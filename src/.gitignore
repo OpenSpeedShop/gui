@@ -1,0 +1,21 @@
+.tmp
+*~
+Make*
+*.pro.user
+core.*
+.*.swp
+
+#Mac OSX
+*.app
+*.pbproj
+*.xcodeproj
+Info.plist
+
+#Unix
+*.[oa]
+OpenSpeedShop
+
+#Windows
+*.dll
+*.exe
+Thumbs.db
