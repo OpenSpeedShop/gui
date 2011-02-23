@@ -17,10 +17,36 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include <QtGui/QApplication>
 
-int main(int argc, char *argv[])
-{
-    QApplication a(argc, argv);
-    return a.exec();
+#ifndef MAINWINDOW_H
+#define MAINWINDOW_H
+
+#include <QMainWindow>
+#include "PluginManager.h"
+
+namespace Ui {
+    class MainWindow;
 }
+
+class MainWindow : public QMainWindow
+{
+    Q_OBJECT
+
+public:
+    explicit MainWindow(QWidget *parent = 0);
+    ~MainWindow();
+
+protected:
+    void changeEvent(QEvent *e);
+    void generateManagers();
+    PluginManager *pluginManager;
+//    ActionManager *actionManager;
+//    ViewManager *viewManager;
+//    SettingManager *settingManager;
+
+private:
+    Ui::MainWindow *ui;
+
+};
+
+#endif // MAINWINDOW_H

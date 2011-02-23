@@ -17,10 +17,37 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include <QtGui/QApplication>
 
-int main(int argc, char *argv[])
+#include "MainWindow.h"
+#include "ui_MainWindow.h"
+
+MainWindow::MainWindow(QWidget *parent) :
+    QMainWindow(parent),
+    ui(new Ui::MainWindow)
 {
-    QApplication a(argc, argv);
-    return a.exec();
+    ui->setupUi(this);
+}
+
+MainWindow::~MainWindow()
+{
+    delete ui;
+}
+
+void MainWindow::changeEvent(QEvent *e)
+{
+    QMainWindow::changeEvent(e);
+    switch (e->type()) {
+    case QEvent::LanguageChange:
+        ui->retranslateUi(this);
+        break;
+    default:
+        break;
+    }
+}
+
+void MainWindow::generateManagers() {
+    pluginManager = new PluginManager(this);
+//    actionManager = new ActionManager(this);
+//    viewManager = new ViewManager(this);
+//    settingManager = new settingManager(this);
 }

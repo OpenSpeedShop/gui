@@ -17,10 +17,8 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include <QtGui/QApplication>
+#include "PluginManager.h"
 
-int main(int argc, char *argv[])
+PluginManager::PluginManager(QObject *parent) : QObject(parent)
 {
-    QApplication a(argc, argv);
-    return a.exec();
 }

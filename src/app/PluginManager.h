@@ -17,10 +17,21 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#include <QtGui/QApplication>
+#ifndef PLUGINMANAGER_H
+#define PLUGINMANAGER_H
 
-int main(int argc, char *argv[])
+#include <QObject>
+
+class PluginManager : public QObject
 {
-    QApplication a(argc, argv);
-    return a.exec();
-}
+    Q_OBJECT
+public:
+    explicit PluginManager(QObject *parent = 0);
+
+signals:
+
+public slots:
+
+};
+
+#endif // PLUGINMANAGER_H
