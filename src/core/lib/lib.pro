@@ -15,16 +15,7 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
-QT       += core gui
-
-TARGET    = ../../bin/OpenSpeedShop
-TEMPLATE  = app
-
-SOURCES  += main.cpp \
-    PluginManager.cpp \
-    MainWindow.cpp
-HEADERS  += \
-    PluginManager.h \
-    MainWindow.h
-FORMS    += \
-    MainWindow.ui
+TEMPLATE = subdirs
+CONFIG  += ordered
+SUBDIRS  = SettingManager PluginManager ActionManager MainWindow
+#           HelpManager
