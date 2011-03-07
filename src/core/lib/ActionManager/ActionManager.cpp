@@ -77,7 +77,7 @@ void ActionManager::registerMenuItem(QString menuName, QAction *action, int prio
      * "clean" name for object searching */
     QString objectName(menuName.replace('&', "").toLower());
 
-    QMenu *menu;
+    QMenu *menu = NULL;
     foreach (QMenu *m, m_Menus) {
         if (m->objectName() == objectName) {
             menu = m;
@@ -94,9 +94,6 @@ void ActionManager::registerMenuItem(QString menuName, QAction *action, int prio
 
     menu->addAction(action);
 }
-
-
-
 
 
 

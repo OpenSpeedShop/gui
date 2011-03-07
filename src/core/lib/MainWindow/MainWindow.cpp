@@ -124,6 +124,7 @@ void MainWindow::initActions()
     // Register actions in menus
     actions->registerMenuItem("File", action);
 
+
 }
 
 void MainWindow::menuAdded(QMenu *menu)

@@ -17,15 +17,15 @@
 
 APPLICATION_TARGET = "OpenSpeedShop"
 
-SOURCE_PATH        = $$PWD
+SOURCE_PATH        = $${PWD}
 
-#BUILD_PATH         = $$OUT_PWD
-BUILD_PATH         = C:/Users/Dane/OpenSpeedShop-build
+#BUILD_PATH         = $${OUT_PWD}
+BUILD_PATH         = C:/Qt/projects/openspeedshop/build
 
-APPLICATION_PATH   = $$BUILD_PATH/bin
-LIBRARY_PATH       = $$BUILD_PATH/lib
-PLUGIN_PATH        = $$LIBRARY_PATH/plugin
+APPLICATION_PATH   = $${BUILD_PATH}/bin
+LIBRARY_PATH       = $${BUILD_PATH}/lib
+PLUGIN_PATH        = $${LIBRARY_PATH}/plugin
 
-INCLUDEPATH       += $$SOURCE_PATH/core/lib
-DEPENDPATH        += $$SOURCE_PATH/core/lib
-LIBS              += -L$$LIBRARY_PATH
+INCLUDEPATH       += $${SOURCE_PATH}/core/lib
+DEPENDPATH        += $${SOURCE_PATH}/core/lib
+LIBS              += -L$${LIBRARY_PATH}
