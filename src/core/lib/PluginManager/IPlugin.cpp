@@ -38,7 +38,7 @@
    \fn IPlugin::IPlugin()
    \brief Constructor
  */
-Core::IPlugin::IPlugin()
+IPlugin::IPlugin()
 {
 
 }

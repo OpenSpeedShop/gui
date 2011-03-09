@@ -32,8 +32,6 @@
 #include <QString>
 #include <QStringList>
 
-namespace Core {
-
 class IPlugin
 {
 public:
@@ -45,5 +43,4 @@ public:
 
 Q_DECLARE_INTERFACE(IPlugin, "org.openspeedshop.gui.IPlugin/0.1")
 
-}
 #endif // IPLUGIN_H
