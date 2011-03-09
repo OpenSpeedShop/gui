@@ -27,6 +27,7 @@
 
 
 #include "OpenSpeedShopPlugin.h"
+#include <ActionManager/ActionManager.h>
 
 namespace Plugins {
 namespace OpenSpeedShop {
@@ -41,11 +42,28 @@ OpenSpeedShopPlugin::~OpenSpeedShopPlugin()
 
 bool OpenSpeedShopPlugin::initialize(QStringList &args, QString *err)
 {
-    return false;
+    Core::ActionManager *actions = Core::ActionManager::instance();
+
+    // Create and connect actions to local slots
+    QAction *action = new QAction(tr("Load"), this);
+    action->setStatusTip(tr("Load an existing data set"));
+    connect(action, SIGNAL(triggered()), this, SLOT(load()));
+
+    // Register actions in menus
+    actions->registerMenuItem("File", action);
+
+
+
+    return true;
 }
 
 void OpenSpeedShopPlugin::shutdown()
 {
+}
+
+void OpenSpeedShopPlugin::load()
+{
+    qDebug("OpenSpeedShopPlugin::load() Triggered");
 }
 
 Q_EXPORT_PLUGIN(Plugins::OpenSpeedShop::OpenSpeedShopPlugin)

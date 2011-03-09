@@ -120,7 +120,7 @@ void PluginManager::writeSettings()
 void PluginManager::loadPlugins()
 {
     //TODO: Get the directory from the SettingManager
-    QDir pluginDir("C:/Users/Dane/OpenSpeedShop-build/lib/plugins");
+    QDir pluginDir("C:/Qt/projects/openspeedshop/build/lib/plugin");
 
     foreach (QString fileName, pluginDir.entryList(QDir::Files)) {
         QPluginLoader pluginLoader(pluginDir.absoluteFilePath(fileName));
@@ -131,6 +131,14 @@ void PluginManager::loadPlugins()
                 m_Plugins.append(interface);
                 emit pluginLoaded(interface);
             }
+        }
+    }
+
+    QString *err = new QString();
+    QStringList args;
+    foreach(IPlugin *plugin, m_Plugins) {
+        if(!plugin->initialize(args, err)) {
+            qWarning(err->toAscii());
         }
     }
 }

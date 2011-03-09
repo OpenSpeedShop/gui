@@ -28,4 +28,4 @@ PLUGIN_PATH        = $${LIBRARY_PATH}/plugin
 
 INCLUDEPATH       += $${SOURCE_PATH}/core/lib
 DEPENDPATH        += $${SOURCE_PATH}/core/lib
-LIBS              += -L$${LIBRARY_PATH}
+LIBS              += -L$${LIBRARY_PATH} -L$${PLUGIN_PATH}

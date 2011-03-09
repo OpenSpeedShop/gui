@@ -50,7 +50,7 @@ signals:
 
 public slots:
     void menuAdded(QMenu *);
-    void fileNew();
+    void pluginDialog();
 
 
 protected:

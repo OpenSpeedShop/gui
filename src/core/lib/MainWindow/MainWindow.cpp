@@ -26,6 +26,7 @@
  */
 
 #include "MainWindow.h"
+#include <PluginManager/PluginDialog.h>
 
 namespace Core {
 
@@ -114,14 +115,12 @@ void MainWindow::initActions()
     connect(actions, SIGNAL(menuAdded(QMenu *)), this, SLOT(menuAdded(QMenu *)));
 
     // Create and connect actions to local slots
-    QAction *action = new QAction(tr("&New"), this);
-    action->setShortcut(QKeySequence::New);
-    action->setStatusTip(tr("Create a new file"));
-    connect(action, SIGNAL(triggered()), this, SLOT(fileNew()));
+    QAction *action = new QAction(tr("Plugins"), this);
+    action->setStatusTip(tr("View loaded plugins"));
+    connect(action, SIGNAL(triggered()), this, SLOT(pluginDialog()));
 
     // Register actions in menus
-    actions->registerMenuItem("File", action);
-
+    actions->registerMenuItem("Help", action);
 
 }
 
@@ -130,9 +129,15 @@ void MainWindow::menuAdded(QMenu *menu)
     menuBar()->addMenu(menu);
 }
 
-void MainWindow::fileNew()
+void MainWindow::pluginDialog()
 {
-    qDebug("fileNew() triggered");
+    qDebug("pluginDialog() triggered");
+    PluginDialog dialog(this);
+    if (dialog.exec() == QDialog::Accepted) {
+        qDebug("Accepted");
+    } else {
+        qDebug("Rejected");
+    }
 }
 
 }

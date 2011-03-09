@@ -15,13 +15,8 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
-include(../../OpenSpeedShop.pri)
-
-
-TEMPLATE = lib
-CONFIG  += plugin
+include(../plugins.pri)
 TARGET   = OpenSpeedShop
-DESTDIR  = $$LIBRARY_PATH
 
 SOURCES += OpenSpeedShopPlugin.cpp
 HEADERS += OpenSpeedShopPlugin.h

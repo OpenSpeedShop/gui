@@ -21,4 +21,4 @@ TEMPLATE = subdirs
 CONFIG  += ordered
 SUBDIRS  = core plugins
 
-OTHER_FILES += Doxyfile
+OTHER_FILES += Doxyfile fileheader.txt

@@ -1,5 +1,5 @@
 /*!
-   \file OpenSpeedShopPlugin.h
+   \file PluginDialog.cpp
    \author Dane Gardner <dane.gardner@gmail.com>
    \version
 
@@ -25,32 +25,34 @@
 
  */
 
-#ifndef OPENSPEEDSHOPPLUGIN_H
-#define OPENSPEEDSHOPPLUGIN_H
+#include "PluginDialog.h"
+#include "ui_PluginDialog.h"
 
-#include <QtCore>
-#include <PluginManager/IPlugin.h>
+namespace Core {
 
-namespace Plugins {
-namespace OpenSpeedShop {
+PluginDialog::PluginDialog(QWidget *parent) :
+    QDialog(parent),
+    ui(new Ui::PluginDialog)
+{
+    ui->setupUi(this);
+}
 
-class OpenSpeedShopPlugin : public QObject, public IPlugin {
-Q_OBJECT
-Q_INTERFACES(IPlugin)
+PluginDialog::~PluginDialog()
+{
+    delete ui;
+}
 
-public:
-    OpenSpeedShopPlugin();
+void PluginDialog::changeEvent(QEvent *e)
+{
+    QDialog::changeEvent(e);
+    switch (e->type()) {
+    case QEvent::LanguageChange:
+        ui->retranslateUi(this);
+        break;
+    default:
+        break;
+    }
+}
 
-    ~OpenSpeedShopPlugin();
-    bool initialize(QStringList &args, QString *err);
-    void shutdown();
 
-public slots:
-    void load();
-
-};
-
-
-
-}}
-#endif // OPENSPEEDSHOPPLUGIN_H
+}
