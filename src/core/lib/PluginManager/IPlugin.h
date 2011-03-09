@@ -28,8 +28,11 @@
 #ifndef IPLUGIN_H
 #define IPLUGIN_H
 
+#include <QtCore>
 #include <QString>
 #include <QStringList>
+
+namespace Core {
 
 class IPlugin
 {
@@ -42,4 +45,5 @@ public:
 
 Q_DECLARE_INTERFACE(IPlugin, "org.openspeedshop.gui.IPlugin/0.1")
 
+}
 #endif // IPLUGIN_H

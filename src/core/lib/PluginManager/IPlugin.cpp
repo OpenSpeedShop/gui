@@ -38,7 +38,7 @@
    \fn IPlugin::IPlugin()
    \brief Constructor
  */
-IPlugin::IPlugin()
+Core::IPlugin::IPlugin()
 {
 
 }
@@ -57,7 +57,8 @@ IPlugin::IPlugin()
    \returns true if successful; false otherwise
  */
 
-/*! @fn IPlugin::shutdown()
+/*!
+   \fn IPlugin::shutdown()
    \brief This method is called in the reverse order of the initialize
           method and notifies the plugin that we are about to shutdown
           --before it is destroyed.

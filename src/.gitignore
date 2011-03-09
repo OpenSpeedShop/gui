@@ -13,7 +13,6 @@ Info.plist
 
 #Unix
 *.[oa]
-OpenSpeedShop
 
 #Windows
 *.dll

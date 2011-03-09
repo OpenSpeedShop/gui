@@ -15,8 +15,15 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
-TEMPLATE = subdirs
-CONFIG  += ordered
+include(../../OpenSpeedShop.pri)
 
-SUBDIRS  = OpenSpeedShop
-#SUBDIRS += ViewManager
+
+TEMPLATE = lib
+CONFIG  += plugin
+TARGET   = OpenSpeedShop
+DESTDIR  = $$LIBRARY_PATH
+
+SOURCES += OpenSpeedShopPlugin.cpp
+HEADERS += OpenSpeedShopPlugin.h
+
+LIBS    += -lPluginManager -lSettingManager -lActionManager
