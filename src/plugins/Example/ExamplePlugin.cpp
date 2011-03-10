@@ -1,5 +1,5 @@
 /*!
-   \file OpenSpeedShopPlugin.cpp
+   \file ExamplePlugin.cpp
    \author Dane Gardner <dane.gardner@gmail.com>
    \version
 
@@ -25,54 +25,31 @@
 
  */
 
-#ifdef QT_DEBUG
-  #include <QtDebug>
-#endif
 
-#include "OpenSpeedShopPlugin.h"
+#include "ExamplePlugin.h"
 #include <ActionManager/ActionManager.h>
 
 namespace Plugins {
-namespace OpenSpeedShop {
+namespace Example {
 
-OpenSpeedShopPlugin::OpenSpeedShopPlugin()
+ExamplePlugin::ExamplePlugin()
 {
 }
 
-OpenSpeedShopPlugin::~OpenSpeedShopPlugin()
+ExamplePlugin::~ExamplePlugin()
 {
 }
 
-bool OpenSpeedShopPlugin::initialize(QStringList &args, QString *err)
+bool ExamplePlugin::initialize(QStringList &args, QString *err)
 {
-    Core::ActionManager *actions = Core::ActionManager::instance();
-
-    // Create and connect actions to local slots
-    QAction *action = new QAction(tr("Load"), this);
-    action->setStatusTip(tr("Load an existing data set"));
-    connect(action, SIGNAL(triggered()), this, SLOT(load()));
-
-    // Register actions in menus
-    actions->registerMenuItem("File", action);
-
-
-
     return true;
 }
 
-void OpenSpeedShopPlugin::shutdown()
+void ExamplePlugin::shutdown()
 {
 }
 
-void OpenSpeedShopPlugin::load()
-{
-#ifdef QT_DEBUG
-    qDebug() << __FILE__ << __LINE__ << "Plugins::OpenSpeedShop::OpenSpeedShopPlugin::load()";
-#endif
-
-}
-
-Q_EXPORT_PLUGIN(Plugins::OpenSpeedShop::OpenSpeedShopPlugin)
+Q_EXPORT_PLUGIN(Plugins::Example::ExamplePlugin)
 
 }}
 

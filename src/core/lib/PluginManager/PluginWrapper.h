@@ -1,7 +1,7 @@
 /*!
-   \file PluginManager.h
+   \file PluginWrapper.h
    \author Dane Gardner <dane.gardner@gmail.com>
-   \version
+   \version 
 
    \section LICENSE
    This file is part of the Open|SpeedShop Graphical User Interface
@@ -25,61 +25,41 @@
 
  */
 
-#ifndef PLUGINMANAGER_H
-#define PLUGINMANAGER_H
+#ifndef PLUGINWRAPPER_H
+#define PLUGINWRAPPER_H
 
 #include <QObject>
-#include <QList>
-
-#include <SettingManager/SettingManager.h>
+#include <QString>
+#include <QStringList>
 
 #include "IPlugin.h"
-#include "PluginWrapper.h"
 
 namespace Core {
 
-class PluginManager : public QObject
-{
-    Q_OBJECT
-public:
-    static PluginManager *instance();
-
-    void loadPlugins();
-
-    void addObject(QObject *object);
-    bool delObject(QObject *object);
-
-    template <typename Type> Type *getObject() const {
-        Type *result = 0;
-        foreach (QObject *obj, m_Objects) {
-            if (result = qobject_cast<Type>(obj))
-                break;
-        }
-        return result;
-    }
-
-signals:
-    void pluginLoaded(IPlugin *);
-    void objectAdding(QObject *);
-    void objectAdded(QObject *);
-    void objectRemoving(QObject *);
-    void objectRemoved(QObject *);
-
-public slots:
-
-protected:
-    PluginManager();
-    ~PluginManager();
-
-    void readSettings();
-    void writeSettings();
-
-    QList<PluginWrapper *> m_Plugins;
-    QList<QObject *> m_Objects;
-
-    QString m_PluginPath;
+enum PluginStatus {
+    PluginStatus_Error,
+    PluginStatus_Loaded,
+    PluginStatus_Initialized,
+    PluginStatus_Shutdown
 };
 
-}
+class PluginWrapper : public QObject {
+    Q_OBJECT
 
-#endif // PLUGINMANAGER_H
+public:
+    PluginWrapper(IPlugin *plugin, QString filePath, QObject *parent = 0);
+    void loadSpecs();
+
+    QString m_Name;
+    QString m_FilePath;
+
+    IPlugin *m_Plugin;
+    PluginStatus m_Status;
+
+    QList<PluginWrapper *> m_DependsUpon;
+    QList<PluginWrapper *> m_Children;
+};
+
+
+}
+#endif // PLUGINWRAPPER_H

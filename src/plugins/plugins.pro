@@ -18,5 +18,5 @@
 TEMPLATE = subdirs
 CONFIG  += ordered
 
-SUBDIRS  = OpenSpeedShop
+SUBDIRS  = Example OpenSpeedShop
 #SUBDIRS += ViewManager

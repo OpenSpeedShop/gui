@@ -15,17 +15,10 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
-include(../lib.pri)
-TARGET   = PluginManager
+include(../plugins.pri)
+TARGET   = Example
 
-SOURCES += PluginManager.cpp \
-           IPlugin.cpp \
-           PluginDialog.cpp \
-           PluginWrapper.cpp
-HEADERS += PluginManager.h \
-           IPlugin.h \
-           PluginDialog.h \
-           PluginWrapper.h
-FORMS   += PluginDialog.ui
+SOURCES += ExamplePlugin.cpp
+HEADERS += ExamplePlugin.h
 
-LIBS    += -lSettingManager
+LIBS    += -lPluginManager

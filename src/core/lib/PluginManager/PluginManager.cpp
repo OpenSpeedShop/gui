@@ -25,6 +25,10 @@
 
  */
 
+#ifdef QT_DEBUG
+  #include <QtDebug>
+#endif
+
 #include <QDir>
 #include <QPluginLoader>
 #include "PluginManager.h"
@@ -123,21 +127,25 @@ void PluginManager::loadPlugins()
     QDir pluginDir("C:/Qt/projects/openspeedshop/build/lib/plugin");
 
     foreach (QString fileName, pluginDir.entryList(QDir::Files)) {
-        QPluginLoader pluginLoader(pluginDir.absoluteFilePath(fileName));
-        QObject *plugin = pluginLoader.instance();
-        if (plugin) {
-            IPlugin *interface = qobject_cast<IPlugin *>(plugin);
-            if (interface) {
-                m_Plugins.append(interface);
-                emit pluginLoaded(interface);
+        QString filePath = pluginDir.absoluteFilePath(fileName);
+        QPluginLoader pluginLoader(filePath);
+        QObject *object = pluginLoader.instance();
+
+        if (object) {
+            IPlugin *plugin = qobject_cast<IPlugin *>(object);
+
+            if (plugin) {
+                PluginWrapper *wrapper = new PluginWrapper(plugin, filePath, this);
+                m_Plugins.append(wrapper);
+                emit pluginLoaded(plugin);
             }
         }
     }
 
     QString *err = new QString();
     QStringList args;
-    foreach(IPlugin *plugin, m_Plugins) {
-        if(!plugin->initialize(args, err)) {
+    foreach(PluginWrapper *plugin, m_Plugins) {
+        if(!plugin->m_Plugin->initialize(args, err)) {
             qWarning(err->toAscii());
         }
     }

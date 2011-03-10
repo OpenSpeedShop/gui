@@ -1,5 +1,5 @@
 /*!
-   \file OpenSpeedShopPlugin.cpp
+   \file PluginWrapper.cpp
    \author Dane Gardner <dane.gardner@gmail.com>
    \version
 
@@ -25,54 +25,39 @@
 
  */
 
+#include "PluginWrapper.h"
+
 #ifdef QT_DEBUG
   #include <QtDebug>
 #endif
 
-#include "OpenSpeedShopPlugin.h"
-#include <ActionManager/ActionManager.h>
-
-namespace Plugins {
-namespace OpenSpeedShop {
-
-OpenSpeedShopPlugin::OpenSpeedShopPlugin()
+Core::PluginWrapper::PluginWrapper(IPlugin *plugin, QString filePath, QObject *parent) :
+        QObject(parent)
 {
+    if(!plugin)
+        throw QString(tr("Cannot wrap null plugin pointer"));
+    if(filePath.isEmpty())
+        throw QString(tr("Cannot wrap empty filePath"));
+
+    m_Plugin = plugin;
+    m_FilePath = filePath;
+    m_Status = PluginStatus_Loaded;
+
+    loadSpecs();
 }
 
-OpenSpeedShopPlugin::~OpenSpeedShopPlugin()
+void Core::PluginWrapper::loadSpecs()
 {
-}
+    QString specFilePath = m_FilePath;
+    int index = specFilePath.lastIndexOf('.');
+    specFilePath.truncate(index);
+    specFilePath.append(".spec");
 
-bool OpenSpeedShopPlugin::initialize(QStringList &args, QString *err)
-{
-    Core::ActionManager *actions = Core::ActionManager::instance();
-
-    // Create and connect actions to local slots
-    QAction *action = new QAction(tr("Load"), this);
-    action->setStatusTip(tr("Load an existing data set"));
-    connect(action, SIGNAL(triggered()), this, SLOT(load()));
-
-    // Register actions in menus
-    actions->registerMenuItem("File", action);
-
-
-
-    return true;
-}
-
-void OpenSpeedShopPlugin::shutdown()
-{
-}
-
-void OpenSpeedShopPlugin::load()
-{
 #ifdef QT_DEBUG
-    qDebug() << __FILE__ << __LINE__ << "Plugins::OpenSpeedShop::OpenSpeedShopPlugin::load()";
+    qDebug() << __FILE__ << __LINE__ << "Loading plugin spec file:" << specFilePath;
 #endif
 
 }
 
-Q_EXPORT_PLUGIN(Plugins::OpenSpeedShop::OpenSpeedShopPlugin)
 
-}}
 

@@ -25,15 +25,18 @@
 
  */
 
+#ifdef QT_DEBUG
+  #include <QtDebug>
+#endif
+
 #include "MainWindow.h"
 #include <PluginManager/PluginDialog.h>
 
 namespace Core {
-
-MainWindow *m_Instance;
+    MainWindow *m_Instance;
 
 /*!
-   \class MainWindow
+   \class Core::MainWindow
    \brief The MainWindow class is part of the core framework libraries. It is
           the actual viewport that the user sees. All plugins manipulate this
           view to expose data to the user.
@@ -42,7 +45,7 @@ MainWindow *m_Instance;
  */
 
 /*!
-   \fn MainWindow::instance()
+   \fn Core::MainWindow::instance()
    \brief Access to the singleton instance of this class
    \returns A pointer to the singleton instance of this class
  */
@@ -52,7 +55,7 @@ MainWindow *MainWindow::instance()
 }
 
 /*!
-   \fn MainWindow::MainWindow()
+   \fn Core::MainWindow::MainWindow()
    \brief Constructor
    \internal
  */
@@ -68,7 +71,7 @@ MainWindow::MainWindow() : QMainWindow(0)
 }
 
 /*!
-   \fn MainWindow::MainWindow()
+   \fn Core::MainWindow::MainWindow()
    \brief Destructor
    \internal
  */
@@ -78,7 +81,7 @@ MainWindow::~MainWindow()
 }
 
 /*!
-   \fn MainWindow::readSettings()
+   \fn Core::MainWindow::readSettings()
    \brief Load settings from the SettingManager.
    \internal
  */
@@ -94,7 +97,7 @@ void MainWindow::readSettings()
 }
 
 /*!
-   \fn MainWindow::writeSettings()
+   \fn Core::MainWindow::writeSettings()
    \brief Stores settings in the SettingManager for later retrieval.
    \internal
  */
@@ -131,13 +134,15 @@ void MainWindow::menuAdded(QMenu *menu)
 
 void MainWindow::pluginDialog()
 {
-    qDebug("pluginDialog() triggered");
+#ifdef QT_DEBUG
+    qDebug() << __FILE__ << __LINE__ << "Core::MainWindow::pluginDialog()";
+#endif
+
     PluginDialog dialog(this);
     if (dialog.exec() == QDialog::Accepted) {
-        qDebug("Accepted");
     } else {
-        qDebug("Rejected");
     }
 }
+
 
 }
