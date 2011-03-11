@@ -1,0 +1,6 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$class_core_1_1_plugin_manager.html#a82ee1fab763ad7e0f0898aff8a7f0735" title="Stores settings in the SettingManager for later retrieval." alt="" coords="127,5,356,32"/>
+<area shape="rect" id="node7" href="$class_core_1_1_main_window.html#a82ee1fab763ad7e0f0898aff8a7f0735" title="Stores settings in the SettingManager for later retrieval." alt="" coords="132,56,351,83"/>
+<area shape="rect" id="node5" href="$class_core_1_1_plugin_manager.html#afc08635322d4879e620ccb5d9ad3191a" title="Core::PluginManager::~PluginManager" alt="" coords="405,5,656,32"/>
+<area shape="rect" id="node9" href="$class_core_1_1_main_window.html#aa33fa7d45aa34b9ede5cb69ab574a1b2" title="Core::MainWindow::~MainWindow" alt="" coords="419,56,643,83"/>
+</map>

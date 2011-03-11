@@ -1,0 +1,13 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$class_core_1_1_plugin_wrapper.html#aee2dd8a62805e14b9f0b407a27159117" title="Core::PluginWrapper::name" alt="" coords="109,81,296,108"/>
+<area shape="rect" id="node5" href="$class_core_1_1_plugin_manager.html#aa24b44f1f5107fef92572f35888536ed" title="Core::PluginManager::findPlugin" alt="" coords="345,56,559,83"/>
+<area shape="rect" id="node7" href="$class_core_1_1_plugin_manager.html#a8a4f97b280db192126587a7176ea6d83" title="Helper function that builds a dependency list, checks the dependencies for circular references..." alt="" coords="609,81,855,108"/>
+<area shape="rect" id="node9" href="$class_core_1_1_plugin_manager.html#aaf7576d4ca8745a033953daa6ac19a0b" title="Loads plugins from a location defined in the SettingManager." alt="" coords="905,81,1124,108"/>
+<area shape="rect" id="node11" href="$class_core_1_1_main_window.html#aeb676574b78bda84d687fdcfd65d84a6" title="Constructor." alt="" coords="1173,81,1389,108"/>
+<area shape="rect" id="node13" href="$class_core_1_1_main_window.html#a2766ec38746efaa15389befd5b6874ce" title="Access to the singleton instance of this class." alt="" coords="1437,81,1627,108"/>
+<area shape="rect" id="node15" href="$class_core_1_1_main_window.html#a3add754bdd339f64be1dff4546be65f5" title="Core::MainWindow::initActions" alt="" coords="1683,5,1885,32"/>
+<area shape="rect" id="node17" href="$main_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97" title="main" alt="" coords="1757,56,1811,83"/>
+<area shape="rect" id="node19" href="$class_core_1_1_main_window.html#a4a0f747e87cdc5ab3de03f4bb18cd75c" title="Load settings from the SettingManager." alt="" coords="1677,107,1891,133"/>
+<area shape="rect" id="node21" href="$class_core_1_1_main_window.html#a82ee1fab763ad7e0f0898aff8a7f0735" title="Stores settings in the SettingManager for later retrieval." alt="" coords="1675,157,1893,184"/>
+<area shape="rect" id="node23" href="$class_core_1_1_main_window.html#aa33fa7d45aa34b9ede5cb69ab574a1b2" title="Core::MainWindow::~MainWindow" alt="" coords="1941,157,2165,184"/>
+</map>

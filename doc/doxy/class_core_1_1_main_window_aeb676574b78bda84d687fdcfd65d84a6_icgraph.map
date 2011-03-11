@@ -1,0 +1,8 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$class_core_1_1_main_window.html#a2766ec38746efaa15389befd5b6874ce" title="Access to the singleton instance of this class." alt="" coords="153,81,223,108"/>
+<area shape="rect" id="node5" href="$class_core_1_1_main_window.html#a3add754bdd339f64be1dff4546be65f5" title="initActions" alt="" coords="280,5,365,32"/>
+<area shape="rect" id="node7" href="$main_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97" title="main" alt="" coords="296,56,349,83"/>
+<area shape="rect" id="node9" href="$class_core_1_1_main_window.html#a4a0f747e87cdc5ab3de03f4bb18cd75c" title="Load settings from the SettingManager." alt="" coords="276,107,369,133"/>
+<area shape="rect" id="node11" href="$class_core_1_1_main_window.html#a82ee1fab763ad7e0f0898aff8a7f0735" title="Stores settings in the SettingManager for later retrieval." alt="" coords="273,157,372,184"/>
+<area shape="rect" id="node13" href="$class_core_1_1_main_window.html#aa33fa7d45aa34b9ede5cb69ab574a1b2" title="~MainWindow" alt="" coords="421,157,528,184"/>
+</map>

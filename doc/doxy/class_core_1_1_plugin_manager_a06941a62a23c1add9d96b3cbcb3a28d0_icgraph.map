@@ -1,0 +1,10 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$class_core_1_1_plugin_manager.html#aaf7576d4ca8745a033953daa6ac19a0b" title="Loads plugins from a location defined in the SettingManager." alt="" coords="156,81,244,108"/>
+<area shape="rect" id="node5" href="$class_core_1_1_main_window.html#aeb676574b78bda84d687fdcfd65d84a6" title="Constructor." alt="" coords="293,81,509,108"/>
+<area shape="rect" id="node7" href="$class_core_1_1_main_window.html#a2766ec38746efaa15389befd5b6874ce" title="Access to the singleton instance of this class." alt="" coords="557,81,747,108"/>
+<area shape="rect" id="node9" href="$class_core_1_1_main_window.html#a3add754bdd339f64be1dff4546be65f5" title="Core::MainWindow::initActions" alt="" coords="803,5,1005,32"/>
+<area shape="rect" id="node11" href="$main_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97" title="main" alt="" coords="877,56,931,83"/>
+<area shape="rect" id="node13" href="$class_core_1_1_main_window.html#a4a0f747e87cdc5ab3de03f4bb18cd75c" title="Load settings from the SettingManager." alt="" coords="797,107,1011,133"/>
+<area shape="rect" id="node15" href="$class_core_1_1_main_window.html#a82ee1fab763ad7e0f0898aff8a7f0735" title="Stores settings in the SettingManager for later retrieval." alt="" coords="795,157,1013,184"/>
+<area shape="rect" id="node17" href="$class_core_1_1_main_window.html#aa33fa7d45aa34b9ede5cb69ab574a1b2" title="Core::MainWindow::~MainWindow" alt="" coords="1061,157,1285,184"/>
+</map>
