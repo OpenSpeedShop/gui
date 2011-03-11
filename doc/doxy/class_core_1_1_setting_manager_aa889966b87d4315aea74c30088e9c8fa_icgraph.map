@@ -1,8 +1,0 @@
-<map id="G" name="G">
-<area shape="rect" id="node3" href="$class_core_1_1_plugin_manager.html#a4a0f747e87cdc5ab3de03f4bb18cd75c" title="Load settings from the SettingManager." alt="" coords="147,5,373,32"/>
-<area shape="rect" id="node5" href="$class_core_1_1_main_window.html#a4a0f747e87cdc5ab3de03f4bb18cd75c" title="Load settings from the SettingManager." alt="" coords="153,56,367,83"/>
-<area shape="rect" id="node7" href="$class_core_1_1_plugin_manager.html#a82ee1fab763ad7e0f0898aff8a7f0735" title="Stores settings in the SettingManager for later retrieval." alt="" coords="145,107,375,133"/>
-<area shape="rect" id="node11" href="$class_core_1_1_main_window.html#a82ee1fab763ad7e0f0898aff8a7f0735" title="Stores settings in the SettingManager for later retrieval." alt="" coords="151,157,369,184"/>
-<area shape="rect" id="node9" href="$class_core_1_1_plugin_manager.html#afc08635322d4879e620ccb5d9ad3191a" title="Core::PluginManager::~PluginManager" alt="" coords="424,107,675,133"/>
-<area shape="rect" id="node13" href="$class_core_1_1_main_window.html#aa33fa7d45aa34b9ede5cb69ab574a1b2" title="Core::MainWindow::~MainWindow" alt="" coords="437,157,661,184"/>
-</map>

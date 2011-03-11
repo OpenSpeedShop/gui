@@ -1,7 +1,0 @@
-<map id="G" name="G">
-<area shape="rect" id="node3" href="$class_core_1_1_setting_manager.html#aa889966b87d4315aea74c30088e9c8fa" title="Appends prefix to the current group." alt="" coords="151,5,375,32"/>
-<area shape="rect" id="node5" href="$class_core_1_1_setting_manager.html#af964cd7bde81d0f118ea09e201e155dd" title="Resets the group to what it was before the corresponding beginGroup() call." alt="" coords="156,56,369,83"/>
-<area shape="rect" id="node7" href="$class_core_1_1_plugin_manager.html#a28b73269cbaa004e9d1e6a606645b308" title="Access to the singleton instance of this class." alt="" coords="228,107,297,133"/>
-<area shape="rect" id="node11" href="$class_core_1_1_setting_manager.html#abcd1aae8b822256e1dcbc05694ee0ad9" title="Returns the value for setting key. If the setting doesn&#39;t exist, returns defaultValue." alt="" coords="168,157,357,184"/>
-<area shape="rect" id="node9" href="$class_core_1_1_plugin_manager.html#a70ce71e44ccce4b4766258ea007e7a28" title="Constructor." alt="" coords="425,107,535,133"/>
-</map>

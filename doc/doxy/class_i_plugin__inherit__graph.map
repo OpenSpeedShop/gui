@@ -1,5 +1,0 @@
-<map id="G" name="G">
-<area shape="rect" id="node3" href="$class_core_1_1_plugin_wrapper.html" title="{PluginWrapper\n|# m_FilePath\l# m_Plugin\l# m_Status\l|+ PluginWrapper()\l+ initialize()\l+ shutdown()\l+ name()\l+ dependencies()\l}" alt="" coords="5,213,136,379"/>
-<area shape="rect" id="node5" href="$class_plugins_1_1_example_1_1_example_plugin.html" title="{ExamplePlugin\n|# m_Name\l# m_Dependencies\l|+ ExamplePlugin()\l+ ~ExamplePlugin()\l+ initialize()\l+ shutdown()\l+ name()\l+ dependencies()\l}" alt="" coords="160,213,299,379"/>
-<area shape="rect" id="node7" href="$class_plugins_1_1_open_speed_shop_1_1_open_speed_shop_plugin.html" title="{OpenSpeedShopPlugin\n|# m_Name\l# m_Dependencies\l|+ OpenSpeedShopPlugin()\l+ ~OpenSpeedShopPlugin()\l+ initialize()\l+ shutdown()\l+ name()\l+ dependencies()\l+ load()\l}" alt="" coords="323,206,501,386"/>
-</map>
