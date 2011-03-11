@@ -46,6 +46,7 @@ public:
     void shutdown();
 
     QString name();
+    QString version();
     QStringList dependencies();
 
 public slots:
@@ -53,7 +54,8 @@ public slots:
 
 protected:
     QString m_Name;
-    QStringList m_Dependencies;
+    QString m_Version;
+    QList<Dependency> m_Dependencies;
 
 };
 

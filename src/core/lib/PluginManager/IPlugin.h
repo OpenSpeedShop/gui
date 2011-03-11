@@ -32,6 +32,16 @@
 #include <QString>
 #include <QStringList>
 
+struct Dependency {
+    QString name;
+    QString version;
+
+    Dependency(QString name, QString version) {
+        this->name = name;
+        this->version = version;
+    }
+};
+
 class IPlugin
 {
 public:
@@ -42,7 +52,8 @@ public:
     virtual void shutdown() = 0;
 
     virtual QString name() = 0;
-    virtual QStringList dependencies() = 0;
+    virtual QString version() = 0;
+    virtual QList<Dependency> dependencies() = 0;
 };
 
 Q_DECLARE_INTERFACE(IPlugin, "org.openspeedshop.gui.IPlugin/0.1")

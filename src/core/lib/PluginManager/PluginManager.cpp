@@ -159,21 +159,32 @@ void PluginManager::loadPlugins()
 /*!
    \fn PluginManager::initializePlugins()
    \brief Helper function that builds a dependency list, checks the
-          dependencies for circular references, and then calls the init
-          function for the plugins in the proper order.
+    dependencies for circular references, and then calls the init function for
+    the plugins in the proper order.
 
-    Inspired from "Algorithms in C++" by Robert Sedgewick, section 19.6,
-    specifically figure 19.25
+    The algorithm used here was inspired from "Algorithms in C++" by Robert
+    Sedgewick, section 19.6 --specifically the use of a queue.
  */
 void PluginManager::initializePlugins()
 {
+    // Generate a temporary directed graph of plugins and dependencies
     QMap<QString, QStringList *> dag;
     foreach(PluginWrapper *plugin, m_Plugins) {
-        dag.insert(plugin->name(), new QStringList(plugin->dependencies()));
+        QStringList *names = new QStringList();
+        foreach(Dependency dep, plugin->dependencies()) {
+            names->append(dep.name);
+        }
+
+        dag.insert(plugin->name(), names);
     }
 
+    //TODO: Check plugin versions
+
+    // Create a queue with the proper initialization ordering
     QQueue<PluginWrapper *> queue;
     while(dag.count()) {
+
+        // Iterate through the plugins and see if any have no dependencies
         QString next;
         foreach(QString key, dag.keys()) {
             if(!dag[key]->count()) {
@@ -182,6 +193,7 @@ void PluginManager::initializePlugins()
             }
         }
 
+        // Are we done, or is there a cyclic dependency?
         if(next.isEmpty()) {
             if(dag.count())
                 throw QString("Cyclic plugin dependency found");
@@ -189,33 +201,33 @@ void PluginManager::initializePlugins()
                 break;
         }
 
+        // Add the plugin with no dependencies to the queue
         queue.enqueue(findPlugin(next));
-        dag.remove(next);
 
+        // Remove it from all of the lists
+        dag.remove(next);
         foreach(QStringList *value, dag.values()) {
             value->removeAll(next);
         }
     }
 
+    /* Intialize via the queue */
     QString *err = new QString();
     QStringList args;
     while(queue.count()) {
         PluginWrapper *plugin = queue.dequeue();
-
-#ifdef QT_DEBUG
-        qDebug() << __FILE__ << __LINE__ << "Initializing plugin:" << plugin->name();
-#endif
-
-        if(plugin->initialize(args, err)) {
+        if( plugin->status() == PluginStatus_Loaded && plugin->initialize(args, err) ) {
             emit pluginInitialized(plugin);
-        } else {
-#ifdef QT_DEBUG
-            qWarning() << "Plugin failed to initialize:" << plugin->name() << err->toAscii();
-#endif
         }
     }
 }
 
+/*!
+   \fn PluginManager::findPlugin()
+   \brief Helper function
+   \param name Name of the plugin to search for and return
+   \returns Pointer to the plugin specified by name
+ */
 PluginWrapper *PluginManager::findPlugin(QString name)
 {
     foreach(PluginWrapper *plugin, m_Plugins) {

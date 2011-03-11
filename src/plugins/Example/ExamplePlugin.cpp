@@ -35,7 +35,8 @@ namespace Example {
 ExamplePlugin::ExamplePlugin()
 {
     m_Name = "Example";
-    m_Dependencies.append("OpenSpeedShop");
+    m_Version = "0.1.dev";
+    m_Dependencies.append( Dependency("OpenSpeedShop", "^0\.1.*$") );
 }
 
 ExamplePlugin::~ExamplePlugin()
@@ -56,7 +57,12 @@ QString ExamplePlugin::name()
     return m_Name;
 }
 
-QStringList ExamplePlugin::dependencies()
+QString ExamplePlugin::version()
+{
+    return m_Version;
+}
+
+QList<Dependency> ExamplePlugin::dependencies()
 {
     return m_Dependencies;
 }

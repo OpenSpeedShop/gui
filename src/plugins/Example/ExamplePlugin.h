@@ -46,7 +46,8 @@ public:
     bool initialize(QStringList &args, QString *err);
     void shutdown();
     QString name();
-    QStringList dependencies();
+    QString version();
+    QList<Dependency> dependencies();
 
 protected:
     QString m_Name;

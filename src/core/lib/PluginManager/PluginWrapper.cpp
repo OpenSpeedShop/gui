@@ -31,7 +31,9 @@
   #include <QtDebug>
 #endif
 
-Core::PluginWrapper::PluginWrapper(IPlugin *plugin, QString filePath, QObject *parent) :
+namespace Core {
+
+PluginWrapper::PluginWrapper(IPlugin *plugin, QString filePath, QObject *parent) :
         QObject(parent)
 {
     if(!plugin)
@@ -44,5 +46,50 @@ Core::PluginWrapper::PluginWrapper(IPlugin *plugin, QString filePath, QObject *p
     m_Status = PluginStatus_Loaded;
 }
 
+PluginStatus PluginWrapper::status()
+{
+    return m_Status;
+}
+
+bool PluginWrapper::initialize(QStringList &args, QString *err)
+{
+    bool retVal = m_Plugin->initialize(args, err);
+    m_Status = retVal ? PluginStatus_Initialized : PluginStatus_Error;
+    return retVal;
+}
+
+void PluginWrapper::shutdown()
+{
+    m_Plugin->shutdown();
+    m_Status = PluginStatus_Shutdown;
+}
+
+QString PluginWrapper::name()
+{
+    return m_Plugin->name();
+}
+
+QString PluginWrapper::version()
+{
+    return m_Plugin->version();
+}
+
+QList<Dependency> PluginWrapper::dependencies()
+{
+    return m_Plugin->dependencies();
+}
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+}

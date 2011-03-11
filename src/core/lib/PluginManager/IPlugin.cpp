@@ -28,8 +28,20 @@
 #include "IPlugin.h"
 
 /*!
+  \struct Dependency
+  \brief Object that describes a dependent object
+ */
+
+/*!
+  \fn Dependency::Dependency()
+  \param name A QString that contains the name of the dependent plugin.
+  \param version A QString that contains a Regular Expression pattern that
+         matches desired versions of the dependent plugin.
+ */
+
+/*!
    \class IPlugin
-   \brief to be overriden as an interface for plugins
+   \brief To be overriden as an interface for plugins
 
    pure virtual class
  */
@@ -67,6 +79,11 @@ IPlugin::IPlugin()
 /*!
    \fn IPlugin::name()
    \returns QString containing the name of the plugin
+ */
+
+/*!
+   \fn IPlugin::version()
+   \returns QString containing the version of the plugin
  */
 
 /*!

@@ -38,6 +38,7 @@ namespace OpenSpeedShop {
 OpenSpeedShopPlugin::OpenSpeedShopPlugin()
 {
     m_Name = "OpenSpeedShop";
+    m_Version = "0.1.dev";
 }
 
 OpenSpeedShopPlugin::~OpenSpeedShopPlugin()
@@ -74,7 +75,12 @@ QString OpenSpeedShopPlugin::name()
     return m_Name;
 }
 
-QStringList OpenSpeedShopPlugin::dependencies()
+QString OpenSpeedShopPlugin::version()
+{
+    return m_Version;
+}
+
+QList<Dependency> OpenSpeedShopPlugin::dependencies()
 {
     return m_Dependencies;
 }

@@ -49,12 +49,14 @@ class PluginWrapper : public QObject, public IPlugin {
 
 public:
     PluginWrapper(IPlugin *plugin, QString filePath, QObject *parent = 0);
+    PluginStatus status();
 
     /* IPlugin interface */
-    bool initialize(QStringList &args, QString *err) { return m_Plugin->initialize(args, err); }
-    void shutdown() { m_Plugin->shutdown(); }
-    QString name() { return m_Plugin->name(); }
-    QStringList dependencies() { return m_Plugin->dependencies(); }
+    bool initialize(QStringList &args, QString *err);
+    void shutdown();
+    QString name();
+    QString version();
+    QList<Dependency> dependencies();
 
 protected:
     QString m_FilePath;
