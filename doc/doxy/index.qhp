@@ -1,0 +1,392 @@
+<QtHelpProject version="1.0">
+  <namespace>org.openspeedshop.gui</namespace>
+  <virtualFolder>openspeedshop-gui</virtualFolder>
+  <filterSection>
+    <filterAttribute>doxygen</filterAttribute>
+    <toc>
+      <section title="Open|SpeedShop GUI v0.1" ref="index.html">
+        <section title="Open|SpeedShop GUI" ref="index.html" />
+        <section title="Class List" ref="annotated.html">
+          <section title="ActionManager" ref="class_core_1_1_action_manager.html" />
+          <section title="Dependency" ref="struct_dependency.html" />
+          <section title="ExamplePlugin" ref="class_plugins_1_1_example_1_1_example_plugin.html" />
+          <section title="IPlugin" ref="class_i_plugin.html" />
+          <section title="MainWindow" ref="class_core_1_1_main_window.html" />
+          <section title="OpenSpeedShopPlugin" ref="class_plugins_1_1_open_speed_shop_1_1_open_speed_shop_plugin.html" />
+          <section title="PluginDialog" ref="class_core_1_1_plugin_dialog.html" />
+          <section title="PluginManager" ref="class_core_1_1_plugin_manager.html" />
+          <section title="PluginWrapper" ref="class_core_1_1_plugin_wrapper.html" />
+          <section title="QDialog" ref="class_q_dialog.html" />
+          <section title="QMainWindow" ref="class_q_main_window.html" />
+          <section title="QObject" ref="class_q_object.html" />
+          <section title="SettingManager" ref="class_core_1_1_setting_manager.html" />
+        </section>
+        <section title="Class Index" ref="classes.html" />
+        <section title="Class Hierarchy" ref="hierarchy.html">
+          <section title="Dependency" ref="struct_dependency.html" />
+          <section title="IPlugin" ref="class_i_plugin.html">
+            <section title="PluginWrapper" ref="class_core_1_1_plugin_wrapper.html" />
+            <section title="ExamplePlugin" ref="class_plugins_1_1_example_1_1_example_plugin.html" />
+            <section title="OpenSpeedShopPlugin" ref="class_plugins_1_1_open_speed_shop_1_1_open_speed_shop_plugin.html" />
+          </section>
+          <section title="QDialog" ref="class_q_dialog.html">
+            <section title="PluginDialog" ref="class_core_1_1_plugin_dialog.html" />
+          </section>
+          <section title="QMainWindow" ref="class_q_main_window.html">
+            <section title="MainWindow" ref="class_core_1_1_main_window.html" />
+          </section>
+          <section title="QObject" ref="class_q_object.html">
+            <section title="ActionManager" ref="class_core_1_1_action_manager.html" />
+            <section title="PluginManager" ref="class_core_1_1_plugin_manager.html" />
+            <section title="PluginWrapper" ref="class_core_1_1_plugin_wrapper.html" />
+            <section title="SettingManager" ref="class_core_1_1_setting_manager.html" />
+            <section title="ExamplePlugin" ref="class_plugins_1_1_example_1_1_example_plugin.html" />
+            <section title="OpenSpeedShopPlugin" ref="class_plugins_1_1_open_speed_shop_1_1_open_speed_shop_plugin.html" />
+          </section>
+        </section>
+        <section title="Class Members" ref="functions.html" />
+        <section title="File List" ref="files.html">
+          <section title="core/app/main.cpp" ref="main_8cpp.html" />
+          <section title="core/lib/ActionManager/ActionManager.cpp" ref="_action_manager_8cpp.html" />
+          <section title="core/lib/ActionManager/ActionManager.h" ref="_action_manager_8h.html" />
+          <section title="core/lib/MainWindow/MainWindow.cpp" ref="_main_window_8cpp.html" />
+          <section title="core/lib/MainWindow/MainWindow.h" ref="_main_window_8h.html" />
+          <section title="core/lib/PluginManager/IPlugin.cpp" ref="_i_plugin_8cpp.html" />
+          <section title="core/lib/PluginManager/IPlugin.h" ref="_i_plugin_8h.html" />
+          <section title="core/lib/PluginManager/PluginDialog.cpp" ref="_plugin_dialog_8cpp.html" />
+          <section title="core/lib/PluginManager/PluginDialog.h" ref="_plugin_dialog_8h.html" />
+          <section title="core/lib/PluginManager/PluginManager.cpp" ref="_plugin_manager_8cpp.html" />
+          <section title="core/lib/PluginManager/PluginManager.h" ref="_plugin_manager_8h.html" />
+          <section title="core/lib/PluginManager/PluginWrapper.cpp" ref="_plugin_wrapper_8cpp.html" />
+          <section title="core/lib/PluginManager/PluginWrapper.h" ref="_plugin_wrapper_8h.html" />
+          <section title="core/lib/SettingManager/SettingManager.cpp" ref="_setting_manager_8cpp.html" />
+          <section title="core/lib/SettingManager/SettingManager.h" ref="_setting_manager_8h.html" />
+          <section title="plugins/Example/ExamplePlugin.cpp" ref="_example_plugin_8cpp.html" />
+          <section title="plugins/Example/ExamplePlugin.h" ref="_example_plugin_8h.html" />
+          <section title="plugins/OpenSpeedShop/OpenSpeedShopPlugin.cpp" ref="_open_speed_shop_plugin_8cpp.html" />
+          <section title="plugins/OpenSpeedShop/OpenSpeedShopPlugin.h" ref="_open_speed_shop_plugin_8h.html" />
+        </section>
+        <section title="File Members" ref="globals.html" />
+      </section>
+    </toc>
+    <keywords>
+      <keyword name="main" id="main.cpp::main" ref="main_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97" />
+      <keyword name="__pad0__" id="ActionManager.cpp::__pad0__" ref="_action_manager_8cpp.html#a4a70169ff33fd08b4dd3bc11ac0a3012" />
+      <keyword name="ui" id="PluginDialog.cpp::ui" ref="_plugin_dialog_8cpp.html#a6cc9000001bbd493db7a6940e3277768" />
+      <keyword name="append" id="ExamplePlugin.cpp::append" ref="_example_plugin_8cpp.html#a783af9aaad2ccbdebd82878d6cf5c1d3" />
+      <keyword name="__pad0__" id="ExamplePlugin.cpp::__pad0__" ref="_example_plugin_8cpp.html#a4a70169ff33fd08b4dd3bc11ac0a3012" />
+      <keyword name="m_Version" id="ExamplePlugin.cpp::m_Version" ref="_example_plugin_8cpp.html#a341c8ebbe556a1f1115d8a9267a921a8" />
+      <keyword name="Dependency" id="Dependency" ref="struct_dependency.html" />
+      <keyword name="Dependency" id="Dependency::Dependency" ref="struct_dependency.html#a6d4e7b6d68f793b2ac76d1034ba04690" />
+      <keyword name="name" id="Dependency::name" ref="struct_dependency.html#abc29e461e01cc0c712944f8f47f91331" />
+      <keyword name="version" id="Dependency::version" ref="struct_dependency.html#accb344ff518c8d35f4e2a0df6fe3a6d1" />
+      <keyword name="IPlugin" id="IPlugin" ref="class_i_plugin.html" />
+      <keyword name="IPlugin" id="IPlugin::IPlugin" ref="class_i_plugin.html#adde8b8f966136b330e0df9c9ca7203c3" />
+      <keyword name="~IPlugin" id="IPlugin::~IPlugin" ref="class_i_plugin.html#ac178ba7c364e6cd992b04489870c1757" />
+      <keyword name="initialize" id="IPlugin::initialize" ref="class_i_plugin.html#adde939146f7111ec1334447e6d729f5c" />
+      <keyword name="shutdown" id="IPlugin::shutdown" ref="class_i_plugin.html#a376da6a9f20fa7717800c1e655fa8693" />
+      <keyword name="name" id="IPlugin::name" ref="class_i_plugin.html#abce479837a180217144c52aa3e2b95d2" />
+      <keyword name="version" id="IPlugin::version" ref="class_i_plugin.html#a660d54932079e6328772eadea72decdc" />
+      <keyword name="dependencies" id="IPlugin::dependencies" ref="class_i_plugin.html#a5df6b4cfeeb07445b6305aeee9ddf71d" />
+      <keyword name="QDialog" id="QDialog" ref="class_q_dialog.html" />
+      <keyword name="QMainWindow" id="QMainWindow" ref="class_q_main_window.html" />
+      <keyword name="QObject" id="QObject" ref="class_q_object.html" />
+      <keyword name="Core::ActionManager" id="Core::ActionManager" ref="class_core_1_1_action_manager.html" />
+      <keyword name="menuAdded" id="Core::ActionManager::menuAdded" ref="class_core_1_1_action_manager.html#a65db82e06bd4efd6e2bfa9afd7df175c" />
+      <keyword name="toolBarAdded" id="Core::ActionManager::toolBarAdded" ref="class_core_1_1_action_manager.html#ab185c96a4d1189932b5d8f2cc53c42e8" />
+      <keyword name="statusBarAdded" id="Core::ActionManager::statusBarAdded" ref="class_core_1_1_action_manager.html#a4434b567dfa11b96f7425c10d80bb75c" />
+      <keyword name="registerMenuItem" id="Core::ActionManager::registerMenuItem" ref="class_core_1_1_action_manager.html#a9338859558fc15f46b5f4ecae82b5253" />
+      <keyword name="instance" id="Core::ActionManager::instance" ref="class_core_1_1_action_manager.html#a10f0ee5cd80271c449fe9ae839a1c8ac" />
+      <keyword name="ActionManager" id="Core::ActionManager::ActionManager" ref="class_core_1_1_action_manager.html#a3bad0df5e69ff4d959de447231ef45e8" />
+      <keyword name="~ActionManager" id="Core::ActionManager::~ActionManager" ref="class_core_1_1_action_manager.html#a26c8cd261b90a64fe44912c26e01f157" />
+      <keyword name="m_Menus" id="Core::ActionManager::m_Menus" ref="class_core_1_1_action_manager.html#a3cf2777412a0801666411bb2df64204e" />
+      <keyword name="Core::MainWindow" id="Core::MainWindow" ref="class_core_1_1_main_window.html" />
+      <keyword name="menuAdded" id="Core::MainWindow::menuAdded" ref="class_core_1_1_main_window.html#a65db82e06bd4efd6e2bfa9afd7df175c" />
+      <keyword name="pluginDialog" id="Core::MainWindow::pluginDialog" ref="class_core_1_1_main_window.html#a6d23d129e3793c3b4c29f18e878bf56e" />
+      <keyword name="instance" id="Core::MainWindow::instance" ref="class_core_1_1_main_window.html#a2766ec38746efaa15389befd5b6874ce" />
+      <keyword name="MainWindow" id="Core::MainWindow::MainWindow" ref="class_core_1_1_main_window.html#aeb676574b78bda84d687fdcfd65d84a6" />
+      <keyword name="~MainWindow" id="Core::MainWindow::~MainWindow" ref="class_core_1_1_main_window.html#aa33fa7d45aa34b9ede5cb69ab574a1b2" />
+      <keyword name="readSettings" id="Core::MainWindow::readSettings" ref="class_core_1_1_main_window.html#a4a0f747e87cdc5ab3de03f4bb18cd75c" />
+      <keyword name="writeSettings" id="Core::MainWindow::writeSettings" ref="class_core_1_1_main_window.html#a82ee1fab763ad7e0f0898aff8a7f0735" />
+      <keyword name="initActions" id="Core::MainWindow::initActions" ref="class_core_1_1_main_window.html#a3add754bdd339f64be1dff4546be65f5" />
+      <keyword name="Core::PluginDialog" id="Core::PluginDialog" ref="class_core_1_1_plugin_dialog.html" />
+      <keyword name="PluginDialog" id="Core::PluginDialog::PluginDialog" ref="class_core_1_1_plugin_dialog.html#a826a0b4cc2f100fee8d1d11a32f7a3d2" />
+      <keyword name="~PluginDialog" id="Core::PluginDialog::~PluginDialog" ref="class_core_1_1_plugin_dialog.html#a94880a1e9efede50da3e98837a9bf015" />
+      <keyword name="changeEvent" id="Core::PluginDialog::changeEvent" ref="class_core_1_1_plugin_dialog.html#a35d3587c7aec05ebd82542643f2f67f9" />
+      <keyword name="Core::PluginManager" id="Core::PluginManager" ref="class_core_1_1_plugin_manager.html" />
+      <keyword name="pluginLoaded" id="Core::PluginManager::pluginLoaded" ref="class_core_1_1_plugin_manager.html#a06941a62a23c1add9d96b3cbcb3a28d0" />
+      <keyword name="pluginInitialized" id="Core::PluginManager::pluginInitialized" ref="class_core_1_1_plugin_manager.html#a73e09c38422829f41da9ca67c99adb11" />
+      <keyword name="pluginShutdown" id="Core::PluginManager::pluginShutdown" ref="class_core_1_1_plugin_manager.html#a955530d02c9106983c4624e0e0b7f63d" />
+      <keyword name="objectAdding" id="Core::PluginManager::objectAdding" ref="class_core_1_1_plugin_manager.html#a81db0914e4b29bceaa511a3fecd26bb5" />
+      <keyword name="objectAdded" id="Core::PluginManager::objectAdded" ref="class_core_1_1_plugin_manager.html#ac9f5117e37396dda5440a920f3e8ac3b" />
+      <keyword name="objectRemoving" id="Core::PluginManager::objectRemoving" ref="class_core_1_1_plugin_manager.html#a9da465a9b58cf398a0085bd89e9c6567" />
+      <keyword name="objectRemoved" id="Core::PluginManager::objectRemoved" ref="class_core_1_1_plugin_manager.html#a422ba0025a4508087791ff96d780799e" />
+      <keyword name="loadPlugins" id="Core::PluginManager::loadPlugins" ref="class_core_1_1_plugin_manager.html#aaf7576d4ca8745a033953daa6ac19a0b" />
+      <keyword name="addObject" id="Core::PluginManager::addObject" ref="class_core_1_1_plugin_manager.html#a3aa35da986ea185ea69e064aaab10693" />
+      <keyword name="delObject" id="Core::PluginManager::delObject" ref="class_core_1_1_plugin_manager.html#a86a951a59d3dd18393f27d9acba7cf00" />
+      <keyword name="getObjects" id="Core::PluginManager::getObjects" ref="class_core_1_1_plugin_manager.html#aa85238ab366add3fed927958fe3ca1d7" />
+      <keyword name="instance" id="Core::PluginManager::instance" ref="class_core_1_1_plugin_manager.html#a28b73269cbaa004e9d1e6a606645b308" />
+      <keyword name="PluginManager" id="Core::PluginManager::PluginManager" ref="class_core_1_1_plugin_manager.html#a70ce71e44ccce4b4766258ea007e7a28" />
+      <keyword name="~PluginManager" id="Core::PluginManager::~PluginManager" ref="class_core_1_1_plugin_manager.html#afc08635322d4879e620ccb5d9ad3191a" />
+      <keyword name="readSettings" id="Core::PluginManager::readSettings" ref="class_core_1_1_plugin_manager.html#a4a0f747e87cdc5ab3de03f4bb18cd75c" />
+      <keyword name="writeSettings" id="Core::PluginManager::writeSettings" ref="class_core_1_1_plugin_manager.html#a82ee1fab763ad7e0f0898aff8a7f0735" />
+      <keyword name="initializePlugins" id="Core::PluginManager::initializePlugins" ref="class_core_1_1_plugin_manager.html#a8a4f97b280db192126587a7176ea6d83" />
+      <keyword name="findPlugin" id="Core::PluginManager::findPlugin" ref="class_core_1_1_plugin_manager.html#aa24b44f1f5107fef92572f35888536ed" />
+      <keyword name="m_Plugins" id="Core::PluginManager::m_Plugins" ref="class_core_1_1_plugin_manager.html#aca684a74308c2aacfa82bc6b6e4e4ce3" />
+      <keyword name="m_Objects" id="Core::PluginManager::m_Objects" ref="class_core_1_1_plugin_manager.html#ac750f7778e1f1b6377d7c902c3062278" />
+      <keyword name="m_PluginPath" id="Core::PluginManager::m_PluginPath" ref="class_core_1_1_plugin_manager.html#aab788961d8ffbdd91eba176db6994412" />
+      <keyword name="Core::PluginWrapper" id="Core::PluginWrapper" ref="class_core_1_1_plugin_wrapper.html" />
+      <keyword name="PluginWrapper" id="Core::PluginWrapper::PluginWrapper" ref="class_core_1_1_plugin_wrapper.html#a726263ccb521c8e43caa09378166bc3f" />
+      <keyword name="status" id="Core::PluginWrapper::status" ref="class_core_1_1_plugin_wrapper.html#a367ee664199687f6eca55b7bf965d5bd" />
+      <keyword name="initialize" id="Core::PluginWrapper::initialize" ref="class_core_1_1_plugin_wrapper.html#ae4405b4089d270bc9060f8dfaa2dc0c9" />
+      <keyword name="shutdown" id="Core::PluginWrapper::shutdown" ref="class_core_1_1_plugin_wrapper.html#a7861ee1569802186a619778efc85af13" />
+      <keyword name="name" id="Core::PluginWrapper::name" ref="class_core_1_1_plugin_wrapper.html#aee2dd8a62805e14b9f0b407a27159117" />
+      <keyword name="version" id="Core::PluginWrapper::version" ref="class_core_1_1_plugin_wrapper.html#a659651269f8ce5ee7d80cb2d0ce89dd1" />
+      <keyword name="dependencies" id="Core::PluginWrapper::dependencies" ref="class_core_1_1_plugin_wrapper.html#a09329d88c791f5b53629a64eed7de32f" />
+      <keyword name="m_FilePath" id="Core::PluginWrapper::m_FilePath" ref="class_core_1_1_plugin_wrapper.html#ab80bac9bb35dc114d50d891cdfe10775" />
+      <keyword name="m_Plugin" id="Core::PluginWrapper::m_Plugin" ref="class_core_1_1_plugin_wrapper.html#ac1b9bc3dad87ea423cd179a9b8b40106" />
+      <keyword name="m_Status" id="Core::PluginWrapper::m_Status" ref="class_core_1_1_plugin_wrapper.html#a01a913710dcac4bfbc2bb260630ea04e" />
+      <keyword name="Core::SettingManager" id="Core::SettingManager" ref="class_core_1_1_setting_manager.html" />
+      <keyword name="setValue" id="Core::SettingManager::setValue" ref="class_core_1_1_setting_manager.html#a48d1031ae51455e458b881c49c65a92e" />
+      <keyword name="value" id="Core::SettingManager::value" ref="class_core_1_1_setting_manager.html#abcd1aae8b822256e1dcbc05694ee0ad9" />
+      <keyword name="remove" id="Core::SettingManager::remove" ref="class_core_1_1_setting_manager.html#a89c0a3a6c660a5f577e5241a63052f2c" />
+      <keyword name="contains" id="Core::SettingManager::contains" ref="class_core_1_1_setting_manager.html#aab9f06bc42480ab555a9757e14303e5f" />
+      <keyword name="beginGroup" id="Core::SettingManager::beginGroup" ref="class_core_1_1_setting_manager.html#aa889966b87d4315aea74c30088e9c8fa" />
+      <keyword name="endGroup" id="Core::SettingManager::endGroup" ref="class_core_1_1_setting_manager.html#af964cd7bde81d0f118ea09e201e155dd" />
+      <keyword name="group" id="Core::SettingManager::group" ref="class_core_1_1_setting_manager.html#a5adb315467de1866550658b4679bf9f9" />
+      <keyword name="instance" id="Core::SettingManager::instance" ref="class_core_1_1_setting_manager.html#ab92dd570d24d76325bfe571820381621" />
+      <keyword name="SettingManager" id="Core::SettingManager::SettingManager" ref="class_core_1_1_setting_manager.html#a71d0b5644d3a305daa64f722e810bd7e" />
+      <keyword name="~SettingManager" id="Core::SettingManager::~SettingManager" ref="class_core_1_1_setting_manager.html#abd1dcef5abb886db525e180df1c6de31" />
+      <keyword name="m_Settings" id="Core::SettingManager::m_Settings" ref="class_core_1_1_setting_manager.html#a6693588bdfaaebb40ab6577a6babf5e1" />
+      <keyword name="Plugins::Example::ExamplePlugin" id="Plugins::Example::ExamplePlugin" ref="class_plugins_1_1_example_1_1_example_plugin.html" />
+      <keyword name="ExamplePlugin" id="Plugins::Example::ExamplePlugin::ExamplePlugin" ref="class_plugins_1_1_example_1_1_example_plugin.html#a60ea504cfa1ad5270b5896a84c482715" />
+      <keyword name="~ExamplePlugin" id="Plugins::Example::ExamplePlugin::~ExamplePlugin" ref="class_plugins_1_1_example_1_1_example_plugin.html#ae80fab338e45ba4dd2513002c4ef0780" />
+      <keyword name="initialize" id="Plugins::Example::ExamplePlugin::initialize" ref="class_plugins_1_1_example_1_1_example_plugin.html#ae4405b4089d270bc9060f8dfaa2dc0c9" />
+      <keyword name="shutdown" id="Plugins::Example::ExamplePlugin::shutdown" ref="class_plugins_1_1_example_1_1_example_plugin.html#a7861ee1569802186a619778efc85af13" />
+      <keyword name="name" id="Plugins::Example::ExamplePlugin::name" ref="class_plugins_1_1_example_1_1_example_plugin.html#aee2dd8a62805e14b9f0b407a27159117" />
+      <keyword name="version" id="Plugins::Example::ExamplePlugin::version" ref="class_plugins_1_1_example_1_1_example_plugin.html#a659651269f8ce5ee7d80cb2d0ce89dd1" />
+      <keyword name="dependencies" id="Plugins::Example::ExamplePlugin::dependencies" ref="class_plugins_1_1_example_1_1_example_plugin.html#a1a4053bc4c8fdacdd7768d67df9e8da0" />
+      <keyword name="m_Name" id="Plugins::Example::ExamplePlugin::m_Name" ref="class_plugins_1_1_example_1_1_example_plugin.html#aecaa55d04fe6f1f8a12af51aad3ba547" />
+      <keyword name="m_Dependencies" id="Plugins::Example::ExamplePlugin::m_Dependencies" ref="class_plugins_1_1_example_1_1_example_plugin.html#a6535ddb493f0380c4faa3e6760741b3e" />
+      <keyword name="Plugins::OpenSpeedShop::OpenSpeedShopPlugin" id="Plugins::OpenSpeedShop::OpenSpeedShopPlugin" ref="class_plugins_1_1_open_speed_shop_1_1_open_speed_shop_plugin.html" />
+      <keyword name="load" id="Plugins::OpenSpeedShop::OpenSpeedShopPlugin::load" ref="class_plugins_1_1_open_speed_shop_1_1_open_speed_shop_plugin.html#a78f61ac2dd03bcba8e09ca20cd7d68e3" />
+      <keyword name="OpenSpeedShopPlugin" id="Plugins::OpenSpeedShop::OpenSpeedShopPlugin::OpenSpeedShopPlugin" ref="class_plugins_1_1_open_speed_shop_1_1_open_speed_shop_plugin.html#a50e797e659bdc3682c8a1cc3a05459b1" />
+      <keyword name="~OpenSpeedShopPlugin" id="Plugins::OpenSpeedShop::OpenSpeedShopPlugin::~OpenSpeedShopPlugin" ref="class_plugins_1_1_open_speed_shop_1_1_open_speed_shop_plugin.html#adcced7353dba412e51fa421e04686e14" />
+      <keyword name="initialize" id="Plugins::OpenSpeedShop::OpenSpeedShopPlugin::initialize" ref="class_plugins_1_1_open_speed_shop_1_1_open_speed_shop_plugin.html#ae4405b4089d270bc9060f8dfaa2dc0c9" />
+      <keyword name="shutdown" id="Plugins::OpenSpeedShop::OpenSpeedShopPlugin::shutdown" ref="class_plugins_1_1_open_speed_shop_1_1_open_speed_shop_plugin.html#a7861ee1569802186a619778efc85af13" />
+      <keyword name="name" id="Plugins::OpenSpeedShop::OpenSpeedShopPlugin::name" ref="class_plugins_1_1_open_speed_shop_1_1_open_speed_shop_plugin.html#aee2dd8a62805e14b9f0b407a27159117" />
+      <keyword name="version" id="Plugins::OpenSpeedShop::OpenSpeedShopPlugin::version" ref="class_plugins_1_1_open_speed_shop_1_1_open_speed_shop_plugin.html#a659651269f8ce5ee7d80cb2d0ce89dd1" />
+      <keyword name="dependencies" id="Plugins::OpenSpeedShop::OpenSpeedShopPlugin::dependencies" ref="class_plugins_1_1_open_speed_shop_1_1_open_speed_shop_plugin.html#a09329d88c791f5b53629a64eed7de32f" />
+      <keyword name="m_Name" id="Plugins::OpenSpeedShop::OpenSpeedShopPlugin::m_Name" ref="class_plugins_1_1_open_speed_shop_1_1_open_speed_shop_plugin.html#aecaa55d04fe6f1f8a12af51aad3ba547" />
+      <keyword name="m_Version" id="Plugins::OpenSpeedShop::OpenSpeedShopPlugin::m_Version" ref="class_plugins_1_1_open_speed_shop_1_1_open_speed_shop_plugin.html#a06f3e43a380829c7d660437719b89979" />
+      <keyword name="m_Dependencies" id="Plugins::OpenSpeedShop::OpenSpeedShopPlugin::m_Dependencies" ref="class_plugins_1_1_open_speed_shop_1_1_open_speed_shop_plugin.html#adb7b7d0fd26841c96e9bf29b33e589ce" />
+    </keywords>
+    <files>
+      <file>tabs.css</file>
+      <file>tab_a.png</file>
+      <file>tab_b.png</file>
+      <file>tab_h.png</file>
+      <file>tab_s.png</file>
+      <file>nav_h.png</file>
+      <file>nav_f.png</file>
+      <file>bc_s.png</file>
+      <file>doxygen.png</file>
+      <file>closed.png</file>
+      <file>open.png</file>
+      <file>doxygen.css</file>
+      <file>/search/mag_sel.png</file>
+      <file>/search/search_l.png</file>
+      <file>/search/search_m.png</file>
+      <file>/search/search_r.png</file>
+      <file>/search/close.png</file>
+      <file>search/search.css</file>
+      <file>search/search.js</file>
+      <file>index.html</file>
+      <file>main_8cpp_source.html</file>
+      <file>_action_manager_8cpp_source.html</file>
+      <file>_action_manager_8h_source.html</file>
+      <file>_main_window_8cpp_source.html</file>
+      <file>_main_window_8h_source.html</file>
+      <file>_i_plugin_8cpp_source.html</file>
+      <file>_i_plugin_8h_source.html</file>
+      <file>_plugin_dialog_8cpp_source.html</file>
+      <file>_plugin_dialog_8h_source.html</file>
+      <file>_plugin_manager_8cpp_source.html</file>
+      <file>_plugin_manager_8h_source.html</file>
+      <file>_plugin_wrapper_8cpp_source.html</file>
+      <file>_plugin_wrapper_8h_source.html</file>
+      <file>_setting_manager_8cpp_source.html</file>
+      <file>_setting_manager_8h_source.html</file>
+      <file>_example_plugin_8cpp_source.html</file>
+      <file>_example_plugin_8h_source.html</file>
+      <file>_open_speed_shop_plugin_8cpp_source.html</file>
+      <file>_open_speed_shop_plugin_8h_source.html</file>
+      <file>main_8cpp.html</file>
+      <file>main_8cpp__incl.png</file>
+      <file>main_8cpp_a0ddf1224851353fc92bfbff6f499fa97_cgraph.png</file>
+      <file>_action_manager_8cpp.html</file>
+      <file>_action_manager_8cpp__incl.png</file>
+      <file>_action_manager_8h.html</file>
+      <file>_action_manager_8h__incl.png</file>
+      <file>_action_manager_8h__dep__incl.png</file>
+      <file>_main_window_8cpp.html</file>
+      <file>_main_window_8cpp__incl.png</file>
+      <file>_main_window_8h.html</file>
+      <file>_main_window_8h__incl.png</file>
+      <file>_main_window_8h__dep__incl.png</file>
+      <file>_i_plugin_8cpp.html</file>
+      <file>_i_plugin_8cpp__incl.png</file>
+      <file>_i_plugin_8h.html</file>
+      <file>_i_plugin_8h__incl.png</file>
+      <file>_i_plugin_8h__dep__incl.png</file>
+      <file>_plugin_dialog_8cpp.html</file>
+      <file>_plugin_dialog_8cpp__incl.png</file>
+      <file>_plugin_dialog_8h.html</file>
+      <file>_plugin_dialog_8h__incl.png</file>
+      <file>_plugin_dialog_8h__dep__incl.png</file>
+      <file>_plugin_manager_8cpp.html</file>
+      <file>_plugin_manager_8cpp__incl.png</file>
+      <file>_plugin_manager_8h.html</file>
+      <file>_plugin_manager_8h__incl.png</file>
+      <file>_plugin_manager_8h__dep__incl.png</file>
+      <file>_plugin_wrapper_8cpp.html</file>
+      <file>_plugin_wrapper_8cpp__incl.png</file>
+      <file>_plugin_wrapper_8h.html</file>
+      <file>_plugin_wrapper_8h__incl.png</file>
+      <file>_plugin_wrapper_8h__dep__incl.png</file>
+      <file>_setting_manager_8cpp.html</file>
+      <file>_setting_manager_8cpp__incl.png</file>
+      <file>_setting_manager_8h.html</file>
+      <file>_setting_manager_8h__incl.png</file>
+      <file>_setting_manager_8h__dep__incl.png</file>
+      <file>_example_plugin_8cpp.html</file>
+      <file>_example_plugin_8cpp__incl.png</file>
+      <file>_example_plugin_8h.html</file>
+      <file>_example_plugin_8h__incl.png</file>
+      <file>_example_plugin_8h__dep__incl.png</file>
+      <file>_open_speed_shop_plugin_8cpp.html</file>
+      <file>_open_speed_shop_plugin_8cpp__incl.png</file>
+      <file>_open_speed_shop_plugin_8h.html</file>
+      <file>_open_speed_shop_plugin_8h__incl.png</file>
+      <file>_open_speed_shop_plugin_8h__dep__incl.png</file>
+      <file>annotated.html</file>
+      <file>classes.html</file>
+      <file>hierarchy.html</file>
+      <file>functions.html</file>
+      <file>functions_func.html</file>
+      <file>functions_vars.html</file>
+      <file>struct_dependency.html</file>
+      <file>struct_dependency__coll__graph.png</file>
+      <file>struct_dependency-members.html</file>
+      <file>class_i_plugin.html</file>
+      <file>class_i_plugin__inherit__graph.png</file>
+      <file>class_i_plugin_a5df6b4cfeeb07445b6305aeee9ddf71d_icgraph.png</file>
+      <file>class_i_plugin_adde939146f7111ec1334447e6d729f5c_icgraph.png</file>
+      <file>class_i_plugin_abce479837a180217144c52aa3e2b95d2_icgraph.png</file>
+      <file>class_i_plugin_a376da6a9f20fa7717800c1e655fa8693_icgraph.png</file>
+      <file>class_i_plugin_a660d54932079e6328772eadea72decdc_icgraph.png</file>
+      <file>class_i_plugin-members.html</file>
+      <file>class_q_dialog.html</file>
+      <file>class_q_dialog__inherit__graph.png</file>
+      <file>class_q_main_window.html</file>
+      <file>class_q_main_window__inherit__graph.png</file>
+      <file>class_q_object.html</file>
+      <file>class_q_object__inherit__graph.png</file>
+      <file>inherits.html</file>
+      <file>inherit_graph_0.png</file>
+      <file>inherit_graph_1.png</file>
+      <file>inherit_graph_2.png</file>
+      <file>inherit_graph_3.png</file>
+      <file>class_core_1_1_action_manager.html</file>
+      <file>class_core_1_1_action_manager__inherit__graph.png</file>
+      <file>class_core_1_1_action_manager__coll__graph.png</file>
+      <file>class_core_1_1_action_manager_a3bad0df5e69ff4d959de447231ef45e8_icgraph.png</file>
+      <file>class_core_1_1_action_manager_a10f0ee5cd80271c449fe9ae839a1c8ac_cgraph.png</file>
+      <file>class_core_1_1_action_manager_a65db82e06bd4efd6e2bfa9afd7df175c_icgraph.png</file>
+      <file>class_core_1_1_action_manager_a9338859558fc15f46b5f4ecae82b5253_cgraph.png</file>
+      <file>class_core_1_1_action_manager_a9338859558fc15f46b5f4ecae82b5253_icgraph.png</file>
+      <file>class_core_1_1_action_manager-members.html</file>
+      <file>class_core_1_1_main_window.html</file>
+      <file>class_core_1_1_main_window__inherit__graph.png</file>
+      <file>class_core_1_1_main_window__coll__graph.png</file>
+      <file>class_core_1_1_main_window_aeb676574b78bda84d687fdcfd65d84a6_cgraph.png</file>
+      <file>class_core_1_1_main_window_aeb676574b78bda84d687fdcfd65d84a6_icgraph.png</file>
+      <file>class_core_1_1_main_window_aa33fa7d45aa34b9ede5cb69ab574a1b2_cgraph.png</file>
+      <file>class_core_1_1_main_window_a3add754bdd339f64be1dff4546be65f5_cgraph.png</file>
+      <file>class_core_1_1_main_window_a2766ec38746efaa15389befd5b6874ce_cgraph.png</file>
+      <file>class_core_1_1_main_window_a2766ec38746efaa15389befd5b6874ce_icgraph.png</file>
+      <file>class_core_1_1_main_window_a65db82e06bd4efd6e2bfa9afd7df175c_icgraph.png</file>
+      <file>class_core_1_1_main_window_a6d23d129e3793c3b4c29f18e878bf56e_icgraph.png</file>
+      <file>class_core_1_1_main_window_a4a0f747e87cdc5ab3de03f4bb18cd75c_cgraph.png</file>
+      <file>class_core_1_1_main_window_a82ee1fab763ad7e0f0898aff8a7f0735_cgraph.png</file>
+      <file>class_core_1_1_main_window_a82ee1fab763ad7e0f0898aff8a7f0735_icgraph.png</file>
+      <file>class_core_1_1_main_window-members.html</file>
+      <file>class_core_1_1_plugin_dialog.html</file>
+      <file>class_core_1_1_plugin_dialog__inherit__graph.png</file>
+      <file>class_core_1_1_plugin_dialog__coll__graph.png</file>
+      <file>class_core_1_1_plugin_dialog-members.html</file>
+      <file>class_core_1_1_plugin_manager.html</file>
+      <file>class_core_1_1_plugin_manager__inherit__graph.png</file>
+      <file>class_core_1_1_plugin_manager__coll__graph.png</file>
+      <file>class_core_1_1_plugin_manager_a70ce71e44ccce4b4766258ea007e7a28_icgraph.png</file>
+      <file>class_core_1_1_plugin_manager_afc08635322d4879e620ccb5d9ad3191a_cgraph.png</file>
+      <file>class_core_1_1_plugin_manager_a3aa35da986ea185ea69e064aaab10693_cgraph.png</file>
+      <file>class_core_1_1_plugin_manager_a86a951a59d3dd18393f27d9acba7cf00_cgraph.png</file>
+      <file>class_core_1_1_plugin_manager_a86a951a59d3dd18393f27d9acba7cf00_icgraph.png</file>
+      <file>class_core_1_1_plugin_manager_aa24b44f1f5107fef92572f35888536ed_cgraph.png</file>
+      <file>class_core_1_1_plugin_manager_aa24b44f1f5107fef92572f35888536ed_icgraph.png</file>
+      <file>class_core_1_1_plugin_manager_a8a4f97b280db192126587a7176ea6d83_cgraph.png</file>
+      <file>class_core_1_1_plugin_manager_a8a4f97b280db192126587a7176ea6d83_icgraph.png</file>
+      <file>class_core_1_1_plugin_manager_a28b73269cbaa004e9d1e6a606645b308_cgraph.png</file>
+      <file>class_core_1_1_plugin_manager_a28b73269cbaa004e9d1e6a606645b308_icgraph.png</file>
+      <file>class_core_1_1_plugin_manager_aaf7576d4ca8745a033953daa6ac19a0b_cgraph.png</file>
+      <file>class_core_1_1_plugin_manager_aaf7576d4ca8745a033953daa6ac19a0b_icgraph.png</file>
+      <file>class_core_1_1_plugin_manager_ac9f5117e37396dda5440a920f3e8ac3b_icgraph.png</file>
+      <file>class_core_1_1_plugin_manager_a81db0914e4b29bceaa511a3fecd26bb5_icgraph.png</file>
+      <file>class_core_1_1_plugin_manager_a422ba0025a4508087791ff96d780799e_icgraph.png</file>
+      <file>class_core_1_1_plugin_manager_a9da465a9b58cf398a0085bd89e9c6567_icgraph.png</file>
+      <file>class_core_1_1_plugin_manager_a73e09c38422829f41da9ca67c99adb11_icgraph.png</file>
+      <file>class_core_1_1_plugin_manager_a06941a62a23c1add9d96b3cbcb3a28d0_icgraph.png</file>
+      <file>class_core_1_1_plugin_manager_a4a0f747e87cdc5ab3de03f4bb18cd75c_cgraph.png</file>
+      <file>class_core_1_1_plugin_manager_a82ee1fab763ad7e0f0898aff8a7f0735_cgraph.png</file>
+      <file>class_core_1_1_plugin_manager_a82ee1fab763ad7e0f0898aff8a7f0735_icgraph.png</file>
+      <file>class_core_1_1_plugin_manager-members.html</file>
+      <file>class_core_1_1_plugin_wrapper.html</file>
+      <file>class_core_1_1_plugin_wrapper__inherit__graph.png</file>
+      <file>class_core_1_1_plugin_wrapper__coll__graph.png</file>
+      <file>class_core_1_1_plugin_wrapper_a09329d88c791f5b53629a64eed7de32f_cgraph.png</file>
+      <file>class_core_1_1_plugin_wrapper_a09329d88c791f5b53629a64eed7de32f_icgraph.png</file>
+      <file>class_core_1_1_plugin_wrapper_ae4405b4089d270bc9060f8dfaa2dc0c9_cgraph.png</file>
+      <file>class_core_1_1_plugin_wrapper_ae4405b4089d270bc9060f8dfaa2dc0c9_icgraph.png</file>
+      <file>class_core_1_1_plugin_wrapper_aee2dd8a62805e14b9f0b407a27159117_cgraph.png</file>
+      <file>class_core_1_1_plugin_wrapper_aee2dd8a62805e14b9f0b407a27159117_icgraph.png</file>
+      <file>class_core_1_1_plugin_wrapper_a7861ee1569802186a619778efc85af13_cgraph.png</file>
+      <file>class_core_1_1_plugin_wrapper_a367ee664199687f6eca55b7bf965d5bd_icgraph.png</file>
+      <file>class_core_1_1_plugin_wrapper_a659651269f8ce5ee7d80cb2d0ce89dd1_cgraph.png</file>
+      <file>class_core_1_1_plugin_wrapper-members.html</file>
+      <file>class_core_1_1_setting_manager.html</file>
+      <file>class_core_1_1_setting_manager__inherit__graph.png</file>
+      <file>class_core_1_1_setting_manager__coll__graph.png</file>
+      <file>class_core_1_1_setting_manager_a71d0b5644d3a305daa64f722e810bd7e_icgraph.png</file>
+      <file>class_core_1_1_setting_manager_aa889966b87d4315aea74c30088e9c8fa_icgraph.png</file>
+      <file>class_core_1_1_setting_manager_af964cd7bde81d0f118ea09e201e155dd_icgraph.png</file>
+      <file>class_core_1_1_setting_manager_ab92dd570d24d76325bfe571820381621_cgraph.png</file>
+      <file>class_core_1_1_setting_manager_a48d1031ae51455e458b881c49c65a92e_icgraph.png</file>
+      <file>class_core_1_1_setting_manager_abcd1aae8b822256e1dcbc05694ee0ad9_icgraph.png</file>
+      <file>class_core_1_1_setting_manager-members.html</file>
+      <file>class_plugins_1_1_example_1_1_example_plugin.html</file>
+      <file>class_plugins_1_1_example_1_1_example_plugin__inherit__graph.png</file>
+      <file>class_plugins_1_1_example_1_1_example_plugin__coll__graph.png</file>
+      <file>class_plugins_1_1_example_1_1_example_plugin-members.html</file>
+      <file>class_plugins_1_1_open_speed_shop_1_1_open_speed_shop_plugin.html</file>
+      <file>class_plugins_1_1_open_speed_shop_1_1_open_speed_shop_plugin__inherit__graph.png</file>
+      <file>class_plugins_1_1_open_speed_shop_1_1_open_speed_shop_plugin__coll__graph.png</file>
+      <file>class_plugins_1_1_open_speed_shop_1_1_open_speed_shop_plugin-members.html</file>
+      <file>graph_legend.png</file>
+      <file>graph_legend.html</file>
+      <file>files.html</file>
+      <file>globals.html</file>
+      <file>globals_func.html</file>
+    </files>
+  </filterSection>
+</QtHelpProject>

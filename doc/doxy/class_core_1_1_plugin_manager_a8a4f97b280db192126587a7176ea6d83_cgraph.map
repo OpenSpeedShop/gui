@@ -1,0 +1,11 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$class_core_1_1_plugin_wrapper.html#a09329d88c791f5b53629a64eed7de32f" title="Core::PluginWrapper::dependencies" alt="" coords="171,5,400,32"/>
+<area shape="rect" id="node7" href="$class_core_1_1_plugin_manager.html#aa24b44f1f5107fef92572f35888536ed" title="Helper function." alt="" coords="244,56,327,83"/>
+<area shape="rect" id="node9" href="$class_core_1_1_plugin_wrapper.html#aee2dd8a62805e14b9f0b407a27159117" title="Core::PluginWrapper::name" alt="" coords="448,81,635,108"/>
+<area shape="rect" id="node13" href="$class_core_1_1_plugin_wrapper.html#ae4405b4089d270bc9060f8dfaa2dc0c9" title="Core::PluginWrapper::initialize" alt="" coords="184,157,387,184"/>
+<area shape="rect" id="node18" href="$class_core_1_1_plugin_manager.html#a73e09c38422829f41da9ca67c99adb11" title="pluginInitialized" alt="" coords="227,208,344,235"/>
+<area shape="rect" id="node20" href="$class_core_1_1_plugin_wrapper.html#a367ee664199687f6eca55b7bf965d5bd" title="Core::PluginWrapper::status" alt="" coords="192,259,379,285"/>
+<area shape="rect" id="node5" href="$class_i_plugin.html#a5df6b4cfeeb07445b6305aeee9ddf71d" title="IPlugin::dependencies" alt="" coords="468,5,615,32"/>
+<area shape="rect" id="node11" href="$class_i_plugin.html#abce479837a180217144c52aa3e2b95d2" title="IPlugin::name" alt="" coords="684,81,788,108"/>
+<area shape="rect" id="node15" href="$class_i_plugin.html#adde939146f7111ec1334447e6d729f5c" title="IPlugin::initialize" alt="" coords="480,157,603,184"/>
+</map>

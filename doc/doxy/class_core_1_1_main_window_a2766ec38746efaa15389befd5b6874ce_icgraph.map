@@ -1,0 +1,7 @@
+<map id="G" name="G">
+<area shape="rect" id="node3" href="$class_core_1_1_main_window.html#a3add754bdd339f64be1dff4546be65f5" title="initActions" alt="" coords="133,5,219,32"/>
+<area shape="rect" id="node5" href="$main_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97" title="main" alt="" coords="149,56,203,83"/>
+<area shape="rect" id="node7" href="$class_core_1_1_main_window.html#a4a0f747e87cdc5ab3de03f4bb18cd75c" title="Load settings from the SettingManager." alt="" coords="129,107,223,133"/>
+<area shape="rect" id="node9" href="$class_core_1_1_main_window.html#a82ee1fab763ad7e0f0898aff8a7f0735" title="Stores settings in the SettingManager for later retrieval." alt="" coords="127,157,225,184"/>
+<area shape="rect" id="node11" href="$class_core_1_1_main_window.html#aa33fa7d45aa34b9ede5cb69ab574a1b2" title="~MainWindow" alt="" coords="275,157,381,184"/>
+</map>
