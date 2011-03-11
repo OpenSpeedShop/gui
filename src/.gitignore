@@ -2,7 +2,6 @@
 *~
 Make*
 *.pro.user
-core.*
 .*.swp
 
 #Mac OSX
