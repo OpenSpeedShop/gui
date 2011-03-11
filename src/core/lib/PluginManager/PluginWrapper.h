@@ -43,21 +43,23 @@ enum PluginStatus {
     PluginStatus_Shutdown
 };
 
-class PluginWrapper : public QObject {
+class PluginWrapper : public QObject, public IPlugin {
     Q_OBJECT
+    Q_INTERFACES(IPlugin)
 
 public:
     PluginWrapper(IPlugin *plugin, QString filePath, QObject *parent = 0);
-    void loadSpecs();
 
-    QString m_Name;
+    /* IPlugin interface */
+    bool initialize(QStringList &args, QString *err) { return m_Plugin->initialize(args, err); }
+    void shutdown() { m_Plugin->shutdown(); }
+    QString name() { return m_Plugin->name(); }
+    QStringList dependencies() { return m_Plugin->dependencies(); }
+
+protected:
     QString m_FilePath;
-
     IPlugin *m_Plugin;
     PluginStatus m_Status;
-
-    QList<PluginWrapper *> m_DependsUpon;
-    QList<PluginWrapper *> m_Children;
 };
 
 

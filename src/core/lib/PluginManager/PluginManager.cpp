@@ -45,8 +45,9 @@ namespace Core {
  */
 
 /*!
-   \fn T *PluginManager::getObject() const
-   \returns The given object type that has been stored in the manager.
+   \fn PluginManager::getObjects() const
+   \returns A QList populated with the given object type that has been stored in
+            the object pool.
  */
 
 PluginManager *m_Instance;
@@ -128,6 +129,11 @@ void PluginManager::loadPlugins()
 
     foreach (QString fileName, pluginDir.entryList(QDir::Files)) {
         QString filePath = pluginDir.absoluteFilePath(fileName);
+
+#ifdef QT_DEBUG
+        qDebug() << __FILE__ << __LINE__ << "Attempting to load plugin:" << fileName;
+#endif
+
         QPluginLoader pluginLoader(filePath);
         QObject *object = pluginLoader.instance();
 
@@ -137,18 +143,86 @@ void PluginManager::loadPlugins()
             if (plugin) {
                 PluginWrapper *wrapper = new PluginWrapper(plugin, filePath, this);
                 m_Plugins.append(wrapper);
+
+#ifdef QT_DEBUG
+                qDebug() << __FILE__ << __LINE__ << "Loaded plugin:" << fileName;
+#endif
+
                 emit pluginLoaded(plugin);
             }
         }
     }
 
-    QString *err = new QString();
-    QStringList args;
+    initializePlugins();
+}
+
+/*!
+   \fn PluginManager::initializePlugins()
+   \brief Helper function that builds a dependency list, checks the
+          dependencies for circular references, and then calls the init
+          function for the plugins in the proper order.
+
+    Inspired from "Algorithms in C++" by Robert Sedgewick, section 19.6,
+    specifically figure 19.25
+ */
+void PluginManager::initializePlugins()
+{
+    QMap<QString, QStringList *> dag;
     foreach(PluginWrapper *plugin, m_Plugins) {
-        if(!plugin->m_Plugin->initialize(args, err)) {
-            qWarning(err->toAscii());
+        dag.insert(plugin->name(), new QStringList(plugin->dependencies()));
+    }
+
+    QQueue<PluginWrapper *> queue;
+    while(dag.count()) {
+        QString next;
+        foreach(QString key, dag.keys()) {
+            if(!dag[key]->count()) {
+                next = key;
+                break;
+            }
+        }
+
+        if(next.isEmpty()) {
+            if(dag.count())
+                throw QString("Cyclic plugin dependency found");
+            else
+                break;
+        }
+
+        queue.enqueue(findPlugin(next));
+        dag.remove(next);
+
+        foreach(QStringList *value, dag.values()) {
+            value->removeAll(next);
         }
     }
+
+    QString *err = new QString();
+    QStringList args;
+    while(queue.count()) {
+        PluginWrapper *plugin = queue.dequeue();
+
+#ifdef QT_DEBUG
+        qDebug() << __FILE__ << __LINE__ << "Initializing plugin:" << plugin->name();
+#endif
+
+        if(plugin->initialize(args, err)) {
+            emit pluginInitialized(plugin);
+        } else {
+#ifdef QT_DEBUG
+            qWarning() << "Plugin failed to initialize:" << plugin->name() << err->toAscii();
+#endif
+        }
+    }
+}
+
+PluginWrapper *PluginManager::findPlugin(QString name)
+{
+    foreach(PluginWrapper *plugin, m_Plugins) {
+        if(plugin->name() == name)
+            return plugin;
+    }
+    return 0;
 }
 
 /*!

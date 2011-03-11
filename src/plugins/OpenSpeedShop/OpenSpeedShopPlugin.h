@@ -40,13 +40,20 @@ Q_INTERFACES(IPlugin)
 
 public:
     OpenSpeedShopPlugin();
-
     ~OpenSpeedShopPlugin();
+
     bool initialize(QStringList &args, QString *err);
     void shutdown();
 
+    QString name();
+    QStringList dependencies();
+
 public slots:
     void load();
+
+protected:
+    QString m_Name;
+    QStringList m_Dependencies;
 
 };
 

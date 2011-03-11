@@ -63,3 +63,14 @@ IPlugin::IPlugin()
           method and notifies the plugin that we are about to shutdown
           --before it is destroyed.
  */
+
+/*!
+   \fn IPlugin::name()
+   \returns QString containing the name of the plugin
+ */
+
+/*!
+   \fn IPlugin::dependencies()
+   \returns QStringList where each QString in the list contains the name
+            of a parent plugin which must be initialized before this one
+ */

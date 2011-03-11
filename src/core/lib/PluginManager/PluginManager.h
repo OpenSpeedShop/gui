@@ -49,17 +49,20 @@ public:
     void addObject(QObject *object);
     bool delObject(QObject *object);
 
-    template <typename Type> Type *getObject() const {
-        Type *result = 0;
-        foreach (QObject *obj, m_Objects) {
-            if (result = qobject_cast<Type>(obj))
-                break;
+    template <typename Type> QList<Type *> *getObjects() const {
+        QList<Type *> *list = QList<Type *>();
+        Type *type = 0;
+        foreach (QObject *object, m_Objects) {
+            if (type = qobject_cast<Type>(object))
+                list->append(type);
         }
-        return result;
+        return list;
     }
 
 signals:
     void pluginLoaded(IPlugin *);
+    void pluginInitialized(IPlugin *);
+    void pluginShutdown(IPlugin *);
     void objectAdding(QObject *);
     void objectAdded(QObject *);
     void objectRemoving(QObject *);
@@ -74,10 +77,14 @@ protected:
     void readSettings();
     void writeSettings();
 
+    void initializePlugins();
+
     QList<PluginWrapper *> m_Plugins;
     QList<QObject *> m_Objects;
 
     QString m_PluginPath;
+
+    PluginWrapper *findPlugin(QString name);
 };
 
 }

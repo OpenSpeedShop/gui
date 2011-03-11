@@ -42,21 +42,6 @@ Core::PluginWrapper::PluginWrapper(IPlugin *plugin, QString filePath, QObject *p
     m_Plugin = plugin;
     m_FilePath = filePath;
     m_Status = PluginStatus_Loaded;
-
-    loadSpecs();
-}
-
-void Core::PluginWrapper::loadSpecs()
-{
-    QString specFilePath = m_FilePath;
-    int index = specFilePath.lastIndexOf('.');
-    specFilePath.truncate(index);
-    specFilePath.append(".spec");
-
-#ifdef QT_DEBUG
-    qDebug() << __FILE__ << __LINE__ << "Loading plugin spec file:" << specFilePath;
-#endif
-
 }
 
 

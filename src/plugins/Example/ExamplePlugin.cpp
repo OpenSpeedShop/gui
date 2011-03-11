@@ -34,6 +34,8 @@ namespace Example {
 
 ExamplePlugin::ExamplePlugin()
 {
+    m_Name = "Example";
+    m_Dependencies.append("OpenSpeedShop");
 }
 
 ExamplePlugin::~ExamplePlugin()
@@ -48,6 +50,17 @@ bool ExamplePlugin::initialize(QStringList &args, QString *err)
 void ExamplePlugin::shutdown()
 {
 }
+
+QString ExamplePlugin::name()
+{
+    return m_Name;
+}
+
+QStringList ExamplePlugin::dependencies()
+{
+    return m_Dependencies;
+}
+
 
 Q_EXPORT_PLUGIN(Plugins::Example::ExamplePlugin)
 

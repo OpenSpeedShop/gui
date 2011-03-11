@@ -37,8 +37,12 @@ class IPlugin
 public:
     IPlugin();
     virtual ~IPlugin() {}
+
     virtual bool initialize(QStringList &args, QString *err) = 0;
     virtual void shutdown() = 0;
+
+    virtual QString name() = 0;
+    virtual QStringList dependencies() = 0;
 };
 
 Q_DECLARE_INTERFACE(IPlugin, "org.openspeedshop.gui.IPlugin/0.1")

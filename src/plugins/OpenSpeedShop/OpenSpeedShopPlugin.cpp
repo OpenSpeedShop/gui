@@ -37,6 +37,7 @@ namespace OpenSpeedShop {
 
 OpenSpeedShopPlugin::OpenSpeedShopPlugin()
 {
+    m_Name = "OpenSpeedShop";
 }
 
 OpenSpeedShopPlugin::~OpenSpeedShopPlugin()
@@ -51,11 +52,7 @@ bool OpenSpeedShopPlugin::initialize(QStringList &args, QString *err)
     QAction *action = new QAction(tr("Load"), this);
     action->setStatusTip(tr("Load an existing data set"));
     connect(action, SIGNAL(triggered()), this, SLOT(load()));
-
-    // Register actions in menus
     actions->registerMenuItem("File", action);
-
-
 
     return true;
 }
@@ -70,6 +67,16 @@ void OpenSpeedShopPlugin::load()
     qDebug() << __FILE__ << __LINE__ << "Plugins::OpenSpeedShop::OpenSpeedShopPlugin::load()";
 #endif
 
+}
+
+QString OpenSpeedShopPlugin::name()
+{
+    return m_Name;
+}
+
+QStringList OpenSpeedShopPlugin::dependencies()
+{
+    return m_Dependencies;
 }
 
 Q_EXPORT_PLUGIN(Plugins::OpenSpeedShop::OpenSpeedShopPlugin)

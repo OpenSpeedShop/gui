@@ -45,6 +45,12 @@ public:
     ~ExamplePlugin();
     bool initialize(QStringList &args, QString *err);
     void shutdown();
+    QString name();
+    QStringList dependencies();
+
+protected:
+    QString m_Name;
+    QStringList m_Dependencies;
 
 };
 
