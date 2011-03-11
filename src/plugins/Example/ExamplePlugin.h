@@ -51,7 +51,8 @@ public:
 
 protected:
     QString m_Name;
-    QStringList m_Dependencies;
+    QString m_Version;
+    QList<Dependency> m_Dependencies;
 
 };
 

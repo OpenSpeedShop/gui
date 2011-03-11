@@ -47,7 +47,7 @@ public:
 
     QString name();
     QString version();
-    QStringList dependencies();
+    QList<Dependency> dependencies();
 
 public slots:
     void load();
