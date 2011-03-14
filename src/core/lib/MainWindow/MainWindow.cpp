@@ -33,7 +33,7 @@
 #include <PluginManager/PluginDialog.h>
 
 namespace Core {
-    MainWindow *m_Instance;
+MainWindow *m_Instance;
 
 /*!
    \class Core::MainWindow

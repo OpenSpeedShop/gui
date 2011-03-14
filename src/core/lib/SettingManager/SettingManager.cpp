@@ -145,4 +145,16 @@ QString SettingManager::group() const
     return m_Settings.group();
 }
 
+
+void SettingManager::registerPage(ISettingPage *page)
+{
+    m_Pages.append(page);
+}
+
+void SettingManager::settingDialog()
+{
+    SettingDialog dialog(this);
+    dialog.exec();
+}
+
 }

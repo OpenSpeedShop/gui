@@ -1,7 +1,7 @@
 /*!
-   \file SettingManager.h
+   \file SettingDialog.cpp
    \author Dane Gardner <dane.gardner@gmail.com>
-   \version
+   \version 
 
    \section LICENSE
    This file is part of the Open|SpeedShop Graphical User Interface
@@ -25,50 +25,17 @@
 
  */
 
-#ifndef SETTINGMANAGER_H
-#define SETTINGMANAGER_H
-
-#include <QObject>
-#include <QString>
-#include <QSettings>
-
-#include "ISettingPage.h"
 #include "SettingDialog.h"
+#include "ui_SettingDialog.h"
 
-namespace Core {
-
-class SettingManager : public QObject
+SettingDialog::SettingDialog(QWidget *parent) :
+    QDialog(parent),
+    ui(new Ui::SettingDialog)
 {
-    Q_OBJECT
-public:
-    static SettingManager *instance();
-
-    void setValue(const QString &key, const QVariant &value);
-    QVariant value(const QString &key, const QVariant &defaultValue = QVariant()) const;
-
-    void remove(const QString &key);
-    bool contains(const QString &key) const;
-
-    void beginGroup(const QString &prefix);
-    void endGroup();
-    QString group() const;
-
-    void registerPage(ISettingPage *page);
-
-signals:
-
-public slots:
-    void settingDialog();
-
-protected:
-    SettingManager();
-    ~SettingManager();
-
-    QSettings m_Settings;
-    QList<ISettingPage *> m_Pages;
-
-};
-
+    ui->setupUi(this);
 }
 
-#endif // SETTINGMANAGER_H
+SettingDialog::~SettingDialog()
+{
+    delete ui;
+}

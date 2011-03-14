@@ -18,6 +18,11 @@
 include(../lib.pri)
 TARGET   = SettingManager
 
-HEADERS += SettingManager.h
-SOURCES += SettingManager.cpp
-FORMS   +=
+HEADERS += SettingManager.h \
+    SettingDialog.h \
+    ISettingPage.h
+SOURCES += SettingManager.cpp \
+    SettingDialog.cpp \
+    ISettingPage.cpp
+FORMS   += \
+    SettingDialog.ui

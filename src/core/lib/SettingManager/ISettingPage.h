@@ -1,7 +1,7 @@
 /*!
-   \file SettingManager.h
+   \file ISettingPage.h
    \author Dane Gardner <dane.gardner@gmail.com>
-   \version
+   \version 
 
    \section LICENSE
    This file is part of the Open|SpeedShop Graphical User Interface
@@ -25,50 +25,28 @@
 
  */
 
-#ifndef SETTINGMANAGER_H
-#define SETTINGMANAGER_H
+#ifndef ISETTINGPAGE_H
+#define ISETTINGPAGE_H
 
 #include <QObject>
 #include <QString>
-#include <QSettings>
+#include <QIcon>
 
-#include "ISettingPage.h"
-#include "SettingDialog.h"
-
-namespace Core {
-
-class SettingManager : public QObject
+class ISettingPage
 {
-    Q_OBJECT
 public:
-    static SettingManager *instance();
+    ISettingPage();
+    virtual ~ISettingPage() {}
 
-    void setValue(const QString &key, const QVariant &value);
-    QVariant value(const QString &key, const QVariant &defaultValue = QVariant()) const;
-
-    void remove(const QString &key);
-    bool contains(const QString &key) const;
-
-    void beginGroup(const QString &prefix);
-    void endGroup();
-    QString group() const;
-
-    void registerPage(ISettingPage *page);
+    virtual QIcon icon() = 0;
+    virtual QString name() = 0;
+    virtual int priority() = 0;
+    virtual QWidget *widget() = 0;
 
 signals:
 
 public slots:
-    void settingDialog();
-
-protected:
-    SettingManager();
-    ~SettingManager();
-
-    QSettings m_Settings;
-    QList<ISettingPage *> m_Pages;
 
 };
 
-}
-
-#endif // SETTINGMANAGER_H
+#endif // ISETTINGPAGE_H
