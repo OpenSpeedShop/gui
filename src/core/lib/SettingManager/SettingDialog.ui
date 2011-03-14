@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>SettingDialog</class>
- <widget class="QDialog" name="SettingDialog">
+ <class>Core::SettingManager::SettingDialog</class>
+ <widget class="QDialog" name="Core::SettingManager::SettingDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -45,7 +45,7 @@
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
-     <widget class="QWidget" name="stackedWidgetPage1" native="true"/>
+     <widget class="QWidget" name="stackedWidgetPage1"/>
     </widget>
    </item>
   </layout>
@@ -55,7 +55,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>SettingDialog</receiver>
+   <receiver>Core::SettingManager::SettingDialog</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -71,7 +71,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>SettingDialog</receiver>
+   <receiver>Core::SettingManager::SettingDialog</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

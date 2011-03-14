@@ -117,7 +117,7 @@ int main(int argc, char *argv[])
     QCoreApplication::setApplicationName("OpenSpeedShop GUI");
     QCoreApplication::setApplicationVersion("0.1");
 
-    Core::MainWindow::instance()->show();
+    Core::MainWindow::MainWindow::instance()->show();
 
     return a.exec();
 }

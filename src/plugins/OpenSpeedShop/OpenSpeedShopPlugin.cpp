@@ -47,7 +47,8 @@ OpenSpeedShopPlugin::~OpenSpeedShopPlugin()
 
 bool OpenSpeedShopPlugin::initialize(QStringList &args, QString *err)
 {
-    Core::ActionManager *actions = Core::ActionManager::instance();
+    Core::ActionManager::ActionManager *actions =
+            Core::ActionManager::ActionManager::instance();
 
     // Create and connect actions to local slots
     QAction *action = new QAction(tr("Load"), this);

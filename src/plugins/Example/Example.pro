@@ -21,4 +21,4 @@ TARGET   = Example
 SOURCES += ExamplePlugin.cpp
 HEADERS += ExamplePlugin.h
 
-LIBS    += -lPluginManager
+LIBS    += -lCore

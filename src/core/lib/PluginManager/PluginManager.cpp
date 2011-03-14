@@ -34,6 +34,7 @@
 #include "PluginManager.h"
 
 namespace Core {
+namespace PluginManager {
 
 /*!
    \class PluginManager
@@ -93,7 +94,9 @@ PluginManager::~PluginManager()
  */
 void PluginManager::readSettings()
 {
-    SettingManager *settings = SettingManager::instance();
+    SettingManager::SettingManager *settings =
+            SettingManager::SettingManager::instance();
+
     settings->beginGroup("PluginManager");
 
     m_PluginPath = settings->value("PluginPath").toString();
@@ -108,7 +111,9 @@ void PluginManager::readSettings()
  */
 void PluginManager::writeSettings()
 {
-    SettingManager *settings = SettingManager::instance();
+    SettingManager::SettingManager *settings =
+            SettingManager::SettingManager::instance();
+
     settings->beginGroup("PluginManager");
 
     settings->setValue("PluginPath", m_PluginPath);
@@ -270,4 +275,4 @@ bool PluginManager::delObject(QObject *object)
     return (RetVal);
 }
 
-}
+}}

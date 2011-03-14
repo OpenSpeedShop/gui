@@ -91,3 +91,4 @@ IPlugin::IPlugin()
    \returns QStringList where each QString in the list contains the name
             of a parent plugin which must be initialized before this one
  */
+

@@ -37,6 +37,7 @@
 #include "PluginWrapper.h"
 
 namespace Core {
+namespace PluginManager {
 
 class PluginManager : public QObject
 {
@@ -87,6 +88,5 @@ protected:
     PluginWrapper *findPlugin(QString name);
 };
 
-}
-
+}}
 #endif // PLUGINMANAGER_H

@@ -33,6 +33,8 @@
 #include <PluginManager/PluginDialog.h>
 
 namespace Core {
+namespace MainWindow {
+
 MainWindow *m_Instance;
 
 /*!
@@ -67,7 +69,7 @@ MainWindow::MainWindow() : QMainWindow(0)
     readSettings();
     initActions();
 
-    PluginManager::instance()->loadPlugins();
+    PluginManager::PluginManager::instance()->loadPlugins();
 }
 
 /*!
@@ -87,7 +89,9 @@ MainWindow::~MainWindow()
  */
 void MainWindow::readSettings()
 {
-    SettingManager *settings = SettingManager::instance();
+    SettingManager::SettingManager *settings =
+            SettingManager::SettingManager::instance();
+
     settings->beginGroup("MainWindow");
 
     resize( settings->value("WindowSize", QSize(640, 400)).toSize() );
@@ -103,7 +107,9 @@ void MainWindow::readSettings()
  */
 void MainWindow::writeSettings()
 {
-    SettingManager *settings = SettingManager::instance();
+    SettingManager::SettingManager *settings =
+            SettingManager::SettingManager::instance();
+
     settings->beginGroup("MainWindow");
 
     settings->setValue("WindowSize", size());
@@ -114,7 +120,9 @@ void MainWindow::writeSettings()
 
 void MainWindow::initActions()
 {
-    ActionManager *actions = ActionManager::instance();
+    ActionManager::ActionManager *actions =
+            ActionManager::ActionManager::instance();
+
     connect(actions, SIGNAL(menuAdded(QMenu *)), this, SLOT(menuAdded(QMenu *)));
 
     // Create and connect actions to local slots
@@ -134,15 +142,9 @@ void MainWindow::menuAdded(QMenu *menu)
 
 void MainWindow::pluginDialog()
 {
-#ifdef QT_DEBUG
-    qDebug() << __FILE__ << __LINE__ << "Core::MainWindow::pluginDialog()";
-#endif
-
-    PluginDialog dialog(this);
-    if (dialog.exec() == QDialog::Accepted) {
-    } else {
-    }
+    PluginManager::PluginDialog dialog(this);
+    dialog.exec();
 }
 
 
-}
+}}

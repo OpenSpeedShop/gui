@@ -21,4 +21,4 @@ TARGET   = OpenSpeedShop
 SOURCES += OpenSpeedShopPlugin.cpp
 HEADERS += OpenSpeedShopPlugin.h
 
-LIBS    += -lPluginManager -lSettingManager -lActionManager
+LIBS    += -lCore

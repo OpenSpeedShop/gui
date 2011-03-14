@@ -32,6 +32,7 @@
 #endif
 
 namespace Core {
+namespace PluginManager {
 
 PluginWrapper::PluginWrapper(IPlugin *plugin, QString filePath, QObject *parent) :
         QObject(parent)
@@ -81,15 +82,4 @@ QList<Dependency> PluginWrapper::dependencies()
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-}
+}}

@@ -35,9 +35,10 @@
 #include <PluginManager/PluginManager.h>
 #include <ActionManager/ActionManager.h>
 
-namespace Core {
+class Core::SettingManager::SettingManager;
 
-class SettingManager;
+namespace Core {
+namespace MainWindow {
 
 class MainWindow : public QMainWindow
 {
@@ -63,5 +64,5 @@ protected:
     void initActions();
 };
 
-}
+}}
 #endif // MAINWINDOW_H

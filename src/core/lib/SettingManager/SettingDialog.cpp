@@ -28,6 +28,9 @@
 #include "SettingDialog.h"
 #include "ui_SettingDialog.h"
 
+namespace Core {
+namespace SettingManager {
+
 SettingDialog::SettingDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::SettingDialog)
@@ -39,3 +42,7 @@ SettingDialog::~SettingDialog()
 {
     delete ui;
 }
+
+
+
+}}

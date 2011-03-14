@@ -36,6 +36,7 @@
 #include "SettingDialog.h"
 
 namespace Core {
+namespace SettingManager {
 
 class SettingManager : public QObject
 {
@@ -64,11 +65,11 @@ protected:
     SettingManager();
     ~SettingManager();
 
+
     QSettings m_Settings;
     QList<ISettingPage *> m_Pages;
 
 };
 
-}
-
+}}
 #endif // SETTINGMANAGER_H

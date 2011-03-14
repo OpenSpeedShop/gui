@@ -28,6 +28,7 @@
 #include "ActionManager.h"
 
 namespace Core {
+namespace ActionManager {
 
 /*!
    \class ActionManager
@@ -97,4 +98,4 @@ void ActionManager::registerMenuItem(QString menuName, QAction *action, int prio
 
 
 
-}
+}}

@@ -28,9 +28,14 @@
 #ifndef ISETTINGPAGE_H
 #define ISETTINGPAGE_H
 
+#include <QtPlugin>
+
 #include <QObject>
 #include <QString>
 #include <QIcon>
+
+namespace Core {
+namespace SettingManager {
 
 class ISettingPage
 {
@@ -48,5 +53,10 @@ signals:
 public slots:
 
 };
+
+
+}}
+
+Q_DECLARE_INTERFACE(Core::SettingManager::ISettingPage, "org.openspeedshop.gui.ISettingPage/0.1")
 
 #endif // ISETTINGPAGE_H

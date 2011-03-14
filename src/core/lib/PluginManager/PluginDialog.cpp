@@ -29,6 +29,7 @@
 #include "ui_PluginDialog.h"
 
 namespace Core {
+namespace PluginManager {
 
 PluginDialog::PluginDialog(QWidget *parent) :
     QDialog(parent),
@@ -55,4 +56,4 @@ void PluginDialog::changeEvent(QEvent *e)
 }
 
 
-}
+}}

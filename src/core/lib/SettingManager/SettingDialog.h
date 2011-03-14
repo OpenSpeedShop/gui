@@ -30,6 +30,8 @@
 
 #include <QDialog>
 
+namespace Core {
+namespace SettingManager {
 namespace Ui {
     class SettingDialog;
 }
@@ -46,4 +48,5 @@ private:
     Ui::SettingDialog *ui;
 };
 
+}}
 #endif // SETTINGDIALOG_H

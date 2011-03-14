@@ -36,6 +36,7 @@
 #include <QStatusBar>
 
 namespace Core {
+namespace ActionManager {
 
 class ActionManager : public QObject
 {
@@ -64,6 +65,5 @@ protected:
 
 };
 
-}
-
+}}
 #endif // ACTIONMANAGER_H

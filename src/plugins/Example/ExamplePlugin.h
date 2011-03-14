@@ -41,7 +41,7 @@ Q_INTERFACES(IPlugin)
 public:
     ExamplePlugin();
 
-	/* IPlugin Interface */
+    /* IPlugin Interface */
     ~ExamplePlugin();
     bool initialize(QStringList &args, QString *err);
     void shutdown();

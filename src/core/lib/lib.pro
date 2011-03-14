@@ -15,7 +15,30 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
-TEMPLATE = subdirs
-CONFIG  += ordered
-SUBDIRS  = SettingManager PluginManager ActionManager MainWindow
-#           HelpManager
+include(lib.pri)
+TARGET   = Core
+
+HEADERS += ActionManager/ActionManager.h \
+           MainWindow/MainWindow.h \
+           PluginManager/PluginManager.h \
+           PluginManager/IPlugin.h \
+           PluginManager/PluginDialog.h \
+           PluginManager/PluginWrapper.h \
+           SettingManager/SettingManager.h \
+           SettingManager/SettingDialog.h \
+           SettingManager/ISettingPage.h
+
+SOURCES += ActionManager/ActionManager.cpp \
+           MainWindow/MainWindow.cpp \
+    	   PluginManager/PluginManager.cpp \
+           PluginManager/IPlugin.cpp \
+           PluginManager/PluginDialog.cpp \
+           PluginManager/PluginWrapper.cpp \
+           SettingManager/SettingManager.cpp \
+           SettingManager/SettingDialog.cpp \
+           SettingManager/ISettingPage.cpp
+
+FORMS   += PluginManager/PluginDialog.ui \
+           SettingManager/SettingDialog.ui
+
+LIBS    += 

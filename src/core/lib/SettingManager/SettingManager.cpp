@@ -28,6 +28,7 @@
 #include "SettingManager.h"
 
 namespace Core {
+namespace SettingManager {
 
 /*!
    \class SettingManager
@@ -153,8 +154,12 @@ void SettingManager::registerPage(ISettingPage *page)
 
 void SettingManager::settingDialog()
 {
-    SettingDialog dialog(this);
-    dialog.exec();
+    SettingDialog dialog();
+//    dialog.exec();
 }
 
-}
+
+
+}}
+
+

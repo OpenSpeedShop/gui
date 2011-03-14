@@ -25,4 +25,4 @@ SOURCES += main.cpp
 HEADERS +=
 FORMS   +=
 
-LIBS    += -lMainWindow
+LIBS    += -lCore

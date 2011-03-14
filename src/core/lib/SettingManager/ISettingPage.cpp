@@ -27,6 +27,11 @@
 
 #include "ISettingPage.h"
 
+namespace Core {
+namespace SettingManager {
+
 ISettingPage::ISettingPage()
 {
 }
+
+}}

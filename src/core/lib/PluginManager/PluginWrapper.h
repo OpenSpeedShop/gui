@@ -35,6 +35,7 @@
 #include "IPlugin.h"
 
 namespace Core {
+namespace PluginManager {
 
 enum PluginStatus {
     PluginStatus_Error,
@@ -65,5 +66,5 @@ protected:
 };
 
 
-}
+}}
 #endif // PLUGINWRAPPER_H

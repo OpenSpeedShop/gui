@@ -31,6 +31,7 @@
 #include <QDialog>
 
 namespace Core {
+namespace PluginManager {
 
 namespace Ui {
     class PluginDialog;
@@ -51,5 +52,5 @@ private:
     Ui::PluginDialog *ui;
 };
 
-}
+}}
 #endif // PLUGINDIALOG_H
