@@ -35,8 +35,6 @@
 #include <PluginManager/PluginManager.h>
 #include <ActionManager/ActionManager.h>
 
-class Core::SettingManager::SettingManager;
-
 namespace Core {
 namespace MainWindow {
 
@@ -47,21 +45,25 @@ class MainWindow : public QMainWindow
 public:
     static MainWindow* instance();
 
+    bool initialize();
+    bool initialized();
+
 signals:
 
 public slots:
     void menuAdded(QMenu *);
-    void pluginDialog();
-
 
 protected:
     MainWindow();
     ~MainWindow();
 
+    bool m_Initialized;
+
     void readSettings();
     void writeSettings();
 
     void initActions();
+
 };
 
 }}

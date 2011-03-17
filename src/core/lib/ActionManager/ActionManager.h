@@ -35,6 +35,8 @@
 #include <QToolBar>
 #include <QStatusBar>
 
+#include "MainWindow/MainWindow.h"
+
 namespace Core {
 namespace ActionManager {
 
@@ -45,21 +47,20 @@ public:
     static ActionManager *instance();
 
     void registerMenuItem(QString menuName, QAction *action, int priority=0);
-//    void registerToolBarItem(QString toolBarName, QAction action, int priority=0);
-//    void registerStatusBarItem(QString statusBarName, QAction action, int priority=0);
 
-//    QList<QToolBar *> m_ToolBars;
+    bool initialize();
+    bool initialized();
 
 signals:
     void menuAdded(QMenu *);
-    void toolBarAdded(QToolBar *);
-    void statusBarAdded(QStatusBar *);
 
 public slots:
 
 protected:
     ActionManager();
     ~ActionManager();
+
+    bool m_Initialized;
 
     QList<QMenu *> m_Menus;
 

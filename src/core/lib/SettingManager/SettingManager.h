@@ -32,8 +32,12 @@
 #include <QString>
 #include <QSettings>
 
+#include "MainWindow/MainWindow.h"
+#include "ActionManager/ActionManager.h"
+
 #include "ISettingPage.h"
 #include "SettingDialog.h"
+
 
 namespace Core {
 namespace SettingManager {
@@ -43,6 +47,9 @@ class SettingManager : public QObject
     Q_OBJECT
 public:
     static SettingManager *instance();
+
+    bool initialize();
+    bool initialized();
 
     void setValue(const QString &key, const QVariant &value);
     QVariant value(const QString &key, const QVariant &defaultValue = QVariant()) const;
@@ -65,6 +72,7 @@ protected:
     SettingManager();
     ~SettingManager();
 
+    bool m_Initialized;
 
     QSettings m_Settings;
     QList<ISettingPage *> m_Pages;

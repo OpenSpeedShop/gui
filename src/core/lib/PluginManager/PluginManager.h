@@ -45,6 +45,9 @@ class PluginManager : public QObject
 public:
     static PluginManager *instance();
 
+    bool initialize();
+    bool initialized();
+
     void loadPlugins();
 
     void addObject(QObject *object);
@@ -70,10 +73,13 @@ signals:
     void objectRemoved(QObject *);
 
 public slots:
+    void pluginDialog();
 
 protected:
     PluginManager();
     ~PluginManager();
+
+    bool m_Initialized;
 
     void readSettings();
     void writeSettings();

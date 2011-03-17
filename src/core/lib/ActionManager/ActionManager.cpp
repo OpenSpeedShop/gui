@@ -57,6 +57,7 @@ ActionManager *ActionManager::instance()
  */
 ActionManager::ActionManager() : QObject(0)
 {
+    m_Initialized = false;
 }
 
 /*!
@@ -68,9 +69,22 @@ ActionManager::~ActionManager()
 {
 }
 
+bool ActionManager::initialize()
+{
+    return m_Initialized = true;
+}
+
+bool ActionManager::initialized()
+{
+    return m_Initialized;
+}
+
 void ActionManager::registerMenuItem(QString menuName, QAction *action, int priority)
 {
     Q_UNUSED(priority);
+
+    Core::MainWindow::MainWindow *mainWindow =
+            Core::MainWindow::MainWindow::instance();
 
     /* Replace any ampersands that might be in the name, so we can have a
        "clean" name for object searching */
@@ -92,6 +106,9 @@ void ActionManager::registerMenuItem(QString menuName, QAction *action, int prio
     }
 
     menu->addAction(action);
+
+    mainWindow->menuBar()->addMenu(menu);
+
 }
 
 

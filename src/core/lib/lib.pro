@@ -42,3 +42,5 @@ FORMS   += PluginManager/PluginDialog.ui \
            SettingManager/SettingDialog.ui
 
 LIBS    += 
+
+RESOURCES += resources/Core.qrc

@@ -30,7 +30,6 @@
 #endif
 
 #include "MainWindow.h"
-#include <PluginManager/PluginDialog.h>
 
 namespace Core {
 namespace MainWindow {
@@ -63,13 +62,10 @@ MainWindow *MainWindow::instance()
  */
 MainWindow::MainWindow() : QMainWindow(0)
 {
+    m_Initialized = false;
+
     // Easier notification (than the alternatives) that we're closing
     setAttribute( Qt::WA_DeleteOnClose );
-
-    readSettings();
-    initActions();
-
-    PluginManager::PluginManager::instance()->loadPlugins();
 }
 
 /*!
@@ -80,6 +76,22 @@ MainWindow::MainWindow() : QMainWindow(0)
 MainWindow::~MainWindow()
 {
     writeSettings();
+
+    if(m_Instance)
+        m_Instance = NULL;
+}
+
+bool MainWindow::initialize()
+{
+    readSettings();
+    initActions();
+
+    return m_Initialized = true;
+}
+
+bool MainWindow::initialized()
+{
+    return m_Initialized;
 }
 
 /*!
@@ -123,16 +135,8 @@ void MainWindow::initActions()
     ActionManager::ActionManager *actions =
             ActionManager::ActionManager::instance();
 
-    connect(actions, SIGNAL(menuAdded(QMenu *)), this, SLOT(menuAdded(QMenu *)));
-
-    // Create and connect actions to local slots
-    QAction *action = new QAction(tr("Plugins"), this);
-    action->setStatusTip(tr("View loaded plugins"));
-    connect(action, SIGNAL(triggered()), this, SLOT(pluginDialog()));
-
-    // Register actions in menus
-    actions->registerMenuItem("Help", action);
-
+    //TODO: Create and connect actions to local slots
+    //TODO: Register actions in menus
 }
 
 void MainWindow::menuAdded(QMenu *menu)
@@ -140,11 +144,6 @@ void MainWindow::menuAdded(QMenu *menu)
     menuBar()->addMenu(menu);
 }
 
-void MainWindow::pluginDialog()
-{
-    PluginManager::PluginDialog dialog(this);
-    dialog.exec();
-}
 
 
 }}

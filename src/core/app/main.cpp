@@ -106,6 +106,9 @@
 
 
 #include <QtGui/QApplication>
+#include <SettingManager/SettingManager.h>
+#include <ActionManager/ActionManager.h>
+#include <PluginManager/PluginManager.h>
 #include <MainWindow/MainWindow.h>
 
 int main(int argc, char *argv[])
@@ -117,7 +120,26 @@ int main(int argc, char *argv[])
     QCoreApplication::setApplicationName("OpenSpeedShop GUI");
     QCoreApplication::setApplicationVersion("0.1");
 
-    Core::MainWindow::MainWindow::instance()->show();
+    Core::SettingManager::SettingManager *settingManager =
+            Core::SettingManager::SettingManager::instance();
+    Core::ActionManager::ActionManager *actionManager =
+            Core::ActionManager::ActionManager::instance();
+    Core::PluginManager::PluginManager *pluginManager =
+            Core::PluginManager::PluginManager::instance();
+    Core::MainWindow::MainWindow *mainWindow =
+            Core::MainWindow::MainWindow::instance();
+
+    if(!settingManager->initialized())
+        settingManager->initialize();
+    if(!actionManager->initialized())
+        actionManager->initialize();
+    if(!pluginManager->initialized())
+        pluginManager->initialize();
+    if(!mainWindow->initialized())
+        mainWindow->initialize();
+
+    pluginManager->loadPlugins();
+    mainWindow->show();
 
     return a.exec();
 }

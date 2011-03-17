@@ -31,7 +31,9 @@
 
 #include <QDir>
 #include <QPluginLoader>
+
 #include "PluginManager.h"
+#include "PluginDialog.h"
 
 namespace Core {
 namespace PluginManager {
@@ -70,7 +72,7 @@ PluginManager *PluginManager::instance()
  */
 PluginManager::PluginManager() : QObject(0)
 {
-    readSettings();
+    m_Initialized = false;
 }
 
 /*!
@@ -87,6 +89,26 @@ PluginManager::~PluginManager()
     writeSettings();
 }
 
+bool PluginManager::initialize()
+{
+    readSettings();
+
+    ActionManager::ActionManager *actions =
+            ActionManager::ActionManager::instance();
+
+    QAction *action = new QAction(tr("Plugins"), this);
+    action->setStatusTip(tr("View loaded plugins"));
+    connect(action, SIGNAL(triggered()), this, SLOT(pluginDialog()));
+    actions->registerMenuItem("Help", action);
+
+    return m_Initialized = true;
+}
+
+bool PluginManager::initialized()
+{
+    return m_Initialized;
+}
+
 /*!
    \fn PluginManager::readSettings()
    \brief Load settings from the SettingManager.
@@ -100,6 +122,9 @@ void PluginManager::readSettings()
     settings->beginGroup("PluginManager");
 
     m_PluginPath = settings->value("PluginPath").toString();
+
+    //DEBUG:
+    m_PluginPath = "C:/Qt/projects/openspeedshop/build/lib/plugin";
 
     settings->endGroup();
 }
@@ -129,9 +154,7 @@ void PluginManager::writeSettings()
  */
 void PluginManager::loadPlugins()
 {
-    //TODO: Get the directory from the SettingManager
-    QDir pluginDir("C:/Qt/projects/openspeedshop/build/lib/plugin");
-
+    QDir pluginDir(m_PluginPath);
     foreach (QString fileName, pluginDir.entryList(QDir::Files)) {
         QString filePath = pluginDir.absoluteFilePath(fileName);
 
@@ -273,6 +296,12 @@ bool PluginManager::delObject(QObject *object)
     RetVal = m_Objects.removeAll(object);
     emit objectRemoved(object);
     return (RetVal);
+}
+
+void PluginManager::pluginDialog()
+{
+    PluginDialog dialog(m_Plugins, MainWindow::MainWindow::instance());
+    dialog.exec();
 }
 
 }}

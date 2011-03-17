@@ -59,6 +59,7 @@ SettingManager *SettingManager::instance()
  */
 SettingManager::SettingManager() : QObject(0)
 {
+    m_Initialized = false;
 }
 
 /*!
@@ -69,6 +70,24 @@ SettingManager::SettingManager() : QObject(0)
 SettingManager::~SettingManager()
 {
     m_Settings.sync();
+}
+
+bool SettingManager::initialize()
+{
+    ActionManager::ActionManager *actions =
+            ActionManager::ActionManager::instance();
+
+    QAction *action = new QAction(tr("Settings"), this);
+    action->setStatusTip(tr("Change application and plugin settings"));
+    connect(action, SIGNAL(triggered()), this, SLOT(settingDialog()));
+    actions->registerMenuItem("Tools", action);
+
+    return m_Initialized = true;
+}
+
+bool SettingManager::initialized()
+{
+    return m_Initialized;
 }
 
 /*!
@@ -154,8 +173,8 @@ void SettingManager::registerPage(ISettingPage *page)
 
 void SettingManager::settingDialog()
 {
-    SettingDialog dialog();
-//    dialog.exec();
+    SettingDialog dialog(Core::MainWindow::MainWindow::instance());
+    dialog.exec();
 }
 
 

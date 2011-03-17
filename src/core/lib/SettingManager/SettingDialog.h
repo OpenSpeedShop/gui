@@ -32,6 +32,7 @@
 
 namespace Core {
 namespace SettingManager {
+
 namespace Ui {
     class SettingDialog;
 }
@@ -46,6 +47,7 @@ public:
 
 private:
     Ui::SettingDialog *ui;
+
 };
 
 }}

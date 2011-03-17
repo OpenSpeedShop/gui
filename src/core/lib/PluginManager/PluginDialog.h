@@ -29,6 +29,9 @@
 #define PLUGINDIALOG_H
 
 #include <QDialog>
+#include <QTreeWidget>
+#include <SettingManager/SettingManager.h>
+#include "PluginWrapper.h"
 
 namespace Core {
 namespace PluginManager {
@@ -42,14 +45,21 @@ class PluginDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit PluginDialog(QWidget *parent = 0);
+    explicit PluginDialog(QList<PluginWrapper *> plugins, QWidget *parent = 0);
     ~PluginDialog();
 
 protected:
     void changeEvent(QEvent *e);
 
+    void readSettings();
+    void writeSettings();
+
+    void buildTree(QList<PluginWrapper *> plugins);
+    QList<QTreeWidgetItem *> m_Plugins;
+
 private:
     Ui::PluginDialog *ui;
+
 };
 
 }}
