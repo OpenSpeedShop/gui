@@ -25,55 +25,41 @@
 
  */
 
-#include "Settings.h"
-#include "ui_Settings.h"
+#include "SettingPageFactory.h"
 
-Settings::Settings(QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::Settings)
+namespace Plugins {
+namespace OpenSpeedShop {
+
+SettingPageFactory::SettingPageFactory(QObject *parent) :
+    QObject(parent)
 {
-    ui->setupUi(this);
 }
 
-Settings::~Settings()
+SettingPageFactory::~SettingPageFactory()
 {
-    delete ui;
 }
 
-QIcon Settings::icon()
+QIcon SettingPageFactory::icon()
 {
-    return this->windowIcon();
+    return QIcon(":/OpenSpeedShop/app.png");
 }
 
-QString Settings::name()
+QString SettingPageFactory::name()
 {
-    return this->windowTitle();
+    return tr("Open|SpeedShop");
 }
 
-int Settings::priority()
+int SettingPageFactory::priority()
 {
     return 50;
 }
 
-QWidget *Settings::widget()
+Core::SettingManager::ISettingPage *SettingPageFactory::createPage()
 {
-    return this;
+    SettingPage *page = new SettingPage();
+    Q_UNUSED(page);
+
+    return 0;
 }
 
-void Settings::initialize()
-{
-    Core::SettingManager::SettingManager *settingManager =
-             Core::SettingManager::SettingManager::instance();
-
-    //TODO: Get settings
-    Q_UNUSED(settingManager);
-}
-
-void Settings::apply()
-{
-    Core::SettingManager::SettingManager *settingManager =
-             Core::SettingManager::SettingManager::instance();
-
-    //TODO: Persist settings
-    Q_UNUSED(settingManager);
-}
+}}

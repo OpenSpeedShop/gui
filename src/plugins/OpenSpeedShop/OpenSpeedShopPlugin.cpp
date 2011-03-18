@@ -30,7 +30,6 @@
 #endif
 
 #include "OpenSpeedShopPlugin.h"
-#include <ActionManager/ActionManager.h>
 
 namespace Plugins {
 namespace OpenSpeedShop {
@@ -57,7 +56,7 @@ bool OpenSpeedShopPlugin::initialize(QStringList &args, QString *err)
 
     Core::SettingManager::SettingManager *settingManager =
              Core::SettingManager::SettingManager::instance();
-    settingManager->registerPage(new Settings());
+    settingManager->registerPage(new SettingPageFactory());
 
     // Setup menu actions
     Core::ActionManager::ActionManager *actions =

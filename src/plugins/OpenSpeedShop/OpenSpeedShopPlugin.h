@@ -29,9 +29,10 @@
 #define OPENSPEEDSHOPPLUGIN_H
 
 #include <QtCore>
-#include "Settings.h"
+#include "SettingPageFactory.h"
 #include <PluginManager/IPlugin.h>
 #include <SettingManager/SettingManager.h>
+#include <ActionManager/ActionManager.h>
 
 namespace Plugins {
 namespace OpenSpeedShop {

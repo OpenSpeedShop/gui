@@ -1,5 +1,5 @@
 /*!
-   \file ISettingPageFactory.cpp
+   \file 
    \author Dane Gardner <dane.gardner@gmail.com>
    \version 
 
@@ -25,10 +25,28 @@
 
  */
 
-#include "ISettingPageFactory.h"
+#ifndef ISETTINGPAGE_H
+#define ISETTINGPAGE_H
+
+#include <QtPlugin>
+#include <QWidget>
 
 namespace Core {
 namespace SettingManager {
 
+class ISettingPage : public QWidget
+{
+    Q_OBJECT
+public:
+    ISettingPage(QWidget *parent = 0) : QWidget(parent) {}
+    virtual ~ISettingPage() {}
+public slots:
+    virtual void initialize() = 0;
+    virtual void apply() = 0;
+};
 
 }}
+
+Q_DECLARE_INTERFACE(Core::SettingManager::ISettingPage, "org.openspeedshop.gui.ISettingPage/0.1")
+
+#endif // ISETTINGPAGE_H

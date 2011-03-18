@@ -26,7 +26,8 @@ HEADERS += ActionManager/ActionManager.h \
            PluginManager/PluginWrapper.h \
            SettingManager/SettingManager.h \
            SettingManager/SettingDialog.h \
-           SettingManager/ISettingPageFactory.h
+           SettingManager/ISettingPageFactory.h \
+    SettingManager/ISettingPage.h
 
 SOURCES += ActionManager/ActionManager.cpp \
            MainWindow/MainWindow.cpp \
@@ -36,7 +37,8 @@ SOURCES += ActionManager/ActionManager.cpp \
            PluginManager/PluginWrapper.cpp \
            SettingManager/SettingManager.cpp \
            SettingManager/SettingDialog.cpp \
-           SettingManager/ISettingPageFactory.cpp
+           SettingManager/ISettingPageFactory.cpp \
+    SettingManager/ISettingPage.cpp
 
 FORMS   += PluginManager/PluginDialog.ui \
            SettingManager/SettingDialog.ui

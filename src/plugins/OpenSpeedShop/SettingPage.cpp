@@ -1,5 +1,5 @@
 /*!
-   \file ISettingPageFactory.cpp
+   \file 
    \author Dane Gardner <dane.gardner@gmail.com>
    \version 
 
@@ -25,10 +25,23 @@
 
  */
 
-#include "ISettingPageFactory.h"
+#include "SettingPage.h"
+#include "ui_SettingPage.h"
 
-namespace Core {
-namespace SettingManager {
+namespace Plugins {
+namespace OpenSpeedShop {
+
+SettingPage::SettingPage(QWidget *parent) :
+    Core::SettingManager::ISettingPage(parent),
+    ui(new Ui::SettingPage)
+{
+    ui->setupUi(this);
+}
+
+SettingPage::~SettingPage()
+{
+    delete ui;
+}
 
 
 }}

@@ -25,14 +25,13 @@
 
  */
 
-#ifndef ISETTINGPAGE_H
-#define ISETTINGPAGE_H
+#ifndef ISETTINGPAGEFACTORY_H
+#define ISETTINGPAGEFACTORY_H
 
 #include <QtPlugin>
-
-#include <QObject>
 #include <QString>
 #include <QIcon>
+#include "ISettingPage.h"
 
 namespace Core {
 namespace SettingManager {
@@ -40,25 +39,15 @@ namespace SettingManager {
 class ISettingPageFactory
 {
 public:
-    ISettingPageFactory();
     virtual ~ISettingPageFactory() {}
-
     virtual QIcon icon() = 0;
     virtual QString name() = 0;
     virtual int priority() = 0;
-    virtual void initialize() = 0;
-    virtual void apply() = 0;
-    virtual QWidget *createPage() = 0;
-
-signals:
-
-public slots:
-
+    virtual ISettingPage *createPage() = 0;
 };
-
 
 }}
 
 Q_DECLARE_INTERFACE(Core::SettingManager::ISettingPageFactory, "org.openspeedshop.gui.ISettingPageFactory/0.1")
 
-#endif // ISETTINGPAGE_H
+#endif // ISETTINGPAGEFACTORY_H

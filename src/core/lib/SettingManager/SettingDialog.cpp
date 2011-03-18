@@ -54,13 +54,15 @@ SettingDialog::SettingDialog(QList<ISettingPageFactory *> pages, QWidget *parent
 
     // Add the pages to the lists, after initializing them
     for(int i = 0; i < m_Pages.count(); i++) {
-        ISettingPageFactory *page = m_Pages.at(i);
-        page->initialize();
+        ISettingPageFactory *factory = m_Pages.at(i);
 
         QListWidgetItem *item = new QListWidgetItem(ui->listWidget);
-        item->setText(page->name());
-        item->setIcon(page->icon());
-        ui->stackedWidget->addWidget(page->widget());
+        item->setText(factory->name());
+        item->setIcon(factory->icon());
+
+        ISettingPage *page = factory->createPage();
+        page->initialize();
+        ui->stackedWidget->addWidget( qobject_cast<QWidget *>(page) );
     }
 }
 
@@ -107,8 +109,12 @@ bool SettingDialog::ascending(ISettingPageFactory *left, ISettingPageFactory *ri
 
 void SettingDialog::accept()
 {
-    foreach(ISettingPageFactory *page, m_Pages) {
-        page->apply();
+    // Iterate over the pages and persist the changes to the settings
+    for(int i = 0; i < ui->stackedWidget->count(); i++) {
+        ISettingPage *page = qobject_cast<ISettingPage *>(ui->stackedWidget->widget(i));
+        if(page) {
+            page->apply();
+        }
     }
 
     QDialog::accept();
