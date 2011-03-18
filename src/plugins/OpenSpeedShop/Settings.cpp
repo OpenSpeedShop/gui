@@ -1,5 +1,5 @@
 /*!
-   \file ISettingPage.h
+   \file 
    \author Dane Gardner <dane.gardner@gmail.com>
    \version 
 
@@ -25,38 +25,55 @@
 
  */
 
-#ifndef ISETTINGPAGE_H
-#define ISETTINGPAGE_H
+#include "Settings.h"
+#include "ui_Settings.h"
 
-#include <QtPlugin>
-
-#include <QObject>
-#include <QString>
-#include <QIcon>
-
-namespace Core {
-namespace SettingManager {
-
-class ISettingPage
+Settings::Settings(QWidget *parent) :
+    QWidget(parent),
+    ui(new Ui::Settings)
 {
-public:
-    ISettingPage();
-    virtual ~ISettingPage() {}
+    ui->setupUi(this);
+}
 
-    virtual QIcon icon() = 0;
-    virtual QString name() = 0;
-    virtual int priority() = 0;
-    virtual QWidget *widget() = 0;
+Settings::~Settings()
+{
+    delete ui;
+}
 
-signals:
+QIcon Settings::icon()
+{
+    return this->windowIcon();
+}
 
-public slots:
+QString Settings::name()
+{
+    return this->windowTitle();
+}
 
-};
+int Settings::priority()
+{
+    return 50;
+}
 
+QWidget *Settings::widget()
+{
+    return this;
+}
 
-}}
+void Settings::initialize()
+{
+    Core::SettingManager::SettingManager *settingManager =
+             Core::SettingManager::SettingManager::instance();
 
-Q_DECLARE_INTERFACE(Core::SettingManager::ISettingPage, "org.openspeedshop.gui.ISettingPage/0.1")
+    //TODO: Get settings
+    Q_UNUSED(settingManager);
+}
 
-#endif // ISETTINGPAGE_H
+void Settings::apply()
+{
+    Core::SettingManager::SettingManager *settingManager =
+             Core::SettingManager::SettingManager::instance();
+
+    //TODO: Persist settings
+    Q_UNUSED(settingManager);
+}

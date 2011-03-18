@@ -92,6 +92,9 @@ protected:
     QString m_PluginPath;
 
     PluginWrapper *findPlugin(QString name);
+    static bool ascending(PluginWrapper *left, PluginWrapper *right);
+    static bool descending(PluginWrapper *left, PluginWrapper *right);
+
 };
 
 }}

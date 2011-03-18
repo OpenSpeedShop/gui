@@ -47,10 +47,21 @@ OpenSpeedShopPlugin::~OpenSpeedShopPlugin()
 
 bool OpenSpeedShopPlugin::initialize(QStringList &args, QString *err)
 {
+    /* We're a main plugin, so we need to make changes to the mainWindow
+       like the application icon and the title
+     */
+    Core::MainWindow::MainWindow *mainWindow =
+            Core::MainWindow::MainWindow::instance();
+    mainWindow->setWindowIcon(QIcon(":/OpenSpeedShop/app.png"));
+    mainWindow->setWindowTitle( QString("Open|SpeedShop%1").arg(QChar(0x2122)) );
+
+    Core::SettingManager::SettingManager *settingManager =
+             Core::SettingManager::SettingManager::instance();
+    settingManager->registerPage(new Settings());
+
+    // Setup menu actions
     Core::ActionManager::ActionManager *actions =
             Core::ActionManager::ActionManager::instance();
-
-    // Create and connect actions to local slots
     QAction *action = new QAction(tr("Load"), this);
     action->setStatusTip(tr("Load an existing data set"));
     connect(action, SIGNAL(triggered()), this, SLOT(load()));

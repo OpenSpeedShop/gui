@@ -209,7 +209,7 @@ void PluginManager::initializePlugins()
     //TODO: Check plugin versions
 
     // Create a queue with the proper initialization ordering
-    QQueue<PluginWrapper *> queue;
+    int priority = 0;
     while(dag.count()) {
 
         // Iterate through the plugins and see if any have no dependencies
@@ -230,7 +230,8 @@ void PluginManager::initializePlugins()
         }
 
         // Add the plugin with no dependencies to the queue
-        queue.enqueue(findPlugin(next));
+        PluginWrapper *plugin = findPlugin(next);
+        plugin->setPriority(priority++);
 
         // Remove it from all of the lists
         dag.remove(next);
@@ -239,11 +240,12 @@ void PluginManager::initializePlugins()
         }
     }
 
+    qSort(m_Plugins.begin(), m_Plugins.end(), ascending);
+
     /* Intialize via the queue */
     QString *err = new QString();
     QStringList args;
-    while(queue.count()) {
-        PluginWrapper *plugin = queue.dequeue();
+    foreach(PluginWrapper *plugin, m_Plugins) {
         if( plugin->status() == PluginStatus_Loaded && plugin->initialize(args, err) ) {
             emit pluginInitialized(plugin);
         }
@@ -302,6 +304,16 @@ void PluginManager::pluginDialog()
 {
     PluginDialog dialog(m_Plugins, MainWindow::MainWindow::instance());
     dialog.exec();
+}
+
+bool PluginManager::ascending(PluginWrapper *left, PluginWrapper *right)
+{
+    return left->priority() > right->priority();
+}
+
+bool PluginManager::descending(PluginWrapper *left, PluginWrapper *right)
+{
+    return left->priority() < right->priority();
 }
 
 }}

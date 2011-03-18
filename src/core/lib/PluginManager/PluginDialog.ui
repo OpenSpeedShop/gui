@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>Loaded Plugins</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="../resources/Core.qrc">
+    <normaloff>:/PluginManager/plugin.png</normaloff>:/PluginManager/plugin.png</iconset>
+  </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
     <widget class="QTreeWidget" name="treeWidget">
@@ -38,7 +42,9 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../resources/Core.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>buttonBox</sender>

@@ -42,44 +42,6 @@ PluginDialog::PluginDialog(QList<PluginWrapper *> plugins, QWidget *parent) :
     buildTree(plugins);
 }
 
-void PluginDialog::buildTree(QList<PluginWrapper *> plugins)
-{
-    QStringList headers;
-    headers.append("Name");
-    ui->treeWidget->setColumnWidth(0, 250);
-    headers.append("Version");
-    ui->treeWidget->setColumnWidth(1, 50);
-    ui->treeWidget->setHeaderLabels(headers);
-    ui->treeWidget->setHeaderHidden(false);
-
-    foreach(PluginWrapper *plugin, plugins) {
-        QTreeWidgetItem *item = new QTreeWidgetItem(ui->treeWidget);
-        item->setText(0, plugin->name());
-        item->setText(1, plugin->version());
-
-        switch(plugin->status()) {
-            case PluginStatus_Loaded:
-                item->setToolTip(0, tr("Plugin loaded"));
-                item->setIcon(0, QIcon(":/icons/check.png"));
-                break;
-            case PluginStatus_Initialized:
-                item->setToolTip(0, tr("Plugin initialized"));
-                item->setIcon(0, QIcon(":/icons/check.png"));
-                break;
-            case PluginStatus_Error:
-                item->setToolTip(0, tr("Plugin failed"));
-                item->setIcon(0, QIcon(":/icons/fail.png"));
-                break;
-            case PluginStatus_Shutdown:
-                item->setToolTip(0, tr("Plugin shutdown"));
-                item->setIcon(0, QIcon(":/icons/fail.png"));
-                break;
-        }
-
-        m_Plugins.append(item);
-    }
-}
-
 PluginDialog::~PluginDialog()
 {
     writeSettings();
@@ -108,8 +70,8 @@ void PluginDialog::readSettings()
     settings->beginGroup("PluginDialog");
 
     //TODO: Restore tree state
-    resize( settings->value("WindowSize", QSize(640, 400)).toSize() );
-    move( settings->value("WindowPosition", QPoint(0, 0)).toPoint() );
+    resize( settings->value("WindowSize", size()).toSize() );
+    move( settings->value("WindowPosition", pos()).toPoint() );
 
     settings->endGroup();
     settings->endGroup();
@@ -129,6 +91,50 @@ void PluginDialog::writeSettings()
 
     settings->endGroup();
     settings->endGroup();
+}
+
+void PluginDialog::buildTree(QList<PluginWrapper *> plugins)
+{
+    QStringList headers;
+    headers.append("Name");
+    ui->treeWidget->setColumnWidth(0, 250);
+    headers.append("Version");
+    ui->treeWidget->setColumnWidth(1, 50);
+    ui->treeWidget->setHeaderLabels(headers);
+    ui->treeWidget->setHeaderHidden(false);
+
+    // Plugins should already be in the proper order after initialization
+
+    foreach(PluginWrapper *plugin, plugins) {
+        QTreeWidgetItem *item = new QTreeWidgetItem(ui->treeWidget);
+        item->setText(0, plugin->name());
+        item->setText(1, plugin->version());
+
+        switch(plugin->status()) {
+            case PluginStatus_Loaded:
+                item->setToolTip(0, tr("Plugin loaded"));
+                item->setIcon(0, QIcon(":/PluginManager/check.png"));
+                break;
+            case PluginStatus_Initialized:
+                item->setToolTip(0, tr("Plugin initialized"));
+                item->setIcon(0, QIcon(":/PluginManager/check.png"));
+                break;
+            case PluginStatus_Error:
+                item->setToolTip(0, tr("Plugin failed"));
+                item->setIcon(0, QIcon(":/PluginManager/fail.png"));
+                break;
+            case PluginStatus_Shutdown:
+                item->setToolTip(0, tr("Plugin shutdown"));
+                item->setIcon(0, QIcon(":/PluginManager/fail.png"));
+                break;
+            default:
+                item->setToolTip(0, tr("Unknown status"));
+                item->setIcon(0, QIcon(":/PluginManager/fail.png"));
+                break;
+        }
+
+        m_Plugins.append(item);
+    }
 }
 
 }}

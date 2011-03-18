@@ -1,5 +1,5 @@
 /*!
-   \file ISettingPage.cpp
+   \file 
    \author Dane Gardner <dane.gardner@gmail.com>
    \version 
 
@@ -25,13 +25,36 @@
 
  */
 
-#include "ISettingPage.h"
+#ifndef SETTINGS_H
+#define SETTINGS_H
 
-namespace Core {
-namespace SettingManager {
+#include <QWidget>
+#include <SettingManager/ISettingPageFactory.h>
+#include <SettingManager/SettingManager.h>
 
-ISettingPage::ISettingPage()
-{
+namespace Ui {
+    class Settings;
 }
 
-}}
+class Settings : public QWidget, public Core::SettingManager::ISettingPageFactory
+{
+    Q_OBJECT
+    Q_INTERFACES(Core::SettingManager::ISettingPageFactory)
+
+public:
+    explicit Settings(QWidget *parent = 0);
+    ~Settings();
+
+    /* ISettingPageFactory interface */
+    QIcon icon();
+    QString name();
+    int priority();
+    QWidget *widget();
+    void initialize();
+    void apply();
+
+private:
+    Ui::Settings *ui;
+};
+
+#endif // SETTINGS_H

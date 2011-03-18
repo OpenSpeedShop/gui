@@ -35,7 +35,7 @@
 #include "MainWindow/MainWindow.h"
 #include "ActionManager/ActionManager.h"
 
-#include "ISettingPage.h"
+#include "ISettingPageFactory.h"
 #include "SettingDialog.h"
 
 
@@ -61,7 +61,7 @@ public:
     void endGroup();
     QString group() const;
 
-    void registerPage(ISettingPage *page);
+    void registerPage(ISettingPageFactory *page);
 
 signals:
 
@@ -75,7 +75,7 @@ protected:
     bool m_Initialized;
 
     QSettings m_Settings;
-    QList<ISettingPage *> m_Pages;
+    QList<ISettingPageFactory *> m_Pages;
 
 };
 

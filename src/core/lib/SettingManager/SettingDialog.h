@@ -29,6 +29,8 @@
 #define SETTINGDIALOG_H
 
 #include <QDialog>
+#include "SettingManager.h"
+#include "ISettingPageFactory.h"
 
 namespace Core {
 namespace SettingManager {
@@ -42,8 +44,23 @@ class SettingDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit SettingDialog(QWidget *parent = 0);
+    explicit SettingDialog(QList<ISettingPageFactory *> pages, QWidget *parent = 0);
     ~SettingDialog();
+
+    void readSettings();
+    void writeSettings();
+
+
+public slots:
+
+protected:
+    static bool ascending(ISettingPageFactory *left, ISettingPageFactory *right);
+    QList<ISettingPageFactory *> m_Pages;
+
+protected slots:
+    void accept();
+    void reject();
+
 
 private:
     Ui::SettingDialog *ui;

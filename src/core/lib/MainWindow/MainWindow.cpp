@@ -66,6 +66,8 @@ MainWindow::MainWindow() : QMainWindow(0)
 
     // Easier notification (than the alternatives) that we're closing
     setAttribute( Qt::WA_DeleteOnClose );
+
+    setWindowIcon(QIcon(":/MainWindow/app.png"));
 }
 
 /*!
@@ -132,11 +134,13 @@ void MainWindow::writeSettings()
 
 void MainWindow::initActions()
 {
-    ActionManager::ActionManager *actions =
+    ActionManager::ActionManager *actionManager =
             ActionManager::ActionManager::instance();
 
     //TODO: Create and connect actions to local slots
     //TODO: Register actions in menus
+    Q_UNUSED(actionManager);
+
 }
 
 void MainWindow::menuAdded(QMenu *menu)

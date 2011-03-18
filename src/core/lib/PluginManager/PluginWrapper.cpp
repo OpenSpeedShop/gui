@@ -80,6 +80,14 @@ QList<Dependency> PluginWrapper::dependencies()
     return m_Plugin->dependencies();
 }
 
+int PluginWrapper::priority()
+{
+    return m_Priority;
+}
 
+void PluginWrapper::setPriority(int priority)
+{
+    m_Priority = priority;
+}
 
 }}

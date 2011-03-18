@@ -31,18 +31,92 @@
 namespace Core {
 namespace SettingManager {
 
-SettingDialog::SettingDialog(QWidget *parent) :
+SettingDialog::SettingDialog(QList<ISettingPageFactory *> pages, QWidget *parent) :
     QDialog(parent),
+    m_Pages(pages),
     ui(new Ui::SettingDialog)
 {
     ui->setupUi(this);
+
+    readSettings();
+
+    // Connect the listWidget selections with the displayed page
+    connect(ui->listWidget, SIGNAL(currentRowChanged(int)),
+            ui->stackedWidget, SLOT(setCurrentIndex(int)));
+
+    // Honor priority in the page listing
+    qSort(m_Pages.begin(), m_Pages.end(), ascending);
+
+    // Clear previous pages
+    while(ui->stackedWidget->count()) {
+        ui->stackedWidget->removeWidget(ui->stackedWidget->widget(0));
+    }
+
+    // Add the pages to the lists, after initializing them
+    for(int i = 0; i < m_Pages.count(); i++) {
+        ISettingPageFactory *page = m_Pages.at(i);
+        page->initialize();
+
+        QListWidgetItem *item = new QListWidgetItem(ui->listWidget);
+        item->setText(page->name());
+        item->setIcon(page->icon());
+        ui->stackedWidget->addWidget(page->widget());
+    }
 }
 
 SettingDialog::~SettingDialog()
 {
+    writeSettings();
     delete ui;
 }
 
+void SettingDialog::readSettings()
+{
+    SettingManager::SettingManager *settings =
+            SettingManager::SettingManager::instance();
 
+    settings->beginGroup("SettingManager");
+    settings->beginGroup("SettingDialog");
+
+    resize( settings->value("WindowSize", size()).toSize() );
+    move( settings->value("WindowPosition", pos()).toPoint() );
+
+    settings->endGroup();
+    settings->endGroup();
+}
+
+void SettingDialog::writeSettings()
+{
+    SettingManager::SettingManager *settings =
+            SettingManager::SettingManager::instance();
+
+    settings->beginGroup("SettingManager");
+    settings->beginGroup("SettingDialog");
+
+    settings->setValue("WindowSize", size());
+    settings->setValue("WindowPosition", pos());
+
+    settings->endGroup();
+    settings->endGroup();
+}
+
+bool SettingDialog::ascending(ISettingPageFactory *left, ISettingPageFactory *right)
+{
+    return left->priority() < right->priority();
+}
+
+void SettingDialog::accept()
+{
+    foreach(ISettingPageFactory *page, m_Pages) {
+        page->apply();
+    }
+
+    QDialog::accept();
+}
+
+void SettingDialog::reject()
+{
+    QDialog::reject();
+}
 
 }}

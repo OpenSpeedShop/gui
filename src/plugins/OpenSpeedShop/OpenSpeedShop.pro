@@ -18,7 +18,14 @@
 include(../plugins.pri)
 TARGET   = OpenSpeedShop
 
-SOURCES += OpenSpeedShopPlugin.cpp
-HEADERS += OpenSpeedShopPlugin.h
+SOURCES += OpenSpeedShopPlugin.cpp \
+    Settings.cpp
+HEADERS += OpenSpeedShopPlugin.h \
+    Settings.h
 
 LIBS    += -lCore
+
+RESOURCES += Resources/OpenSpeedShop.qrc
+
+FORMS += \
+    Settings.ui

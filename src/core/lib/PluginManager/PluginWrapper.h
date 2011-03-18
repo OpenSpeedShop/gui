@@ -52,6 +52,9 @@ public:
     PluginWrapper(IPlugin *plugin, QString filePath, QObject *parent = 0);
     PluginStatus status();
 
+    int priority();
+    void setPriority(int priority);
+
     /* IPlugin interface */
     bool initialize(QStringList &args, QString *err);
     void shutdown();
@@ -63,6 +66,7 @@ protected:
     QString m_FilePath;
     IPlugin *m_Plugin;
     PluginStatus m_Status;
+    int m_Priority;
 };
 
 

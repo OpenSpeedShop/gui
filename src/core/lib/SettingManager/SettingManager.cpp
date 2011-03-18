@@ -27,6 +27,10 @@
 
 #include "SettingManager.h"
 
+#ifdef QT_DEBUG
+    #include <QDebug>
+#endif
+
 namespace Core {
 namespace SettingManager {
 
@@ -166,15 +170,27 @@ QString SettingManager::group() const
 }
 
 
-void SettingManager::registerPage(ISettingPage *page)
+void SettingManager::registerPage(ISettingPageFactory *page)
 {
     m_Pages.append(page);
 }
 
 void SettingManager::settingDialog()
 {
-    SettingDialog dialog(Core::MainWindow::MainWindow::instance());
+#ifdef QT_DEBUG
+    foreach(ISettingPageFactory *page, m_Pages) {
+        qDebug() << "PRE: Remaining page:" << page->name();
+    }
+#endif
+
+    SettingDialog dialog(m_Pages, MainWindow::MainWindow::instance());
     dialog.exec();
+
+#ifdef QT_DEBUG
+    foreach(ISettingPageFactory *page, m_Pages) {
+        qDebug() << "POST: Remaining page:" << page->name();
+    }
+#endif
 }
 
 
