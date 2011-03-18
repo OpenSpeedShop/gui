@@ -41,8 +41,8 @@ public:
     ISettingPage(QWidget *parent = 0) : QWidget(parent) {}
     virtual ~ISettingPage() {}
 public slots:
-    virtual void initialize() = 0;
     virtual void apply() = 0;
+    virtual void reset() = 0;
 };
 
 }}

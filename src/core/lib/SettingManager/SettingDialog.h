@@ -29,6 +29,7 @@
 #define SETTINGDIALOG_H
 
 #include <QDialog>
+#include <QAbstractButton>
 #include "SettingManager.h"
 #include "ISettingPageFactory.h"
 
@@ -50,17 +51,9 @@ public:
     void readSettings();
     void writeSettings();
 
-
-public slots:
-
 protected:
     static bool ascending(ISettingPageFactory *left, ISettingPageFactory *right);
     QList<ISettingPageFactory *> m_Pages;
-
-protected slots:
-    void accept();
-    void reject();
-
 
 private:
     Ui::SettingDialog *ui;

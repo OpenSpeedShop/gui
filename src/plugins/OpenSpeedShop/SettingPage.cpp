@@ -28,6 +28,8 @@
 #include "SettingPage.h"
 #include "ui_SettingPage.h"
 
+#include <QWidget>
+
 namespace Plugins {
 namespace OpenSpeedShop {
 
@@ -36,6 +38,7 @@ SettingPage::SettingPage(QWidget *parent) :
     ui(new Ui::SettingPage)
 {
     ui->setupUi(this);
+    initialize();
 }
 
 SettingPage::~SettingPage()
@@ -43,5 +46,41 @@ SettingPage::~SettingPage()
     delete ui;
 }
 
+void SettingPage::initialize()
+{
+    // Get settings from SettingManager and populate form
+    Core::SettingManager::SettingManager *settingManager =
+            Core::SettingManager::SettingManager::instance();
+
+    settingManager->beginGroup("Plugin");
+    settingManager->beginGroup("OpenSpeedShop");
+
+    ui->lblSetting1->setText( "Default Project Path" );
+    ui->txtSetting1->setText( settingManager->value("ProjectPath", "C:/Qt/projects/").toString() );
+
+    settingManager->endGroup();
+    settingManager->endGroup();
+
+}
+
+void SettingPage::apply()
+{
+    // Persist changed settings to SettingManager
+    Core::SettingManager::SettingManager *settingManager =
+            Core::SettingManager::SettingManager::instance();
+
+    settingManager->beginGroup("Plugin");
+    settingManager->beginGroup("OpenSpeedShop");
+
+    settingManager->setValue( "ProjectPath", ui->txtSetting1->text() );
+
+    settingManager->endGroup();
+    settingManager->endGroup();
+}
+
+void SettingPage::reset()
+{
+    initialize();
+}
 
 }}

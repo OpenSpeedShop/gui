@@ -56,10 +56,7 @@ int SettingPageFactory::priority()
 
 Core::SettingManager::ISettingPage *SettingPageFactory::createPage()
 {
-    SettingPage *page = new SettingPage();
-    Q_UNUSED(page);
-
-    return 0;
+    return new SettingPage();
 }
 
 }}

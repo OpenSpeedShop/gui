@@ -103,15 +103,15 @@ bool MainWindow::initialized()
  */
 void MainWindow::readSettings()
 {
-    SettingManager::SettingManager *settings =
+    SettingManager::SettingManager *settingManager =
             SettingManager::SettingManager::instance();
 
-    settings->beginGroup("MainWindow");
+    settingManager->beginGroup("MainWindow");
 
-    resize( settings->value("WindowSize", QSize(640, 400)).toSize() );
-    move( settings->value("WindowPosition", QPoint(0, 0)).toPoint() );
+    resize( settingManager->value("WindowSize", QSize(640, 400)).toSize() );
+    move( settingManager->value("WindowPosition", QPoint(0, 0)).toPoint() );
 
-    settings->endGroup();
+    settingManager->endGroup();
 }
 
 /*!
@@ -121,15 +121,15 @@ void MainWindow::readSettings()
  */
 void MainWindow::writeSettings()
 {
-    SettingManager::SettingManager *settings =
+    SettingManager::SettingManager *settingManager =
             SettingManager::SettingManager::instance();
 
-    settings->beginGroup("MainWindow");
+    settingManager->beginGroup("MainWindow");
 
-    settings->setValue("WindowSize", size());
-    settings->setValue("WindowPosition", pos());
+    settingManager->setValue("WindowSize", size());
+    settingManager->setValue("WindowPosition", pos());
 
-    settings->endGroup();
+    settingManager->endGroup();
 }
 
 void MainWindow::initActions()

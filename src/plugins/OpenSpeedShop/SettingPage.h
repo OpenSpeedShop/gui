@@ -30,6 +30,7 @@
 
 #include <QWidget>
 #include <SettingManager/ISettingPage.h>
+#include <SettingManager/SettingManager.h>
 
 namespace Plugins {
 namespace OpenSpeedShop {
@@ -44,18 +45,20 @@ class SettingPage : public Core::SettingManager::ISettingPage
     Q_INTERFACES(Core::SettingManager::ISettingPage)
 
 public:
-    explicit SettingPage(QWidget *parent = 0);
+    SettingPage(QWidget *parent = 0);
     ~SettingPage();
 
 public slots:
-    void initialize() {}
-    void apply() {}
+    void apply();
+    void reset();
+
+protected:
+    void initialize();
 
 private:
     Ui::SettingPage *ui;
 };
 
 
-} // namespace OpenSpeedShop
-} // namespace Plugins
+}}
 #endif // SETTINGPAGE_H

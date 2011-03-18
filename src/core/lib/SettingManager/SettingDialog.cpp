@@ -25,6 +25,7 @@
 
  */
 
+#include <QPushButton>
 #include "SettingDialog.h"
 #include "ui_SettingDialog.h"
 
@@ -44,6 +45,14 @@ SettingDialog::SettingDialog(QList<ISettingPageFactory *> pages, QWidget *parent
     connect(ui->listWidget, SIGNAL(currentRowChanged(int)),
             ui->stackedWidget, SLOT(setCurrentIndex(int)));
 
+    // Get the buttons in the button box, and wire them up
+    QPushButton *btnOkay = ui->buttonBox->button(QDialogButtonBox::Ok);
+    connect(btnOkay, SIGNAL(clicked()), this, SLOT(accept()));
+    QPushButton *btnCancel = ui->buttonBox->button(QDialogButtonBox::Cancel);
+    connect(btnCancel, SIGNAL(clicked()), this, SLOT(reject()));
+    QPushButton *btnApply = ui->buttonBox->button(QDialogButtonBox::Apply);
+    QPushButton *btnReset = ui->buttonBox->button(QDialogButtonBox::Reset);
+
     // Honor priority in the page listing
     qSort(m_Pages.begin(), m_Pages.end(), ascending);
 
@@ -61,7 +70,10 @@ SettingDialog::SettingDialog(QList<ISettingPageFactory *> pages, QWidget *parent
         item->setIcon(factory->icon());
 
         ISettingPage *page = factory->createPage();
-        page->initialize();
+        connect(btnOkay, SIGNAL(clicked()), page, SLOT(apply()));
+        connect(btnApply, SIGNAL(clicked()), page, SLOT(apply()));
+        connect(btnReset, SIGNAL(clicked()), page, SLOT(reset()));
+
         ui->stackedWidget->addWidget( qobject_cast<QWidget *>(page) );
     }
 }
@@ -107,22 +119,5 @@ bool SettingDialog::ascending(ISettingPageFactory *left, ISettingPageFactory *ri
     return left->priority() < right->priority();
 }
 
-void SettingDialog::accept()
-{
-    // Iterate over the pages and persist the changes to the settings
-    for(int i = 0; i < ui->stackedWidget->count(); i++) {
-        ISettingPage *page = qobject_cast<ISettingPage *>(ui->stackedWidget->widget(i));
-        if(page) {
-            page->apply();
-        }
-    }
-
-    QDialog::accept();
-}
-
-void SettingDialog::reject()
-{
-    QDialog::reject();
-}
 
 }}
