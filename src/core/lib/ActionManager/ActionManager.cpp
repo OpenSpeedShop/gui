@@ -26,6 +26,7 @@
  */
 
 #include "ActionManager.h"
+#include "MainWindow/MainWindow.h"
 
 namespace Core {
 namespace ActionManager {
@@ -79,40 +80,53 @@ bool ActionManager::initialized()
     return m_Initialized;
 }
 
-void ActionManager::registerMenuItem(QString menuName, QAction *action, int priority)
+void ActionManager::refreshMenuItems()
 {
-    Q_UNUSED(priority);
+    QMenuBar *menuBar = MainWindow::MainWindow::instance()->menuBar();
 
-    Core::MainWindow::MainWindow *mainWindow =
-            Core::MainWindow::MainWindow::instance();
+    MenuItem base;
+    QList<MenuItem *> menuItems = m_MenuItems;
 
-    /* Replace any ampersands that might be in the name, so we can have a
-       "clean" name for object searching */
-    QString objectName(menuName.replace('&', "").toLower());
-
-    QMenu *menu = NULL;
-    foreach (QMenu *m, m_Menus) {
-        if (m->objectName() == objectName) {
-            menu = m;
+    // Merge all of the items in the list
+    while(!menuItems.isEmpty()) {
+        MenuItem *menuItem = menuItems.takeFirst();
+        foreach(MenuItem *merge, menuItems) {
+            if(menuItem->title() == merge->title()) {
+                menuItems.removeOne(merge);
+                menuItem = menuItem->merge(merge);
+            }
         }
+        base.addMenuItem(menuItem);
     }
 
-    if (!menu) {
-        menu = new QMenu(menuName);
-        menu->setObjectName(objectName);
+    // Add them by priority into the MainWindow's MenuBar
+    menuBar->clear();
+    while(!base.actions().isEmpty()) {
+        ActionItem *actionItem = base.actionItems().takeFirst();
+        base.removeAction(actionItem);  // Using takeFirst doesn't really remove it from the underlying data structure
 
-        m_Menus.append(menu);
-        emit menuAdded(menu);
+        bool inserted = false;
+        foreach(QAction *action, menuBar->actions()) {
+            ActionItem *menuItem = (ActionItem *)action;
+            if(menuItem->priority() > actionItem->priority()) {
+                menuBar->insertAction(menuItem, actionItem);
+                inserted = true;
+                break;
+            }
+        }
+
+        if(!inserted)
+            menuBar->addAction(actionItem);
     }
-
-    menu->addAction(action);
-
-    mainWindow->menuBar()->addMenu(menu);
 
 }
 
-
-
+void ActionManager::registerMenuItem(MenuItem *menuItem)
+{
+    m_MenuItems.append(menuItem);
+    emit menuItemAdded(menuItem);
+    refreshMenuItems();
+}
 
 
 }}

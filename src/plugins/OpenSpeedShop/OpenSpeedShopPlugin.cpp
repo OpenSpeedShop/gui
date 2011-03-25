@@ -58,13 +58,21 @@ bool OpenSpeedShopPlugin::initialize(QStringList &args, QString *err)
              Core::SettingManager::SettingManager::instance();
     settingManager->registerPage(new SettingPageFactory());
 
-    // Setup menu actions
-    Core::ActionManager::ActionManager *actions =
-            Core::ActionManager::ActionManager::instance();
-    QAction *action = new QAction(tr("Load"), this);
-    action->setStatusTip(tr("Load an existing data set"));
-    connect(action, SIGNAL(triggered()), this, SLOT(load()));
-    actions->registerMenuItem("File", action);
+    Core::ActionManager::ActionManager *actionManager =
+             Core::ActionManager::ActionManager::instance();
+
+    // Create the actions that we'll use to interact with the user
+    Core::ActionManager::ActionItem *load =
+            new Core::ActionManager::ActionItem(tr("Load"), this);
+    load->setStatusTip(tr("Load an existing data set"));
+    connect(load, SIGNAL(triggered()), this, SLOT(laod()));
+
+    // Build the menus and add the actions to them
+    Core::ActionManager::MenuItem *fileMenu =
+            new Core::ActionManager::MenuItem();
+    fileMenu->setTitle(tr("File"));
+    fileMenu->addActionItem(load);
+    actionManager->registerMenuItem(fileMenu);
 
     return true;
 }

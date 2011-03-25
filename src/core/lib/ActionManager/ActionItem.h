@@ -1,7 +1,7 @@
 /*!
-   \file ActionManager.h
+   \file 
    \author Dane Gardner <dane.gardner@gmail.com>
-   \version
+   \version 
 
    \section LICENSE
    This file is part of the Open|SpeedShop Graphical User Interface
@@ -25,43 +25,42 @@
 
  */
 
-#ifndef ACTIONMANAGER_H
-#define ACTIONMANAGER_H
+#ifndef ACTIONITEM_H
+#define ACTIONITEM_H
 
-#include <QObject>
-#include <QString>
-#include <QList>
-#include "MenuItem.h"
+#include <QAction>
 
 namespace Core {
 namespace ActionManager {
 
-class ActionManager : public QObject
+class MenuItem;
+
+class ActionItem : public QAction
 {
     Q_OBJECT
 public:
-    static ActionManager *instance();
+    explicit ActionItem(QObject *parent = 0);
+    explicit ActionItem(const QString &text, QObject *parent);
+    explicit ActionItem(const QIcon &icon, const QString &text, QObject *parent);
 
-    void registerMenuItem(MenuItem *menuItem);
-    void refreshMenuItems();
+    int priority();
+    void setPriority(int priority);
 
-    bool initialize();
-    bool initialized();
+    ActionItem *merge(ActionItem *other);
+    static ActionItem *merge(ActionItem *left, ActionItem *right);
+
+    MenuItem *menuItem();
 
 signals:
-    void menuItemAdded(MenuItem *);
 
 public slots:
 
 protected:
-    ActionManager();
-    ~ActionManager();
-
-    bool m_Initialized;
-
-    QList<MenuItem *> m_MenuItems;
+    int m_Priority;
 
 };
 
-}}
-#endif // ACTIONMANAGER_H
+} // namespace ActionManager
+} // namespace Core
+
+#endif // ACTIONITEM_H

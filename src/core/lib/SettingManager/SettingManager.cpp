@@ -78,13 +78,17 @@ SettingManager::~SettingManager()
 
 bool SettingManager::initialize()
 {
-    ActionManager::ActionManager *actions =
-            ActionManager::ActionManager::instance();
+    // Create the actions that we'll use to interact with the user
+    ActionManager::ActionItem *settingDialog;
+    settingDialog = new ActionManager::ActionItem(tr("Settings"), this);
+    settingDialog->setStatusTip(tr("Change application and plugin settings"));
+    connect(settingDialog, SIGNAL(triggered()), this, SLOT(settingDialog()));
 
-    QAction *action = new QAction(tr("Settings"), this);
-    action->setStatusTip(tr("Change application and plugin settings"));
-    connect(action, SIGNAL(triggered()), this, SLOT(settingDialog()));
-    actions->registerMenuItem("Tools", action);
+    // Build the menus and add the actions to them
+    ActionManager::MenuItem *toolsMenu = new ActionManager::MenuItem();
+    toolsMenu->setTitle(tr("Tools"));
+    toolsMenu->addActionItem(settingDialog);
+    ActionManager::ActionManager::instance()->registerMenuItem(toolsMenu);
 
     return m_Initialized = true;
 }

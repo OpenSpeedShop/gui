@@ -93,13 +93,17 @@ bool PluginManager::initialize()
 {
     readSettings();
 
-    ActionManager::ActionManager *actions =
-            ActionManager::ActionManager::instance();
+    // Create the actions that we'll use to interact with the user
+    ActionManager::ActionItem *pluginDialog;
+    pluginDialog = new ActionManager::ActionItem(tr("Plugins"), this);
+    pluginDialog->setStatusTip(tr("View loaded plugins"));
+    connect(pluginDialog, SIGNAL(triggered()), this, SLOT(pluginDialog()));
 
-    QAction *action = new QAction(tr("Plugins"), this);
-    action->setStatusTip(tr("View loaded plugins"));
-    connect(action, SIGNAL(triggered()), this, SLOT(pluginDialog()));
-    actions->registerMenuItem("Help", action);
+    // Build the menus and add the actions to them
+    ActionManager::MenuItem *helpMenu = new ActionManager::MenuItem();
+    helpMenu->setTitle(tr("Help"));
+    helpMenu->addActionItem(pluginDialog);
+    ActionManager::ActionManager::instance()->registerMenuItem(helpMenu);
 
     return m_Initialized = true;
 }
