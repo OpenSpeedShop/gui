@@ -34,10 +34,10 @@
 namespace Plugins {
 namespace OpenSpeedShop {
 
-OpenSpeedShopPlugin::OpenSpeedShopPlugin()
+OpenSpeedShopPlugin::OpenSpeedShopPlugin() :
+    m_Name("OpenSpeedShop"),
+    m_Version("0.1.dev")
 {
-    m_Name = "OpenSpeedShop";
-    m_Version = "0.1.dev";
 }
 
 OpenSpeedShopPlugin::~OpenSpeedShopPlugin()
@@ -46,18 +46,21 @@ OpenSpeedShopPlugin::~OpenSpeedShopPlugin()
 
 bool OpenSpeedShopPlugin::initialize(QStringList &args, QString *err)
 {
-    /* We're a main plugin, so we need to make changes to the mainWindow
-       like the application icon and the title
-     */
+    /*** We're a main plugin, so we need to make changes to the mainWindow,
+         like the application icon and the title ***/
     Core::MainWindow::MainWindow *mainWindow =
             Core::MainWindow::MainWindow::instance();
     mainWindow->setWindowIcon(QIcon(":/OpenSpeedShop/app.png"));
     mainWindow->setWindowTitle( QString("Open|SpeedShop%1").arg(QChar(0x2122)) );
 
+
+    /*** Register the settings page ***/
     Core::SettingManager::SettingManager *settingManager =
              Core::SettingManager::SettingManager::instance();
-    settingManager->registerPage(new SettingPageFactory());
+    settingManager->registerPageFactory(new SettingPageFactory());
 
+
+    /*** Register our menu structure ***/
     Core::ActionManager::ActionManager *actionManager =
              Core::ActionManager::ActionManager::instance();
 
@@ -65,7 +68,7 @@ bool OpenSpeedShopPlugin::initialize(QStringList &args, QString *err)
     Core::ActionManager::ActionItem *load =
             new Core::ActionManager::ActionItem(tr("Load"), this);
     load->setStatusTip(tr("Load an existing data set"));
-    connect(load, SIGNAL(triggered()), this, SLOT(laod()));
+    connect(load, SIGNAL(triggered()), this, SLOT(load()));
 
     // Build the menus and add the actions to them
     Core::ActionManager::MenuItem *fileMenu =

@@ -1,5 +1,5 @@
 /*!
-   \file OpenSpeedShopPlugin.h
+   \file SettingPage.h
    \author Dane Gardner <dane.gardner@gmail.com>
    \version
 
@@ -25,44 +25,50 @@
 
  */
 
-#ifndef OPENSPEEDSHOPPLUGIN_H
-#define OPENSPEEDSHOPPLUGIN_H
+#ifndef SETTINGPAGE_H
+#define SETTINGPAGE_H
 
-#include <QtCore>
-#include "Settings/SettingPageFactory.h"
-#include <PluginManager/IPlugin.h>
+#include <QDialog>
+#include <QTreeWidget>
+#include <SettingManager/ISettingPage.h>
 #include <SettingManager/SettingManager.h>
-#include <ActionManager/ActionManager.h>
+#include "PluginWrapper.h"
 
-namespace Plugins {
-namespace OpenSpeedShop {
+namespace Core {
+namespace PluginManager {
 
-class OpenSpeedShopPlugin : public QObject, public IPlugin {
-Q_OBJECT
-Q_INTERFACES(IPlugin)
+namespace Ui {
+    class SettingPage;
+}
+
+class SettingPage :
+        public SettingManager::ISettingPage
+{
+    Q_OBJECT
+    Q_INTERFACES(Core::SettingManager::ISettingPage)
 
 public:
-    OpenSpeedShopPlugin();
-    ~OpenSpeedShopPlugin();
-
-    bool initialize(QStringList &args, QString *err);
-    void shutdown();
-
-    QString name();
-    QString version();
-    QList<Dependency> dependencies();
+    explicit SettingPage(QList<PluginWrapper *> plugins, QWidget *parent = 0);
+    explicit SettingPage(QWidget *parent = 0);
+    ~SettingPage();
 
 public slots:
-    void load();
+    void apply();
+    void reset();
 
 protected:
-    QString m_Name;
-    QString m_Version;
-    QList<Dependency> m_Dependencies;
+    void changeEvent(QEvent *e);
+
+    void readSettings();
+    void writeSettings();
+
+    void buildTree(QList<PluginWrapper *> plugins);
+    QList<QTreeWidgetItem *> m_Plugins;
+
+private:
+    Ui::SettingPage *ui;
 
 };
 
-
-
 }}
-#endif // OPENSPEEDSHOPPLUGIN_H
+#endif // SETTINGPAGE_H

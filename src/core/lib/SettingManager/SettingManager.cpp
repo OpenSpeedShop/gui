@@ -174,7 +174,7 @@ QString SettingManager::group() const
 }
 
 
-void SettingManager::registerPage(ISettingPageFactory *page)
+void SettingManager::registerPageFactory(ISettingPageFactory *page)
 {
     m_Pages.append(page);
 }

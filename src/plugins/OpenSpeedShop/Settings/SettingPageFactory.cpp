@@ -1,7 +1,7 @@
 /*!
-   \file OpenSpeedShopPlugin.h
+   \file 
    \author Dane Gardner <dane.gardner@gmail.com>
-   \version
+   \version 
 
    \section LICENSE
    This file is part of the Open|SpeedShop Graphical User Interface
@@ -25,44 +25,38 @@
 
  */
 
-#ifndef OPENSPEEDSHOPPLUGIN_H
-#define OPENSPEEDSHOPPLUGIN_H
-
-#include <QtCore>
-#include "Settings/SettingPageFactory.h"
-#include <PluginManager/IPlugin.h>
-#include <SettingManager/SettingManager.h>
-#include <ActionManager/ActionManager.h>
+#include "SettingPageFactory.h"
 
 namespace Plugins {
 namespace OpenSpeedShop {
 
-class OpenSpeedShopPlugin : public QObject, public IPlugin {
-Q_OBJECT
-Q_INTERFACES(IPlugin)
+SettingPageFactory::SettingPageFactory(QObject *parent) :
+    QObject(parent)
+{
+}
 
-public:
-    OpenSpeedShopPlugin();
-    ~OpenSpeedShopPlugin();
+SettingPageFactory::~SettingPageFactory()
+{
+}
 
-    bool initialize(QStringList &args, QString *err);
-    void shutdown();
+QIcon SettingPageFactory::icon()
+{
+    return QIcon(":/OpenSpeedShop/app.png");
+}
 
-    QString name();
-    QString version();
-    QList<Dependency> dependencies();
+QString SettingPageFactory::name()
+{
+    return tr("Open|SpeedShop");
+}
 
-public slots:
-    void load();
+int SettingPageFactory::priority()
+{
+    return 128;
+}
 
-protected:
-    QString m_Name;
-    QString m_Version;
-    QList<Dependency> m_Dependencies;
-
-};
-
-
+Core::SettingManager::ISettingPage *SettingPageFactory::createPage()
+{
+    return new SettingPage();
+}
 
 }}
-#endif // OPENSPEEDSHOPPLUGIN_H

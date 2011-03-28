@@ -1,5 +1,5 @@
 /*!
-   \file PluginDialog.cpp
+   \file SettingPage.cpp
    \author Dane Gardner <dane.gardner@gmail.com>
    \version
 
@@ -25,33 +25,52 @@
 
  */
 
-#include "PluginDialog.h"
-#include "ui_PluginDialog.h"
+#include "SettingPage.h"
+#include "ui_SettingPage.h"
 
 namespace Core {
 namespace PluginManager {
 
-PluginDialog::PluginDialog(QList<PluginWrapper *> plugins, QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::PluginDialog)
+SettingPage::SettingPage(QList<PluginWrapper *> plugins, QWidget *parent) :
+    SettingManager::ISettingPage(parent),
+    ui(new Ui::SettingPage)
 {
     ui->setupUi(this);
 
     readSettings();
 
+    /* This constructor is called from the PluginManager as a dialog. We need
+       to disable editing of the settings from here */
+    ui->txtPluginPath->setEnabled(false);
+    ui->lblPluginPath->setEnabled(false);
+    ui->btnPluginPath->setVisible(false);
+
     buildTree(plugins);
+    reset();
 }
 
-PluginDialog::~PluginDialog()
+SettingPage::SettingPage(QWidget *parent) :
+    SettingManager::ISettingPage(parent),
+    ui(new Ui::SettingPage)
+{
+    ui->setupUi(this);
+
+    readSettings();
+
+    buildTree( PluginManager::PluginManager::instance()->m_Plugins );
+    reset();
+}
+
+SettingPage::~SettingPage()
 {
     writeSettings();
 
     delete ui;
 }
 
-void PluginDialog::changeEvent(QEvent *e)
+void SettingPage::changeEvent(QEvent *e)
 {
-    QDialog::changeEvent(e);
+    QWidget::changeEvent(e);
     switch (e->type()) {
     case QEvent::LanguageChange:
         ui->retranslateUi(this);
@@ -61,39 +80,70 @@ void PluginDialog::changeEvent(QEvent *e)
     }
 }
 
-void PluginDialog::readSettings()
+void SettingPage::apply()
 {
-    SettingManager::SettingManager *settings =
+    SettingManager::SettingManager *settingManager =
             SettingManager::SettingManager::instance();
 
-    settings->beginGroup("PluginManager");
-    settings->beginGroup("PluginDialog");
+    settingManager->beginGroup("PluginManager");
+
+    // Store user settable settings
+    PluginManager::instance()->m_PluginPath = ui->txtPluginPath->text();
+
+    /* We could let the PluginManager manage this setting (it's stored upon
+       close)... but then if we did, if there was a crash, the setting would
+       never be stored. So we shall for now, until there is a reason not to.*/
+    settingManager->setValue("PluginPath", ui->txtPluginPath->text());
+
+    settingManager->endGroup();
+}
+
+void SettingPage::reset()
+{
+    SettingManager::SettingManager *settingManager =
+            SettingManager::SettingManager::instance();
+
+    settingManager->beginGroup("PluginManager");
+
+    // Restore user settable settings
+    ui->txtPluginPath->setText(PluginManager::instance()->m_PluginPath);
+
+    settingManager->endGroup();
+}
+
+void SettingPage::readSettings()
+{
+    SettingManager::SettingManager *settingManager =
+            SettingManager::SettingManager::instance();
+
+    settingManager->beginGroup("PluginManager");
+    settingManager->beginGroup("SettingPage");
 
     //TODO: Restore tree state
-    resize( settings->value("WindowSize", size()).toSize() );
-    move( settings->value("WindowPosition", pos()).toPoint() );
+    resize( settingManager->value("WindowSize", size()).toSize() );
+    move( settingManager->value("WindowPosition", pos()).toPoint() );
 
-    settings->endGroup();
-    settings->endGroup();
+    settingManager->endGroup();
+    settingManager->endGroup();
 }
 
-void PluginDialog::writeSettings()
+void SettingPage::writeSettings()
 {
-    SettingManager::SettingManager *settings =
+    SettingManager::SettingManager *settingManager =
             SettingManager::SettingManager::instance();
 
-    settings->beginGroup("PluginManager");
-    settings->beginGroup("PluginDialog");
+    settingManager->beginGroup("PluginManager");
+    settingManager->beginGroup("SettingPage");
 
     //TODO: Store tree state
-    settings->setValue("WindowSize", size());
-    settings->setValue("WindowPosition", pos());
+    settingManager->setValue("WindowSize", size());
+    settingManager->setValue("WindowPosition", pos());
 
-    settings->endGroup();
-    settings->endGroup();
+    settingManager->endGroup();
+    settingManager->endGroup();
 }
 
-void PluginDialog::buildTree(QList<PluginWrapper *> plugins)
+void SettingPage::buildTree(QList<PluginWrapper *> plugins)
 {
     QStringList headers;
     headers.append("Name");

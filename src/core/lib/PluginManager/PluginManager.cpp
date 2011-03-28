@@ -31,9 +31,8 @@
 
 #include <QDir>
 #include <QPluginLoader>
-
+#include <QGridLayout>
 #include "PluginManager.h"
-#include "PluginDialog.h"
 
 namespace Core {
 namespace PluginManager {
@@ -92,6 +91,10 @@ PluginManager::~PluginManager()
 bool PluginManager::initialize()
 {
     readSettings();
+
+    Core::SettingManager::SettingManager *settingManager =
+             Core::SettingManager::SettingManager::instance();
+    settingManager->registerPageFactory(new SettingPageFactory());
 
     // Create the actions that we'll use to interact with the user
     ActionManager::ActionItem *pluginDialog;
@@ -306,8 +309,15 @@ bool PluginManager::delObject(QObject *object)
 
 void PluginManager::pluginDialog()
 {
-    PluginDialog dialog(m_Plugins, MainWindow::MainWindow::instance());
-    dialog.exec();
+    QDialog *dialog = new QDialog(MainWindow::MainWindow::instance());
+    QLayout *layout = new QGridLayout(dialog);
+    layout->addWidget(new SettingPage(m_Plugins, dialog));
+    dialog->setLayout(layout);
+    dialog->resize(640, 480);
+    dialog->setWindowIcon(QIcon(":/PluginManager/plugin.png"));
+    dialog->exec();
+
+    delete(dialog);
 }
 
 bool PluginManager::ascending(PluginWrapper *left, PluginWrapper *right)

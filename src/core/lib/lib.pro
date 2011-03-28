@@ -22,30 +22,33 @@ HEADERS += ActionManager/ActionManager.h \
            MainWindow/MainWindow.h \
            PluginManager/PluginManager.h \
            PluginManager/IPlugin.h \
-           PluginManager/PluginDialog.h \
            PluginManager/PluginWrapper.h \
            SettingManager/SettingManager.h \
            SettingManager/SettingDialog.h \
            SettingManager/ISettingPageFactory.h \
            SettingManager/ISettingPage.h \
            ActionManager/ActionItem.h \
-           ActionManager/MenuItem.h
+           ActionManager/MenuItem.h \
+    PluginManager/SettingPageFactory.h \
+    PluginManager/SettingPage.h
 
 SOURCES += ActionManager/ActionManager.cpp \
            MainWindow/MainWindow.cpp \
     	   PluginManager/PluginManager.cpp \
            PluginManager/IPlugin.cpp \
-           PluginManager/PluginDialog.cpp \
            PluginManager/PluginWrapper.cpp \
            SettingManager/SettingManager.cpp \
            SettingManager/SettingDialog.cpp \
            SettingManager/ISettingPageFactory.cpp \
            SettingManager/ISettingPage.cpp \
            ActionManager/ActionItem.cpp \
-           ActionManager/MenuItem.cpp
+           ActionManager/MenuItem.cpp \
+    PluginManager/SettingPageFactory.cpp \
+    PluginManager/SettingPage.cpp
 
-FORMS   += PluginManager/PluginDialog.ui \
-           SettingManager/SettingDialog.ui
+FORMS   += \
+           SettingManager/SettingDialog.ui \
+    PluginManager/SettingPage.ui
 
 LIBS    += 
 

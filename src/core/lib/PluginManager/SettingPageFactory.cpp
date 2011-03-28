@@ -1,7 +1,7 @@
 /*!
-   \file PluginDialog.h
+   \file 
    \author Dane Gardner <dane.gardner@gmail.com>
-   \version
+   \version 
 
    \section LICENSE
    This file is part of the Open|SpeedShop Graphical User Interface
@@ -25,42 +25,40 @@
 
  */
 
-#ifndef PLUGINDIALOG_H
-#define PLUGINDIALOG_H
-
-#include <QDialog>
-#include <QTreeWidget>
-#include <SettingManager/SettingManager.h>
-#include "PluginWrapper.h"
+#include "SettingPageFactory.h"
 
 namespace Core {
 namespace PluginManager {
 
-namespace Ui {
-    class PluginDialog;
+SettingPageFactory::SettingPageFactory(QObject *parent) :
+    QObject(parent)
+{
 }
 
-class PluginDialog : public QDialog
+SettingPageFactory::~SettingPageFactory()
 {
-    Q_OBJECT
+}
 
-public:
-    explicit PluginDialog(QList<PluginWrapper *> plugins, QWidget *parent = 0);
-    ~PluginDialog();
+QIcon SettingPageFactory::icon()
+{
+    return QIcon(":/PluginManager/plugin.png");
+}
 
-protected:
-    void changeEvent(QEvent *e);
+QString SettingPageFactory::name()
+{
+    return tr("Plugins");
+}
 
-    void readSettings();
-    void writeSettings();
+int SettingPageFactory::priority()
+{
+    return 50;
+}
 
-    void buildTree(QList<PluginWrapper *> plugins);
-    QList<QTreeWidgetItem *> m_Plugins;
+Core::SettingManager::ISettingPage *SettingPageFactory::createPage()
+{
+    return new SettingPage();
+}
 
-private:
-    Ui::PluginDialog *ui;
 
-};
-
-}}
-#endif // PLUGINDIALOG_H
+} // namespace PluginManager
+} // namespace Core

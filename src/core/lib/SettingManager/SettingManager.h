@@ -61,7 +61,7 @@ public:
     void endGroup();
     QString group() const;
 
-    void registerPage(ISettingPageFactory *page);
+    void registerPageFactory(ISettingPageFactory *page);
 
 signals:
 

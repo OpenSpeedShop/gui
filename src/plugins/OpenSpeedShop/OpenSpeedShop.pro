@@ -19,16 +19,17 @@ include(../plugins.pri)
 TARGET   = OpenSpeedShop
 
 SOURCES += OpenSpeedShopPlugin.cpp \
-           SettingPageFactory.cpp \
-    SettingPage.cpp
+           Settings/SettingPageFactory.cpp \
+           Settings/SettingPage.cpp \
+           ConnectionManager/ConnectionManager.cpp
 
 HEADERS += OpenSpeedShopPlugin.h \
-           SettingPageFactory.h \
-    SettingPage.h
+           Settings/SettingPageFactory.h \
+           Settings/SettingPage.h \
+           ConnectionManager/ConnectionManager.h
 
-LIBS    += -lCore
+FORMS += Settings/SettingPage.ui
 
 RESOURCES += Resources/OpenSpeedShop.qrc
 
-FORMS += \
-    SettingPage.ui
+LIBS    += -lCore
