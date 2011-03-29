@@ -81,9 +81,9 @@ PluginManager::PluginManager() : QObject(0)
  */
 PluginManager::~PluginManager()
 {
-    //Should we be doing this in the reverse order?
-    foreach (QObject *obj, m_Objects)
-        delObject(obj);
+    qSort(m_Plugins.begin(), m_Plugins.end(), descending);
+    while(!m_Plugins.isEmpty())
+        delete m_Plugins.takeFirst();
 
     writeSettings();
 }
@@ -106,6 +106,7 @@ bool PluginManager::initialize()
     ActionManager::MenuItem *helpMenu = new ActionManager::MenuItem();
     helpMenu->setTitle(tr("Help"));
     helpMenu->addActionItem(pluginDialog);
+    helpMenu->menuActionItem()->setParent(this);
     ActionManager::ActionManager::instance()->registerMenuItem(helpMenu);
 
     return m_Initialized = true;
@@ -114,6 +115,14 @@ bool PluginManager::initialize()
 bool PluginManager::initialized()
 {
     return m_Initialized;
+}
+
+void PluginManager::shutdown()
+{
+    qSort(m_Plugins.begin(), m_Plugins.end(), descending);
+    foreach(IPlugin *plugin, m_Plugins) {
+        plugin->shutdown();
+    }
 }
 
 /*!
@@ -250,7 +259,7 @@ void PluginManager::initializePlugins()
     qSort(m_Plugins.begin(), m_Plugins.end(), ascending);
 
     /* Intialize via the queue */
-    QString *err = new QString();
+    QString *err = NULL;
     QStringList args;
     foreach(PluginWrapper *plugin, m_Plugins) {
         if( plugin->status() == PluginStatus_Loaded && plugin->initialize(args, err) ) {
@@ -309,6 +318,8 @@ bool PluginManager::delObject(QObject *object)
 
 void PluginManager::pluginDialog()
 {
+    // Wrapped in a QDialog because this is also registered as a setting page
+
     QDialog *dialog = new QDialog(MainWindow::MainWindow::instance());
     QLayout *layout = new QGridLayout(dialog);
     layout->addWidget(new SettingPage(m_Plugins, dialog));
@@ -317,7 +328,7 @@ void PluginManager::pluginDialog()
     dialog->setWindowIcon(QIcon(":/PluginManager/plugin.png"));
     dialog->exec();
 
-    delete(dialog);
+    delete dialog;
 }
 
 bool PluginManager::ascending(PluginWrapper *left, PluginWrapper *right)

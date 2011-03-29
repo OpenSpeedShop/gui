@@ -61,6 +61,9 @@ protected:
     QString m_Version;
     QList<Dependency> m_Dependencies;
 
+    void readSettings();
+    void writeSettings();
+
 };
 
 

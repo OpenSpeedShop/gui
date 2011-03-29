@@ -50,6 +50,8 @@ class PluginWrapper : public QObject, public IPlugin {
 
 public:
     PluginWrapper(IPlugin *plugin, QString filePath, QObject *parent = 0);
+    ~PluginWrapper();
+
     PluginStatus status();
 
     int priority();

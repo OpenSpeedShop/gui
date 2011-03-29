@@ -44,18 +44,18 @@ class MainWindow : public QMainWindow
 
 public:
     static MainWindow* instance();
+    ~MainWindow();
 
     bool initialize();
     bool initialized();
+    void shutdown();
 
 signals:
 
 public slots:
-    void menuAdded(QMenu *);
 
 protected:
     MainWindow();
-    ~MainWindow();
 
     bool m_Initialized;
 

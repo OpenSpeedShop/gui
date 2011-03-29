@@ -77,8 +77,6 @@ MainWindow::MainWindow() : QMainWindow(NULL)
  */
 MainWindow::~MainWindow()
 {
-    writeSettings();
-
     if(m_Instance)
         m_Instance = NULL;
 }
@@ -94,6 +92,11 @@ bool MainWindow::initialize()
 bool MainWindow::initialized()
 {
     return m_Initialized;
+}
+
+void MainWindow::shutdown()
+{
+    writeSettings();
 }
 
 /*!
@@ -241,14 +244,6 @@ void MainWindow::initActions()
     actionManager->registerMenuItem(right);
 
 }
-
-void MainWindow::menuAdded(QMenu *menu)
-{
-    Q_UNUSED(menu)
-
-//    menuBar()->addMenu(menu);
-}
-
 
 
 }}

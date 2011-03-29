@@ -68,6 +68,8 @@ ActionManager::ActionManager() : QObject(0)
  */
 ActionManager::~ActionManager()
 {
+    if(m_Instance)
+        m_Instance = NULL;
 }
 
 bool ActionManager::initialize()
@@ -78,6 +80,11 @@ bool ActionManager::initialize()
 bool ActionManager::initialized()
 {
     return m_Initialized;
+}
+
+void ActionManager::shutdown()
+{
+
 }
 
 void ActionManager::refreshMenuItems()

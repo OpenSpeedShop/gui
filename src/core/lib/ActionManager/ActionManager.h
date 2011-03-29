@@ -41,12 +41,14 @@ class ActionManager : public QObject
     Q_OBJECT
 public:
     static ActionManager *instance();
+    ~ActionManager();
 
     void registerMenuItem(MenuItem *menuItem);
     void refreshMenuItems();
 
     bool initialize();
     bool initialized();
+    void shutdown();
 
 signals:
     void menuItemAdded(MenuItem *);
@@ -55,7 +57,6 @@ public slots:
 
 protected:
     ActionManager();
-    ~ActionManager();
 
     bool m_Initialized;
 

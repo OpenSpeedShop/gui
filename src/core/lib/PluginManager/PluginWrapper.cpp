@@ -47,6 +47,11 @@ PluginWrapper::PluginWrapper(IPlugin *plugin, QString filePath, QObject *parent)
     m_Status = PluginStatus_Loaded;
 }
 
+PluginWrapper::~PluginWrapper()
+{
+    delete m_Plugin;
+}
+
 PluginStatus PluginWrapper::status()
 {
     return m_Status;
@@ -56,6 +61,7 @@ bool PluginWrapper::initialize(QStringList &args, QString *err)
 {
     bool retVal = m_Plugin->initialize(args, err);
     m_Status = retVal ? PluginStatus_Initialized : PluginStatus_Error;
+    //TODO: We should save the error string for later retrieval (i.e. in the PluginDialog)
     return retVal;
 }
 

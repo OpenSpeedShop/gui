@@ -140,12 +140,21 @@ int main(int argc, char *argv[])
 
     pluginManager->loadPlugins();
     mainWindow->show();
-//TODO:    pluginManager->shutdownPlugins();
+    int retval = a.exec();
 
-//    delete(mainWindow);
-//    delete(pluginManager);
-//    delete(actionManager);
-//    delete(settingManager);
+    if(mainWindow->initialized())
+        mainWindow->shutdown();
+    if(pluginManager->initialized())
+        pluginManager->shutdown();
+    if(actionManager->initialized())
+        actionManager->shutdown();
+    if(settingManager->initialized())
+        settingManager->shutdown();
 
-    return a.exec();
+    delete mainWindow;
+    delete pluginManager;
+    delete actionManager;
+    delete settingManager;
+
+    return retval;
 }

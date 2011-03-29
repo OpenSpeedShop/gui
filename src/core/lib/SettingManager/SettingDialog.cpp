@@ -81,6 +81,7 @@ SettingDialog::SettingDialog(QList<ISettingPageFactory *> pages, QWidget *parent
 SettingDialog::~SettingDialog()
 {
     writeSettings();
+
     delete ui;
 }
 

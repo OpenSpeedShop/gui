@@ -43,9 +43,11 @@ class PluginManager : public QObject
     Q_OBJECT
 public:
     static PluginManager *instance();
+    ~PluginManager();
 
     bool initialize();
     bool initialized();
+    void shutdown();
 
     void loadPlugins();
 
@@ -76,7 +78,6 @@ public slots:
 
 protected:
     PluginManager();
-    ~PluginManager();
 
     bool m_Initialized;
 

@@ -47,9 +47,11 @@ class SettingManager : public QObject
     Q_OBJECT
 public:
     static SettingManager *instance();
+    ~SettingManager();
 
     bool initialize();
     bool initialized();
+    void shutdown();
 
     void setValue(const QString &key, const QVariant &value);
     QVariant value(const QString &key, const QVariant &defaultValue = QVariant()) const;
@@ -70,7 +72,6 @@ public slots:
 
 protected:
     SettingManager();
-    ~SettingManager();
 
     bool m_Initialized;
 

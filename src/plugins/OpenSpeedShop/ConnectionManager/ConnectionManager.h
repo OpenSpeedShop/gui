@@ -32,6 +32,7 @@
 #include <QList>
 #include <QDockWidget>
 #include <MainWindow/MainWindow.h>
+#include <SettingManager/SettingManager.h>
 #include "IConnection.h"
 #include "ConnectionWidget.h"
 #include "DirectConnection.h"
@@ -59,6 +60,10 @@ protected:
     ConnectionManager(QObject *parent = 0);
     ~ConnectionManager();
     QList<IConnection *> m_Connections;
+    QDockWidget *m_DockWidget;
+
+    void readSettings();
+    void writeSettings();
 
     friend class ConnectionWidget;
 

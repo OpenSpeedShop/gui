@@ -46,13 +46,17 @@ OpenSpeedShopPlugin::~OpenSpeedShopPlugin()
 
 bool OpenSpeedShopPlugin::initialize(QStringList &args, QString *err)
 {
+    readSettings();
+
     /*** We're a main plugin, so we need to make changes to the mainWindow,
          like the application icon and the title ***/
     Core::MainWindow::MainWindow *mainWindow =
             Core::MainWindow::MainWindow::instance();
     mainWindow->setWindowIcon(QIcon(":/OpenSpeedShop/app.png"));
-    mainWindow->setWindowTitle( QString("Open|SpeedShop%1").arg(QChar(0x2122)) );
+    mainWindow->setWindowTitle(QString("Open|SpeedShop%1").arg(QChar(0x2122))); //Trademark
 
+    //DEBUG: Just stick an empty widget into the central area for now
+    mainWindow->setCentralWidget(new QWidget(mainWindow));
 
     /*** Register the settings page ***/
     Core::SettingManager::SettingManager *settingManager =
@@ -86,6 +90,7 @@ bool OpenSpeedShopPlugin::initialize(QStringList &args, QString *err)
 
 void OpenSpeedShopPlugin::shutdown()
 {
+    writeSettings();
 
     ConnectionManager *connectionManager = ConnectionManager::instance();
     connectionManager->shutdown();
@@ -113,6 +118,33 @@ QList<Dependency> OpenSpeedShopPlugin::dependencies()
 {
     return m_Dependencies;
 }
+
+void OpenSpeedShopPlugin::readSettings()
+{
+    Core::SettingManager::SettingManager *settingManager =
+            Core::SettingManager::SettingManager::instance();
+
+    settingManager->beginGroup("Plugins");
+    settingManager->beginGroup("OpenSpeedShop");
+
+
+    settingManager->endGroup();
+    settingManager->endGroup();
+}
+
+void OpenSpeedShopPlugin::writeSettings()
+{
+    Core::SettingManager::SettingManager *settingManager =
+            Core::SettingManager::SettingManager::instance();
+
+    settingManager->beginGroup("Plugins");
+    settingManager->beginGroup("OpenSpeedShop");
+
+
+    settingManager->endGroup();
+    settingManager->endGroup();
+}
+
 
 Q_EXPORT_PLUGIN(Plugins::OpenSpeedShop::OpenSpeedShopPlugin)
 

@@ -74,6 +74,9 @@ SettingManager::SettingManager() : QObject(0)
 SettingManager::~SettingManager()
 {
     m_Settings.sync();
+
+    while(!m_Pages.isEmpty())
+        delete m_Pages.takeFirst();
 }
 
 bool SettingManager::initialize()
@@ -88,6 +91,7 @@ bool SettingManager::initialize()
     ActionManager::MenuItem *toolsMenu = new ActionManager::MenuItem();
     toolsMenu->setTitle(tr("Tools"));
     toolsMenu->addActionItem(settingDialog);
+    toolsMenu->menuActionItem()->setParent(this);
     ActionManager::ActionManager::instance()->registerMenuItem(toolsMenu);
 
     return m_Initialized = true;
@@ -96,6 +100,10 @@ bool SettingManager::initialize()
 bool SettingManager::initialized()
 {
     return m_Initialized;
+}
+
+void SettingManager::shutdown()
+{
 }
 
 /*!
@@ -181,20 +189,8 @@ void SettingManager::registerPageFactory(ISettingPageFactory *page)
 
 void SettingManager::settingDialog()
 {
-#ifdef QT_DEBUG
-    foreach(ISettingPageFactory *page, m_Pages) {
-        qDebug() << "PRE: Remaining page:" << page->name();
-    }
-#endif
-
     SettingDialog dialog(m_Pages, MainWindow::MainWindow::instance());
     dialog.exec();
-
-#ifdef QT_DEBUG
-    foreach(ISettingPageFactory *page, m_Pages) {
-        qDebug() << "POST: Remaining page:" << page->name();
-    }
-#endif
 }
 
 
