@@ -130,8 +130,8 @@ void PluginManager::readSettings()
 
     m_PluginPath = settings->value("PluginPath").toString();
 
-    //DEBUG:
-    m_PluginPath = "C:/Qt/projects/openspeedshop/build/lib/plugin";
+    //TODO: Check for environment variable
+    //TODO: Maybe this should be a list of paths to check
 
     settings->endGroup();
 }

@@ -52,4 +52,5 @@ FORMS   += \
 
 LIBS    += 
 
-RESOURCES += resources/Core.qrc
+RESOURCES += Resources/Core.qrc
+

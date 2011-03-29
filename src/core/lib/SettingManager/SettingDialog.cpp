@@ -86,8 +86,7 @@ SettingDialog::~SettingDialog()
 
 void SettingDialog::readSettings()
 {
-    SettingManager::SettingManager *settings =
-            SettingManager::SettingManager::instance();
+    SettingManager *settings = SettingManager::instance();
 
     settings->beginGroup("SettingManager");
     settings->beginGroup("SettingDialog");
@@ -101,8 +100,7 @@ void SettingDialog::readSettings()
 
 void SettingDialog::writeSettings()
 {
-    SettingManager::SettingManager *settings =
-            SettingManager::SettingManager::instance();
+    SettingManager *settings = SettingManager::instance();
 
     settings->beginGroup("SettingManager");
     settings->beginGroup("SettingDialog");

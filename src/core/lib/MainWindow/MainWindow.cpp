@@ -244,6 +244,8 @@ void MainWindow::initActions()
 
 void MainWindow::menuAdded(QMenu *menu)
 {
+    Q_UNUSED(menu)
+
 //    menuBar()->addMenu(menu);
 }
 

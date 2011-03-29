@@ -12,6 +12,9 @@ Info.plist
 
 #Unix
 *.[oa]
+moc_*
+ui_*
+qrc_*
 
 #Windows
 *.dll

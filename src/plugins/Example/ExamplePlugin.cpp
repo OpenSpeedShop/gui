@@ -45,6 +45,9 @@ ExamplePlugin::~ExamplePlugin()
 
 bool ExamplePlugin::initialize(QStringList &args, QString *err)
 {
+    Q_UNUSED(args)
+    Q_UNUSED(err)
+
     return true;
 }
 
