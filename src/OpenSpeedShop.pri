@@ -20,8 +20,13 @@ APPLICATION_TARGET = "OpenSpeedShop"
 SOURCE_PATH        = $${PWD}
 
 #BUILD_PATH         = $${OUT_PWD}
-BUILD_PATH         = /home/dane/tmp/openspeedshop-gui-build
-#BUILD_PATH         = C:/Qt/projects/openspeedshop/build
+
+
+win32 {
+  BUILD_PATH         = C:/Qt/projects/openspeedshop/build
+} else {
+  BUILD_PATH         = /tmp/openspeedshop-gui-build
+}
 
 APPLICATION_PATH   = $${BUILD_PATH}/bin
 LIBRARY_PATH       = $${BUILD_PATH}/lib
