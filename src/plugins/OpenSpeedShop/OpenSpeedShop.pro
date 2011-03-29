@@ -21,14 +21,24 @@ TARGET   = OpenSpeedShop
 SOURCES += OpenSpeedShopPlugin.cpp \
            Settings/SettingPageFactory.cpp \
            Settings/SettingPage.cpp \
-           ConnectionManager/ConnectionManager.cpp
+           ConnectionManager/ConnectionManager.cpp \
+    ConnectionManager/ConnectionWidget.cpp \
+    ConnectionManager/DirectConnection.cpp \
+    ConnectionManager/DirectConnectionPage.cpp \
+    ConnectionManager/IConnection.cpp
 
 HEADERS += OpenSpeedShopPlugin.h \
            Settings/SettingPageFactory.h \
            Settings/SettingPage.h \
-           ConnectionManager/ConnectionManager.h
+           ConnectionManager/ConnectionManager.h \
+    ConnectionManager/ConnectionWidget.h \
+    ConnectionManager/IConnection.h \
+    ConnectionManager/DirectConnection.h \
+    ConnectionManager/DirectConnectionPage.h
 
-FORMS += Settings/SettingPage.ui
+FORMS += Settings/SettingPage.ui \
+    ConnectionManager/ConnectionWidget.ui \
+    ConnectionManager/DirectConnectionPage.ui
 
 RESOURCES += Resources/OpenSpeedShop.qrc
 

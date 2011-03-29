@@ -77,11 +77,18 @@ bool OpenSpeedShopPlugin::initialize(QStringList &args, QString *err)
     fileMenu->addActionItem(load);
     actionManager->registerMenuItem(fileMenu);
 
+
+    ConnectionManager *connectionManager = ConnectionManager::instance();
+    connectionManager->initialize();
+
     return true;
 }
 
 void OpenSpeedShopPlugin::shutdown()
 {
+
+    ConnectionManager *connectionManager = ConnectionManager::instance();
+    connectionManager->shutdown();
 }
 
 void OpenSpeedShopPlugin::load()

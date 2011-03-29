@@ -25,46 +25,41 @@
 
  */
 
-#ifndef CONNECTIONMANAGER_H
-#define CONNECTIONMANAGER_H
-
-#include <QObject>
-#include <QList>
-#include <QDockWidget>
-#include <MainWindow/MainWindow.h>
-#include "IConnection.h"
 #include "ConnectionWidget.h"
-#include "DirectConnection.h"
+#include "ui_ConnectionWidget.h"
 
 namespace Plugins {
 namespace OpenSpeedShop {
 
-class ConnectionManager : public QObject
+
+ConnectionWidget::ConnectionWidget(QWidget *parent) :
+    QWidget(parent),
+    ui(new Ui::ConnectionWidget)
 {
-    Q_OBJECT
-public:
-    static ConnectionManager *instance();
+    ui->setupUi(this);
 
-    bool initialize();
-    void shutdown();
+    ConnectionManager *connectionManager = ConnectionManager::instance();
 
-    void registerConnection(IConnection *connection);
+    // Grab any connections that already exist
+    foreach(IConnection *connection, connectionManager->m_Connections)
+        connectionRegistered(connection);
 
-signals:
-    void connectionRegistered(IConnection *);
+    // Register for notification of any new ones that are registered
+    connect(connectionManager, SIGNAL(connectionRegistered(IConnection*)),
+            this, SLOT(connectionRegistered(IConnection*)));
+}
 
-public slots:
+ConnectionWidget::~ConnectionWidget()
+{
+    delete ui;
+}
 
-protected:
-    ConnectionManager(QObject *parent = 0);
-    ~ConnectionManager();
-    QList<IConnection *> m_Connections;
+void ConnectionWidget::connectionRegistered(IConnection *connection)
+{
+    QWidget *page = connection->page();
+    int index = ui->stackedWidget->addWidget(page);
+    ui->cmbConnectionType->addItem(page->windowIcon(), page->windowTitle(), QVariant(index));
+}
 
-    friend class ConnectionWidget;
 
-};
-
-} // namespace OpenSpeedShop
-} // namespace Plugins
-
-#endif // CONNECTIONMANAGER_H
+}}

@@ -33,6 +33,7 @@
 #include <PluginManager/IPlugin.h>
 #include <SettingManager/SettingManager.h>
 #include <ActionManager/ActionManager.h>
+#include "ConnectionManager/ConnectionManager.h"
 
 namespace Plugins {
 namespace OpenSpeedShop {

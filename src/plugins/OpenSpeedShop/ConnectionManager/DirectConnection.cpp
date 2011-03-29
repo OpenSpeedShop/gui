@@ -25,53 +25,45 @@
 
  */
 
-#include "ConnectionManager.h"
+#include "DirectConnection.h"
 
 namespace Plugins {
 namespace OpenSpeedShop {
 
-
-ConnectionManager *m_Instance;
-ConnectionManager *ConnectionManager::instance()
-{
-    return m_Instance ? m_Instance : m_Instance = new ConnectionManager();
-}
-
-ConnectionManager::ConnectionManager(QObject *parent) :
-    QObject(parent)
+DirectConnection::DirectConnection(QObject *parent) :
+    IConnection(parent)
 {
 }
 
-ConnectionManager::~ConnectionManager()
+QWidget *DirectConnection::page()
 {
-    // We're responsible for disposing of the connections
-    while(!m_Connections.isEmpty())
-        delete(m_Connections.takeFirst());
+    return new DirectConnectionPage();
 }
 
-bool ConnectionManager::initialize()
+bool DirectConnection::connect()
 {
-    Core::MainWindow::MainWindow *mainWindow =
-            Core::MainWindow::MainWindow::instance();
+    bool RetVal = false;
 
-    QDockWidget *dockWidget = new QDockWidget(mainWindow);
-    dockWidget->setWidget(new ConnectionWidget(dockWidget));
-    mainWindow->addDockWidget(Qt::LeftDockWidgetArea, dockWidget, Qt::Vertical);
+    emit connecting();
 
-    registerConnection(new DirectConnection());
 
-    return true;
+    if(RetVal)
+        emit connected();
+
+    return RetVal;
 }
 
-void ConnectionManager::shutdown()
+bool DirectConnection::disconnect()
 {
-}
+    bool RetVal = false;
 
-void ConnectionManager::registerConnection(IConnection *connection)
-{
-    connection->setParent(this);
-    m_Connections.append(connection);
-    emit connectionRegistered(connection);
+    emit disconnecting();
+
+
+    if(RetVal)
+        emit disconnected();
+
+    return RetVal;
 }
 
 

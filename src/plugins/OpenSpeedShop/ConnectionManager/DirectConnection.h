@@ -25,55 +25,36 @@
 
  */
 
-#include "ConnectionManager.h"
+#ifndef DIRECTCONNECTION_H
+#define DIRECTCONNECTION_H
+
+#include <QObject>
+#include "IConnection.h"
+#include "DirectConnectionPage.h"
 
 namespace Plugins {
 namespace OpenSpeedShop {
 
-
-ConnectionManager *m_Instance;
-ConnectionManager *ConnectionManager::instance()
+class DirectConnection : public IConnection
 {
-    return m_Instance ? m_Instance : m_Instance = new ConnectionManager();
-}
+    Q_OBJECT
+public:
+    explicit DirectConnection(QObject *parent = 0);
 
-ConnectionManager::ConnectionManager(QObject *parent) :
-    QObject(parent)
-{
-}
+    QWidget *page();
 
-ConnectionManager::~ConnectionManager()
-{
-    // We're responsible for disposing of the connections
-    while(!m_Connections.isEmpty())
-        delete(m_Connections.takeFirst());
-}
+    bool connect();
+    bool disconnect();
 
-bool ConnectionManager::initialize()
-{
-    Core::MainWindow::MainWindow *mainWindow =
-            Core::MainWindow::MainWindow::instance();
+signals:
+    void connecting();
+    void connected();
+    void disconnecting();
+    void disconnected();
 
-    QDockWidget *dockWidget = new QDockWidget(mainWindow);
-    dockWidget->setWidget(new ConnectionWidget(dockWidget));
-    mainWindow->addDockWidget(Qt::LeftDockWidgetArea, dockWidget, Qt::Vertical);
-
-    registerConnection(new DirectConnection());
-
-    return true;
-}
-
-void ConnectionManager::shutdown()
-{
-}
-
-void ConnectionManager::registerConnection(IConnection *connection)
-{
-    connection->setParent(this);
-    m_Connections.append(connection);
-    emit connectionRegistered(connection);
-}
-
+};
 
 } // namespace OpenSpeedShop
 } // namespace Plugins
+
+#endif // DIRECTCONNECTION_H
