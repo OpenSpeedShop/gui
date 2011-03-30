@@ -60,14 +60,10 @@ MainWindow *MainWindow::instance()
    \brief Constructor
    \internal
  */
-MainWindow::MainWindow() : QMainWindow(NULL)
+MainWindow::MainWindow() :
+    QMainWindow(NULL),
+    m_Initialized(false)
 {
-    m_Initialized = false;
-
-    // Easier notification (than the alternatives) that we're closing
-    setAttribute( Qt::WA_DeleteOnClose );
-
-    setWindowIcon(QIcon(":/MainWindow/app.png"));
 }
 
 /*!
@@ -83,6 +79,8 @@ MainWindow::~MainWindow()
 
 bool MainWindow::initialize()
 {
+    setWindowIcon(QIcon(":/MainWindow/app.png"));
+
     readSettings();
     initActions();
 
@@ -142,107 +140,29 @@ void MainWindow::initActions()
 
     // Create base (default) menu layout with top level MenuItems and priority levels
     ActionManager::MenuItem *fileMenu = new ActionManager::MenuItem(this);
-    fileMenu->setTitle(tr("File"));
+    fileMenu->action()->setText(tr("File"));
     fileMenu->setPriority(16);
     actionManager->registerMenuItem(fileMenu);
 
     ActionManager::MenuItem *editMenu = new ActionManager::MenuItem(this);
-    editMenu->setTitle(tr("Edit"));
+    editMenu->action()->setText(tr("Edit"));
     editMenu->setPriority(32);
     actionManager->registerMenuItem(editMenu);
 
     ActionManager::MenuItem *toolsMenu = new ActionManager::MenuItem(this);
-    toolsMenu->setTitle(tr("Tools"));
+    toolsMenu->action()->setText(tr("Tools"));
     toolsMenu->setPriority(208);
     actionManager->registerMenuItem(toolsMenu);
 
     ActionManager::MenuItem *windowMenu = new ActionManager::MenuItem(this);
-    windowMenu->setTitle(tr("Window"));
+    windowMenu->action()->setText(tr("Window"));
     windowMenu->setPriority(224);
     actionManager->registerMenuItem(windowMenu);
 
     ActionManager::MenuItem *helpMenu = new ActionManager::MenuItem(this);
-    helpMenu->setTitle(tr("Help"));
+    helpMenu->action()->setText(tr("Help"));
     helpMenu->setPriority(240);
     actionManager->registerMenuItem(helpMenu);
-
-
-    // Create and connect actions to local slots
-    // Register actions in menus
-
-
-    ActionManager::ActionItem *action;
-
-    ActionManager::MenuItem *left =
-            new ActionManager::MenuItem(this);
-    left->setTitle("Edit");
-
-    action = new ActionManager::ActionItem(left);
-    action->setText("Undo/Redo");
-    action->setSeparator(true);
-    left->addActionItem(action);
-    action = new ActionManager::ActionItem(left);
-    action->setText("Undo");
-    left->addActionItem(action);
-    action = new ActionManager::ActionItem(left);
-    action->setText("Redo");
-    left->addActionItem(action);
-
-    action = new ActionManager::ActionItem(left);
-    action->setText("Edit Actions");
-    action->setSeparator(true);
-    left->addActionItem(action);
-    action = new ActionManager::ActionItem(left);
-    action->setText("Paste");
-    left->addActionItem(action);
-    action = new ActionManager::ActionItem(left);
-    action->setText("Copy");
-    left->addActionItem(action);
-    action = new ActionManager::ActionItem(left);
-    action->setText("Cut");
-    left->addActionItem(action);
-
-    action = new ActionManager::ActionItem(left);
-    action->setText("Left Only!");
-    left->addActionItem(action);
-
-    actionManager->registerMenuItem(left);
-
-    ActionManager::MenuItem *right =
-            new ActionManager::MenuItem(this);
-    right->setTitle("Edit");
-
-    action = new ActionManager::ActionItem(right);
-    action->setText("Undo/Redo");
-    action->setSeparator(true);
-    right->addActionItem(action);
-    action = new ActionManager::ActionItem(right);
-    action->setText("Undo");
-    right->addActionItem(action);
-    action = new ActionManager::ActionItem(right);
-    action->setText("Redo");
-    right->addActionItem(action);
-
-    action = new ActionManager::ActionItem(right);
-    action->setText("Edit Actions");
-    action->setSeparator(true);
-    right->addActionItem(action);
-    action = new ActionManager::ActionItem(right);
-    action->setText("Paste");
-    right->addActionItem(action);
-    action = new ActionManager::ActionItem(right);
-    action->setText("Copy");
-    right->addActionItem(action);
-    action = new ActionManager::ActionItem(right);
-    action->setText("Cut");
-    right->addActionItem(action);
-
-    action = new ActionManager::ActionItem(right);
-    action->setText("Right Only!");
-    right->addActionItem(action);
-
-    actionManager->registerMenuItem(right);
-
 }
 
 

@@ -27,7 +27,6 @@ HEADERS += ActionManager/ActionManager.h \
            SettingManager/SettingDialog.h \
            SettingManager/ISettingPageFactory.h \
            SettingManager/ISettingPage.h \
-           ActionManager/ActionItem.h \
            ActionManager/MenuItem.h \
     PluginManager/SettingPageFactory.h \
     PluginManager/SettingPage.h
@@ -41,7 +40,6 @@ SOURCES += ActionManager/ActionManager.cpp \
            SettingManager/SettingDialog.cpp \
            SettingManager/ISettingPageFactory.cpp \
            SettingManager/ISettingPage.cpp \
-           ActionManager/ActionItem.cpp \
            ActionManager/MenuItem.cpp \
     PluginManager/SettingPageFactory.cpp \
     PluginManager/SettingPage.cpp
@@ -53,4 +51,3 @@ FORMS   += \
 LIBS    += 
 
 RESOURCES += Resources/Core.qrc
-

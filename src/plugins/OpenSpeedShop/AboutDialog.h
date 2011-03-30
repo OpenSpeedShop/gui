@@ -25,42 +25,37 @@
 
  */
 
-#ifndef ACTIONITEM_H
-#define ACTIONITEM_H
+#ifndef ABOUTDIALOG_H
+#define ABOUTDIALOG_H
 
-#include <QAction>
+#include <QDialog>
+#include <QTimer>
 
-namespace Core {
-namespace ActionManager {
+namespace Plugins {
+namespace OpenSpeedShop {
 
-class MenuItem;
+namespace Ui {
+    class AboutDialog;
+}
 
-class ActionItem : public QAction
+class AboutDialog : public QDialog
 {
     Q_OBJECT
+
 public:
-    explicit ActionItem(QObject *parent = 0);
-    explicit ActionItem(const QString &text, QObject *parent);
-    explicit ActionItem(const QIcon &icon, const QString &text, QObject *parent);
+    explicit AboutDialog(QWidget *parent = 0);
+    ~AboutDialog();
 
-    int priority();
-    void setPriority(int priority);
-
-    ActionItem *merge(ActionItem *other);
-    static ActionItem *merge(ActionItem *left, ActionItem *right);
-
-    MenuItem *menuItem();
-
-signals:
-
-public slots:
+    static void splash(int ms = 2000);
 
 protected:
-    int m_Priority;
+    QTimer *m_Timer;
 
+private:
+    Ui::AboutDialog *ui;
 };
 
-} // namespace ActionManager
-} // namespace Core
 
-#endif // ACTIONITEM_H
+} // namespace OpenSpeedShop
+} // namespace Plugins
+#endif // ABOUTDIALOG_H

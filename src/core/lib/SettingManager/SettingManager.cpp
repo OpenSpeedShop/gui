@@ -77,22 +77,27 @@ SettingManager::~SettingManager()
 
     while(!m_Pages.isEmpty())
         delete m_Pages.takeFirst();
+
+    if(m_Instance)
+        m_Instance = NULL;
 }
 
 bool SettingManager::initialize()
 {
     // Create the actions that we'll use to interact with the user
-    ActionManager::ActionItem *settingDialog;
-    settingDialog = new ActionManager::ActionItem(tr("Settings"), this);
-    settingDialog->setStatusTip(tr("Change application and plugin settings"));
-    connect(settingDialog, SIGNAL(triggered()), this, SLOT(settingDialog()));
+    ActionManager::ActionManager *actionManager =
+            ActionManager::ActionManager::instance();
+
+    ActionManager::MenuItem *settingDialog = new ActionManager::MenuItem(this);
+    settingDialog->action()->setText(tr("Settings"));
+    settingDialog->action()->setToolTip(tr("Change application and plugin settings"));
+    connect(settingDialog->action(), SIGNAL(triggered()), this, SLOT(settingDialog()));
 
     // Build the menus and add the actions to them
-    ActionManager::MenuItem *toolsMenu = new ActionManager::MenuItem();
-    toolsMenu->setTitle(tr("Tools"));
-    toolsMenu->addActionItem(settingDialog);
-    toolsMenu->menuActionItem()->setParent(this);
-    ActionManager::ActionManager::instance()->registerMenuItem(toolsMenu);
+    ActionManager::MenuItem *toolsMenu = new ActionManager::MenuItem(this);
+    toolsMenu->action()->setText(tr("Tools"));
+    toolsMenu->addMenuItem(settingDialog);
+    actionManager->registerMenuItem(toolsMenu);
 
     return m_Initialized = true;
 }

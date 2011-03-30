@@ -30,6 +30,7 @@
 #endif
 
 #include "OpenSpeedShopPlugin.h"
+#include "AboutDialog.h"
 
 namespace Plugins {
 namespace OpenSpeedShop {
@@ -38,6 +39,7 @@ OpenSpeedShopPlugin::OpenSpeedShopPlugin() :
     m_Name("OpenSpeedShop"),
     m_Version("0.1.dev")
 {
+    AboutDialog::splash();
 }
 
 OpenSpeedShopPlugin::~OpenSpeedShopPlugin()
@@ -69,18 +71,16 @@ bool OpenSpeedShopPlugin::initialize(QStringList &args, QString *err)
              Core::ActionManager::ActionManager::instance();
 
     // Create the actions that we'll use to interact with the user
-    Core::ActionManager::ActionItem *load =
-            new Core::ActionManager::ActionItem(tr("Load"), this);
-    load->setStatusTip(tr("Load an existing data set"));
-    connect(load, SIGNAL(triggered()), this, SLOT(load()));
+    Core::ActionManager::MenuItem *load = new Core::ActionManager::MenuItem(this);
+    load->action()->setText(tr("Load"));
+    load->action()->setToolTip(tr("Load an existing data set"));
+    connect(load->action(), SIGNAL(triggered()), this, SLOT(load()));
 
     // Build the menus and add the actions to them
-    Core::ActionManager::MenuItem *fileMenu =
-            new Core::ActionManager::MenuItem();
-    fileMenu->setTitle(tr("File"));
-    fileMenu->addActionItem(load);
+    Core::ActionManager::MenuItem *fileMenu = new Core::ActionManager::MenuItem(this);
+    fileMenu->action()->setText(tr("File"));
+    fileMenu->addMenuItem(load);
     actionManager->registerMenuItem(fileMenu);
-
 
     ConnectionManager *connectionManager = ConnectionManager::instance();
     connectionManager->initialize();

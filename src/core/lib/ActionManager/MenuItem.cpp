@@ -30,110 +30,149 @@
 namespace Core {
 namespace ActionManager {
 
-MenuItem::MenuItem(QWidget *parent) :
-    QMenu(parent)
+MenuItem::MenuItem(QObject *parent) :
+    QObject(parent),
+    m_Action(new QAction(this)),
+    m_Priority(128)
 {
-    setPriority(128);
+}
+
+MenuItem::MenuItem(MenuItem *menuItem, QObject *parent) :
+    QObject(parent),
+    m_Action(new QAction(this)),
+    m_Priority(menuItem->priority())
+{
+    action()->setText(menuItem->action()->text());
+    action()->setToolTip(menuItem->action()->toolTip());
+    action()->setWhatsThis(menuItem->action()->whatsThis());
+    action()->setIcon(menuItem->action()->icon());
+    action()->setCheckable(menuItem->action()->isCheckable());
+    action()->setSeparator(menuItem->action()->isSeparator());
+}
+
+QAction *MenuItem::action()
+{
+//    return m_Action ? m_Action : m_Action = new QAction(this);
+    return m_Action;
 }
 
 int MenuItem::priority()
 {
-    return menuActionItem()->priority();
+    return m_Priority;
 }
 
 void MenuItem::setPriority(int priority)
 {
-    menuActionItem()->setPriority(priority);
+    m_Priority = priority;
 }
 
-MenuItem *MenuItem::merge(MenuItem* menu)
+MenuItemTypes MenuItem::menuItemType()
 {
-    return merge(this, menu);
+    if(action()->actionGroup())
+        return MenuItemType_Group;
+    if(action()->menu())
+        return MenuItemType_SubMenu;
+    if(action()->isSeparator())
+        return MenuItemType_Separator;
+    return MenuItemType_Action;
+}
+
+QList<MenuItem *> MenuItem::menuItems()
+{
+    return m_MenuItems;
+}
+
+void MenuItem::addMenuItem(MenuItem *menuItem)
+{
+    for(int i=0; i < m_MenuItems.count(); i++) {
+        if(m_MenuItems[i]->priority() > menuItem->priority()) {
+            m_MenuItems.insert(i, menuItem);
+            return;
+        }
+    }
+    m_MenuItems.append(menuItem);
+}
+
+MenuItem *MenuItem::merge(MenuItem* menuItem)
+{
+    return merge(this, menuItem);
 }
 
 MenuItem *MenuItem::merge(MenuItem* left, MenuItem *right)
 {
     MenuItem *retval = new MenuItem();
 
-    // Merge this object
-    retval->setTitle( left->title().isEmpty() ? right->title() : left->title() );
-    retval->setToolTip( left->toolTip().isEmpty() ? right->toolTip() : left->toolTip() );
-    retval->setWhatsThis( left->whatsThis().isEmpty() ? right->whatsThis() : left->whatsThis() );
-    retval->setIcon( left->icon().isNull() ? right->icon() : left->icon() );
+    // Merge the two MenuItems
+    retval->action()->setText( left->action()->text().isEmpty() ? right->action()->text() : left->action()->text() );
+    retval->action()->setToolTip( left->action()->toolTip().isEmpty() ? right->action()->toolTip() : left->action()->toolTip() );
+    retval->action()->setWhatsThis( left->action()->whatsThis().isEmpty() ? right->action()->whatsThis() : left->action()->whatsThis() );
+    retval->action()->setIcon( left->action()->icon().isNull() ? right->action()->icon() : left->action()->icon() );
+    retval->action()->setCheckable(left->action()->isCheckable() || right->action()->isCheckable());
+    retval->action()->setSeparator(left->action()->isSeparator() || right->action()->isSeparator());
     retval->setPriority( left->priority() == 128 ? right->priority() : left->priority() );
 
-    // Now, merge the children
-    QList<ActionItem *> leftActionItems = left->actionItems();
-    QList<ActionItem *> rightActionItems = right->actionItems();
+    //TODO: We need to figure out how to support groups!
 
-    foreach(ActionItem *leftAction, leftActionItems) {
-        foreach(ActionItem *rightAction, rightActionItems) {
-            if( (leftAction->text() == rightAction->text()) || (leftAction->objectName() == rightAction->objectName()) ) {
-                if(leftAction->menuItem()) {
-                    MenuItem *menuItem = leftAction->menuItem()->merge(rightAction->menuItem());
-                    menuItem->setParent(retval);    // We only parent cloned actions for disposal
-                    retval->addMenuItem(menuItem);
-                } else {
-                    ActionItem *actionItem = leftAction->merge(rightAction);
-                    actionItem->setParent(retval);    // We only parent cloned actions for disposal
-                    retval->addAction(actionItem);
-                }
+    // Merge the submenu items
+    if(left->menuItemType() == MenuItemType_SubMenu) {
+        // Merge the children
+        QList<MenuItem *> leftMenuItems = left->menuItems();
+        QList<MenuItem *> rightMenuItems = right->menuItems();
 
-                leftActionItems.removeOne(leftAction);
-                rightActionItems.removeOne(rightAction);
+        // Merge everything we can find matches for
+        foreach(MenuItem *leftMenuItem, leftMenuItems) {
+            foreach(MenuItem *rightMenuItem, rightMenuItems) {
+                if(leftMenuItem->action()->text() == rightMenuItem->action()->text()) {
+                    MenuItem *merged = merge(leftMenuItem, rightMenuItem);
+                    merged->setParent(retval);
+                    retval->addMenuItem(merged);
 
-                break;
-            }
-        }
+                    leftMenuItems.removeOne(leftMenuItem);
+                    rightMenuItems.removeOne(rightMenuItem);
+
+                    break;
+        } } }
+
+        // Add any children that didn't get merged
+        foreach(MenuItem *leftMenuItem, leftMenuItems)
+            retval->addMenuItem(new MenuItem(leftMenuItem, retval));
+        foreach(MenuItem *rightMenuItem, rightMenuItems)
+            retval->addMenuItem(new MenuItem(rightMenuItem, retval));
     }
-
-    // Add any children that didn't get merged.
-    // Remember, not to adopt these children, we don't own them!
-    foreach(ActionItem *leftAction, leftActionItems)
-        retval->addAction(leftAction);
-    foreach(ActionItem *rightAction, rightActionItems)
-        retval->addAction(rightAction);
 
     return retval;
 }
 
-QList<ActionItem *> MenuItem::actionItems()
+QAction *MenuItem::generate()
 {
-    QList<ActionItem *> actionItems;
+    QAction *retval = NULL;
 
-    foreach(QAction *action, actions())
-        actionItems.append((ActionItem *)action);
+    if(menuItemType() == MenuItemType_SubMenu) {
+        QMenu *menu = new QMenu();
+        retval = menu->menuAction();
+    } else {
+        retval = new QAction(NULL);
+    }
 
-    return actionItems;
-}
+    retval->setText(action()->text());
+    retval->setToolTip(action()->toolTip());
+    retval->setWhatsThis(action()->whatsThis());
+    retval->setIcon(action()->icon());
+    retval->setCheckable(action()->isCheckable());
+    retval->setSeparator(action()->isSeparator());
 
-ActionItem *MenuItem::menuActionItem()
-{
-    return (ActionItem *)menuAction();
-}
-
-void MenuItem::addActionItem(ActionItem *actionItem)
-{
-    foreach(ActionItem *item, actionItems()) {
-        if(item->priority() > actionItem->priority()) {
-            insertAction(item, actionItem);
-            return;
+    if(menuItemType() == MenuItemType_SubMenu) {
+        foreach(MenuItem *menuItem, menuItems()) {
+            QAction *action = menuItem->generate();
+            action->setParent(retval);
+            retval->menu()->addAction(action);
         }
     }
 
-    addAction(actionItem);
+    return retval;
 }
 
-void MenuItem::addMenuItem(MenuItem *menuItem)
-{
-    foreach(ActionItem *item, actionItems()) {
-        if(item->priority() > menuItem->priority()) {
-            insertMenu(item, menuItem);
-            return;
-        }
-    }
-    addMenu(menuItem);
-}
+
 
 } // namespace ActionManager
 } // namespace Core

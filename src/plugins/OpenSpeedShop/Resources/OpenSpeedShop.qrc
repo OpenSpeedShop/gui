@@ -1,5 +1,8 @@
 <RCC>
     <qresource prefix="/OpenSpeedShop">
         <file alias="app.png">icon_app.png</file>
+        <file alias="logo_640.png">Logo_640.png</file>
+        <file alias="logo_320.png">Logo_320.png</file>
+        <file alias="logo_1024.png">Logo_1024.png</file>
     </qresource>
 </RCC>

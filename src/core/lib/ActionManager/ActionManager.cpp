@@ -91,41 +91,46 @@ void ActionManager::refreshMenuItems()
 {
     QMenuBar *menuBar = MainWindow::MainWindow::instance()->menuBar();
 
-    MenuItem base;
-    QList<MenuItem *> menuItems = m_MenuItems;
+    QList<MenuItem *> menuItems(m_MenuItems);
+    QList<MenuItem *> base;
 
     // Merge all of the items in the list
     while(!menuItems.isEmpty()) {
         MenuItem *menuItem = menuItems.takeFirst();
+        bool newMenuItem = false;
         foreach(MenuItem *merge, menuItems) {
-            if(menuItem->title() == merge->title()) {
-                menuItems.removeOne(merge);
+            if(menuItem->action()->text() == merge->action()->text()) {
+                if(newMenuItem) delete menuItem;
+                newMenuItem = true;
                 menuItem = menuItem->merge(merge);
+                menuItems.removeOne(merge);
             }
         }
-        base.addMenuItem(menuItem);
+        base.append(menuItem);
+    }
+
+    // Remove and delete all actions
+    while(!menuBar->actions().isEmpty()) {
+        QAction *action = menuBar->actions().first();
+        menuBar->removeAction(action);
+
+        // Do I need to actually do this? or does the QAction handle the QMenu?
+        if(action->menu()) {
+            QMenu *menu = action->menu();
+            action->setMenu(NULL);
+            delete menu;
+        }
+
+        delete action;
     }
 
     // Add them by priority into the MainWindow's MenuBar
-    menuBar->clear();
-    while(!base.actions().isEmpty()) {
-        ActionItem *actionItem = base.actionItems().takeFirst();
-        base.removeAction(actionItem);  // Using takeFirst doesn't really remove it from the underlying data structure
-
-        bool inserted = false;
-        foreach(QAction *action, menuBar->actions()) {
-            ActionItem *menuItem = (ActionItem *)action;
-            if(menuItem->priority() > actionItem->priority()) {
-                menuBar->insertAction(menuItem, actionItem);
-                inserted = true;
-                break;
-            }
-        }
-
-        if(!inserted)
-            menuBar->addAction(actionItem);
+    qSort(base.begin(), base.end(), MenuItem::ascending);
+    MenuItem *menuItem = NULL;
+    while(!base.isEmpty()) {
+        menuItem = base.takeFirst();
+        menuBar->addAction(menuItem->generate());
     }
-
 }
 
 void ActionManager::registerMenuItem(MenuItem *menuItem)

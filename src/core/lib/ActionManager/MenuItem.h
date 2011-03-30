@@ -28,38 +28,52 @@
 #ifndef MENUITEM_H
 #define MENUITEM_H
 
+#include <QObject>
 #include <QMenu>
 #include <QAction>
-#include "ActionItem.h"
 
 namespace Core {
 namespace ActionManager {
 
-class ActionItem;
+enum MenuItemTypes {
+    MenuItemType_SubMenu,
+    MenuItemType_Group,
+    MenuItemType_Separator,
+    MenuItemType_Action
+};
 
-class MenuItem : public QMenu
+class MenuItem : public QObject
 {
     Q_OBJECT
 public:
-    explicit MenuItem(QWidget *parent = 0);
+    explicit MenuItem(QObject *parent = 0);
+    MenuItem(MenuItem *menuItem, QObject *parent = 0);
 
     int priority();
     void setPriority(int priority);
 
-    MenuItem *merge(MenuItem* menu);
+    QAction *action();
+
+    MenuItemTypes menuItemType();
+
+    QList<MenuItem *> menuItems();
+    void addMenuItem(MenuItem *menuItem);
+
+    MenuItem *merge(MenuItem* menuItem);
     static MenuItem *merge(MenuItem* left, MenuItem *right);
 
-    QList<ActionItem *> actionItems();
-    ActionItem *menuActionItem();
-    void addActionItem(ActionItem *actionItem);
-    void addMenuItem(MenuItem *menuItem);
+    QAction *generate();
+
+    static bool ascending(MenuItem *left, MenuItem *right) { return left->priority() < right->priority(); }
 
 signals:
 
 public slots:
 
 protected:
-
+    QList<MenuItem *> m_MenuItems;
+    QAction *m_Action;
+    int m_Priority;
 };
 
 } // namespace ActionManager

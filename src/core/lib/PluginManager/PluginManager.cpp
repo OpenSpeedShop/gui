@@ -86,6 +86,9 @@ PluginManager::~PluginManager()
         delete m_Plugins.takeFirst();
 
     writeSettings();
+
+    if(m_Instance)
+        m_Instance = NULL;
 }
 
 bool PluginManager::initialize()
@@ -97,17 +100,19 @@ bool PluginManager::initialize()
     settingManager->registerPageFactory(new SettingPageFactory());
 
     // Create the actions that we'll use to interact with the user
-    ActionManager::ActionItem *pluginDialog;
-    pluginDialog = new ActionManager::ActionItem(tr("Plugins"), this);
-    pluginDialog->setStatusTip(tr("View loaded plugins"));
-    connect(pluginDialog, SIGNAL(triggered()), this, SLOT(pluginDialog()));
+    ActionManager::ActionManager *actionManager =
+            ActionManager::ActionManager::instance();
+
+    ActionManager::MenuItem *pluginDialog = new ActionManager::MenuItem(this);
+    pluginDialog->action()->setText(tr("Plugins"));
+    pluginDialog->action()->setToolTip(tr("View loaded plugins"));
+    connect(pluginDialog->action(), SIGNAL(triggered()), this, SLOT(pluginDialog()));
 
     // Build the menus and add the actions to them
-    ActionManager::MenuItem *helpMenu = new ActionManager::MenuItem();
-    helpMenu->setTitle(tr("Help"));
-    helpMenu->addActionItem(pluginDialog);
-    helpMenu->menuActionItem()->setParent(this);
-    ActionManager::ActionManager::instance()->registerMenuItem(helpMenu);
+    ActionManager::MenuItem *helpMenu = new ActionManager::MenuItem(this);
+    helpMenu->action()->setText(tr("Help"));
+    helpMenu->addMenuItem(pluginDialog);
+    actionManager->registerMenuItem(helpMenu);
 
     return m_Initialized = true;
 }

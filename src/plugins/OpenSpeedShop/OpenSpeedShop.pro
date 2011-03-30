@@ -25,7 +25,8 @@ SOURCES += OpenSpeedShopPlugin.cpp \
     ConnectionManager/ConnectionWidget.cpp \
     ConnectionManager/DirectConnection.cpp \
     ConnectionManager/DirectConnectionPage.cpp \
-    ConnectionManager/IConnection.cpp
+    ConnectionManager/IConnection.cpp \
+    AboutDialog.cpp
 
 HEADERS += OpenSpeedShopPlugin.h \
            Settings/SettingPageFactory.h \
@@ -34,11 +35,13 @@ HEADERS += OpenSpeedShopPlugin.h \
     ConnectionManager/ConnectionWidget.h \
     ConnectionManager/IConnection.h \
     ConnectionManager/DirectConnection.h \
-    ConnectionManager/DirectConnectionPage.h
+    ConnectionManager/DirectConnectionPage.h \
+    AboutDialog.h
 
 FORMS += Settings/SettingPage.ui \
     ConnectionManager/ConnectionWidget.ui \
-    ConnectionManager/DirectConnectionPage.ui
+    ConnectionManager/DirectConnectionPage.ui \
+    AboutDialog.ui
 
 RESOURCES += Resources/OpenSpeedShop.qrc
 
