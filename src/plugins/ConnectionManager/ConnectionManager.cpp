@@ -25,10 +25,11 @@
 
  */
 
+#include <QGridLayout>
 #include "ConnectionManager.h"
 
 namespace Plugins {
-namespace OpenSpeedShop {
+namespace ConnectionManager {
 
 
 ConnectionManager *m_Instance;
@@ -55,6 +56,7 @@ bool ConnectionManager::initialize()
             Core::MainWindow::MainWindow::instance();
 
     m_DockWidget = new QDockWidget(mainWindow);
+    m_DockWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
     m_DockWidget->setWidget(new ConnectionWidget(m_DockWidget));
     mainWindow->addDockWidget(Qt::LeftDockWidgetArea, m_DockWidget, Qt::Vertical);
 
@@ -75,16 +77,10 @@ void ConnectionManager::readSettings()
     Core::SettingManager::SettingManager *settingManager =
             Core::SettingManager::SettingManager::instance();
 
-    settingManager->beginGroup("Plugins");
-    settingManager->beginGroup("OpenSpeedShop");
-    settingManager->beginGroup("ConnectionManager");
+    settingManager->beginGroup("Plugins/OpenSpeedShop/ConnectionManager");
 
-    settingManager->beginGroup("DockWidget");
-    m_DockWidget->resize( settingManager->value("size", m_DockWidget->size()).toSize() );
-    settingManager->endGroup();
+    m_DockWidget->widget()->restoreGeometry(settingManager->value("DockWidget/WidgetGeometry").toByteArray());
 
-    settingManager->endGroup();
-    settingManager->endGroup();
     settingManager->endGroup();
 }
 
@@ -93,16 +89,10 @@ void ConnectionManager::writeSettings()
     Core::SettingManager::SettingManager *settingManager =
             Core::SettingManager::SettingManager::instance();
 
-    settingManager->beginGroup("Plugins");
-    settingManager->beginGroup("OpenSpeedShop");
-    settingManager->beginGroup("ConnectionManager");
+    settingManager->beginGroup("Plugins/OpenSpeedShop/ConnectionManager");
 
-    settingManager->beginGroup("DockWidget");
-    settingManager->setValue("size", m_DockWidget->size());
-    settingManager->endGroup();
+    settingManager->setValue("DockWidget/WidgetGeometry", m_DockWidget->widget()->saveGeometry());
 
-    settingManager->endGroup();
-    settingManager->endGroup();
     settingManager->endGroup();
 }
 

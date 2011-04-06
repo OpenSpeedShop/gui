@@ -1,7 +1,7 @@
 /*!
-   \file ExamplePlugin.cpp
+   \file 
    \author Dane Gardner <dane.gardner@gmail.com>
-   \version
+   \version 
 
    \section LICENSE
    This file is part of the Open|SpeedShop Graphical User Interface
@@ -25,52 +25,17 @@
 
  */
 
-
-#include "ExamplePlugin.h"
+#include "ViewManagerPlugin.h"
 
 namespace Plugins {
-namespace Example {
+namespace ViewManager {
 
-ExamplePlugin::ExamplePlugin() :
-    m_Name("Example"),
-    m_Version("0.1.dev")
-{
-    m_Dependencies.append( Dependency("OpenSpeedShop", "^0\\.1.*$") );
-}
-
-ExamplePlugin::~ExamplePlugin()
+ViewManagerPlugin::ViewManagerPlugin(QObject *parent) :
+    QObject(parent)
 {
 }
 
-bool ExamplePlugin::initialize(QStringList &args, QString *err)
-{
-    Q_UNUSED(args)
-    Q_UNUSED(err)
+Q_EXPORT_PLUGIN(Plugins::ViewManagerPlugin::ViewManagerPlugin)
 
-    return true;
-}
-
-void ExamplePlugin::shutdown()
-{
-}
-
-QString ExamplePlugin::name()
-{
-    return m_Name;
-}
-
-QString ExamplePlugin::version()
-{
-    return m_Version;
-}
-
-QList<Dependency> ExamplePlugin::dependencies()
-{
-    return m_Dependencies;
-}
-
-
-Q_EXPORT_PLUGIN(Plugins::Example::ExamplePlugin)
-
-}}
-
+} // namespace ViewManager
+} // namespace Plugins

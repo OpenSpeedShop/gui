@@ -25,8 +25,8 @@
 
  */
 
-#ifndef SETTINGPAGEFACTORY_H
-#define SETTINGPAGEFACTORY_H
+#ifndef PLUGINSETTINGPAGEFACTORY_H
+#define PLUGINSETTINGPAGEFACTORY_H
 
 #include <QObject>
 #include <SettingManager/ISettingPageFactory.h>
@@ -56,4 +56,4 @@ public:
 } // namespace PluginManager
 } // namespace Core
 
-#endif // SETTINGPAGEFACTORY_H
+#endif // PLUGINSETTINGPAGEFACTORY_H

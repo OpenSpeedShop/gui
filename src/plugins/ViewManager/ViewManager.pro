@@ -16,21 +16,16 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 include(../plugins.pri)
-TARGET   =  OpenSpeedShop
+TARGET   =  ViewManager
 
-SOURCES +=  OpenSpeedShopPlugin.cpp \
-            Settings/SettingPageFactory.cpp \
-            Settings/SettingPage.cpp \
-            AboutDialog.cpp
+SOURCES += \  
+    ViewManagerPlugin.cpp
 
-HEADERS +=  OpenSpeedShopPlugin.h \
-            Settings/SettingPageFactory.h \
-            Settings/SettingPage.h \
-            AboutDialog.h
+HEADERS += \  
+    ViewManagerPlugin.h
 
-FORMS +=    Settings/SettingPage.ui \
-            AboutDialog.ui
+FORMS +=    
 
-RESOURCES += Resources/OpenSpeedShop.qrc
+RESOURCES += 
 
 LIBS    +=  -lCore

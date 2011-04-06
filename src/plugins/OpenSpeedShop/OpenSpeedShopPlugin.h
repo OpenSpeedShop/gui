@@ -29,16 +29,16 @@
 #define OPENSPEEDSHOPPLUGIN_H
 
 #include <QtCore>
-#include "Settings/SettingPageFactory.h"
 #include <PluginManager/IPlugin.h>
 #include <SettingManager/SettingManager.h>
-#include <ActionManager/ActionManager.h>
-#include "ConnectionManager/ConnectionManager.h"
+#include "Settings/SettingPageFactory.h"
+#include "AboutDialog.h"
 
 namespace Plugins {
 namespace OpenSpeedShop {
 
-class OpenSpeedShopPlugin : public QObject, public IPlugin {
+class OpenSpeedShopPlugin : public QObject, public IPlugin
+{
 Q_OBJECT
 Q_INTERFACES(IPlugin)
 
@@ -55,6 +55,7 @@ public:
 
 public slots:
     void load();
+    void aboutDialog();
 
 protected:
     QString m_Name;
@@ -68,5 +69,6 @@ protected:
 
 
 
-}}
+} // namespace OpenSpeedShop
+} // namespace Plugins
 #endif // OPENSPEEDSHOPPLUGIN_H

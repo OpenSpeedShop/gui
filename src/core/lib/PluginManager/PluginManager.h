@@ -31,7 +31,6 @@
 #include <QObject>
 #include <QList>
 #include <SettingManager/SettingManager.h>
-#include "IPlugin.h"
 #include "SettingPageFactory.h"
 #include "PluginWrapper.h"
 

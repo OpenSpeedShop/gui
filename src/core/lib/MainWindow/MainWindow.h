@@ -33,7 +33,6 @@
 
 #include <SettingManager/SettingManager.h>
 #include <PluginManager/PluginManager.h>
-#include <ActionManager/ActionManager.h>
 
 namespace Core {
 namespace MainWindow {

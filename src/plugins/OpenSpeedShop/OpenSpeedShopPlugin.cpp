@@ -30,7 +30,6 @@
 #endif
 
 #include "OpenSpeedShopPlugin.h"
-#include "AboutDialog.h"
 
 namespace Plugins {
 namespace OpenSpeedShop {
@@ -39,7 +38,9 @@ OpenSpeedShopPlugin::OpenSpeedShopPlugin() :
     m_Name("OpenSpeedShop"),
     m_Version("0.1.dev")
 {
+#ifndef QT_DEBUG
     AboutDialog::splash();
+#endif
 }
 
 OpenSpeedShopPlugin::~OpenSpeedShopPlugin()
@@ -65,25 +66,20 @@ bool OpenSpeedShopPlugin::initialize(QStringList &args, QString *err)
              Core::SettingManager::SettingManager::instance();
     settingManager->registerPageFactory(new SettingPageFactory());
 
-
     /*** Register our menu structure ***/
-    Core::ActionManager::ActionManager *actionManager =
-             Core::ActionManager::ActionManager::instance();
-
-    // Create the actions that we'll use to interact with the user
-    Core::ActionManager::MenuItem *load = new Core::ActionManager::MenuItem(this);
-    load->action()->setText(tr("Load"));
-    load->action()->setToolTip(tr("Load an existing data set"));
-    connect(load->action(), SIGNAL(triggered()), this, SLOT(load()));
-
-    // Build the menus and add the actions to them
-    Core::ActionManager::MenuItem *fileMenu = new Core::ActionManager::MenuItem(this);
-    fileMenu->action()->setText(tr("File"));
-    fileMenu->addMenuItem(load);
-    actionManager->registerMenuItem(fileMenu);
-
-    ConnectionManager *connectionManager = ConnectionManager::instance();
-    connectionManager->initialize();
+    foreach(QAction *action, mainWindow->menuBar()->actions()) {
+        if(action->text() == tr("File")) {
+            QAction *load = new QAction(tr("Load"), this);
+            load->setToolTip(tr("Just a test object for the OSS plugin"));
+            connect(load, SIGNAL(triggered()), this, SLOT(load()));
+            action->menu()->addAction(load);
+        } else if(action->text() == tr("Help")) {
+            QAction *about = new QAction(tr("About Open|SpeedShop"), this);
+            about->setToolTip(tr("Displays the Open|SpeedShop about dialog"));
+            connect(about, SIGNAL(triggered()), this, SLOT(aboutDialog()));
+            action->menu()->addAction(about);
+        }
+    }
 
     return true;
 }
@@ -91,9 +87,6 @@ bool OpenSpeedShopPlugin::initialize(QStringList &args, QString *err)
 void OpenSpeedShopPlugin::shutdown()
 {
     writeSettings();
-
-    ConnectionManager *connectionManager = ConnectionManager::instance();
-    connectionManager->shutdown();
 }
 
 void OpenSpeedShopPlugin::load()
@@ -102,6 +95,12 @@ void OpenSpeedShopPlugin::load()
     qDebug() << __FILE__ << __LINE__ << "Plugins::OpenSpeedShop::OpenSpeedShopPlugin::load()";
 #endif
 
+}
+
+void OpenSpeedShopPlugin::aboutDialog()
+{
+    AboutDialog about;
+    about.exec();
 }
 
 QString OpenSpeedShopPlugin::name()

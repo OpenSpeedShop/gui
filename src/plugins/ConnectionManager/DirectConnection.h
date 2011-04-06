@@ -25,26 +25,26 @@
 
  */
 
-#ifndef ICONNECTION_H
-#define ICONNECTION_H
+#ifndef DIRECTCONNECTION_H
+#define DIRECTCONNECTION_H
 
 #include <QObject>
-#include <QWidget>
+#include "IConnection.h"
+#include "DirectConnectionPage.h"
 
 namespace Plugins {
-namespace OpenSpeedShop {
+namespace ConnectionManager {
 
-class IConnection : public QObject {
+class DirectConnection : public IConnection
+{
     Q_OBJECT
-
 public:
-    explicit IConnection(QObject *parent = 0);
-    virtual ~IConnection() {}
+    explicit DirectConnection(QObject *parent = 0);
 
-    virtual QWidget *page() = 0;
+    QWidget *page();
 
-    virtual bool connect() = 0;
-    virtual bool disconnect() = 0;
+    bool connect();
+    bool disconnect();
 
 signals:
     void connecting();
@@ -54,6 +54,6 @@ signals:
 
 };
 
-}}
-
-#endif // ICONNECTION_H
+} // namespace OpenSpeedShop
+} // namespace Plugins
+#endif // DIRECTCONNECTION_H

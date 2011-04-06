@@ -95,24 +95,21 @@ bool PluginManager::initialize()
 {
     readSettings();
 
+
     Core::SettingManager::SettingManager *settingManager =
              Core::SettingManager::SettingManager::instance();
     settingManager->registerPageFactory(new SettingPageFactory());
 
-    // Create the actions that we'll use to interact with the user
-    ActionManager::ActionManager *actionManager =
-            ActionManager::ActionManager::instance();
 
-    ActionManager::MenuItem *pluginDialog = new ActionManager::MenuItem(this);
-    pluginDialog->action()->setText(tr("Plugins"));
-    pluginDialog->action()->setToolTip(tr("View loaded plugins"));
-    connect(pluginDialog->action(), SIGNAL(triggered()), this, SLOT(pluginDialog()));
-
-    // Build the menus and add the actions to them
-    ActionManager::MenuItem *helpMenu = new ActionManager::MenuItem(this);
-    helpMenu->action()->setText(tr("Help"));
-    helpMenu->addMenuItem(pluginDialog);
-    actionManager->registerMenuItem(helpMenu);
+    MainWindow::MainWindow *mainWindow = MainWindow::MainWindow::instance();
+    foreach(QAction *action, mainWindow->menuBar()->actions()) {
+        if(action->text() == tr("Help")) {
+            QAction *pluginDialog = new QAction("Plugins", this);
+            pluginDialog->setToolTip(tr("View loaded plugins"));
+            connect(pluginDialog, SIGNAL(triggered()), this, SLOT(pluginDialog()));
+            action->menu()->addAction(pluginDialog);
+        }
+    }
 
     return m_Initialized = true;
 }

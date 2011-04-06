@@ -16,21 +16,25 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 include(../plugins.pri)
-TARGET   =  OpenSpeedShop
+TARGET   =  ConnectionManager
 
-SOURCES +=  OpenSpeedShopPlugin.cpp \
-            Settings/SettingPageFactory.cpp \
-            Settings/SettingPage.cpp \
-            AboutDialog.cpp
+SOURCES +=  ConnectionManager.cpp \
+            ConnectionWidget.cpp \
+            IConnection.cpp \
+            DirectConnection.cpp \
+            DirectConnectionPage.cpp \
+    ConnectionManagerPlugin.cpp
 
-HEADERS +=  OpenSpeedShopPlugin.h \
-            Settings/SettingPageFactory.h \
-            Settings/SettingPage.h \
-            AboutDialog.h
+HEADERS +=  ConnectionManager.h \
+            ConnectionWidget.h \
+            IConnection.h \
+            DirectConnection.h \
+            DirectConnectionPage.h \
+    ConnectionManagerPlugin.h
 
-FORMS +=    Settings/SettingPage.ui \
-            AboutDialog.ui
+FORMS +=    ConnectionWidget.ui \
+            DirectConnectionPage.ui
 
-RESOURCES += Resources/OpenSpeedShop.qrc
+RESOURCES += 
 
 LIBS    +=  -lCore

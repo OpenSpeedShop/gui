@@ -1,7 +1,7 @@
 /*!
-   \file ExamplePlugin.cpp
+   \file 
    \author Dane Gardner <dane.gardner@gmail.com>
-   \version
+   \version 
 
    \section LICENSE
    This file is part of the Open|SpeedShop Graphical User Interface
@@ -25,52 +25,23 @@
 
  */
 
-
-#include "ExamplePlugin.h"
+#include "DirectConnectionPage.h"
+#include "ui_DirectConnectionPage.h"
 
 namespace Plugins {
-namespace Example {
+namespace ConnectionManager {
 
-ExamplePlugin::ExamplePlugin() :
-    m_Name("Example"),
-    m_Version("0.1.dev")
+DirectConnectionPage::DirectConnectionPage(QWidget *parent) :
+    QWidget(parent),
+    ui(new Ui::DirectConnectionPage)
 {
-    m_Dependencies.append( Dependency("OpenSpeedShop", "^0\\.1.*$") );
+    ui->setupUi(this);
 }
 
-ExamplePlugin::~ExamplePlugin()
+DirectConnectionPage::~DirectConnectionPage()
 {
+    delete ui;
 }
 
-bool ExamplePlugin::initialize(QStringList &args, QString *err)
-{
-    Q_UNUSED(args)
-    Q_UNUSED(err)
-
-    return true;
-}
-
-void ExamplePlugin::shutdown()
-{
-}
-
-QString ExamplePlugin::name()
-{
-    return m_Name;
-}
-
-QString ExamplePlugin::version()
-{
-    return m_Version;
-}
-
-QList<Dependency> ExamplePlugin::dependencies()
-{
-    return m_Dependencies;
-}
-
-
-Q_EXPORT_PLUGIN(Plugins::Example::ExamplePlugin)
-
-}}
-
+} // namespace OpenSpeedShop
+} // namespace Plugins

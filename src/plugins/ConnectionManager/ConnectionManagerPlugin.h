@@ -1,7 +1,7 @@
 /*!
-   \file SettingManager.h
+   \file 
    \author Dane Gardner <dane.gardner@gmail.com>
-   \version
+   \version 
 
    \section LICENSE
    This file is part of the Open|SpeedShop Graphical User Interface
@@ -25,59 +25,47 @@
 
  */
 
-#ifndef SETTINGMANAGER_H
-#define SETTINGMANAGER_H
+#ifndef CONNECTIONMANAGERPLUGIN_H
+#define CONNECTIONMANAGERPLUGIN_H
 
 #include <QObject>
-#include <QString>
-#include <QSettings>
+#include <PluginManager/IPlugin.h>
+#include "ConnectionManager.h"
 
-#include "MainWindow/MainWindow.h"
+namespace Plugins {
+namespace ConnectionManager {
 
-#include "ISettingPageFactory.h"
-#include "SettingDialog.h"
-
-
-namespace Core {
-namespace SettingManager {
-
-class SettingManager : public QObject
+class ConnectionManagerPlugin : public QObject, public IPlugin
 {
     Q_OBJECT
-public:
-    static SettingManager *instance();
-    ~SettingManager();
+    Q_INTERFACES(IPlugin)
 
-    bool initialize();
-    bool initialized();
+public:
+    explicit ConnectionManagerPlugin(QObject *parent = 0);
+    ~ConnectionManagerPlugin();
+
+    bool initialize(QStringList &args, QString *err);
     void shutdown();
 
-    void setValue(const QString &key, const QVariant &value);
-    QVariant value(const QString &key, const QVariant &defaultValue = QVariant()) const;
-
-    void remove(const QString &key);
-    bool contains(const QString &key) const;
-
-    void beginGroup(const QString &prefix);
-    void endGroup();
-    QString group() const;
-
-    void registerPageFactory(ISettingPageFactory *page);
+    QString name();
+    QString version();
+    QList<Dependency> dependencies();
 
 signals:
 
 public slots:
-    void settingDialog();
 
 protected:
-    SettingManager();
+    QString m_Name;
+    QString m_Version;
+    QList<Dependency> m_Dependencies;
 
-    bool m_Initialized;
-
-    QSettings m_Settings;
-    QList<ISettingPageFactory *> m_Pages;
+    void readSettings();
+    void writeSettings();
 
 };
 
-}}
-#endif // SETTINGMANAGER_H
+} // namespace ConnectionManager
+} // namespace Plugins
+
+#endif // CONNECTIONMANAGERPLUGIN_H

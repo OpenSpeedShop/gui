@@ -25,45 +25,39 @@
 
  */
 
-#include "DirectConnection.h"
+#include "ConnectionWidget.h"
+#include "ui_ConnectionWidget.h"
 
 namespace Plugins {
-namespace OpenSpeedShop {
+namespace ConnectionManager {
 
-DirectConnection::DirectConnection(QObject *parent) :
-    IConnection(parent)
+ConnectionWidget::ConnectionWidget(QWidget *parent) :
+    QWidget(parent),
+    ui(new Ui::ConnectionWidget)
 {
+    ui->setupUi(this);
+
+    ConnectionManager *connectionManager = ConnectionManager::instance();
+
+    // Grab any connections that already exist
+    foreach(IConnection *connection, connectionManager->m_Connections)
+        connectionRegistered(connection);
+
+    // Register for notification of any new ones that are registered
+    connect(connectionManager, SIGNAL(connectionRegistered(IConnection*)),
+            this, SLOT(connectionRegistered(IConnection*)));
 }
 
-QWidget *DirectConnection::page()
+ConnectionWidget::~ConnectionWidget()
 {
-    return new DirectConnectionPage();
+    delete ui;
 }
 
-bool DirectConnection::connect()
+void ConnectionWidget::connectionRegistered(IConnection *connection)
 {
-    bool RetVal = false;
-
-    emit connecting();
-
-
-    if(RetVal)
-        emit connected();
-
-    return RetVal;
-}
-
-bool DirectConnection::disconnect()
-{
-    bool RetVal = false;
-
-    emit disconnecting();
-
-
-    if(RetVal)
-        emit disconnected();
-
-    return RetVal;
+    QWidget *page = connection->page();
+    int index = ui->stackedWidget->addWidget(page);
+    ui->cmbConnectionType->addItem(page->windowIcon(), page->windowTitle(), QVariant(index));
 }
 
 

@@ -107,7 +107,6 @@
 
 #include <QtGui/QApplication>
 #include <SettingManager/SettingManager.h>
-#include <ActionManager/ActionManager.h>
 #include <PluginManager/PluginManager.h>
 #include <MainWindow/MainWindow.h>
 
@@ -122,38 +121,31 @@ int main(int argc, char *argv[])
 
     Core::SettingManager::SettingManager *settingManager =
             Core::SettingManager::SettingManager::instance();
-    Core::ActionManager::ActionManager *actionManager =
-            Core::ActionManager::ActionManager::instance();
-    Core::PluginManager::PluginManager *pluginManager =
-            Core::PluginManager::PluginManager::instance();
     Core::MainWindow::MainWindow *mainWindow =
             Core::MainWindow::MainWindow::instance();
+    Core::PluginManager::PluginManager *pluginManager =
+            Core::PluginManager::PluginManager::instance();
 
     if(!settingManager->initialized())
         settingManager->initialize();
-    if(!actionManager->initialized())
-        actionManager->initialize();
-    if(!pluginManager->initialized())
-        pluginManager->initialize();
     if(!mainWindow->initialized())
         mainWindow->initialize();
+    if(!pluginManager->initialized())
+        pluginManager->initialize();
 
     pluginManager->loadPlugins();
     mainWindow->show();
     int retval = a.exec();
 
-    if(mainWindow->initialized())
-        mainWindow->shutdown();
     if(pluginManager->initialized())
         pluginManager->shutdown();
-    if(actionManager->initialized())
-        actionManager->shutdown();
+    if(mainWindow->initialized())
+        mainWindow->shutdown();
     if(settingManager->initialized())
         settingManager->shutdown();
 
     delete mainWindow;
     delete pluginManager;
-    delete actionManager;
     delete settingManager;
 
     return retval;

@@ -25,36 +25,29 @@
 
  */
 
-#ifndef DIRECTCONNECTION_H
-#define DIRECTCONNECTION_H
+#ifndef VIEWMANAGERPLUGIN_H
+#define VIEWMANAGERPLUGIN_H
 
 #include <QObject>
-#include "IConnection.h"
-#include "DirectConnectionPage.h"
+#include <PluginManager/IPlugin.h>
 
 namespace Plugins {
-namespace OpenSpeedShop {
+namespace ViewManager {
 
-class DirectConnection : public IConnection
+class ViewManagerPlugin : public QObject, public IPlugin
 {
     Q_OBJECT
+    Q_INTERFACES(IPlugin)
 public:
-    explicit DirectConnection(QObject *parent = 0);
-
-    QWidget *page();
-
-    bool connect();
-    bool disconnect();
+    explicit ViewManagerPlugin(QObject *parent = 0);
 
 signals:
-    void connecting();
-    void connected();
-    void disconnecting();
-    void disconnected();
+
+public slots:
 
 };
 
-} // namespace OpenSpeedShop
+} // namespace ViewManager
 } // namespace Plugins
 
-#endif // DIRECTCONNECTION_H
+#endif // VIEWMANAGERPLUGIN_H

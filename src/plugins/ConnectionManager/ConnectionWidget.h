@@ -25,14 +25,32 @@
 
  */
 
-#include "IConnection.h"
+#ifndef CONNECTIONWIDGET_H
+#define CONNECTIONWIDGET_H
+
+#include <QWidget>
+#include "ConnectionManager.h"
 
 namespace Plugins {
-namespace OpenSpeedShop {
+namespace ConnectionManager {
 
-IConnection::IConnection(QObject *parent) :
-    QObject(parent)
+namespace Ui { class ConnectionWidget; }
+
+class ConnectionWidget : public QWidget
 {
-}
+    Q_OBJECT
 
-}}
+public:
+    explicit ConnectionWidget(QWidget *parent = 0);
+    ~ConnectionWidget();
+
+protected slots:
+    void connectionRegistered(IConnection *);
+
+private:
+    Ui::ConnectionWidget *ui;
+};
+
+} // namespace OpenSpeedShop
+} // namespace Plugins
+#endif // CONNECTIONWIDGET_H

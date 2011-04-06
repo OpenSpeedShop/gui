@@ -49,7 +49,6 @@ public:
     static void splash(int ms = 2000);
 
 protected:
-    QTimer *m_Timer;
 
 private:
     Ui::AboutDialog *ui;

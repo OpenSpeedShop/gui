@@ -33,8 +33,7 @@ namespace OpenSpeedShop {
 
 AboutDialog::AboutDialog(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::AboutDialog),
-    m_Timer(NULL)
+    ui(new Ui::AboutDialog)
 {
     ui->setupUi(this);
 

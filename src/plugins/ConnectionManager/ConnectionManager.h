@@ -25,31 +25,50 @@
 
  */
 
-#ifndef DIRECTCONNECTIONPAGE_H
-#define DIRECTCONNECTIONPAGE_H
+#ifndef CONNECTIONMANAGER_H
+#define CONNECTIONMANAGER_H
 
-#include <QWidget>
+#include <QObject>
+#include <QList>
+#include <QDockWidget>
+#include <MainWindow/MainWindow.h>
+#include <SettingManager/SettingManager.h>
+#include "IConnection.h"
+#include "ConnectionWidget.h"
+#include "DirectConnection.h"
 
 namespace Plugins {
-namespace OpenSpeedShop {
+namespace ConnectionManager {
 
-namespace Ui {
-    class DirectConnectionPage;
-}
-
-class DirectConnectionPage : public QWidget
+class ConnectionManager : public QObject
 {
     Q_OBJECT
-
 public:
-    explicit DirectConnectionPage(QWidget *parent = 0);
-    ~DirectConnectionPage();
+    static ConnectionManager *instance();
 
-private:
-    Ui::DirectConnectionPage *ui;
+    bool initialize();
+    void shutdown();
+
+    void registerConnection(IConnection *connection);
+
+signals:
+    void connectionRegistered(IConnection *);
+
+public slots:
+
+protected:
+    ConnectionManager(QObject *parent = 0);
+    ~ConnectionManager();
+    QList<IConnection *> m_Connections;
+    QDockWidget *m_DockWidget;
+
+    void readSettings();
+    void writeSettings();
+
+    friend class ConnectionWidget;
+
 };
-
 
 } // namespace OpenSpeedShop
 } // namespace Plugins
-#endif // DIRECTCONNECTIONPAGE_H
+#endif // CONNECTIONMANAGER_H

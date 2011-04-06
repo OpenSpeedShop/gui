@@ -64,6 +64,8 @@ MainWindow::MainWindow() :
     QMainWindow(NULL),
     m_Initialized(false)
 {
+    setWindowIcon(QIcon(":/MainWindow/app.png"));
+    initActions();
 }
 
 /*!
@@ -79,11 +81,7 @@ MainWindow::~MainWindow()
 
 bool MainWindow::initialize()
 {
-    setWindowIcon(QIcon(":/MainWindow/app.png"));
-
     readSettings();
-    initActions();
-
     return m_Initialized = true;
 }
 
@@ -109,8 +107,8 @@ void MainWindow::readSettings()
 
     settingManager->beginGroup("MainWindow");
 
-    resize( settingManager->value("WindowSize", QSize(640, 400)).toSize() );
-    move( settingManager->value("WindowPosition", QPoint(0, 0)).toPoint() );
+    restoreGeometry(settingManager->value("Geometry").toByteArray());
+    restoreState(settingManager->value("State").toByteArray());
 
     settingManager->endGroup();
 }
@@ -127,42 +125,26 @@ void MainWindow::writeSettings()
 
     settingManager->beginGroup("MainWindow");
 
-    settingManager->setValue("WindowSize", size());
-    settingManager->setValue("WindowPosition", pos());
+    settingManager->setValue("Geometry", saveGeometry());
+    settingManager->setValue("State", saveState());
 
     settingManager->endGroup();
 }
 
 void MainWindow::initActions()
 {
-    ActionManager::ActionManager *actionManager =
-            ActionManager::ActionManager::instance();
-
-    // Create base (default) menu layout with top level MenuItems and priority levels
-    ActionManager::MenuItem *fileMenu = new ActionManager::MenuItem(this);
-    fileMenu->action()->setText(tr("File"));
-    fileMenu->setPriority(16);
-    actionManager->registerMenuItem(fileMenu);
-
-    ActionManager::MenuItem *editMenu = new ActionManager::MenuItem(this);
-    editMenu->action()->setText(tr("Edit"));
-    editMenu->setPriority(32);
-    actionManager->registerMenuItem(editMenu);
-
-    ActionManager::MenuItem *toolsMenu = new ActionManager::MenuItem(this);
-    toolsMenu->action()->setText(tr("Tools"));
-    toolsMenu->setPriority(208);
-    actionManager->registerMenuItem(toolsMenu);
-
-    ActionManager::MenuItem *windowMenu = new ActionManager::MenuItem(this);
-    windowMenu->action()->setText(tr("Window"));
-    windowMenu->setPriority(224);
-    actionManager->registerMenuItem(windowMenu);
-
-    ActionManager::MenuItem *helpMenu = new ActionManager::MenuItem(this);
-    helpMenu->action()->setText(tr("Help"));
-    helpMenu->setPriority(240);
-    actionManager->registerMenuItem(helpMenu);
+    // Create base (default) menu layout
+    QMenu *menu;
+    menu = new QMenu(tr("File"), this);
+    this->menuBar()->addMenu(menu);
+    menu = new QMenu(tr("Edit"), this);
+    this->menuBar()->addMenu(menu);
+    menu = new QMenu(tr("Tools"), this);
+    this->menuBar()->addMenu(menu);
+    menu = new QMenu(tr("Window"), this);
+    this->menuBar()->addMenu(menu);
+    menu = new QMenu(tr("Help"), this);
+    this->menuBar()->addMenu(menu);
 }
 
 

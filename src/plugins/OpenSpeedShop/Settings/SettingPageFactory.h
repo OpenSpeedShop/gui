@@ -25,8 +25,8 @@
 
  */
 
-#ifndef SETTINGPAGEFACTORY_H
-#define SETTINGPAGEFACTORY_H
+#ifndef OSSSETTINGPAGEFACTORY_H
+#define OSSSETTINGPAGEFACTORY_H
 
 #include <QObject>
 #include <SettingManager/ISettingPageFactory.h>
@@ -54,4 +54,4 @@ public:
 };
 
 }}
-#endif // SETTINGPAGEFACTORY_H
+#endif // OSSSETTINGPAGEFACTORY_H

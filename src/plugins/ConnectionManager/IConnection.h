@@ -25,23 +25,35 @@
 
  */
 
-#include "DirectConnectionPage.h"
-#include "ui_DirectConnectionPage.h"
+#ifndef ICONNECTION_H
+#define ICONNECTION_H
+
+#include <QObject>
+#include <QWidget>
 
 namespace Plugins {
-namespace OpenSpeedShop {
+namespace ConnectionManager {
 
-DirectConnectionPage::DirectConnectionPage(QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::DirectConnectionPage)
-{
-    ui->setupUi(this);
-}
+class IConnection : public QObject {
+    Q_OBJECT
 
-DirectConnectionPage::~DirectConnectionPage()
-{
-    delete ui;
-}
+public:
+    explicit IConnection(QObject *parent = 0);
+    virtual ~IConnection() {}
+
+    virtual QWidget *page() = 0;
+
+    virtual bool connect() = 0;
+    virtual bool disconnect() = 0;
+
+signals:
+    void connecting();
+    void connected();
+    void disconnecting();
+    void disconnected();
+
+};
 
 } // namespace OpenSpeedShop
 } // namespace Plugins
+#endif // ICONNECTION_H

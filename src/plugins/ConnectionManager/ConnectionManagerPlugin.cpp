@@ -1,7 +1,7 @@
 /*!
-   \file ExamplePlugin.cpp
+   \file 
    \author Dane Gardner <dane.gardner@gmail.com>
-   \version
+   \version 
 
    \section LICENSE
    This file is part of the Open|SpeedShop Graphical User Interface
@@ -25,52 +25,52 @@
 
  */
 
-
-#include "ExamplePlugin.h"
+#include "ConnectionManagerPlugin.h"
 
 namespace Plugins {
-namespace Example {
+namespace ConnectionManager {
 
-ExamplePlugin::ExamplePlugin() :
-    m_Name("Example"),
+ConnectionManagerPlugin::ConnectionManagerPlugin(QObject *parent) :
+    QObject(parent),
+    m_Name("ConnectionManager"),
     m_Version("0.1.dev")
 {
     m_Dependencies.append( Dependency("OpenSpeedShop", "^0\\.1.*$") );
-}
 
-ExamplePlugin::~ExamplePlugin()
+    ConnectionManager::instance(); // Create the singleton instance
+}
+ConnectionManagerPlugin::~ConnectionManagerPlugin()
 {
 }
 
-bool ExamplePlugin::initialize(QStringList &args, QString *err)
+bool ConnectionManagerPlugin::initialize(QStringList &args, QString *err)
 {
-    Q_UNUSED(args)
-    Q_UNUSED(err)
-
-    return true;
+    ConnectionManager *connectionManager = ConnectionManager::instance();
+    return connectionManager->initialize();
 }
 
-void ExamplePlugin::shutdown()
+void ConnectionManagerPlugin::shutdown()
 {
+    ConnectionManager *connectionManager = ConnectionManager::instance();
+    connectionManager->shutdown();
 }
 
-QString ExamplePlugin::name()
+QString ConnectionManagerPlugin::name()
 {
     return m_Name;
 }
 
-QString ExamplePlugin::version()
+QString ConnectionManagerPlugin::version()
 {
     return m_Version;
 }
 
-QList<Dependency> ExamplePlugin::dependencies()
+QList<Dependency> ConnectionManagerPlugin::dependencies()
 {
     return m_Dependencies;
 }
 
+Q_EXPORT_PLUGIN(Plugins::ConnectionManager::ConnectionManagerPlugin)
 
-Q_EXPORT_PLUGIN(Plugins::Example::ExamplePlugin)
-
-}}
-
+} // namespace ConnectionManager
+} // namespace Plugins

@@ -25,8 +25,8 @@
 
  */
 
-#ifndef SETTINGPAGE_H
-#define SETTINGPAGE_H
+#ifndef PLUGINSETTINGPAGE_H
+#define PLUGINSETTINGPAGE_H
 
 #include <QDialog>
 #include <QTreeWidget>
@@ -71,4 +71,4 @@ private:
 };
 
 }}
-#endif // SETTINGPAGE_H
+#endif // PLUGINSETTINGPAGE_H

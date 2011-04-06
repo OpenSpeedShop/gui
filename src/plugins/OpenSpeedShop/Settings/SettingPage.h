@@ -25,8 +25,8 @@
 
  */
 
-#ifndef SETTINGPAGE_H
-#define SETTINGPAGE_H
+#ifndef OSSSETTINGPAGE_H
+#define OSSSETTINGPAGE_H
 
 #include <QWidget>
 #include <SettingManager/ISettingPage.h>
@@ -61,4 +61,4 @@ private:
 
 
 }}
-#endif // SETTINGPAGE_H
+#endif // OSSSETTINGPAGE_H
