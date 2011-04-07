@@ -1,5 +1,5 @@
 /*!
-   \file 
+   \file DataItem.h
    \author Dane Gardner <dane.gardner@gmail.com>
    \version 
 
@@ -43,9 +43,11 @@ public:
     DataItem *column(int column);
     QString columnType(int column) const;
     QVariant columnData(int column) const;
+    void addColumn(DataItem *columnItem);
 
     int childCount() const;
     DataItem *child(int row);
+    void addChild(DataItem *childItem);
 
     DataItem *parent();
     int row() const;

@@ -1,5 +1,5 @@
 /*!
-   \file 
+   \file DataModel.h
    \author Dane Gardner <dane.gardner@gmail.com>
    \version 
 
@@ -29,6 +29,8 @@
 #define DATAMODEL_H
 
 #include <QAbstractItemModel>
+#include <QtXml/QDomDocument>
+#include <QtXml/QDomElement>
 #include "DataItem.h"
 
 namespace Plugins {
@@ -40,6 +42,9 @@ class DataModel : public QAbstractItemModel
 public:
     explicit DataModel(QObject *parent = 0);
     ~DataModel();
+
+    void loadData(QString xml);
+    QString saveData() const;
 
     /* QAbstractItemModel interface */
     QModelIndex index(int row, int column, const QModelIndex &parent) const;
@@ -53,8 +58,10 @@ signals:
 public slots:
 
 protected:
+    DataItem *createDataItem(QDomElement element, DataItem *parent);
+    DataItem *m_RootDataItem;
 
-    DataItem * m_RootDataItem;
+
 };
 
 } // namespace ViewManager

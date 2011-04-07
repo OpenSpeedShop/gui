@@ -37,7 +37,7 @@ namespace MainWindow {
 MainWindow *m_Instance;
 
 /*!
-   \class Core::MainWindow
+   \class Core::MainWindow::MainWindow
    \brief The MainWindow class is part of the core framework libraries. It is
           the actual viewport that the user sees. All plugins manipulate this
           view to expose data to the user.
@@ -69,7 +69,7 @@ MainWindow::MainWindow() :
 }
 
 /*!
-   \fn Core::MainWindow::MainWindow()
+   \fn Core::MainWindow::~MainWindow()
    \brief Destructor
    \internal
  */

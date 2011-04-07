@@ -1,5 +1,5 @@
 /*!
-   \file 
+   \file ViewManagerPlugin.cpp
    \author Dane Gardner <dane.gardner@gmail.com>
    \version 
 
