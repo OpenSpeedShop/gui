@@ -18,14 +18,13 @@
 include(../plugins.pri)
 TARGET   =  ViewManager
 
-SOURCES += \  
-    ViewManagerPlugin.cpp
-
-HEADERS += \  
-    ViewManagerPlugin.h
-
+SOURCES += ViewManagerPlugin.cpp \
+    DataModel.cpp \
+    DataItem.cpp
+HEADERS += ViewManagerPlugin.h \
+    DataModel.h \
+    DataItem.h
 FORMS +=    
-
 RESOURCES += 
 
 LIBS    +=  -lCore

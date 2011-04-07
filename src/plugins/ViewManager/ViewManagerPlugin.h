@@ -40,10 +40,23 @@ class ViewManagerPlugin : public QObject, public IPlugin
     Q_INTERFACES(IPlugin)
 public:
     explicit ViewManagerPlugin(QObject *parent = 0);
+    ~ViewManagerPlugin();
+
+    bool initialize(QStringList &args, QString *err);
+    void shutdown();
+
+    QString name();
+    QString version();
+    QList<Dependency> dependencies();
 
 signals:
 
 public slots:
+
+protected:
+    QString m_Name;
+    QString m_Version;
+    QList<Dependency> m_Dependencies;
 
 };
 

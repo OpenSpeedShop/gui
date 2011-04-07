@@ -22,15 +22,12 @@ SOURCES +=  OpenSpeedShopPlugin.cpp \
             Settings/SettingPageFactory.cpp \
             Settings/SettingPage.cpp \
             AboutDialog.cpp
-
 HEADERS +=  OpenSpeedShopPlugin.h \
             Settings/SettingPageFactory.h \
             Settings/SettingPage.h \
             AboutDialog.h
-
 FORMS +=    Settings/SettingPage.ui \
             AboutDialog.ui
-
 RESOURCES += Resources/OpenSpeedShop.qrc
 
 LIBS    +=  -lCore

@@ -25,39 +25,43 @@
 
  */
 
-#include "ViewManagerPlugin.h"
+#ifndef DATAITEM_H
+#define DATAITEM_H
+
+#include <QVariant>
 
 namespace Plugins {
 namespace ViewManager {
 
-ViewManagerPlugin::ViewManagerPlugin(QObject *parent) :
-    QObject(parent),
-    m_Name("ViewManager"),
-    m_Version("0.1.dev")
+class DataItem
 {
-    m_Dependencies.append( Dependency("OpenSpeedShop", "^0\\.1.*$") );
-}
+public:
+    DataItem(const QString &type, const QVariant &data, DataItem *parent);
+    ~DataItem();
 
-ViewManagerPlugin::~ViewManagerPlugin()
-{
-}
+    int columnCount() const;
+    DataItem *column(int column);
+    QString columnType(int column) const;
+    QVariant columnData(int column) const;
 
-bool ViewManagerPlugin::initialize(QStringList &args, QString *err)
-{
-    return true;
-}
+    int childCount() const;
+    DataItem *child(int row);
 
-void ViewManagerPlugin::shutdown()
-{
-}
+    DataItem *parent();
+    int row() const;
 
-QString ViewManagerPlugin::name() { return m_Name; }
+protected:
+    DataItem *m_Parent;
 
-QString ViewManagerPlugin::version() { return m_Version; }
+    QString m_Type;
+    QVariant m_Data;
 
-QList<Dependency> ViewManagerPlugin::dependencies() { return m_Dependencies; }
+    QList<DataItem *> m_Columns;
+    QList<DataItem *> m_Rows;
 
-Q_EXPORT_PLUGIN(Plugins::ViewManager::ViewManagerPlugin)
+};
 
 } // namespace ViewManager
 } // namespace Plugins
+
+#endif // DATAITEM_H

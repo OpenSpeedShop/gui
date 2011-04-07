@@ -55,20 +55,9 @@ void ConnectionManagerPlugin::shutdown()
     connectionManager->shutdown();
 }
 
-QString ConnectionManagerPlugin::name()
-{
-    return m_Name;
-}
-
-QString ConnectionManagerPlugin::version()
-{
-    return m_Version;
-}
-
-QList<Dependency> ConnectionManagerPlugin::dependencies()
-{
-    return m_Dependencies;
-}
+QString ConnectionManagerPlugin::name() { return m_Name; }
+QString ConnectionManagerPlugin::version() { return m_Version; }
+QList<Dependency> ConnectionManagerPlugin::dependencies() { return m_Dependencies; }
 
 Q_EXPORT_PLUGIN(Plugins::ConnectionManager::ConnectionManagerPlugin)
 

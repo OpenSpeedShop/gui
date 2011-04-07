@@ -25,39 +25,39 @@
 
  */
 
-#include "ViewManagerPlugin.h"
+#ifndef DATAMODEL_H
+#define DATAMODEL_H
+
+#include <QAbstractItemModel>
+#include "DataItem.h"
 
 namespace Plugins {
 namespace ViewManager {
 
-ViewManagerPlugin::ViewManagerPlugin(QObject *parent) :
-    QObject(parent),
-    m_Name("ViewManager"),
-    m_Version("0.1.dev")
+class DataModel : public QAbstractItemModel
 {
-    m_Dependencies.append( Dependency("OpenSpeedShop", "^0\\.1.*$") );
-}
+    Q_OBJECT
+public:
+    explicit DataModel(QObject *parent = 0);
+    ~DataModel();
 
-ViewManagerPlugin::~ViewManagerPlugin()
-{
-}
+    /* QAbstractItemModel interface */
+    QModelIndex index(int row, int column, const QModelIndex &parent) const;
+    QModelIndex parent(const QModelIndex &child) const;
+    int rowCount(const QModelIndex &parent) const;
+    int columnCount(const QModelIndex &parent) const;
+    QVariant data(const QModelIndex &index, int role) const;
 
-bool ViewManagerPlugin::initialize(QStringList &args, QString *err)
-{
-    return true;
-}
+signals:
 
-void ViewManagerPlugin::shutdown()
-{
-}
+public slots:
 
-QString ViewManagerPlugin::name() { return m_Name; }
+protected:
 
-QString ViewManagerPlugin::version() { return m_Version; }
-
-QList<Dependency> ViewManagerPlugin::dependencies() { return m_Dependencies; }
-
-Q_EXPORT_PLUGIN(Plugins::ViewManager::ViewManagerPlugin)
+    DataItem * m_RootDataItem;
+};
 
 } // namespace ViewManager
 } // namespace Plugins
+
+#endif // DATAMODEL_H

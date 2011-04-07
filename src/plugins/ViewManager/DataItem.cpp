@@ -25,39 +25,66 @@
 
  */
 
-#include "ViewManagerPlugin.h"
+#include "DataItem.h"
 
 namespace Plugins {
 namespace ViewManager {
 
-ViewManagerPlugin::ViewManagerPlugin(QObject *parent) :
-    QObject(parent),
-    m_Name("ViewManager"),
-    m_Version("0.1.dev")
+DataItem::DataItem(const QString &type, const QVariant &data, DataItem *parent)
 {
-    m_Dependencies.append( Dependency("OpenSpeedShop", "^0\\.1.*$") );
+    m_Parent = parent;
+    m_Type = type;
+    m_Data = data;
+}
+DataItem::~DataItem()
+{
+    qDeleteAll(m_Columns);
+    qDeleteAll(m_Rows);
 }
 
-ViewManagerPlugin::~ViewManagerPlugin()
+int DataItem::columnCount() const
 {
+    return m_Columns.count();
+}
+DataItem *DataItem::column(int column)
+{
+    if(column > 0)
+        return m_Columns.at(--column);
+
+    return this;
+}
+QString DataItem::columnType(int column) const
+{
+    if(column > 0)
+        return m_Columns.at(--column)->columnType(0);
+
+    return m_Type;
+}
+QVariant DataItem::columnData(int column) const
+{
+    if(column > 0)
+        return m_Columns.at(--column)->columnData(0);
+
+    return m_Data;
 }
 
-bool ViewManagerPlugin::initialize(QStringList &args, QString *err)
+int DataItem::childCount() const
 {
-    return true;
+    return m_Rows.count();
+}
+DataItem *DataItem::child(int row)
+{
+    return m_Rows.at(row);
 }
 
-void ViewManagerPlugin::shutdown()
+DataItem *DataItem::parent()
 {
+    return m_Parent;
 }
-
-QString ViewManagerPlugin::name() { return m_Name; }
-
-QString ViewManagerPlugin::version() { return m_Version; }
-
-QList<Dependency> ViewManagerPlugin::dependencies() { return m_Dependencies; }
-
-Q_EXPORT_PLUGIN(Plugins::ViewManager::ViewManagerPlugin)
+int DataItem::row() const
+{
+    return m_Parent->m_Rows.indexOf( const_cast<DataItem *>(this) );
+}
 
 } // namespace ViewManager
 } // namespace Plugins
