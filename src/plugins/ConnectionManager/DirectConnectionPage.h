@@ -33,9 +33,7 @@
 namespace Plugins {
 namespace ConnectionManager {
 
-namespace Ui {
-    class DirectConnectionPage;
-}
+namespace Ui { class DirectConnectionPage; }
 
 class DirectConnectionPage : public QWidget
 {
@@ -52,4 +50,5 @@ private:
 
 } // namespace OpenSpeedShop
 } // namespace Plugins
+
 #endif // DIRECTCONNECTIONPAGE_H

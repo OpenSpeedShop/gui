@@ -31,6 +31,7 @@
 
 #include <QMainWindow>
 #include <QMenuBar>
+#include <QProgressBar>
 
 #include <SettingManager/SettingManager.h>
 #include <PluginManager/PluginManager.h>
@@ -54,6 +55,8 @@ public:
     bool initialized();
     void shutdown();
 
+    QProgressBar *addProgressBar();
+    void removeProgressBar(QProgressBar *progressBar);
 
 protected:
     explicit MainWindow(QWidget *parent = 0);
@@ -63,7 +66,6 @@ protected:
     void initActions();
 
     bool m_Initialized;
-
 
 private:
     Ui::MainWindow *ui;

@@ -46,22 +46,20 @@ public:
 
     QWidget *page();
 
-    bool connect();
-    bool disconnect();
+    bool connectToServer();
+    bool disconnectFromServer();
 
 signals:
-    void connecting();
-    void connected();
-    void disconnecting();
-    void disconnected();
 
 protected slots:
     void readReady();
     void error(QAbstractSocket::SocketError);
+    void connected();
+    void disconnected();
 
 protected:
     QTcpSocket *m_TcpSocket;
-
+    QTimer *m_TimeOut;
 };
 
 } // namespace OpenSpeedShop

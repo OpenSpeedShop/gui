@@ -31,11 +31,10 @@
 namespace Plugins {
 namespace ConnectionManager {
 
-/*!
-   \class DirectConnectionPage
-   \brief Widget that displays connection data and settings to the user for
-          the DirectConnection class.
-   \sa DirectConnection, ConnectionWidget
+/*! \class DirectConnectionPage
+    \brief Widget that displays connection data and settings to the user for
+           the DirectConnection class.
+    \sa DirectConnection, ConnectionWidget
  */
 
 DirectConnectionPage::DirectConnectionPage(QWidget *parent) :

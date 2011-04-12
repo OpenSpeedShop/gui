@@ -30,11 +30,13 @@
 
 #include <QObject>
 #include <QWidget>
+#include <QMetaType>
 
 namespace Plugins {
 namespace ConnectionManager {
 
-class IConnection : public QObject {
+class IConnection : public QObject
+{
     Q_OBJECT
 
 public:
@@ -43,17 +45,25 @@ public:
 
     virtual QWidget *page() = 0;
 
-    virtual bool connect() = 0;
-    virtual bool disconnect() = 0;
-
 signals:
-    void connecting();
-    void connected();
-    void disconnecting();
-    void disconnected();
+    void connectingToServer();
+    void connectedToServer();
+    void disconnectingFromServer();
+    void disconnectedFromServer();
+    void connectionError(QString);
+
+    void progress(int percent);
+
+public slots:
+    virtual bool connectToServer() = 0;
+    virtual bool disconnectFromServer() = 0;
 
 };
 
 } // namespace OpenSpeedShop
 } // namespace Plugins
+
+//! We do this so that we can use the pointer in a QVariant
+Q_DECLARE_METATYPE(Plugins::ConnectionManager::IConnection *);
+
 #endif // ICONNECTION_H

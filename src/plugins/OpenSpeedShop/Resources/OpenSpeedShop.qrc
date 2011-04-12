@@ -4,5 +4,7 @@
         <file alias="logo_640.png">Logo_640.png</file>
         <file alias="logo_320.png">Logo_320.png</file>
         <file alias="logo_1024.png">Logo_1024.png</file>
+        <file alias="connect.png">Connect.png</file>
+        <file alias="disconnect.png">Disconnnect.png</file>
     </qresource>
 </RCC>

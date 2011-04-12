@@ -61,8 +61,8 @@ MainWindow *MainWindow::instance()
  */
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow),
-    m_Initialized(false)
+    m_Initialized(false),
+  ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
     initActions();
@@ -135,6 +135,24 @@ void MainWindow::writeSettings()
 
 void MainWindow::initActions()
 {
+}
+
+
+QProgressBar *MainWindow::addProgressBar()
+{
+    QProgressBar *retval = new QProgressBar(this);
+    retval->hide();
+    retval->setTextVisible(false);
+    retval->setMaximumHeight(15);
+    retval->setMaximumWidth(75);
+    ui->statusbar->insertWidget(0, retval);
+    return retval;
+}
+
+void MainWindow::removeProgressBar(QProgressBar *progressBar)
+{
+    progressBar->setParent(NULL);
+    ui->statusbar->removeWidget(progressBar);
 }
 
 } // namespace MainWindow

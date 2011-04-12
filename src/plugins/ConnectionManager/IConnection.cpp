@@ -30,18 +30,50 @@
 namespace Plugins {
 namespace ConnectionManager {
 
-/*!
-   \class IConnection
-   \brief Interface definition for a connection object that can be
-          registered with the ConnectionManager.
-   \sa ConnectionManager
+/*! \class IConnection
+    \brief Interface definition for a connection object that can be
+           registered with the ConnectionManager.
+    \sa ConnectionManager
  */
 
+//! \todo Document ConnectionManager::IConnection more completely
 
+/*! \fn IConnection::IConnection()
+    \brief
+ */
 IConnection::IConnection(QObject *parent) :
     QObject(parent)
 {
 }
+
+/*! \fn IConnection::~IConnection()
+    \brief
+ */
+
+/*! \fn IConnection::connectToServer()
+    \brief
+ */
+
+/*! \fn IConnection::disconnectFromServer()
+    \brief
+ */
+
+/*! \fn IConnection::connectingToServer()
+    \brief
+ */
+
+/*! \fn IConnection::connectedToServer()
+    \brief
+ */
+
+/*! \fn IConnection::disconnectingFromServer()
+    \brief
+ */
+
+/*! \fn IConnection::disconnectedFromServer()
+    \brief
+ */
+
 
 } // namespace OpenSpeedShop
 } // namespace Plugins

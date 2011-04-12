@@ -19,8 +19,8 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
-   <item>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QComboBox" name="cmbConnectionType">
@@ -32,13 +32,37 @@
        </property>
       </widget>
      </item>
+     <item>
+      <widget class="QToolButton" name="btnConnect">
+       <property name="text">
+        <string>...</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../OpenSpeedShop/Resources/OpenSpeedShop.qrc">
+         <normaloff>:/OpenSpeedShop/connect.png</normaloff>:/OpenSpeedShop/connect.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="btnDisconnect">
+       <property name="text">
+        <string>...</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../OpenSpeedShop/Resources/OpenSpeedShop.qrc">
+         <normaloff>:/OpenSpeedShop/disconnect.png</normaloff>:/OpenSpeedShop/disconnect.png</iconset>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
-   <item>
+   <item row="2" column="0">
     <widget class="QStackedWidget" name="stackedWidget"/>
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../OpenSpeedShop/Resources/OpenSpeedShop.qrc"/>
+ </resources>
  <connections/>
 </ui>

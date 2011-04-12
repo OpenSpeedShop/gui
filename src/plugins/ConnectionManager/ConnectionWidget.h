@@ -29,7 +29,12 @@
 #define CONNECTIONWIDGET_H
 
 #include <QWidget>
+#include <QProgressBar>
+#include <QTimer>
+#include <QMessageBox>
+#include <MainWindow/MainWindow.h>
 #include "ConnectionManager.h"
+
 
 namespace Plugins {
 namespace ConnectionManager {
@@ -46,6 +51,26 @@ public:
 
 protected slots:
     void connectionRegistered(IConnection *);
+    void on_btnConnect_clicked();
+    void on_btnDisconnect_clicked();
+    void on_cmbConnectionType_currentIndexChanged(int index);
+
+    void connectingToServer();
+    void connectedToServer();
+    void disconnectingFromServer();
+    void disconnectedFromServer();
+    void connectionError(QString error);
+
+    void progress();
+    void startTimeOut(int msec = 3500);
+    void stopTimeOut();
+
+
+protected:
+    QProgressBar *m_ProgressBar;
+    QTimer m_ProgressTimer;
+    QMessageBox m_ErrorMessageBox;
+    QMessageBox m_TimeoutMessageBox;
 
 private:
     Ui::ConnectionWidget *ui;
