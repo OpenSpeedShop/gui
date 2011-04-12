@@ -34,10 +34,27 @@
 namespace Plugins {
 namespace OpenSpeedShop {
 
-OpenSpeedShopPlugin::OpenSpeedShopPlugin() :
-    m_Name("OpenSpeedShop"),
-    m_Version("0.1.dev")
+/*! \namespace Plugins::OpenSpeedShop
+    \brief Contains the base plugin for the Open|SpeedShop set of plugins.
+ */
+
+/*! \class OpenSpeedShopPlugin
+    \version 0.1.dev
+    \brief The base plugin for the Open|SpeedShop set of plugins.
+
+    \par Depends on Plugins:
+         none
+
+    \sa ConnectionManager, ViewManager
+ */
+
+
+OpenSpeedShopPlugin::OpenSpeedShopPlugin()
 {
+    m_Name = "OpenSpeedShop";
+    m_Version = "0.1.dev";
+
+    // If we're in production mode, show the splash screen!
 #ifndef QT_DEBUG
     AboutDialog::splash();
 #endif

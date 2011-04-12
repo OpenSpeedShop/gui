@@ -31,6 +31,11 @@
 namespace Plugins {
 namespace ConnectionManager {
 
+/*! \class ConnectionManager
+    \brief Handles the interaction between the Open|SpeedShop plugin set, and
+           the Open|SpeedShop server.
+    \sa ConnectionManagerPlugin
+ */
 
 ConnectionManager *m_Instance;
 ConnectionManager *ConnectionManager::instance()

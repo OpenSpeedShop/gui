@@ -31,10 +31,25 @@
 namespace Plugins {
 namespace Example {
 
-ExamplePlugin::ExamplePlugin() :
-    m_Name("Example"),
-    m_Version("0.1.dev")
+/*! \namespace Plugins::Example
+    \brief Contains the ExamplePlugin, which helps demonstrate the
+           methodologies for creating a GUI plugin.
+ */
+
+/*! \class ExamplePlugin
+    \version 0.1.dev
+    \brief This is an example of the methods for producing a GUI plugin.
+
+    \par Depends on Plugins:
+         OpenSpeedShop
+
+    \todo Document this more explicitly as a developer example.
+ */
+
+ExamplePlugin::ExamplePlugin()
 {
+    m_Name = "Example";
+    m_Version = "0.1.dev";
     m_Dependencies.append( Dependency("OpenSpeedShop", "^0\\.1.*$") );
 }
 

@@ -111,7 +111,7 @@ MenuItem *MenuItem::merge(MenuItem* left, MenuItem *right)
     retval->action()->setSeparator(left->action()->isSeparator() || right->action()->isSeparator());
     retval->setPriority( left->priority() == 128 ? right->priority() : left->priority() );
 
-    //TODO: We need to figure out how to support groups!
+    //! \todo We need to figure out how to support groups!
 
     // Merge the submenu items
     if(left->menuItemType() == MenuItemType_SubMenu) {

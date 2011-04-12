@@ -31,6 +31,12 @@
 namespace Plugins {
 namespace OpenSpeedShop {
 
+/*! \class AboutDialog
+    \brief Handles the displaying of the about and splash pages for the
+           Open|SpeedShop plugin set.
+    \sa OpenSpeedShopPlugin
+ */
+
 AboutDialog::AboutDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::AboutDialog)
@@ -38,7 +44,9 @@ AboutDialog::AboutDialog(QWidget *parent) :
     ui->setupUi(this);
 
     QString aboutText;
-    aboutText.append(tr("%1 v%2\n").arg(QCoreApplication::applicationName()).arg(QCoreApplication::applicationVersion()));
+    aboutText.append(tr("%1 v%2\n").
+                     arg(QCoreApplication::applicationName()).
+                     arg(QCoreApplication::applicationVersion()));
     aboutText.append(tr("Built on %1 at %2\n").arg(__DATE__).arg(__TIME__));
     aboutText.append(tr("Copyright 2010-2011 Argo Navis Technologies LLC\n"));
     ui->lblAbout->setText(aboutText);

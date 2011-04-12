@@ -31,6 +31,13 @@
 namespace Plugins {
 namespace ConnectionManager {
 
+/*!
+   \class ConnectionWidget
+   \brief Widget that displays connection data and settings to the user in a
+          dock panel.
+   \sa ConnectionManager
+ */
+
 ConnectionWidget::ConnectionWidget(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::ConnectionWidget)

@@ -30,28 +30,31 @@
 namespace Plugins {
 namespace ViewManager {
 
-/*!
-   \namespace Plugins::ViewManager
-   \brief Implements the basis for the model-view pattern.
+/*! \namespace Plugins::ViewManager
+    \brief Implements the basis for the model-view pattern.
 
-   The ViewManager namespace contains all of the base classes necessary to
-   implement the model-view design pattern that we are following in this
-   project. It is loaded as a plugin, and is dependent upon the
-   Open|SpeedShop plugin.
+    The ViewManager namespace contains all of the base classes necessary to
+    implement the model-view design pattern that we are following in this
+    project. It is loaded as a plugin, and is dependent upon the
+    Open|SpeedShop plugin.
  */
 
-/*!
-  \class Plugins::ViewManager::ViewManagerPlugin
-  \brief Class which allows for the dynamic loading of the ViewManager
-         namespace.
-  \sa DataItem, DataModel
+/*! \class ViewManagerPlugin
+    \version 0.1.dev
+    \brief Class which allows for the dynamic loading of the ViewManager
+           namespace.
+
+    \par Depends on Plugins:
+         OpenSpeedShop
+
+    \sa DataItem, DataModel
  */
 
 ViewManagerPlugin::ViewManagerPlugin(QObject *parent) :
-    QObject(parent),
-    m_Name("ViewManager"),
-    m_Version("0.1.dev")
+    QObject(parent)
 {
+    m_Name = "ViewManager";
+    m_Version = "0.1.dev";
     m_Dependencies.append( Dependency("OpenSpeedShop", "^0\\.1.*$") );
 }
 

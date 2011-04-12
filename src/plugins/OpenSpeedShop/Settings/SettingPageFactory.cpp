@@ -30,6 +30,17 @@
 namespace Plugins {
 namespace OpenSpeedShop {
 
+/*!
+   \class SettingPageFactory
+   \brief Handles the interaction between the SettingManager and the
+          Open|SpeedShop SettingPage.
+
+   This page factory produces the SettingPage for the Open|SpeedShop plugin,
+   and is registered with the SettingManager in the Core set of libraries.
+
+   \sa OpenSpeedShopPlugin, SettingPage, Core::SettingManager
+ */
+
 SettingPageFactory::SettingPageFactory(QObject *parent) :
     QObject(parent)
 {

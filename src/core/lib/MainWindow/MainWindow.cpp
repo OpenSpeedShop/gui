@@ -25,16 +25,12 @@
 
  */
 
-#ifdef QT_DEBUG
-  #include <QtDebug>
-#endif
 
 #include "MainWindow.h"
+#include "ui_MainWindow.h"
 
 namespace Core {
 namespace MainWindow {
-
-MainWindow *m_Instance;
 
 /*!
    \class Core::MainWindow::MainWindow
@@ -44,6 +40,9 @@ MainWindow *m_Instance;
 
           singleton class
  */
+
+
+MainWindow *m_Instance;
 
 /*!
    \fn Core::MainWindow::instance()
@@ -60,11 +59,12 @@ MainWindow *MainWindow::instance()
    \brief Constructor
    \internal
  */
-MainWindow::MainWindow() :
-    QMainWindow(NULL),
+MainWindow::MainWindow(QWidget *parent) :
+    QMainWindow(parent),
+    ui(new Ui::MainWindow),
     m_Initialized(false)
 {
-    setWindowIcon(QIcon(":/MainWindow/app.png"));
+    ui->setupUi(this);
     initActions();
 }
 
@@ -75,6 +75,8 @@ MainWindow::MainWindow() :
  */
 MainWindow::~MainWindow()
 {
+    delete ui;
+
     if(m_Instance)
         m_Instance = NULL;
 }
@@ -133,19 +135,7 @@ void MainWindow::writeSettings()
 
 void MainWindow::initActions()
 {
-    // Create base (default) menu layout
-    QMenu *menu;
-    menu = new QMenu(tr("File"), this);
-    this->menuBar()->addMenu(menu);
-    menu = new QMenu(tr("Edit"), this);
-    this->menuBar()->addMenu(menu);
-    menu = new QMenu(tr("Tools"), this);
-    this->menuBar()->addMenu(menu);
-    menu = new QMenu(tr("Window"), this);
-    this->menuBar()->addMenu(menu);
-    menu = new QMenu(tr("Help"), this);
-    this->menuBar()->addMenu(menu);
 }
 
-
-}}
+} // namespace MainWindow
+} // namespace Core

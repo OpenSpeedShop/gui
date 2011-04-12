@@ -30,6 +30,14 @@
 namespace Plugins {
 namespace ConnectionManager {
 
+/*!
+   \class IConnection
+   \brief Interface definition for a connection object that can be
+          registered with the ConnectionManager.
+   \sa ConnectionManager
+ */
+
+
 IConnection::IConnection(QObject *parent) :
     QObject(parent)
 {

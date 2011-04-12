@@ -95,7 +95,6 @@ bool PluginManager::initialize()
 {
     readSettings();
 
-
     Core::SettingManager::SettingManager *settingManager =
              Core::SettingManager::SettingManager::instance();
     settingManager->registerPageFactory(new SettingPageFactory());
@@ -141,8 +140,8 @@ void PluginManager::readSettings()
 
     m_PluginPath = settings->value("PluginPath").toString();
 
-    //TODO: Check for environment variable
-    //TODO: Maybe this should be a list of paths to check
+    //! \todo Check for environment variable
+    //! \todo Maybe this should be a list of paths to check
 
     settings->endGroup();
 }
@@ -168,7 +167,8 @@ void PluginManager::writeSettings()
    \fn PluginManager::loadPlugins()
    \brief Loads plugins from a location defined in the SettingManager
 
-   Emits pluginLoaded() signal after loading \b each plugin
+   \par Emits
+        pluginLoaded() signal after loading \b each plugin
  */
 void PluginManager::loadPlugins()
 {
@@ -204,12 +204,13 @@ void PluginManager::loadPlugins()
 
 /*!
    \fn PluginManager::initializePlugins()
-   \brief Helper function that builds a dependency list, checks the
-    dependencies for circular references, and then calls the init function for
+   \brief Helper function that builds a dependency list.
+
+    It checks the dependencies for circular references, and then calls the init function for
     the plugins in the proper order.
 
-    The algorithm used here was inspired from "Algorithms in C++" by Robert
-    Sedgewick, section 19.6 --specifically the use of a queue.
+    \note The algorithm used here was inspired from "Algorithms in C++" by Robert Sedgewick,
+          section 19.6 --specifically the use of a queue.
  */
 void PluginManager::initializePlugins()
 {
@@ -224,7 +225,7 @@ void PluginManager::initializePlugins()
         dag.insert(plugin->name(), names);
     }
 
-    //TODO: Check plugin versions
+    //! \todo Check plugin versions
 
     // Create a queue with the proper initialization ordering
     int priority = 0;
@@ -290,8 +291,9 @@ PluginWrapper *PluginManager::findPlugin(QString name)
    \brief Adds an object to the manager for later retrieval. This is typically
           used by plugins as they are initialized to store factory classes.
 
-   Emits objectAdding() signal before adding
-   Emits objectAdded() signal after adding
+   \par Emits
+        objectAdding() signal before adding
+        objectAdded() signal after adding
    \param object The object to be stored
  */
 void PluginManager::addObject(QObject *object)
@@ -305,8 +307,9 @@ void PluginManager::addObject(QObject *object)
    \fn PluginManager::delObject()
    \brief Removes a previously stored object from the manager.
 
-   Emits objectRemoving() signal before removal
-   Emits objectRemoved() signal after removal
+   \par Emits
+       objectRemoving() signal before removal
+       objectRemoved() signal after removal
    \param object The object to be removed
  */
 bool PluginManager::delObject(QObject *object)
@@ -318,6 +321,16 @@ bool PluginManager::delObject(QObject *object)
     return (RetVal);
 }
 
+/*!
+   \fn PluginManager::pluginDialog()
+   \brief Slot connected to menu item.
+
+   When this slot is called, a QDialog is created as a wrapper to the plugin widget that is
+   registered as a settings page.
+
+   \note This only allows viewing of the plugins that are loaded; user changes should only
+         be performed through the settings dialog.
+ */
 void PluginManager::pluginDialog()
 {
     // Wrapped in a QDialog because this is also registered as a setting page
@@ -333,11 +346,23 @@ void PluginManager::pluginDialog()
     delete dialog;
 }
 
+/*!
+   \fn PluginManager::ascending()
+   \brief Works with qSort to sort an iterable of plugin wrapper pointers
+   \returns A boolean value for comparison of the two parameters that sorts in ascending
+            order.
+ */
 bool PluginManager::ascending(PluginWrapper *left, PluginWrapper *right)
 {
     return left->priority() > right->priority();
 }
 
+/*!
+   \fn PluginManager::descending()
+   \brief Works with qSort to sort an iterable of plugin wrapper pointers
+   \returns A boolean value for comparison of the two parameters that sorts in descending
+            order.
+ */
 bool PluginManager::descending(PluginWrapper *left, PluginWrapper *right)
 {
     return left->priority() < right->priority();

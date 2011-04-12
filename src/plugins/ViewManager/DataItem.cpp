@@ -30,16 +30,15 @@
 namespace Plugins {
 namespace ViewManager {
 
-/*!
-   \class Plugins::ViewManager::DataItem
-   \brief DataItem objects are used to represent heirarchical data returned
-          from the Open|SpeedShop framework, and is generated from within the
-          DataModel class.  There should really be no direct interaction with
-          other classes.
+/*! \class DataItem
+    \brief DataItem objects are used to represent heirarchical data returned
+           from the Open|SpeedShop framework, and is generated from within the
+           DataModel class.  There should really be no direct interaction with
+           other classes.
  */
 
 /*!
-   \fn Plugins::ViewManager::DataItem::DataItem()
+   \fn DataItem::DataItem()
    \brief Constructor
    \param type A QString describing the data type this object represents
    \param data A QVariant containing the data for this object
@@ -54,7 +53,7 @@ DataItem::DataItem(const QString &type, const QVariant &data, DataItem *parent)
 }
 
 /*!
-   \fn Plugins::ViewManager::DataItem::~DataItem()
+   \fn DataItem::~DataItem()
    \brief Destructor
  */
 DataItem::~DataItem()
@@ -64,7 +63,7 @@ DataItem::~DataItem()
 }
 
 /*!
-   \fn Plugins::ViewManager::DataItem::columnCount()
+   \fn DataItem::columnCount()
    \brief Returns the number of columns represented by this object.
    \returns An integer value representing the number of available columns.
    \sa columnCount(), column(), columnType(), columnData(), addColumn(), childCount()
@@ -75,7 +74,7 @@ int DataItem::columnCount() const
 }
 
 /*!
-   \fn Plugins::ViewManager::DataItem::column()
+   \fn DataItem::column()
    \brief Returns the DataItem representing a specified column.
    \param column The desired DataItem column to be returned.
    \returns A DataItem representing a specified column.

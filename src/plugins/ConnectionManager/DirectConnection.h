@@ -29,6 +29,8 @@
 #define DIRECTCONNECTION_H
 
 #include <QObject>
+#include <QTcpSocket>
+#include <QDataStream>
 #include "IConnection.h"
 #include "DirectConnectionPage.h"
 
@@ -40,6 +42,7 @@ class DirectConnection : public IConnection
     Q_OBJECT
 public:
     explicit DirectConnection(QObject *parent = 0);
+    ~DirectConnection();
 
     QWidget *page();
 
@@ -51,6 +54,13 @@ signals:
     void connected();
     void disconnecting();
     void disconnected();
+
+protected slots:
+    void readReady();
+    void error(QAbstractSocket::SocketError);
+
+protected:
+    QTcpSocket *m_TcpSocket;
 
 };
 

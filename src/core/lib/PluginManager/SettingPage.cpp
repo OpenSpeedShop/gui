@@ -119,7 +119,7 @@ void SettingPage::readSettings()
     settingManager->beginGroup("PluginManager");
     settingManager->beginGroup("SettingPage");
 
-    //TODO: Restore tree state
+    //! todo Restore tree state
     resize( settingManager->value("WindowSize", size()).toSize() );
     move( settingManager->value("WindowPosition", pos()).toPoint() );
 
@@ -135,7 +135,7 @@ void SettingPage::writeSettings()
     settingManager->beginGroup("PluginManager");
     settingManager->beginGroup("SettingPage");
 
-    //TODO: Store tree state
+    //! \todo Store tree state
     settingManager->setValue("WindowSize", size());
     settingManager->setValue("WindowPosition", pos());
 

@@ -30,8 +30,26 @@
 namespace Plugins {
 namespace ConnectionManager {
 
+/*!
+   \class DirectConnection
+   \brief Handles the interaction with a standard, remote (or local) TCP
+          connected server.
+   \sa DirectConnectionPage, ConnectionManager
+ */
+
+
 DirectConnection::DirectConnection(QObject *parent) :
     IConnection(parent)
+{
+//    m_TcpSocket = new QTcpSocket(this);
+
+//    connect(m_TcpSocket, SIGNAL(readyRead()),
+//            this, SLOT(readReady()));
+//    connect(m_TcpSocket, SIGNAL(error(QAbstractSocket::SocketError)),
+//            this, SLOT(error(QAbstractSocket::SocketError)));
+}
+
+DirectConnection::~DirectConnection()
 {
 }
 
@@ -46,8 +64,10 @@ bool DirectConnection::connect()
 
     emit connecting();
 
+    m_TcpSocket->connectToHost("localhost", 2048);
 
-    if(RetVal)
+    //! \todo Set up a threaded wait
+    if( (RetVal = m_TcpSocket->waitForConnected(5000)) )
         emit connected();
 
     return RetVal;
@@ -59,12 +79,23 @@ bool DirectConnection::disconnect()
 
     emit disconnecting();
 
+    m_TcpSocket->disconnectFromHost();
 
-    if(RetVal)
+    //! \todo Set up a threaded wait
+    if( (RetVal = m_TcpSocket->waitForDisconnected(5000)) )
         emit disconnected();
 
     return RetVal;
 }
+
+void DirectConnection::readReady()
+{
+}
+
+void DirectConnection::error(QAbstractSocket::SocketError)
+{
+}
+
 
 
 } // namespace OpenSpeedShop

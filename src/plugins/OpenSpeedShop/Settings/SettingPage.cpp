@@ -28,10 +28,19 @@
 #include "SettingPage.h"
 #include "ui_SettingPage.h"
 
-#include <QWidget>
-
 namespace Plugins {
 namespace OpenSpeedShop {
+
+/*!
+   \class SettingPage
+   \brief Widget that handles settings for the Open|SpeedShop plugin.
+
+   This page is produced by the SettingPageFactory, which is registered
+   with the SettingManager in the Core set of libraries.
+
+   \sa OpenSpeedShopPlugin, SettingPageFactory, Core::SettingManager
+ */
+
 
 SettingPage::SettingPage(QWidget *parent) :
     Core::SettingManager::ISettingPage(parent),

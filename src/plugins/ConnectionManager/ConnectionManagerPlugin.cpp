@@ -30,15 +30,32 @@
 namespace Plugins {
 namespace ConnectionManager {
 
+/*! \namespace Plugins::ConnectionManager
+    \brief Contains the base plugin for the Open|SpeedShop ConnectionManager
+           set of plugins.
+ */
+
+/*! \class ConnectionManagerPlugin
+    \version 0.1.dev
+    \brief Main plugin which manages the loading and initialization of the
+           ConnectionManager.
+
+    \par Depends on Plugins:
+         OpenSpeedShop
+
+    \sa ConnectionManager
+ */
+
 ConnectionManagerPlugin::ConnectionManagerPlugin(QObject *parent) :
-    QObject(parent),
-    m_Name("ConnectionManager"),
-    m_Version("0.1.dev")
+    QObject(parent)
 {
+    m_Name = "ConnectionManager";
+    m_Version = "0.1.dev";
     m_Dependencies.append( Dependency("OpenSpeedShop", "^0\\.1.*$") );
 
     ConnectionManager::instance(); // Create the singleton instance
 }
+
 ConnectionManagerPlugin::~ConnectionManagerPlugin()
 {
 }
@@ -55,9 +72,20 @@ void ConnectionManagerPlugin::shutdown()
     connectionManager->shutdown();
 }
 
-QString ConnectionManagerPlugin::name() { return m_Name; }
-QString ConnectionManagerPlugin::version() { return m_Version; }
-QList<Dependency> ConnectionManagerPlugin::dependencies() { return m_Dependencies; }
+QString ConnectionManagerPlugin::name()
+{
+    return m_Name;
+}
+
+QString ConnectionManagerPlugin::version()
+{
+    return m_Version;
+}
+
+QList<Dependency> ConnectionManagerPlugin::dependencies()
+{
+    return m_Dependencies;
+}
 
 Q_EXPORT_PLUGIN(Plugins::ConnectionManager::ConnectionManagerPlugin)
 

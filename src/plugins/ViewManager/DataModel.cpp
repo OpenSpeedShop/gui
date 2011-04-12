@@ -30,13 +30,12 @@
 namespace Plugins {
 namespace ViewManager {
 
-/*!
-   \class Plugins::ViewManager::DataModel
-   \brief A DataModel is used as the interface between a data view and the set
-          of data it is meant to display to the user.
+/*! \class Plugins::ViewManager::DataModel
+    \brief A DataModel is used as the interface between a data view and the set
+           of data it is meant to display to the user.
 
-          This class takes care of the generation of the underlying data from
-          an XML source, and the interaction with data views.
+           This class takes care of the generation of the underlying data from
+           an XML source, and the interaction with data views.
  */
 
 
@@ -47,7 +46,7 @@ namespace ViewManager {
 DataModel::DataModel(QObject *parent) :
     QAbstractItemModel(parent)
 {
-    //TODO: Import and create model data in memory
+    //! \todo Import and create model data in memory
 }
 
 /*!
@@ -75,7 +74,7 @@ void DataModel::loadData(QString xml)
 
     QDomElement rootElement = doc.documentElement();
     if(rootElement.tagName().toLower() != "response") {
-        //TODO: Deal with other responses, like errors
+        //! \todo Deal with other responses, like errors
         throw new QString("Root item was not a response tag");
     }
 
@@ -105,6 +104,9 @@ DataItem *DataModel::createDataItem(QDomElement element, DataItem *parent)
     QVariant data = element.text();
     DataItem *dataItem = new DataItem(type, data, parent);
 
+    /*! \test This might need to be more elaborate, based on what data is
+              coming in. Then again, maybe the server should handle that. */
+
     QDomNodeList childNodes = element.childNodes();
     for(int i = 0; i < childNodes.count(); i++) {
         QDomNode childNode = childNodes.item(i);
@@ -131,7 +133,7 @@ DataItem *DataModel::createDataItem(QDomElement element, DataItem *parent)
  */
 QString DataModel::saveData() const
 {
-    //TODO:
+    //! \todo Complete the saveData function.
     return QString();
 }
 
@@ -264,7 +266,7 @@ QVariant DataModel::data(const QModelIndex &index, int role) const
     if(role == Qt::DisplayRole) {
         return dataItem->columnData(index.column());
     } else if(role == Qt::DecorationRole) {
-        //TODO: Create and associate icons with DataItem types
+        //! \todo Create and associate icons with DataItem types
 
 //        if(index.column() == 0) {
 //            QString dataType = dataItem->columnType(index.column());

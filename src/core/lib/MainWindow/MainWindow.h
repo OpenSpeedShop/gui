@@ -25,6 +25,7 @@
 
  */
 
+
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
@@ -37,33 +38,38 @@
 namespace Core {
 namespace MainWindow {
 
+namespace Ui {
+    class MainWindow;
+}
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
     static MainWindow* instance();
-    ~MainWindow();
 
+    ~MainWindow();
     bool initialize();
     bool initialized();
     void shutdown();
 
-signals:
-
-public slots:
 
 protected:
-    MainWindow();
-
-    bool m_Initialized;
+    explicit MainWindow(QWidget *parent = 0);
 
     void readSettings();
     void writeSettings();
-
     void initActions();
 
+    bool m_Initialized;
+
+
+private:
+    Ui::MainWindow *ui;
 };
 
-}}
+
+} // namespace MainWindow
+} // namespace Core
 #endif // MAINWINDOW_H
