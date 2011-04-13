@@ -52,7 +52,7 @@ public:
 protected slots:
     void connectionRegistered(IConnection *);
     void on_btnConnect_clicked();
-    void on_btnDisconnect_clicked();
+    void on_btnConnect_toggled(bool checked);
     void on_cmbConnectionType_currentIndexChanged(int index);
 
     void connectionStateChanged(IConnection *connection);

@@ -56,6 +56,7 @@ public:
     virtual QString errorMessage() = 0;
     virtual void connectToServer() = 0;
     virtual void disconnectFromServer() = 0;
+    virtual void abort() = 0;
 
 signals:
     void stateChanged(IConnection *);

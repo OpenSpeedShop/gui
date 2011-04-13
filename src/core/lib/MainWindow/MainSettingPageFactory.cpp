@@ -37,12 +37,12 @@ MainSettingPageFactory::MainSettingPageFactory(QObject *parent) :
 
 QIcon MainSettingPageFactory::icon()
 {
-    return QIcon(":/PluginManager/plugin.png");
+    return QIcon(":/MainWindow/app.png");
 }
 
 QString MainSettingPageFactory::name()
 {
-    return tr("Plugins");
+    return tr("Core");
 }
 
 int MainSettingPageFactory::priority()

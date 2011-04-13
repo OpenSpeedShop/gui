@@ -84,6 +84,11 @@ MainWindow::~MainWindow()
 bool MainWindow::initialize()
 {
     readSettings();
+
+    Core::SettingManager::SettingManager *settingManager =
+             Core::SettingManager::SettingManager::instance();
+    settingManager->registerPageFactory(new MainSettingPageFactory());
+
     return m_Initialized = true;
 }
 
@@ -108,6 +113,10 @@ void MainWindow::readSettings()
             SettingManager::SettingManager::instance();
 
     settingManager->beginGroup("MainWindow");
+
+    QString styleName = settingManager->value("style", QApplication::style()->objectName()).toString();
+    QStyle *style = QStyleFactory::create(styleName);
+    QApplication::setStyle(style);
 
     restoreGeometry(settingManager->value("Geometry").toByteArray());
     restoreState(settingManager->value("State").toByteArray());
@@ -136,7 +145,6 @@ void MainWindow::writeSettings()
 void MainWindow::initActions()
 {
 }
-
 
 QProgressBar *MainWindow::addProgressBar()
 {

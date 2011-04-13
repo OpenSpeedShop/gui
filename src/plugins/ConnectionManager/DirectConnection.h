@@ -50,6 +50,7 @@ public:
     QString errorMessage();
     void connectToServer();
     void disconnectFromServer();
+    void abort();
 
 protected slots:
     void readReady();

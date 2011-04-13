@@ -74,6 +74,12 @@ void DirectConnection::disconnectFromServer()
     m_TcpSocket->disconnectFromHost();
 }
 
+void DirectConnection::abort()
+{
+    setState(ConnectionState_Disconnected);
+    m_TcpSocket->abort();
+}
+
 void DirectConnection::readReady()
 {
 }

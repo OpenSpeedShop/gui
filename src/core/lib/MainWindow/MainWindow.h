@@ -71,6 +71,8 @@ protected:
 
 private:
     Ui::MainWindow *ui;
+
+    friend class MainSettingPage;
 };
 
 

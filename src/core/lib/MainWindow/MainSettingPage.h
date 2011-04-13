@@ -29,7 +29,11 @@
 #define MAINSETTINGPAGE_H
 
 #include <QWidget>
+#include <QCoreApplication>
+#include <QStyle>
+#include <SettingManager/SettingManager.h>
 #include <SettingManager/ISettingPage.h>
+#include <QStyleFactory>
 
 namespace Core {
 namespace MainWindow {
@@ -48,6 +52,12 @@ public:
 public slots:
     void apply();
     void reset();
+
+protected slots:
+    void on_cmbStyle_currentIndexChanged(QString style);
+
+protected:
+    QString m_OriginalStyle;
 
 private:
     Ui::MainSettingPage *ui;

@@ -76,6 +76,8 @@ SettingDialog::SettingDialog(QList<ISettingPageFactory *> pages, QWidget *parent
 
         ui->stackedWidget->addWidget( qobject_cast<QWidget *>(page) );
     }
+
+    ui->listWidget->setCurrentRow(0);
 }
 
 SettingDialog::~SettingDialog()

@@ -28,6 +28,7 @@
 #include "ConnectionWidget.h"
 #include "ui_ConnectionWidget.h"
 
+#include <QBitmap>
 #include <QDebug>
 
 namespace Plugins {
@@ -75,58 +76,67 @@ void ConnectionWidget::connectionRegistered(IConnection *connection)
 
 void ConnectionWidget::on_btnConnect_clicked()
 {
-    int index = ui->cmbConnectionType->currentIndex();
-    IConnection *connection = ui->cmbConnectionType->itemData(index).value<IConnection *>();
+    if(ui->btnConnect->isChecked()) {
+        int index = ui->cmbConnectionType->currentIndex();
+        IConnection *connection = ui->cmbConnectionType->itemData(index).value<IConnection *>();
 
-    if(connection->state() == ConnectionState_Disconnected)
-        connection->connectToServer();
+        if(connection->state() == ConnectionState_Disconnected)
+            connection->connectToServer();
+    } else {
+        int index = ui->cmbConnectionType->currentIndex();
+        IConnection *connection = ui->cmbConnectionType->itemData(index).value<IConnection *>();
+
+        if(connection->state() == ConnectionState_Connected)
+            connection->disconnectFromServer();
+    }
 }
 
-void ConnectionWidget::on_btnDisconnect_clicked()
+void ConnectionWidget::on_btnConnect_toggled(bool checked)
 {
-    int index = ui->cmbConnectionType->currentIndex();
-    IConnection *connection = ui->cmbConnectionType->itemData(index).value<IConnection *>();
-
-    if(connection->state() == ConnectionState_Connected)
-        connection->disconnectFromServer();
-
-    //TODO: Need to handle situations where we're waiting for a connect
+    QString text = checked ? tr("Disconnect") : tr("Connect");
+    ui->btnConnect->setToolTip(text);
+    ui->btnConnect->setStatusTip(text);
 }
 
 void ConnectionWidget::on_cmbConnectionType_currentIndexChanged(int index)
 {
     // Simply return if nothing changed
-    static int oldIndex = index;
+    static int oldIndex = -1;
     if(index == oldIndex)
         return;
 
+    if(oldIndex >= 0) {
+        IConnection *oldConnection =
+                ui->cmbConnectionType->itemData(oldIndex).value<IConnection *>();
 
-    // Check the state of the current connection
-    IConnection *oldConnection =
-            ui->cmbConnectionType->itemData(oldIndex).value<IConnection *>();
-    if(oldConnection->state() != ConnectionState_Disconnected) {
-        QMessageBox msg;
-        msg.setIcon(QMessageBox::Warning);
-        msg.setWindowTitle(tr("Warning!"));
-        msg.setText(tr("This action will disconnect you from the currently connected "
-                       "connection. Do you wish to continue?"));
-        msg.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+        // Check the state of the current connection
+        if(oldConnection->state() != ConnectionState_Disconnected) {
+            QMessageBox msg;
+            msg.setIcon(QMessageBox::Warning);
+            msg.setWindowTitle(tr("Warning!"));
+            msg.setText(tr("This action will disconnect you from the currently connected "
+                           "connection. Do you wish to continue?"));
+            msg.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
 
-        if(msg.exec() == QMessageBox::Yes) {
-            oldConnection->disconnectFromServer();
-            stopTimeOut();
-        } else {
-            // User said, "no." Put it back the way it was
-            ui->cmbConnectionType->setCurrentIndex(oldIndex);
-            return;
+            if(msg.exec() == QMessageBox::Yes) {
+                oldConnection->abort();
+                stopTimeOut();
+            } else {
+                // User said, "no." Put it back the way it was
+                ui->cmbConnectionType->setCurrentIndex(oldIndex);
+                return;
+            }
         }
+
+        // Disconnect the old one
+        disconnect(oldConnection, SIGNAL(stateChanged(IConnection*)),
+                    this, SLOT(connectionStateChanged(IConnection*)));
     }
 
+    // Set up the new connection
     ui->stackedWidget->setCurrentIndex(index);
     IConnection *newConnection =
             ui->cmbConnectionType->itemData(index).value<IConnection *>();
-    disconnect(oldConnection, SIGNAL(stateChanged(IConnection*)),
-                this, SLOT(connectionStateChanged(IConnection*)));
     connect(newConnection, SIGNAL(stateChanged(IConnection *)),
             this, SLOT(connectionStateChanged(IConnection*)));
 
@@ -177,20 +187,29 @@ void ConnectionWidget::connectionStateChanged(IConnection *connection)
 {
     switch(connection->state()) {
     case ConnectionState_Connecting:
+        ui->btnConnect->setEnabled(false);
+        ui->btnConnect->setChecked(true);
         startTimeOut();
         break;
     case ConnectionState_Connected:
+        ui->btnConnect->setEnabled(true);
+        ui->btnConnect->setChecked(true);
         stopTimeOut();
         break;
     case ConnectionState_Disconnecting:
+        ui->btnConnect->setEnabled(false);
+        ui->btnConnect->setChecked(false);
         startTimeOut();
         break;
     case ConnectionState_Disconnected:
+        ui->btnConnect->setEnabled(true);
+        ui->btnConnect->setChecked(false);
         stopTimeOut();
         break;
     case ConnectionState_Error:
-        stopTimeOut();
+        ui->btnConnect->setEnabled(false);
 
+        stopTimeOut();
         if(m_TimeoutMessageBox.isVisible()) {
             m_TimeoutMessageBox.close();
         }
@@ -201,7 +220,12 @@ void ConnectionWidget::connectionStateChanged(IConnection *connection)
         m_ErrorMessageBox.setStandardButtons(QMessageBox::Ok);
         m_ErrorMessageBox.exec();
 
-        //! \todo Deal with stopping the connection/disconnection thread
+        // Deal with stopping the connection/disconnection thread
+        int index = ui->cmbConnectionType->currentIndex();
+        IConnection *connection =
+                ui->cmbConnectionType->itemData(index).value<IConnection *>();
+        connection->abort();
+
         break;
     }
 }
