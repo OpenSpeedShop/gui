@@ -37,17 +37,40 @@ namespace ConnectionManager {
     \sa DirectConnection, ConnectionWidget
  */
 
-DirectConnectionPage::DirectConnectionPage(QWidget *parent) :
+DirectConnectionPage::DirectConnectionPage(DirectConnection *parentConnection, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::DirectConnectionPage)
 {
     ui->setupUi(this);
+
+    m_ParentConnection = parentConnection;
+    ui->txtHostname->setText(m_ParentConnection->m_HostName);
+    ui->txtPort->setText(QString("%1").arg(m_ParentConnection->m_Port));
 }
 
 DirectConnectionPage::~DirectConnectionPage()
 {
     delete ui;
 }
+
+void DirectConnectionPage::on_txtHostname_textChanged()
+{
+    m_ParentConnection->m_HostName = ui->txtHostname->text();
+}
+
+void DirectConnectionPage::on_txtPort_textChanged()
+{
+    bool okay;
+    int port = ui->txtPort->text().toInt(&okay);
+    if(okay)
+        m_ParentConnection->m_Port = port;
+}
+
+void DirectConnectionPage::on_btnSetDefault_clicked()
+{
+    m_ParentConnection->writeSettings();
+}
+
 
 } // namespace OpenSpeedShop
 } // namespace Plugins

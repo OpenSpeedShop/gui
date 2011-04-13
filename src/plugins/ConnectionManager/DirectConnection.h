@@ -31,6 +31,7 @@
 #include <QObject>
 #include <QTcpSocket>
 #include <QDataStream>
+#include <SettingManager/SettingManager.h>
 #include "IConnection.h"
 #include "DirectConnectionPage.h"
 
@@ -45,11 +46,10 @@ public:
     ~DirectConnection();
 
     QWidget *page();
-
-    bool connectToServer();
-    bool disconnectFromServer();
-
-signals:
+    ConnectionStates state();
+    QString errorMessage();
+    void connectToServer();
+    void disconnectFromServer();
 
 protected slots:
     void readReady();
@@ -58,8 +58,18 @@ protected slots:
     void disconnected();
 
 protected:
+    void writeSettings();
+    void readSettings();
+    void setState(ConnectionStates state);
+
     QTcpSocket *m_TcpSocket;
     QTimer *m_TimeOut;
+    QString m_HostName;
+    int m_Port;
+    ConnectionStates m_State;
+    QString m_ErrorMessage;
+
+    friend class DirectConnectionPage;
 };
 
 } // namespace OpenSpeedShop

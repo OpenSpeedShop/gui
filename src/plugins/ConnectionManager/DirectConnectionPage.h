@@ -29,19 +29,29 @@
 #define DIRECTCONNECTIONPAGE_H
 
 #include <QWidget>
+#include "DirectConnection.h"
 
 namespace Plugins {
 namespace ConnectionManager {
 
 namespace Ui { class DirectConnectionPage; }
+class DirectConnection;
 
 class DirectConnectionPage : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit DirectConnectionPage(QWidget *parent = 0);
+    explicit DirectConnectionPage(DirectConnection *parentConnection, QWidget *parent = 0);
     ~DirectConnectionPage();
+
+protected slots:
+    void on_txtHostname_textChanged();
+    void on_txtPort_textChanged();
+    void on_btnSetDefault_clicked();
+
+protected:
+    DirectConnection *m_ParentConnection;
 
 private:
     Ui::DirectConnectionPage *ui;

@@ -25,15 +25,15 @@
 
  */
 
-#include "SettingPage.h"
-#include "ui_SettingPage.h"
+#include "PluginSettingPage.h"
+#include "ui_PluginSettingPage.h"
 
 namespace Core {
 namespace PluginManager {
 
-SettingPage::SettingPage(QList<PluginWrapper *> plugins, QWidget *parent) :
+PluginSettingPage::PluginSettingPage(QList<PluginWrapper *> plugins, QWidget *parent) :
     SettingManager::ISettingPage(parent),
-    ui(new Ui::SettingPage)
+    ui(new Ui::PluginSettingPage)
 {
     ui->setupUi(this);
 
@@ -49,9 +49,9 @@ SettingPage::SettingPage(QList<PluginWrapper *> plugins, QWidget *parent) :
     reset();
 }
 
-SettingPage::SettingPage(QWidget *parent) :
+PluginSettingPage::PluginSettingPage(QWidget *parent) :
     SettingManager::ISettingPage(parent),
-    ui(new Ui::SettingPage)
+    ui(new Ui::PluginSettingPage)
 {
     ui->setupUi(this);
 
@@ -61,14 +61,14 @@ SettingPage::SettingPage(QWidget *parent) :
     reset();
 }
 
-SettingPage::~SettingPage()
+PluginSettingPage::~PluginSettingPage()
 {
     writeSettings();
 
     delete ui;
 }
 
-void SettingPage::changeEvent(QEvent *e)
+void PluginSettingPage::changeEvent(QEvent *e)
 {
     QWidget::changeEvent(e);
     switch (e->type()) {
@@ -80,7 +80,7 @@ void SettingPage::changeEvent(QEvent *e)
     }
 }
 
-void SettingPage::apply()
+void PluginSettingPage::apply()
 {
     SettingManager::SettingManager *settingManager =
             SettingManager::SettingManager::instance();
@@ -98,7 +98,7 @@ void SettingPage::apply()
     settingManager->endGroup();
 }
 
-void SettingPage::reset()
+void PluginSettingPage::reset()
 {
     SettingManager::SettingManager *settingManager =
             SettingManager::SettingManager::instance();
@@ -111,7 +111,7 @@ void SettingPage::reset()
     settingManager->endGroup();
 }
 
-void SettingPage::readSettings()
+void PluginSettingPage::readSettings()
 {
     SettingManager::SettingManager *settingManager =
             SettingManager::SettingManager::instance();
@@ -127,7 +127,7 @@ void SettingPage::readSettings()
     settingManager->endGroup();
 }
 
-void SettingPage::writeSettings()
+void PluginSettingPage::writeSettings()
 {
     SettingManager::SettingManager *settingManager =
             SettingManager::SettingManager::instance();
@@ -143,7 +143,7 @@ void SettingPage::writeSettings()
     settingManager->endGroup();
 }
 
-void SettingPage::buildTree(QList<PluginWrapper *> plugins)
+void PluginSettingPage::buildTree(QList<PluginWrapper *> plugins)
 {
     QStringList headers;
     headers.append("Name");

@@ -1,7 +1,7 @@
 /*!
-   \file 
+   \file MainSettingPage.h
    \author Dane Gardner <dane.gardner@gmail.com>
-   \version 
+   \version
 
    \section LICENSE
    This file is part of the Open|SpeedShop Graphical User Interface
@@ -25,40 +25,35 @@
 
  */
 
-#include "SettingPageFactory.h"
+#ifndef MAINSETTINGPAGE_H
+#define MAINSETTINGPAGE_H
+
+#include <QWidget>
+#include <SettingManager/ISettingPage.h>
 
 namespace Core {
-namespace PluginManager {
+namespace MainWindow {
 
-SettingPageFactory::SettingPageFactory(QObject *parent) :
-    QObject(parent)
+namespace Ui { class MainSettingPage; }
+
+class MainSettingPage : public SettingManager::ISettingPage
 {
-}
+    Q_OBJECT
+    Q_INTERFACES(Core::SettingManager::ISettingPage)
 
-SettingPageFactory::~SettingPageFactory()
-{
-}
+public:
+    explicit MainSettingPage(QWidget *parent = 0);
+    ~MainSettingPage();
 
-QIcon SettingPageFactory::icon()
-{
-    return QIcon(":/PluginManager/plugin.png");
-}
+public slots:
+    void apply();
+    void reset();
 
-QString SettingPageFactory::name()
-{
-    return tr("Plugins");
-}
-
-int SettingPageFactory::priority()
-{
-    return 50;
-}
-
-Core::SettingManager::ISettingPage *SettingPageFactory::createPage()
-{
-    return new SettingPage();
-}
+private:
+    Ui::MainSettingPage *ui;
+};
 
 
-} // namespace PluginManager
+} // namespace MainWindow
 } // namespace Core
+#endif // MAINSETTINGPAGE_H

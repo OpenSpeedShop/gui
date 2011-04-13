@@ -1,7 +1,7 @@
 /*!
-   \file 
+   \file MainSettingPageFactory.cpp
    \author Dane Gardner <dane.gardner@gmail.com>
-   \version 
+   \version
 
    \section LICENSE
    This file is part of the Open|SpeedShop Graphical User Interface
@@ -25,46 +25,35 @@
 
  */
 
-#ifndef ICONNECTION_H
-#define ICONNECTION_H
+#include "MainSettingPageFactory.h"
 
-#include <QObject>
-#include <QWidget>
-#include <QMetaType>
+namespace Core {
+namespace MainWindow {
 
-namespace Plugins {
-namespace ConnectionManager {
-
-enum ConnectionStates {
-    ConnectionState_Connecting,
-    ConnectionState_Connected,
-    ConnectionState_Disconnecting,
-    ConnectionState_Disconnected,
-    ConnectionState_Error
-};
-
-class IConnection : public QObject
+MainSettingPageFactory::MainSettingPageFactory(QObject *parent) :
+    QObject(parent)
 {
-    Q_OBJECT
+}
 
-public:
-    explicit IConnection(QObject *parent = 0);
-    virtual ~IConnection() {}
+QIcon MainSettingPageFactory::icon()
+{
+    return QIcon(":/PluginManager/plugin.png");
+}
 
-    virtual QWidget *page() = 0;
-    virtual ConnectionStates state() = 0;
-    virtual QString errorMessage() = 0;
-    virtual void connectToServer() = 0;
-    virtual void disconnectFromServer() = 0;
+QString MainSettingPageFactory::name()
+{
+    return tr("Plugins");
+}
 
-signals:
-    void stateChanged(IConnection *);
-};
+int MainSettingPageFactory::priority()
+{
+    return 10;
+}
 
-} // namespace OpenSpeedShop
-} // namespace Plugins
+SettingManager::ISettingPage *MainSettingPageFactory::createPage()
+{
+    return new MainSettingPage();
+}
 
-//! We do this so that we can use the pointer in a QVariant
-Q_DECLARE_METATYPE(Plugins::ConnectionManager::IConnection *);
-
-#endif // ICONNECTION_H
+} // namespace MainWindow
+} // namespace Core

@@ -97,7 +97,7 @@ bool PluginManager::initialize()
 
     Core::SettingManager::SettingManager *settingManager =
              Core::SettingManager::SettingManager::instance();
-    settingManager->registerPageFactory(new SettingPageFactory());
+    settingManager->registerPageFactory(new PluginSettingPageFactory());
 
 
     MainWindow::MainWindow *mainWindow = MainWindow::MainWindow::instance();
@@ -337,7 +337,7 @@ void PluginManager::pluginDialog()
 
     QDialog *dialog = new QDialog(MainWindow::MainWindow::instance());
     QLayout *layout = new QGridLayout(dialog);
-    layout->addWidget(new SettingPage(m_Plugins, dialog));
+    layout->addWidget(new PluginSettingPage(m_Plugins, dialog));
     dialog->setLayout(layout);
     dialog->resize(640, 480);
     dialog->setWindowIcon(QIcon(":/PluginManager/plugin.png"));

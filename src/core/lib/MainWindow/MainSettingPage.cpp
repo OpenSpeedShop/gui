@@ -1,7 +1,7 @@
 /*!
-   \file 
+   \file MainSettingPage.cpp
    \author Dane Gardner <dane.gardner@gmail.com>
-   \version 
+   \version
 
    \section LICENSE
    This file is part of the Open|SpeedShop Graphical User Interface
@@ -25,46 +25,32 @@
 
  */
 
-#ifndef ICONNECTION_H
-#define ICONNECTION_H
+#include "MainSettingPage.h"
+#include "ui_MainSettingPage.h"
 
-#include <QObject>
-#include <QWidget>
-#include <QMetaType>
+namespace Core {
+namespace MainWindow {
 
-namespace Plugins {
-namespace ConnectionManager {
-
-enum ConnectionStates {
-    ConnectionState_Connecting,
-    ConnectionState_Connected,
-    ConnectionState_Disconnecting,
-    ConnectionState_Disconnected,
-    ConnectionState_Error
-};
-
-class IConnection : public QObject
+MainSettingPage::MainSettingPage(QWidget *parent) :
+    SettingManager::ISettingPage(parent),
+    ui(new Ui::MainSettingPage)
 {
-    Q_OBJECT
+    ui->setupUi(this);
+}
 
-public:
-    explicit IConnection(QObject *parent = 0);
-    virtual ~IConnection() {}
+MainSettingPage::~MainSettingPage()
+{
+    delete ui;
+}
 
-    virtual QWidget *page() = 0;
-    virtual ConnectionStates state() = 0;
-    virtual QString errorMessage() = 0;
-    virtual void connectToServer() = 0;
-    virtual void disconnectFromServer() = 0;
+void MainSettingPage::apply()
+{
+}
 
-signals:
-    void stateChanged(IConnection *);
-};
+void MainSettingPage::reset()
+{
+}
 
-} // namespace OpenSpeedShop
-} // namespace Plugins
 
-//! We do this so that we can use the pointer in a QVariant
-Q_DECLARE_METATYPE(Plugins::ConnectionManager::IConnection *);
-
-#endif // ICONNECTION_H
+} // namespace MainWindow
+} // namespace Core

@@ -1,7 +1,7 @@
 /*!
-   \file SettingPage.h
+   \file 
    \author Dane Gardner <dane.gardner@gmail.com>
-   \version
+   \version 
 
    \section LICENSE
    This file is part of the Open|SpeedShop Graphical User Interface
@@ -25,50 +25,35 @@
 
  */
 
-#ifndef PLUGINSETTINGPAGE_H
-#define PLUGINSETTINGPAGE_H
+#ifndef PLUGINSETTINGPAGEFACTORY_H
+#define PLUGINSETTINGPAGEFACTORY_H
 
-#include <QDialog>
-#include <QTreeWidget>
-#include <SettingManager/ISettingPage.h>
-#include <SettingManager/SettingManager.h>
-#include "PluginWrapper.h"
+#include <QObject>
+#include <SettingManager/ISettingPageFactory.h>
+#include "PluginSettingPage.h"
 
 namespace Core {
 namespace PluginManager {
 
-namespace Ui {
-    class SettingPage;
-}
-
-class SettingPage :
-        public SettingManager::ISettingPage
+class PluginSettingPageFactory :
+        public QObject,
+        public SettingManager::ISettingPageFactory
 {
     Q_OBJECT
-    Q_INTERFACES(Core::SettingManager::ISettingPage)
+    Q_INTERFACES(Core::SettingManager::ISettingPageFactory)
 
 public:
-    explicit SettingPage(QList<PluginWrapper *> plugins, QWidget *parent = 0);
-    explicit SettingPage(QWidget *parent = 0);
-    ~SettingPage();
+    PluginSettingPageFactory(QObject *parent = 0);
+    ~PluginSettingPageFactory();
 
-public slots:
-    void apply();
-    void reset();
-
-protected:
-    void changeEvent(QEvent *e);
-
-    void readSettings();
-    void writeSettings();
-
-    void buildTree(QList<PluginWrapper *> plugins);
-    QList<QTreeWidgetItem *> m_Plugins;
-
-private:
-    Ui::SettingPage *ui;
-
+    /* ISettingPageFactory interface */
+    QIcon icon();
+    QString name();
+    int priority();
+    SettingManager::ISettingPage *createPage();
 };
 
-}}
-#endif // PLUGINSETTINGPAGE_H
+} // namespace PluginManager
+} // namespace Core
+
+#endif // PLUGINSETTINGPAGEFACTORY_H

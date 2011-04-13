@@ -36,6 +36,8 @@
 #include <SettingManager/SettingManager.h>
 #include <PluginManager/PluginManager.h>
 
+#include "MainSettingPageFactory.h"
+
 namespace Core {
 namespace MainWindow {
 

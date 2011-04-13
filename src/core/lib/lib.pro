@@ -27,9 +27,11 @@ HEADERS +=  ActionManager/ActionManager.h \
             SettingManager/ISettingPageFactory.h \
             SettingManager/ISettingPage.h \
             ActionManager/MenuItem.h \
-            PluginManager/SettingPageFactory.h \
-            PluginManager/SettingPage.h \
-            MainWindow/MainWindow.h
+            MainWindow/MainWindow.h \
+    PluginManager/PluginSettingPage.h \
+    PluginManager/PluginSettingPageFactory.h \
+    MainWindow/MainSettingPage.h \
+    MainWindow/MainSettingPageFactory.h
 
 SOURCES +=  ActionManager/ActionManager.cpp \
             PluginManager/PluginManager.cpp \
@@ -40,13 +42,16 @@ SOURCES +=  ActionManager/ActionManager.cpp \
             SettingManager/ISettingPageFactory.cpp \
             SettingManager/ISettingPage.cpp \
             ActionManager/MenuItem.cpp \
-            PluginManager/SettingPageFactory.cpp \
-            PluginManager/SettingPage.cpp \
-            MainWindow/MainWindow.cpp
+            MainWindow/MainWindow.cpp \
+    PluginManager/PluginSettingPage.cpp \
+    PluginManager/PluginSettingPageFactory.cpp \
+    MainWindow/MainSettingPage.cpp \
+    MainWindow/MainSettingPageFactory.cpp
 
 FORMS   +=  SettingManager/SettingDialog.ui \
-            PluginManager/SettingPage.ui \
-            MainWindow/MainWindow.ui
+            MainWindow/MainWindow.ui \
+    PluginManager/PluginSettingPage.ui \
+    MainWindow/MainSettingPage.ui
 
 LIBS    += 
 

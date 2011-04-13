@@ -25,46 +25,40 @@
 
  */
 
-#ifndef ICONNECTION_H
-#define ICONNECTION_H
+#include "PluginSettingPageFactory.h"
 
-#include <QObject>
-#include <QWidget>
-#include <QMetaType>
+namespace Core {
+namespace PluginManager {
 
-namespace Plugins {
-namespace ConnectionManager {
-
-enum ConnectionStates {
-    ConnectionState_Connecting,
-    ConnectionState_Connected,
-    ConnectionState_Disconnecting,
-    ConnectionState_Disconnected,
-    ConnectionState_Error
-};
-
-class IConnection : public QObject
+PluginSettingPageFactory::PluginSettingPageFactory(QObject *parent) :
+    QObject(parent)
 {
-    Q_OBJECT
+}
 
-public:
-    explicit IConnection(QObject *parent = 0);
-    virtual ~IConnection() {}
+PluginSettingPageFactory::~PluginSettingPageFactory()
+{
+}
 
-    virtual QWidget *page() = 0;
-    virtual ConnectionStates state() = 0;
-    virtual QString errorMessage() = 0;
-    virtual void connectToServer() = 0;
-    virtual void disconnectFromServer() = 0;
+QIcon PluginSettingPageFactory::icon()
+{
+    return QIcon(":/PluginManager/plugin.png");
+}
 
-signals:
-    void stateChanged(IConnection *);
-};
+QString PluginSettingPageFactory::name()
+{
+    return tr("Plugins");
+}
 
-} // namespace OpenSpeedShop
-} // namespace Plugins
+int PluginSettingPageFactory::priority()
+{
+    return 50;
+}
 
-//! We do this so that we can use the pointer in a QVariant
-Q_DECLARE_METATYPE(Plugins::ConnectionManager::IConnection *);
+Core::SettingManager::ISettingPage *PluginSettingPageFactory::createPage()
+{
+    return new PluginSettingPage();
+}
 
-#endif // ICONNECTION_H
+
+} // namespace PluginManager
+} // namespace Core

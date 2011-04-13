@@ -68,6 +68,8 @@ bool ConnectionManager::initialize()
     readSettings();
 
     registerConnection(new DirectConnection());
+    registerConnection(new DirectConnection());
+    registerConnection(new DirectConnection());
 
     return true;
 }

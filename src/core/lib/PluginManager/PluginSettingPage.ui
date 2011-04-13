@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Core::PluginManager::SettingPage</class>
- <widget class="QWidget" name="Core::PluginManager::SettingPage">
+ <class>Core::PluginManager::PluginSettingPage</class>
+ <widget class="QWidget" name="Core::PluginManager::PluginSettingPage">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -14,7 +14,7 @@
    <string>Loaded Plugins</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../resources/Core.qrc">
+   <iconset resource="../Resources/Core.qrc">
     <normaloff>:/PluginManager/plugin.png</normaloff>:/PluginManager/plugin.png</iconset>
   </property>
   <layout class="QGridLayout" name="gridLayout">
@@ -54,7 +54,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="../resources/Core.qrc"/>
+  <include location="../Resources/Core.qrc"/>
  </resources>
  <connections/>
 </ui>

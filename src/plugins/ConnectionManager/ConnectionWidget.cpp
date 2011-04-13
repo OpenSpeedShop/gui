@@ -28,6 +28,8 @@
 #include "ConnectionWidget.h"
 #include "ui_ConnectionWidget.h"
 
+#include <QDebug>
+
 namespace Plugins {
 namespace ConnectionManager {
 
@@ -75,79 +77,60 @@ void ConnectionWidget::on_btnConnect_clicked()
 {
     int index = ui->cmbConnectionType->currentIndex();
     IConnection *connection = ui->cmbConnectionType->itemData(index).value<IConnection *>();
-    connection->connectToServer();
+
+    if(connection->state() == ConnectionState_Disconnected)
+        connection->connectToServer();
 }
 
 void ConnectionWidget::on_btnDisconnect_clicked()
 {
     int index = ui->cmbConnectionType->currentIndex();
     IConnection *connection = ui->cmbConnectionType->itemData(index).value<IConnection *>();
-    connection->disconnectFromServer();
+
+    if(connection->state() == ConnectionState_Connected)
+        connection->disconnectFromServer();
+
+    //TODO: Need to handle situations where we're waiting for a connect
 }
 
 void ConnectionWidget::on_cmbConnectionType_currentIndexChanged(int index)
 {
+    // Simply return if nothing changed
+    static int oldIndex = index;
+    if(index == oldIndex)
+        return;
 
-    ui->stackedWidget->setCurrentIndex(index);
 
-    IConnection *connection = ui->cmbConnectionType->itemData(index).value<IConnection *>();
+    // Check the state of the current connection
+    IConnection *oldConnection =
+            ui->cmbConnectionType->itemData(oldIndex).value<IConnection *>();
+    if(oldConnection->state() != ConnectionState_Disconnected) {
+        QMessageBox msg;
+        msg.setIcon(QMessageBox::Warning);
+        msg.setWindowTitle(tr("Warning!"));
+        msg.setText(tr("This action will disconnect you from the currently connected "
+                       "connection. Do you wish to continue?"));
+        msg.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
 
-    disconnect(this, SLOT(connectionError(QString)));
-    connect(connection, SIGNAL(connectionError(QString)),
-            this, SLOT(connectionError(QString)));
-
-    disconnect(this, SLOT(connectingToServer()));
-    connect(connection, SIGNAL(connectingToServer()),
-            this, SLOT(connectingToServer()));
-
-    disconnect(this, SLOT(connectedToServer()));
-    connect(connection, SIGNAL(connectedToServer()),
-            this, SLOT(connectedToServer()));
-
-    disconnect(this, SLOT(disconnectingFromServer()));
-    connect(connection, SIGNAL(disconnectingFromServer()),
-            this, SLOT(disconnectingFromServer()));
-
-    disconnect(this, SLOT(disconnectedFromServer()));
-    connect(connection, SIGNAL(disconnectedFromServer()),
-            this, SLOT(disconnectedFromServer()));
-}
-
-void ConnectionWidget::connectionError(QString error)
-{
-    stopTimeOut();
-
-    if(m_TimeoutMessageBox.isVisible()) {
-        m_TimeoutMessageBox.close();
+        if(msg.exec() == QMessageBox::Yes) {
+            oldConnection->disconnectFromServer();
+            stopTimeOut();
+        } else {
+            // User said, "no." Put it back the way it was
+            ui->cmbConnectionType->setCurrentIndex(oldIndex);
+            return;
+        }
     }
 
-    m_ErrorMessageBox.setIcon(QMessageBox::Critical);
-    m_ErrorMessageBox.setWindowTitle(tr("Connection Error"));
-    m_ErrorMessageBox.setText(tr("A connection error occured. The operation will now cancel.\n\n%1").arg(error));
-    m_ErrorMessageBox.setStandardButtons(QMessageBox::Ok);
-    m_ErrorMessageBox.exec();
+    ui->stackedWidget->setCurrentIndex(index);
+    IConnection *newConnection =
+            ui->cmbConnectionType->itemData(index).value<IConnection *>();
+    disconnect(oldConnection, SIGNAL(stateChanged(IConnection*)),
+                this, SLOT(connectionStateChanged(IConnection*)));
+    connect(newConnection, SIGNAL(stateChanged(IConnection *)),
+            this, SLOT(connectionStateChanged(IConnection*)));
 
-    //! \todo Deal with stopping the connection/disconnection thread
-}
-
-void ConnectionWidget::connectingToServer()
-{
-    startTimeOut();
-}
-
-void ConnectionWidget::connectedToServer()
-{
-    stopTimeOut();
-}
-
-void ConnectionWidget::disconnectingFromServer()
-{
-    startTimeOut();
-}
-
-void ConnectionWidget::disconnectedFromServer()
-{
-    stopTimeOut();
+    oldIndex = index;
 }
 
 void ConnectionWidget::startTimeOut(int msec)
@@ -188,6 +171,39 @@ void ConnectionWidget::progress()
     }
 
     //! \todo Deal with stopping the connection/disconnection thread
+}
+
+void ConnectionWidget::connectionStateChanged(IConnection *connection)
+{
+    switch(connection->state()) {
+    case ConnectionState_Connecting:
+        startTimeOut();
+        break;
+    case ConnectionState_Connected:
+        stopTimeOut();
+        break;
+    case ConnectionState_Disconnecting:
+        startTimeOut();
+        break;
+    case ConnectionState_Disconnected:
+        stopTimeOut();
+        break;
+    case ConnectionState_Error:
+        stopTimeOut();
+
+        if(m_TimeoutMessageBox.isVisible()) {
+            m_TimeoutMessageBox.close();
+        }
+
+        m_ErrorMessageBox.setIcon(QMessageBox::Critical);
+        m_ErrorMessageBox.setWindowTitle(tr("Connection Error"));
+        m_ErrorMessageBox.setText(connection->errorMessage());
+        m_ErrorMessageBox.setStandardButtons(QMessageBox::Ok);
+        m_ErrorMessageBox.exec();
+
+        //! \todo Deal with stopping the connection/disconnection thread
+        break;
+    }
 }
 
 

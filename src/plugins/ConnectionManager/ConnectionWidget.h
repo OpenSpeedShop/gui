@@ -55,18 +55,13 @@ protected slots:
     void on_btnDisconnect_clicked();
     void on_cmbConnectionType_currentIndexChanged(int index);
 
-    void connectingToServer();
-    void connectedToServer();
-    void disconnectingFromServer();
-    void disconnectedFromServer();
-    void connectionError(QString error);
-
+    void connectionStateChanged(IConnection *connection);
     void progress();
+
+protected:
     void startTimeOut(int msec = 3500);
     void stopTimeOut();
 
-
-protected:
     QProgressBar *m_ProgressBar;
     QTimer m_ProgressTimer;
     QMessageBox m_ErrorMessageBox;

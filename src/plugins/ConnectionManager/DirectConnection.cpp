@@ -41,15 +41,16 @@ namespace ConnectionManager {
 DirectConnection::DirectConnection(QObject *parent) :
     IConnection(parent)
 {
+    m_State = ConnectionState_Disconnected;
+
+    readSettings();
+
     m_TcpSocket = new QTcpSocket(this);
-    connect(m_TcpSocket, SIGNAL(readyRead()),
-            this, SLOT(readReady()));
+    connect(m_TcpSocket, SIGNAL(readyRead()), this, SLOT(readReady()));
+    connect(m_TcpSocket, SIGNAL(connected()), this, SLOT(connected()));
+    connect(m_TcpSocket, SIGNAL(disconnected()), this, SLOT(disconnected()));
     connect(m_TcpSocket, SIGNAL(error(QAbstractSocket::SocketError)),
             this, SLOT(error(QAbstractSocket::SocketError)));
-    connect(m_TcpSocket, SIGNAL(connected()),
-            this, SLOT(connected()));
-    connect(m_TcpSocket, SIGNAL(disconnected()),
-            this, SLOT(disconnected()));
 }
 
 DirectConnection::~DirectConnection()
@@ -58,23 +59,19 @@ DirectConnection::~DirectConnection()
 
 QWidget *DirectConnection::page()
 {
-    return new DirectConnectionPage();
+    return new DirectConnectionPage(this);
 }
 
-bool DirectConnection::connectToServer()
+void DirectConnection::connectToServer()
 {
-    bool RetVal = false;
-    emit connectingToServer();
-    m_TcpSocket->connectToHost("localhost", 2048);
-    return RetVal;
+    setState(ConnectionState_Connecting);
+    m_TcpSocket->connectToHost(m_HostName, m_Port);
 }
 
-bool DirectConnection::disconnectFromServer()
+void DirectConnection::disconnectFromServer()
 {
-    bool RetVal = false;
-    emit disconnectingFromServer();
+    setState(ConnectionState_Disconnecting);
     m_TcpSocket->disconnectFromHost();
-    return RetVal;
 }
 
 void DirectConnection::readReady()
@@ -83,84 +80,130 @@ void DirectConnection::readReady()
 
 void DirectConnection::error(QAbstractSocket::SocketError error)
 {
-    QString errorMsg;
-
     switch(error) {
     case QAbstractSocket::ConnectionRefusedError:
-        errorMsg = tr("The connection was refused by the peer (or timed out).");
+        m_ErrorMessage = tr("The connection was refused by the peer (or timed out).");
         break;
     case QAbstractSocket::RemoteHostClosedError:
-        errorMsg = tr("The remote host closed the connection. Note that the client socket (i.e., this socket) will be closed after the remote close notification has been sent.");
+        m_ErrorMessage = tr("The remote host closed the connection. Note that the client socket (i.e., this socket) will be closed after the remote close notification has been sent.");
     case QAbstractSocket::HostNotFoundError:
-        errorMsg = tr("The host address was not found.");
+        m_ErrorMessage = tr("The host address was not found.");
         break;
     case QAbstractSocket::SocketAccessError:
-        errorMsg = tr("The socket operation failed because the application lacked the required privileges.");
+        m_ErrorMessage = tr("The socket operation failed because the application lacked the required privileges.");
         break;
     case QAbstractSocket::SocketResourceError:
-        errorMsg = tr("The local system ran out of resources (e.g., too many sockets).");
+        m_ErrorMessage = tr("The local system ran out of resources (e.g., too many sockets).");
         break;
     case QAbstractSocket::SocketTimeoutError:
-        errorMsg = tr("The socket operation timed out.");
+        m_ErrorMessage = tr("The socket operation timed out.");
         break;
     case QAbstractSocket::DatagramTooLargeError:
-        errorMsg = tr("The datagram was larger than the operating system's limit (which can be as low as 8192 bytes).");
+        m_ErrorMessage = tr("The datagram was larger than the operating system's limit (which can be as low as 8192 bytes).");
         break;
     case QAbstractSocket::NetworkError:
-        errorMsg = tr("An error occurred with the network (e.g., the network cable was accidentally plugged out).");
+        m_ErrorMessage = tr("An error occurred with the network (e.g., the network cable was accidentally plugged out).");
         break;
     case QAbstractSocket::AddressInUseError:
-        errorMsg = tr("The address specified to QUdpSocket::bind() is already in use and was set to be exclusive.");
+        m_ErrorMessage = tr("The address specified to QUdpSocket::bind() is already in use and was set to be exclusive.");
         break;
     case QAbstractSocket::SocketAddressNotAvailableError:
-        errorMsg = tr("The address specified to QUdpSocket::bind() does not belong to the host.");
+        m_ErrorMessage = tr("The address specified to QUdpSocket::bind() does not belong to the host.");
         break;
     case QAbstractSocket::UnsupportedSocketOperationError:
-        errorMsg = tr("The requested socket operation is not supported by the local operating system (e.g., lack of IPv6 support).");
+        m_ErrorMessage = tr("The requested socket operation is not supported by the local operating system (e.g., lack of IPv6 support).");
         break;
     case QAbstractSocket::ProxyAuthenticationRequiredError:
-        errorMsg = tr("The socket is using a proxy, and the proxy requires authentication.");
+        m_ErrorMessage = tr("The socket is using a proxy, and the proxy requires authentication.");
         break;
     case QAbstractSocket::SslHandshakeFailedError:
-        errorMsg = tr("The SSL/TLS handshake failed, so the connection was closed (only used in QSslSocket)");
+        m_ErrorMessage = tr("The SSL/TLS handshake failed, so the connection was closed (only used in QSslSocket)");
         break;
     case QAbstractSocket::UnfinishedSocketOperationError:
-        errorMsg = tr("Used by QAbstractSocketEngine only, The last operation attempted has not finished yet (still in progress in the background).");
+        m_ErrorMessage = tr("Used by QAbstractSocketEngine only, The last operation attempted has not finished yet (still in progress in the background).");
         break;
     case QAbstractSocket::ProxyConnectionRefusedError:
-        errorMsg = tr("Could not contact the proxy server because the connection to that server was denied");
+        m_ErrorMessage = tr("Could not contact the proxy server because the connection to that server was denied");
         break;
     case QAbstractSocket::ProxyConnectionClosedError:
-        errorMsg = tr("The connection to the proxy server was closed unexpectedly (before the connection to the final peer was established)");
+        m_ErrorMessage = tr("The connection to the proxy server was closed unexpectedly (before the connection to the final peer was established)");
         break;
     case QAbstractSocket::ProxyConnectionTimeoutError:
-        errorMsg = tr("The connection to the proxy server timed out or the proxy server stopped responding in the authentication phase.");
+        m_ErrorMessage = tr("The connection to the proxy server timed out or the proxy server stopped responding in the authentication phase.");
         break;
     case QAbstractSocket::ProxyNotFoundError:
-        errorMsg = tr("The proxy address set with setProxy() (or the application proxy) was not found.");
+        m_ErrorMessage = tr("The proxy address set with setProxy() (or the application proxy) was not found.");
         break;
     case QAbstractSocket::ProxyProtocolError:
-        errorMsg = tr("The connection negotiation with the proxy server because the response from the proxy server could not be understood.");
+        m_ErrorMessage = tr("The connection negotiation with the proxy server because the response from the proxy server could not be understood.");
         break;
     case QAbstractSocket::UnknownSocketError:
     default:
-        errorMsg = tr("Unknown socket error");
+        m_ErrorMessage = tr("Unknown socket error");
         break;
     }
 
-    emit connectionError(errorMsg);
+    setState(ConnectionState_Error);
+}
+
+QString DirectConnection::errorMessage()
+{
+    return m_ErrorMessage;
 }
 
 void DirectConnection::connected()
 {
-    emit connectedToServer();
+    setState(ConnectionState_Connected);
 }
 
 void DirectConnection::disconnected()
 {
-    emit disconnectedFromServer();
+    setState(ConnectionState_Disconnected);
 }
 
+void DirectConnection::writeSettings()
+{
+    Core::SettingManager::SettingManager *settingManager =
+            Core::SettingManager::SettingManager::instance();
+
+    settingManager->beginGroup("Plugins");
+    settingManager->beginGroup("ConnectionManager");
+
+    settingManager->setValue("DirectConnection/HostName", m_HostName);
+    settingManager->setValue("DirectConnection/Port", m_Port);
+
+    settingManager->endGroup();
+    settingManager->endGroup();
+}
+
+void DirectConnection::readSettings()
+{
+    Core::SettingManager::SettingManager *settingManager =
+            Core::SettingManager::SettingManager::instance();
+
+    settingManager->beginGroup("Plugins");
+    settingManager->beginGroup("ConnectionManager");
+
+    m_HostName = settingManager->value("DirectConnection/Hostname", "localhost").toString();
+
+    bool okay;
+    m_Port = settingManager->value("DirectConnection/Port").toInt(&okay);
+    if(!okay) m_Port = 2048;
+
+    settingManager->endGroup();
+    settingManager->endGroup();
+}
+
+ConnectionStates DirectConnection::state()
+{
+    return m_State;
+}
+
+void DirectConnection::setState(ConnectionStates state)
+{
+    m_State = state;
+    emit stateChanged(this);
+}
 
 } // namespace OpenSpeedShop
 } // namespace Plugins
