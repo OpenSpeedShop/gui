@@ -19,7 +19,7 @@ public:
   bool send(std::string str);
   int recv(std::string &str);
   bool close();
-  
+
   const Socket& operator <<(const std::string &str) const;
   const Socket& operator >>(std::string &str) const;
 

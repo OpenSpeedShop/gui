@@ -10,6 +10,7 @@
 #include <SS_Input_Manager.hxx>
 
 #include "rapidxml-1.13/rapidxml.hpp"
+
 #include "ServerException.h"
 
 /* Initializing the Open|SpeedShop CLI */
@@ -29,24 +30,22 @@ extern CommandObject *Current_CO;
 
 class OpenSpeedShopCLI {
 public:
-  OpenSpeedShopCLI() { m_windowID = initializeOSS(); }
-  ~OpenSpeedShopCLI() { terminateOSS(m_windowID); }
+  OpenSpeedShopCLI();
+  ~OpenSpeedShopCLI();
 
-  std::string execute(std::string command) { return execute(m_windowID, command.c_str()); }
-  std::string execute(char *command) { return execute(m_windowID, command); }
+  rapidxml::xml_node<> *execute(std::string command, rapidxml::memory_pool<> *memoryPool);
 
 protected:
-  std::string processCommandResults(std::list<CommandResult *> commandResultList);
-  InputLineObject *getInputLineObject(int windowID, const char *command);
-  std::string execute(int windowID, const char *command);
   int initializeOSS();
   void terminateOSS(int windowID);
-  std::string scrubXML(std::string xml, int pos = 0);
 
+  InputLineObject *getInputLineObject(int windowID, const char *command);
+  std::list<rapidxml::xml_node<> *> processCommandResults(
+        std::list<CommandResult *> commandResultList,
+        rapidxml::memory_pool<> *memoryPool );
 
   int m_windowID;
   static int m_windowCount;
-
 
 };
 

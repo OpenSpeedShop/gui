@@ -32,22 +32,27 @@ SocketServer::SocketServer()
           std::string commandType(commandNode->first_attribute("type")->value());
           char *commandID(commandNode->first_attribute("id")->value());
 
+          // Build the response document
+          rapidxml::xml_document<> responseDocument;
+          rapidxml::xml_node<> *responseNode = responseDocument.allocate_node(rapidxml::node_element, "Response");
+          responseNode->append_attribute(responseDocument.allocate_attribute("commandID", commandID));
+          responseDocument.append_node(responseNode);
+
           // Deal with an OpenSpeedShopCLI command
           if(commandType == "OpenSpeedShopCLI") {
-            rapidxml::xml_document<> responseDocument;
-            rapidxml::xml_node<> *responseNode = responseDocument.allocate_node(rapidxml::node_element, "Response");
-            responseNode->append_attribute(responseDocument.allocate_attribute("commandID", commandID));
-            responseDocument.append_node(responseNode);
-
             commandText += '\n';
-            std::string cliResponse = _cli.execute(commandText);
-            responseNode->value(responseDocument.allocate_string(cliResponse.c_str()));
-            std::cout << "responseDocument " << responseDocument << std::endl;
-
-            std::ostringstream responseString;
-            responseString << responseDocument;
-            clientConnection.send(responseString.str());
+            rapidxml::xml_node<> *cliResponse = _cli.execute(commandText, &responseDocument);
+            responseNode->append_node(cliResponse);
           }
+
+          //TODO: else if(otherTypeOfCommand) {
+
+          // Send the result back to the client
+          std::cout << "responseDocument " << responseDocument << std::endl;
+          std::ostringstream responseString;
+          responseString << responseDocument;
+          clientConnection.send(responseString.str());
+
         } catch(...) {
           std::cerr << "Error caught" << std::endl;
         }
