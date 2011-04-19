@@ -129,16 +129,20 @@ void ConnectionWidget::on_cmbConnectionType_currentIndexChanged(int index)
         }
 
         // Disconnect the old one
-        disconnect(oldConnection, SIGNAL(stateChanged(IConnection*)),
-                    this, SLOT(connectionStateChanged(IConnection*)));
+        disconnect(oldConnection, SIGNAL(stateChanged()),
+                   this, SLOT(connectionStateChanged()));
+        disconnect(oldConnection, SIGNAL(readyRecieve()),
+                   this, SLOT(readyRecieve()));
     }
 
     // Set up the new connection
     ui->stackedWidget->setCurrentIndex(index);
     IConnection *newConnection =
             ui->cmbConnectionType->itemData(index).value<IConnection *>();
-    connect(newConnection, SIGNAL(stateChanged(IConnection *)),
-            this, SLOT(connectionStateChanged(IConnection*)));
+    connect(newConnection, SIGNAL(stateChanged()),
+            this, SLOT(connectionStateChanged()));
+    connect(newConnection, SIGNAL(readyRecieve()),
+            this, SLOT(readyRecieve()));
 
     oldIndex = index;
 }
@@ -183,8 +187,10 @@ void ConnectionWidget::progress()
     //! \todo Deal with stopping the connection/disconnection thread
 }
 
-void ConnectionWidget::connectionStateChanged(IConnection *connection)
+void ConnectionWidget::connectionStateChanged()
 {
+    IConnection *connection = qobject_cast<IConnection *>(QObject::sender());
+
     switch(connection->state()) {
     case ConnectionState_Connecting:
         ui->btnConnect->setEnabled(false);
@@ -228,6 +234,15 @@ void ConnectionWidget::connectionStateChanged(IConnection *connection)
 
         break;
     }
+}
+
+void ConnectionWidget::readyRecieve()
+{
+    IConnection *connection = qobject_cast<IConnection *>(QObject::sender());
+
+    qDebug() << connection->recieve();
+
+    //TODO: So, what now?
 }
 
 

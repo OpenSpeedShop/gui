@@ -55,7 +55,8 @@ protected slots:
     void on_btnConnect_toggled(bool checked);
     void on_cmbConnectionType_currentIndexChanged(int index);
 
-    void connectionStateChanged(IConnection *connection);
+    void connectionStateChanged();
+    void readyRecieve();
     void progress();
 
 protected:

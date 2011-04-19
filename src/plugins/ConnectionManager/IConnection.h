@@ -58,8 +58,13 @@ public:
     virtual void disconnectFromServer() = 0;
     virtual void abort() = 0;
 
+    virtual void send(QString command) = 0;
+    virtual QString recieve() = 0;
+
 signals:
-    void stateChanged(IConnection *);
+    void stateChanged();
+    void readyRecieve();
+
 };
 
 } // namespace OpenSpeedShop

@@ -52,6 +52,9 @@ public:
     void disconnectFromServer();
     void abort();
 
+    void send(QString command);
+    QString recieve();
+
 protected slots:
     void readReady();
     void error(QAbstractSocket::SocketError);

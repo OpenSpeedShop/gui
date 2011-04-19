@@ -28,6 +28,8 @@
 #include "DirectConnection.h"
 #include <QCoreApplication>
 
+#include <QDebug>
+
 namespace Plugins {
 namespace ConnectionManager {
 
@@ -82,10 +84,13 @@ void DirectConnection::abort()
 
 void DirectConnection::readReady()
 {
+    emit readyRecieve();
 }
 
 void DirectConnection::error(QAbstractSocket::SocketError error)
 {
+    //TODO: These error messages were copied from Qt's docs. Already found one gramatical error. Needs more checking.
+
     switch(error) {
     case QAbstractSocket::ConnectionRefusedError:
         m_ErrorMessage = tr("The connection was refused by the peer (or timed out).");
@@ -108,7 +113,7 @@ void DirectConnection::error(QAbstractSocket::SocketError error)
         m_ErrorMessage = tr("The datagram was larger than the operating system's limit (which can be as low as 8192 bytes).");
         break;
     case QAbstractSocket::NetworkError:
-        m_ErrorMessage = tr("An error occurred with the network (e.g., the network cable was accidentally plugged out).");
+        m_ErrorMessage = tr("An error occurred with the network (e.g., the network cable was accidentally unplugged).");
         break;
     case QAbstractSocket::AddressInUseError:
         m_ErrorMessage = tr("The address specified to QUdpSocket::bind() is already in use and was set to be exclusive.");
@@ -160,6 +165,7 @@ QString DirectConnection::errorMessage()
 void DirectConnection::connected()
 {
     setState(ConnectionState_Connected);
+    send("help");
 }
 
 void DirectConnection::disconnected()
@@ -208,8 +214,22 @@ ConnectionStates DirectConnection::state()
 void DirectConnection::setState(ConnectionStates state)
 {
     m_State = state;
-    emit stateChanged(this);
+    emit stateChanged();
 }
+
+void DirectConnection::send(QString command)
+{
+    if(!command.endsWith('\n'))
+        command.append('\n');
+    m_TcpSocket->write(command.toLatin1());
+}
+
+QString DirectConnection::recieve()
+{
+    return m_TcpSocket->readAll();
+}
+
 
 } // namespace OpenSpeedShop
 } // namespace Plugins
+

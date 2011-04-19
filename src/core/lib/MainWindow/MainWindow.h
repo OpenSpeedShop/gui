@@ -68,6 +68,7 @@ protected:
     void initActions();
 
     bool m_Initialized;
+    QString m_StylesheetFilePath;
 
 private:
     Ui::MainWindow *ui;

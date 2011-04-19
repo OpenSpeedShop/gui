@@ -65,6 +65,7 @@ MainWindow::MainWindow(QWidget *parent) :
   ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
     initActions();
 }
 
@@ -114,7 +115,8 @@ void MainWindow::readSettings()
 
     settingManager->beginGroup("MainWindow");
 
-    QString styleName = settingManager->value("style", QApplication::style()->objectName()).toString();
+    m_StylesheetFilePath = settingManager->value("StylesheetFilePath", QString()).toString();
+    QString styleName = settingManager->value("Style", QApplication::style()->objectName()).toString();
     QStyle *style = QStyleFactory::create(styleName);
     QApplication::setStyle(style);
 
@@ -135,6 +137,9 @@ void MainWindow::writeSettings()
             SettingManager::SettingManager::instance();
 
     settingManager->beginGroup("MainWindow");
+
+    settingManager->setValue("StylesheetFilePath", m_StylesheetFilePath);
+    settingManager->setValue("Style", QApplication::style()->objectName());
 
     settingManager->setValue("Geometry", saveGeometry());
     settingManager->setValue("State", saveState());

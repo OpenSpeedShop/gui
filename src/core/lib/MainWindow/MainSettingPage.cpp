@@ -69,7 +69,7 @@ void MainSettingPage::apply()
     settingManager->beginGroup("MainWindow");
 
     m_OriginalStyle = QApplication::style()->objectName();
-    settingManager->setValue("style", m_OriginalStyle);
+    settingManager->setValue("Style", m_OriginalStyle);
 
     settingManager->endGroup();
 }
