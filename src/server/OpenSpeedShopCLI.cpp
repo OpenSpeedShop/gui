@@ -87,7 +87,7 @@ std::string OpenSpeedShopCLI::processCommandResults(std::list<CommandResult *> c
     }
 
   }
-  
+
   return retval.str();
 }
 
@@ -154,8 +154,6 @@ std::string OpenSpeedShopCLI::execute(int windowID, const char *command)
   try {
     InputLineObject *inputLineObject = getInputLineObject(windowID, command);
 
-    retval << "<Response>" << std::endl;
-
     /* It appears that there is always only one CommandObject returned, even though
      * it is in a list.  We'll process it properly, just in case: bits are cheap */
     std::list<CommandObject *> commandObjectList = inputLineObject->CmdObj_List();
@@ -167,10 +165,7 @@ std::string OpenSpeedShopCLI::execute(int windowID, const char *command)
       retval << "<CommandObject>" << std::endl;
       retval << processCommandResults((*commandObjectListIterator)->Result_List());
       retval << "</CommandObject>" << std::endl;
-
     }
-
-    retval << "</Response>" << std::endl;
 
     if(inputLineObject) {
       delete inputLineObject;

@@ -59,11 +59,11 @@ public:
     virtual void abort() = 0;
 
     virtual void send(QString command) = 0;
-    virtual QString recieve() = 0;
+    virtual QString receive() = 0;
 
 signals:
     void stateChanged();
-    void readyRecieve();
+    void readyReceive();
 
 };
 

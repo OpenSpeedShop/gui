@@ -6,6 +6,9 @@
 #include <string>
 #include <sys/types.h>
 
+#include "rapidxml-1.13/rapidxml.hpp"
+#include "rapidxml-1.13/rapidxml_print.hpp"
+
 #include "OpenSpeedShopCLI.h"
 #include "Socket.h"
 

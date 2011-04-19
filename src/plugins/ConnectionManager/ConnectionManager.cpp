@@ -110,6 +110,84 @@ void ConnectionManager::registerConnection(IConnection *connection)
     emit connectionRegistered(connection);
 }
 
+void ConnectionManager::setCurrentConnection(IConnection *connection)
+{
+    if(connection && !m_Connections.contains(connection))
+        throw new QString("Cannot set current connection to a connection that is not registered");
+
+    if(connection == m_CurrentConnection)
+        return;
+
+    if(m_CurrentConnection) {
+        disconnect(m_CurrentConnection, SIGNAL(readyReceive()), this, SLOT(connectionReadyRecieve()));
+        disconnect(m_CurrentConnection, SIGNAL(connectionStateChanged()), this, SLOT(connectionStateChanged()));
+    }
+
+    m_CurrentConnection = connection;
+    connect(m_CurrentConnection, SIGNAL(readyReceive()), this, SLOT(connectionReadyRecieve()));
+    connect(m_CurrentConnection, SIGNAL(connectionStateChanged()), this, SLOT(connectionStateChanged()));
+    emit currentConnectionChanged();
+}
+
+IConnection *ConnectionManager::currentConnection()
+{
+    return m_CurrentConnection;
+}
+
+void ConnectionManager::connectionStateChanged()
+{
+    switch(m_CurrentConnection->state()) {
+    case ConnectionState_Connected:
+        break;
+    case ConnectionState_Connecting:
+    case ConnectionState_Disconnecting:
+    case ConnectionState_Disconnected:
+    case ConnectionState_Error:
+        foreach(ServerCommand *serverCommand, m_ServerCommands) {
+            serverCommand->setState(ServerCommandState_Invalid);
+        }
+        m_ServerCommands.clear();
+        break;
+    }
+
+}
+
+void ConnectionManager::connectionReadyRecieve()
+{
+    IConnection *connection = qobject_cast<IConnection *>(QObject::sender());
+
+    if(!connection)
+        throw new QString("Caught signal from unexpected object");
+
+    QDomDocument document("Response");
+    document.setContent(connection->receive());
+
+    QUuid commandID(document.firstChildElement("Response").attribute("commandID"));
+
+    foreach(ServerCommand *serverCommand, m_ServerCommands) {
+        if(serverCommand->m_id == commandID) {
+            serverCommand->setResponse(document);
+            return;
+        }
+    }
+
+    //! \todo Deal with not finding the ServerCommand
+}
+
+bool ConnectionManager::sendCommand(ServerCommand *command)
+{
+    if(currentConnection()->state() != ConnectionState_Connected) {
+        command->setState(ServerCommandState_Invalid);
+        return false;
+    }
+
+    m_ServerCommands.append(command);
+    currentConnection()->send(command->command().toString());
+
+    command->setState(ServerCommandState_Sent);
+    return true;
+}
+
 
 } // namespace OpenSpeedShop
 } // namespace Plugins

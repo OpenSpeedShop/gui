@@ -84,7 +84,8 @@ void DirectConnection::abort()
 
 void DirectConnection::readReady()
 {
-    emit readyRecieve();
+    qDebug() << m_TcpSocket->readAll();
+    emit readyReceive();
 }
 
 void DirectConnection::error(QAbstractSocket::SocketError error)
@@ -165,7 +166,7 @@ QString DirectConnection::errorMessage()
 void DirectConnection::connected()
 {
     setState(ConnectionState_Connected);
-    send("help");
+    send("<Command id=\"blah\" type=\"OpenSpeedShopCLI\">help</Command>");
 }
 
 void DirectConnection::disconnected()
@@ -224,7 +225,7 @@ void DirectConnection::send(QString command)
     m_TcpSocket->write(command.toLatin1());
 }
 
-QString DirectConnection::recieve()
+QString DirectConnection::receive()
 {
     return m_TcpSocket->readAll();
 }

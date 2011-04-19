@@ -15,7 +15,6 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
-
 include(../plugins.pri)
 TARGET   =  ConnectionManager
 
@@ -24,14 +23,16 @@ SOURCES +=  ConnectionManager.cpp \
             IConnection.cpp \
             DirectConnection.cpp \
             DirectConnectionPage.cpp \
-    ConnectionManagerPlugin.cpp
+    ConnectionManagerPlugin.cpp \
+    ServerCommand.cpp
 
 HEADERS +=  ConnectionManager.h \
             ConnectionWidget.h \
             IConnection.h \
             DirectConnection.h \
             DirectConnectionPage.h \
-    ConnectionManagerPlugin.h
+    ConnectionManagerPlugin.h \
+    ServerCommand.h
 
 FORMS +=    ConnectionWidget.ui \
             DirectConnectionPage.ui
@@ -39,4 +40,4 @@ FORMS +=    ConnectionWidget.ui \
 RESOURCES += 
 
 LIBS    +=  -lCore
-QT += network
+QT += network xml

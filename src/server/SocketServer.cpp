@@ -2,17 +2,14 @@
 
 SocketServer::SocketServer()
 {
-  // std::cout << _cli.execute("list -v views\n") << std::endl;
-  // std::cout << _cli.execute("help\n") << std::endl;
-  
   if(!_socket.start(2048)) {
     std::cerr << __FILE__ << ":" << __LINE__ << "\tError code returned from SocketServer.start: " << std::endl;
-	return;
+    return;
   }
-  
+
   for(;;) {
     Socket clientConnection;
-	_socket.accept(clientConnection);
+	  _socket.accept(clientConnection);
 
     pid_t childPID = fork();
     if(childPID < 0) {
@@ -21,26 +18,46 @@ SocketServer::SocketServer()
     } else if(childPID > 0) {
       std::cerr << __FILE__ << ":" << __LINE__ << "\tChild process spawned: " << childPID << std::endl;
     } else {
-      //TODO: Parse commands, and do our bidding!
+      sleep(1); //DEBUG:
 
-	  sleep(1);  //DEBUG: Delay the output to cerr/cout a bit for debugging purposes
+      std::string command;
+      while(clientConnection.recv(command)) {
+        try {
+          // Parse the command
+          rapidxml::xml_document<> commandDocument;
+          commandDocument.parse<0>(commandDocument.allocate_string(command.c_str()));
 
-	  std::string recieved;
-	  while(clientConnection.recv(recieved)) {
-        std::cout << __FILE__ << ":" << __LINE__ << "\tRecieved: '" << recieved << "'" << std::endl;
-        std::string cliResponse = _cli.execute(recieved);
-        std::cout << __FILE__ << ":" << __LINE__ << "\tSending: '" << cliResponse << "'" << std::endl;
-        clientConnection.send(cliResponse);
+          rapidxml::xml_node<> *commandNode = commandDocument.first_node("Command");
+          std::string commandText(commandNode->value());
+          std::string commandType(commandNode->first_attribute("type")->value());
+          char *commandID(commandNode->first_attribute("id")->value());
+
+          // Deal with an OpenSpeedShopCLI command
+          if(commandType == "OpenSpeedShopCLI") {
+            rapidxml::xml_document<> responseDocument;
+            rapidxml::xml_node<> *responseNode = responseDocument.allocate_node(rapidxml::node_element, "Response");
+            responseNode->append_attribute(responseDocument.allocate_attribute("commandID", commandID));
+            responseDocument.append_node(responseNode);
+
+            commandText += '\n';
+            std::string cliResponse = _cli.execute(commandText);
+            responseNode->value(responseDocument.allocate_string(cliResponse.c_str()));
+            std::cout << "responseDocument " << responseDocument << std::endl;
+
+            std::ostringstream responseString;
+            responseString << responseDocument;
+            clientConnection.send(responseString.str());
+          }
+        } catch(...) {
+          std::cerr << "Error caught" << std::endl;
+        }
       }
-
-	  clientConnection.close();
+      clientConnection.close();
       exit(0);
     }
-     sleep(1);
+//    sleep(1);
   }
-
   _socket.close();
-
 }
 
 SocketServer::~SocketServer()

@@ -131,8 +131,6 @@ void ConnectionWidget::on_cmbConnectionType_currentIndexChanged(int index)
         // Disconnect the old one
         disconnect(oldConnection, SIGNAL(stateChanged()),
                    this, SLOT(connectionStateChanged()));
-        disconnect(oldConnection, SIGNAL(readyRecieve()),
-                   this, SLOT(readyRecieve()));
     }
 
     // Set up the new connection
@@ -141,8 +139,8 @@ void ConnectionWidget::on_cmbConnectionType_currentIndexChanged(int index)
             ui->cmbConnectionType->itemData(index).value<IConnection *>();
     connect(newConnection, SIGNAL(stateChanged()),
             this, SLOT(connectionStateChanged()));
-    connect(newConnection, SIGNAL(readyRecieve()),
-            this, SLOT(readyRecieve()));
+
+    ConnectionManager::instance()->setCurrentConnection(newConnection);
 
     oldIndex = index;
 }
@@ -191,6 +189,9 @@ void ConnectionWidget::connectionStateChanged()
 {
     IConnection *connection = qobject_cast<IConnection *>(QObject::sender());
 
+    if(!connection)
+        throw new QString("Caught signal from unexpected object");
+
     switch(connection->state()) {
     case ConnectionState_Connecting:
         ui->btnConnect->setEnabled(false);
@@ -234,15 +235,6 @@ void ConnectionWidget::connectionStateChanged()
 
         break;
     }
-}
-
-void ConnectionWidget::readyRecieve()
-{
-    IConnection *connection = qobject_cast<IConnection *>(QObject::sender());
-
-    qDebug() << connection->recieve();
-
-    //TODO: So, what now?
 }
 
 

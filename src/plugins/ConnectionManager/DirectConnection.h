@@ -53,7 +53,7 @@ public:
     void abort();
 
     void send(QString command);
-    QString recieve();
+    QString receive();
 
 protected slots:
     void readReady();

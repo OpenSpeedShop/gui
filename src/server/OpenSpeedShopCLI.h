@@ -9,6 +9,7 @@
 
 #include <SS_Input_Manager.hxx>
 
+#include "rapidxml-1.13/rapidxml.hpp"
 #include "ServerException.h"
 
 /* Initializing the Open|SpeedShop CLI */

@@ -56,7 +56,6 @@ protected slots:
     void on_cmbConnectionType_currentIndexChanged(int index);
 
     void connectionStateChanged();
-    void readyRecieve();
     void progress();
 
 protected:

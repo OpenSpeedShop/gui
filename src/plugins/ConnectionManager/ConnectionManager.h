@@ -31,11 +31,13 @@
 #include <QObject>
 #include <QList>
 #include <QDockWidget>
+#include <QUuid>
 #include <MainWindow/MainWindow.h>
 #include <SettingManager/SettingManager.h>
 #include "IConnection.h"
 #include "ConnectionWidget.h"
 #include "DirectConnection.h"
+#include "ServerCommand.h"
 
 namespace Plugins {
 namespace ConnectionManager {
@@ -45,25 +47,33 @@ class ConnectionManager : public QObject
     Q_OBJECT
 public:
     static ConnectionManager *instance();
-
     bool initialize();
     void shutdown();
 
     void registerConnection(IConnection *connection);
 
-signals:
-    void connectionRegistered(IConnection *);
+    IConnection *currentConnection();
+    bool sendCommand(ServerCommand *command);
 
-public slots:
+signals:
+    void connectionRegistered(IConnection *connection);
+    void currentConnectionChanged();
 
 protected:
     ConnectionManager(QObject *parent = 0);
     ~ConnectionManager();
-    QList<IConnection *> m_Connections;
-    QDockWidget *m_DockWidget;
-
     void readSettings();
     void writeSettings();
+    void setCurrentConnection(IConnection *connection);
+
+    QList<IConnection *> m_Connections;
+    QList<ServerCommand *> m_ServerCommands;
+    QDockWidget *m_DockWidget;
+    IConnection *m_CurrentConnection;
+
+protected slots:
+    void connectionReadyRecieve();
+    void connectionStateChanged();
 
     friend class ConnectionWidget;
 
