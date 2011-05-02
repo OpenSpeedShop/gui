@@ -29,6 +29,7 @@
 #define OPENSPEEDSHOPPLUGIN_H
 
 #include <QtCore>
+#include <MainWindow/MainWindow.h>
 #include <PluginManager/IPlugin.h>
 #include <SettingManager/SettingManager.h>
 #include "Settings/SettingPageFactory.h"

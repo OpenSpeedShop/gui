@@ -24,7 +24,8 @@ SOURCES +=  ConnectionManager.cpp \
             DirectConnection.cpp \
             DirectConnectionPage.cpp \
     ConnectionManagerPlugin.cpp \
-    ServerCommand.cpp
+    ServerCommand.cpp \
+    IServerAdapter.cpp
 
 HEADERS +=  ConnectionManager.h \
             ConnectionWidget.h \
@@ -32,7 +33,8 @@ HEADERS +=  ConnectionManager.h \
             DirectConnection.h \
             DirectConnectionPage.h \
     ConnectionManagerPlugin.h \
-    ServerCommand.h
+    ServerCommand.h \
+    IServerAdapter.h
 
 FORMS +=    ConnectionWidget.ui \
             DirectConnectionPage.ui

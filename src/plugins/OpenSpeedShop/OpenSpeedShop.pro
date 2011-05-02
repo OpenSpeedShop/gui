@@ -21,13 +21,16 @@ TARGET   =  OpenSpeedShop
 SOURCES +=  OpenSpeedShopPlugin.cpp \
             Settings/SettingPageFactory.cpp \
             Settings/SettingPage.cpp \
-            AboutDialog.cpp
+            AboutDialog.cpp \
+    Eperiments/ExperimentWidget.cpp
 HEADERS +=  OpenSpeedShopPlugin.h \
             Settings/SettingPageFactory.h \
             Settings/SettingPage.h \
-            AboutDialog.h
+            AboutDialog.h \
+    Eperiments/ExperimentWidget.h
 FORMS +=    Settings/SettingPage.ui \
-            AboutDialog.ui
+            AboutDialog.ui \
+    Eperiments/ExperimentWidget.ui
 RESOURCES += Resources/OpenSpeedShop.qrc
 
 LIBS    +=  -lCore

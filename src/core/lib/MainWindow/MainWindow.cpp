@@ -168,5 +168,25 @@ void MainWindow::removeProgressBar(QProgressBar *progressBar)
     ui->statusbar->removeWidget(progressBar);
 }
 
+void MainWindow::setCentralWidget(QWidget *widget)
+{
+    QWidget *oldWidget = ui->placehoderWidget;
+    ui->centralLayout->removeWidget(oldWidget);
+    delete oldWidget;
+
+    widget->setParent(this);
+    ui->placehoderWidget = widget;
+    ui->centralLayout->addWidget(widget);
+}
+
+void MainWindow::notify(const QString &text, NotificationWidget::Icon icon, NotificationWidget::StandardButtons buttons,
+            const QObject *reciever, const char *member)
+{
+    NotificationWidget *notificationWidget = new NotificationWidget(text, icon, buttons, reciever, member, this);
+    ui->centralLayout->insertWidget(0, notificationWidget);
+    notificationWidget->setFocus();
+}
+
+
 } // namespace MainWindow
 } // namespace Core

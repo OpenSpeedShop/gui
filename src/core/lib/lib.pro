@@ -31,7 +31,8 @@ HEADERS +=  ActionManager/ActionManager.h \
     PluginManager/PluginSettingPage.h \
     PluginManager/PluginSettingPageFactory.h \
     MainWindow/MainSettingPage.h \
-    MainWindow/MainSettingPageFactory.h
+    MainWindow/MainSettingPageFactory.h \
+    MainWindow/NotificationWidget.h
 
 SOURCES +=  ActionManager/ActionManager.cpp \
             PluginManager/PluginManager.cpp \
@@ -46,7 +47,8 @@ SOURCES +=  ActionManager/ActionManager.cpp \
     PluginManager/PluginSettingPage.cpp \
     PluginManager/PluginSettingPageFactory.cpp \
     MainWindow/MainSettingPage.cpp \
-    MainWindow/MainSettingPageFactory.cpp
+    MainWindow/MainSettingPageFactory.cpp \
+    MainWindow/NotificationWidget.cpp
 
 FORMS   +=  SettingManager/SettingDialog.ui \
             MainWindow/MainWindow.ui \

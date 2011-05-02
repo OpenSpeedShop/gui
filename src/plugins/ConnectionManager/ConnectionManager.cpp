@@ -46,6 +46,8 @@ ConnectionManager *ConnectionManager::instance()
 ConnectionManager::ConnectionManager(QObject *parent) :
     QObject(parent)
 {
+    m_CurrentConnection = NULL;
+    m_DockWidget = NULL;
 }
 
 ConnectionManager::~ConnectionManager()
@@ -68,9 +70,6 @@ bool ConnectionManager::initialize()
     readSettings();
 
     registerConnection(new DirectConnection());
-    registerConnection(new DirectConnection());
-    registerConnection(new DirectConnection());
-
     return true;
 }
 

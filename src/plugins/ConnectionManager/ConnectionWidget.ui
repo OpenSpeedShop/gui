@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>324</width>
-    <height>482</height>
+    <width>278</width>
+    <height>452</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -37,16 +37,16 @@
      </item>
      <item>
       <widget class="QToolButton" name="btnConnect">
-       <property name="enabled">
-        <bool>true</bool>
+       <property name="styleSheet">
+        <string notr="true">border: none;</string>
        </property>
        <property name="text">
         <string>...</string>
        </property>
        <property name="icon">
         <iconset resource="../OpenSpeedShop/Resources/OpenSpeedShop.qrc">
-         <normaloff>:/OpenSpeedShop/connect.png</normaloff>
-         <normalon>:/OpenSpeedShop/disconnect.png</normalon>:/OpenSpeedShop/connect.png</iconset>
+         <normaloff>:/OpenSpeedShop/connect.svg</normaloff>
+         <normalon>:/OpenSpeedShop/disconnect.svg</normalon>:/OpenSpeedShop/connect.svg</iconset>
        </property>
        <property name="checkable">
         <bool>true</bool>

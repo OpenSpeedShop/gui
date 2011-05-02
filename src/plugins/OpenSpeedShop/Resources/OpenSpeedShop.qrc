@@ -4,7 +4,13 @@
         <file alias="logo_640.png">Logo_640.png</file>
         <file alias="logo_320.png">Logo_320.png</file>
         <file alias="logo_1024.png">Logo_1024.png</file>
-        <file alias="connect.png">Connect.png</file>
-        <file alias="disconnect.png">Disconnnect.png</file>
+        <file alias="pause.png">pause.png</file>
+        <file alias="start.png">play.png</file>
+        <file alias="stop.png">stop.png</file>
+        <file alias="update.png">update.png</file>
+        <file alias="continue.png">continue.png</file>
+        <file alias="add.png">add.png</file>
+        <file alias="connect.svg">media-playback-start-8.svg</file>
+        <file alias="disconnect.svg">media-playback-stop-8.svg</file>
     </qresource>
 </RCC>

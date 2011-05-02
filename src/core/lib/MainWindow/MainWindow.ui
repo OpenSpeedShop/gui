@@ -17,7 +17,19 @@
    <iconset resource="../../../plugins/OpenSpeedShop/Resources/OpenSpeedShop.qrc">
     <normaloff>:/OpenSpeedShop/app.png</normaloff>:/OpenSpeedShop/app.png</iconset>
   </property>
-  <widget class="QWidget" name="centralwidget"/>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="centralLayout">
+    <property name="spacing">
+     <number>0</number>
+    </property>
+    <property name="margin">
+     <number>0</number>
+    </property>
+    <item>
+     <widget class="QWidget" name="placehoderWidget" native="true"/>
+    </item>
+   </layout>
+  </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>

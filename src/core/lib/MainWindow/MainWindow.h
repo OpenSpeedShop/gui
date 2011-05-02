@@ -37,6 +37,7 @@
 #include <PluginManager/PluginManager.h>
 
 #include "MainSettingPageFactory.h"
+#include "NotificationWidget.h"
 
 namespace Core {
 namespace MainWindow {
@@ -59,6 +60,13 @@ public:
 
     QProgressBar *addProgressBar();
     void removeProgressBar(QProgressBar *progressBar);
+
+    void setCentralWidget(QWidget *widget);
+
+    void notify(const QString &text,
+                NotificationWidget::Icon icon = NotificationWidget::NoIcon,
+                NotificationWidget::StandardButtons buttons = NotificationWidget::NoButton,
+                const QObject *reciever = NULL, const char *member = NULL);
 
 protected:
     explicit MainWindow(QWidget *parent = 0);

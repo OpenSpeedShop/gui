@@ -7,5 +7,10 @@
     </qresource>
     <qresource prefix="/MainWindow">
         <file alias="app.png">icon_cluster.png</file>
+        <file alias="notificationClose.svg">window-close.svg</file>
+        <file alias="critical.svg">dialog-error-4.svg</file>
+        <file alias="information.svg">dialog-information-4.svg</file>
+        <file alias="warning.svg">dialog-warning-4.svg</file>
+        <file alias="question.svg">dialog-question.svg</file>
     </qresource>
 </RCC>

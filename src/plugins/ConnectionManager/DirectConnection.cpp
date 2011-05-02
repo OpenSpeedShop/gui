@@ -28,8 +28,6 @@
 #include "DirectConnection.h"
 #include <QCoreApplication>
 
-#include <QDebug>
-
 namespace Plugins {
 namespace ConnectionManager {
 
@@ -84,7 +82,6 @@ void DirectConnection::abort()
 
 void DirectConnection::readReady()
 {
-    qDebug() << m_TcpSocket->readAll();
     emit readyReceive();
 }
 
@@ -166,7 +163,6 @@ QString DirectConnection::errorMessage()
 void DirectConnection::connected()
 {
     setState(ConnectionState_Connected);
-    send("<Command id=\"blah\" type=\"OpenSpeedShopCLI\">help</Command>");
 }
 
 void DirectConnection::disconnected()
