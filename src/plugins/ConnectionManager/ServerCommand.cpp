@@ -1,5 +1,7 @@
 #include "ServerCommand.h"
 
+#include "IConnection.h"
+
 namespace Plugins {
 namespace ConnectionManager {
 

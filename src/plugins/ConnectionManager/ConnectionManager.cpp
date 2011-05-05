@@ -25,8 +25,15 @@
 
  */
 
-#include <QGridLayout>
 #include "ConnectionManager.h"
+
+#include <MainWindow/MainWindow.h>
+#include <SettingManager/SettingManager.h>
+
+#include "IConnection.h"
+#include "ServerCommand.h"
+#include "ConnectionWidget.h"
+#include "DirectConnection.h"
 
 namespace Plugins {
 namespace ConnectionManager {
@@ -119,12 +126,12 @@ void ConnectionManager::setCurrentConnection(IConnection *connection)
 
     if(m_CurrentConnection) {
         disconnect(m_CurrentConnection, SIGNAL(readyReceive()), this, SLOT(connectionReadyRecieve()));
-        disconnect(m_CurrentConnection, SIGNAL(connectionStateChanged()), this, SLOT(connectionStateChanged()));
+        disconnect(m_CurrentConnection, SIGNAL(stateChanged()), this, SLOT(connectionStateChanged()));
     }
 
     m_CurrentConnection = connection;
     connect(m_CurrentConnection, SIGNAL(readyReceive()), this, SLOT(connectionReadyRecieve()));
-    connect(m_CurrentConnection, SIGNAL(connectionStateChanged()), this, SLOT(connectionStateChanged()));
+    connect(m_CurrentConnection, SIGNAL(stateChanged()), this, SLOT(connectionStateChanged()));
     emit currentConnectionChanged();
 }
 

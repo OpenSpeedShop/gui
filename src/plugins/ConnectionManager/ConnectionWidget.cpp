@@ -28,8 +28,9 @@
 #include "ConnectionWidget.h"
 #include "ui_ConnectionWidget.h"
 
-#include <QBitmap>
-#include <QDebug>
+#include <MainWindow/MainWindow.h>
+#include "ConnectionManager.h"
+#include "IConnection.h"
 
 namespace Plugins {
 namespace ConnectionManager {

@@ -6,6 +6,9 @@
 namespace Plugins {
 namespace ConnectionManager {
 
+class ConnectionManager;
+class ServerCommand;
+
 enum ExperimentModes {
     ExperimentMode_Offline,
     ExperimentMode_Online
@@ -16,6 +19,9 @@ class IServerAdapter : public QObject
     Q_OBJECT
 public:
     explicit IServerAdapter(QObject *parent = 0);
+
+    void rawCommand(QString command);
+
 
 //    void attach();
 //    void close();
@@ -65,6 +71,9 @@ public:
 signals:
 
 public slots:
+
+protected:
+
 
 };
 

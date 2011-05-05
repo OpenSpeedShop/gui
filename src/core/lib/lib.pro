@@ -28,11 +28,11 @@ HEADERS +=  ActionManager/ActionManager.h \
             SettingManager/ISettingPage.h \
             ActionManager/MenuItem.h \
             MainWindow/MainWindow.h \
-    PluginManager/PluginSettingPage.h \
-    PluginManager/PluginSettingPageFactory.h \
-    MainWindow/MainSettingPage.h \
-    MainWindow/MainSettingPageFactory.h \
-    MainWindow/NotificationWidget.h
+            PluginManager/PluginSettingPage.h \
+            PluginManager/PluginSettingPageFactory.h \
+            MainWindow/MainSettingPage.h \
+            MainWindow/MainSettingPageFactory.h \
+            MainWindow/NotificationWidget.h
 
 SOURCES +=  ActionManager/ActionManager.cpp \
             PluginManager/PluginManager.cpp \
@@ -44,17 +44,20 @@ SOURCES +=  ActionManager/ActionManager.cpp \
             SettingManager/ISettingPage.cpp \
             ActionManager/MenuItem.cpp \
             MainWindow/MainWindow.cpp \
-    PluginManager/PluginSettingPage.cpp \
-    PluginManager/PluginSettingPageFactory.cpp \
-    MainWindow/MainSettingPage.cpp \
-    MainWindow/MainSettingPageFactory.cpp \
-    MainWindow/NotificationWidget.cpp
+            PluginManager/PluginSettingPage.cpp \
+            PluginManager/PluginSettingPageFactory.cpp \
+            MainWindow/MainSettingPage.cpp \
+            MainWindow/MainSettingPageFactory.cpp \
+            MainWindow/NotificationWidget.cpp
 
 FORMS   +=  SettingManager/SettingDialog.ui \
             MainWindow/MainWindow.ui \
-    PluginManager/PluginSettingPage.ui \
-    MainWindow/MainSettingPage.ui
+            PluginManager/PluginSettingPage.ui \
+            MainWindow/MainSettingPage.ui
 
 LIBS    += 
 
 RESOURCES += Resources/Core.qrc
+
+target.path = /lib
+INSTALLS += target

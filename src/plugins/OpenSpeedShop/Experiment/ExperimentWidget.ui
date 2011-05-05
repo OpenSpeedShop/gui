@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>699</width>
-    <height>538</height>
+    <width>705</width>
+    <height>586</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,7 +20,7 @@
    <item row="0" column="0">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <property name="movable">
       <bool>true</bool>
@@ -287,11 +287,11 @@
       <attribute name="title">
        <string>Views</string>
       </attribute>
-      <layout class="QGridLayout" name="gridLayout_6">
+      <layout class="QGridLayout" name="gridLayout_6" columnstretch="1,10">
        <item row="0" column="0" rowspan="2">
         <widget class="QGroupBox" name="groupBox_5">
          <property name="title">
-          <string>GroupBox</string>
+          <string>Models</string>
          </property>
          <property name="flat">
           <bool>true</bool>
@@ -301,7 +301,14 @@
            <number>0</number>
           </property>
           <item>
-           <widget class="QListView" name="listView"/>
+           <widget class="QListView" name="listView">
+            <property name="minimumSize">
+             <size>
+              <width>140</width>
+              <height>0</height>
+             </size>
+            </property>
+           </widget>
           </item>
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_2">

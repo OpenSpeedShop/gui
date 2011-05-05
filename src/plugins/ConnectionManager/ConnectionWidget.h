@@ -32,13 +32,12 @@
 #include <QProgressBar>
 #include <QTimer>
 #include <QMessageBox>
-#include <MainWindow/MainWindow.h>
-#include "ConnectionManager.h"
 
 
 namespace Plugins {
 namespace ConnectionManager {
 
+class IConnection;
 namespace Ui { class ConnectionWidget; }
 
 class ConnectionWidget : public QWidget

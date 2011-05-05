@@ -19,10 +19,12 @@ include(../../OpenSpeedShop.pri)
 
 TEMPLATE = app
 TARGET   = $$APPLICATION_TARGET
-DESTDIR  = $$APPLICATION_PATH
 
 SOURCES += main.cpp
 HEADERS +=
 FORMS   +=
 
-LIBS    += -lCore
+LIBS    += -L$$quote(${BUILDDIR}/core/lib/debug) -lCore
+
+target.path = /bin
+INSTALLS += target

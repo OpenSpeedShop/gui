@@ -16,21 +16,29 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 include(../plugins.pri)
-TARGET   =  OpenSpeedShop
+TARGET     = OpenSpeedShop
 
-SOURCES +=  OpenSpeedShopPlugin.cpp \
-            Settings/SettingPageFactory.cpp \
-            Settings/SettingPage.cpp \
-            AboutDialog.cpp \
-    Eperiments/ExperimentWidget.cpp
-HEADERS +=  OpenSpeedShopPlugin.h \
-            Settings/SettingPageFactory.h \
-            Settings/SettingPage.h \
-            AboutDialog.h \
-    Eperiments/ExperimentWidget.h
-FORMS +=    Settings/SettingPage.ui \
-            AboutDialog.ui \
-    Eperiments/ExperimentWidget.ui
+SOURCES   += OpenSpeedShopPlugin.cpp \
+             Settings/SettingPageFactory.cpp \
+             Settings/SettingPage.cpp \
+             AboutDialog.cpp \
+             Experiment/ExperimentWidget.cpp \
+             OpenSpeedShopWidget.cpp
+
+HEADERS   += OpenSpeedShopPlugin.h \
+             Settings/SettingPageFactory.h \
+             Settings/SettingPage.h \
+             AboutDialog.h \
+             Experiment/ExperimentWidget.h \
+             OpenSpeedShopWidget.h
+
+FORMS     += Settings/SettingPage.ui \
+             AboutDialog.ui \
+             Experiment/ExperimentWidget.ui \
+             OpenSpeedShopWidget.ui
+
 RESOURCES += Resources/OpenSpeedShop.qrc
 
-LIBS    +=  -lCore
+LIBS      += -L$$quote(${BUILDDIR}/plugins/ConnectionManager/debug) -lConnectionManager
+
+QT        += xml network

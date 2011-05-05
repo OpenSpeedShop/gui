@@ -28,6 +28,8 @@
 #include "DirectConnectionPage.h"
 #include "ui_DirectConnectionPage.h"
 
+#include "DirectConnection.h"
+
 namespace Plugins {
 namespace ConnectionManager {
 

@@ -29,13 +29,12 @@
 #define DIRECTCONNECTIONPAGE_H
 
 #include <QWidget>
-#include "DirectConnection.h"
 
 namespace Plugins {
 namespace ConnectionManager {
 
-namespace Ui { class DirectConnectionPage; }
 class DirectConnection;
+namespace Ui { class DirectConnectionPage; }
 
 class DirectConnectionPage : public QWidget
 {

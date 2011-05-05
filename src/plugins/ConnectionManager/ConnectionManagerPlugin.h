@@ -30,10 +30,11 @@
 
 #include <QObject>
 #include <PluginManager/IPlugin.h>
-#include "ConnectionManager.h"
 
 namespace Plugins {
 namespace ConnectionManager {
+
+class ConnectionManager;
 
 class ConnectionManagerPlugin : public QObject, public IPlugin
 {

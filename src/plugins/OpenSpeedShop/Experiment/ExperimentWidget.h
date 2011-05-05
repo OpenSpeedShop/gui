@@ -6,9 +6,7 @@
 namespace Plugins {
 namespace OpenSpeedShop {
 
-namespace Ui {
-    class ExperimentWidget;
-}
+namespace Ui { class ExperimentWidget; }
 
 class ExperimentWidget : public QWidget
 {
@@ -18,8 +16,12 @@ public:
     explicit ExperimentWidget(QWidget *parent = 0);
     ~ExperimentWidget();
 
+    void create();
+    void load();
+
 private:
     Ui::ExperimentWidget *ui;
+
 };
 
 

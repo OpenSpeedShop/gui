@@ -4,10 +4,11 @@
 #include <QObject>
 #include <QDomDocument>
 #include <QUuid>
-#include "IConnection.h"
 
 namespace Plugins {
 namespace ConnectionManager {
+
+class IConnection;
 
 enum ServerCommandStates {
     ServerCommandState_Created,

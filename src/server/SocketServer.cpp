@@ -60,7 +60,6 @@ SocketServer::SocketServer()
       clientConnection.close();
       exit(0);
     }
-//    sleep(1);
   }
   _socket.close();
 }

@@ -18,5 +18,4 @@
 TEMPLATE = subdirs
 CONFIG  += ordered
 
-SUBDIRS  = Example OpenSpeedShop ConnectionManager ViewManager
-#SUBDIRS += ViewManager
+SUBDIRS  = Example ConnectionManager ViewManager OpenSpeedShop

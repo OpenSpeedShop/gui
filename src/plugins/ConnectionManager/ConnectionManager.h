@@ -32,15 +32,13 @@
 #include <QList>
 #include <QDockWidget>
 #include <QUuid>
-#include <MainWindow/MainWindow.h>
-#include <SettingManager/SettingManager.h>
-#include "IConnection.h"
-#include "ConnectionWidget.h"
-#include "DirectConnection.h"
-#include "ServerCommand.h"
+#include <QGridLayout>
 
 namespace Plugins {
 namespace ConnectionManager {
+
+class IConnection;
+class ServerCommand;
 
 class ConnectionManager : public QObject
 {
@@ -76,7 +74,6 @@ protected slots:
     void connectionStateChanged();
 
     friend class ConnectionWidget;
-
 };
 
 } // namespace OpenSpeedShop

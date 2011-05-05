@@ -16,30 +16,31 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 include(../plugins.pri)
-TARGET   =  ConnectionManager
 
-SOURCES +=  ConnectionManager.cpp \
-            ConnectionWidget.cpp \
-            IConnection.cpp \
-            DirectConnection.cpp \
-            DirectConnectionPage.cpp \
-    ConnectionManagerPlugin.cpp \
-    ServerCommand.cpp \
-    IServerAdapter.cpp
+TARGET     = ConnectionManager
 
-HEADERS +=  ConnectionManager.h \
-            ConnectionWidget.h \
-            IConnection.h \
-            DirectConnection.h \
-            DirectConnectionPage.h \
-    ConnectionManagerPlugin.h \
-    ServerCommand.h \
-    IServerAdapter.h
+SOURCES   += ConnectionManager.cpp \
+             ConnectionWidget.cpp \
+             IConnection.cpp \
+             DirectConnection.cpp \
+             DirectConnectionPage.cpp \
+             ConnectionManagerPlugin.cpp \
+             ServerCommand.cpp \
+             IServerAdapter.cpp
 
-FORMS +=    ConnectionWidget.ui \
-            DirectConnectionPage.ui
+HEADERS   += ConnectionManager.h \
+             ConnectionWidget.h \
+             IConnection.h \
+             DirectConnection.h \
+             DirectConnectionPage.h \
+             ConnectionManagerPlugin.h \
+             ServerCommand.h \
+             IServerAdapter.h
+
+FORMS     += ConnectionWidget.ui \
+             DirectConnectionPage.ui
 
 RESOURCES += 
 
-LIBS    +=  -lCore
-QT += network xml
+LIBS      += -lCore
+QT        += network xml

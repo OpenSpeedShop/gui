@@ -35,6 +35,8 @@
 #include "Settings/SettingPageFactory.h"
 #include "AboutDialog.h"
 
+#include "OpenSpeedShopWidget.h"
+
 namespace Plugins {
 namespace OpenSpeedShop {
 
@@ -55,13 +57,14 @@ public:
     QList<Dependency> dependencies();
 
 public slots:
-    void load();
     void aboutDialog();
 
 protected:
     QString m_Name;
     QString m_Version;
     QList<Dependency> m_Dependencies;
+
+    OpenSpeedShopWidget *_mainWidget;
 
     void readSettings();
     void writeSettings();

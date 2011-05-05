@@ -17,21 +17,9 @@
 
 QT += core gui
 
-APPLICATION_TARGET = "OpenSpeedShop"
+APPLICATION_TARGET = OpenSpeedShop
 
-SOURCE_PATH        = $${PWD}
+SOURCE_PATH        = $$quote($${PWD})
 
-#BUILD_PATH         = $${OUT_PWD}
-win32 {
-  BUILD_PATH         = D:/Qt/projects/openspeedshop/build
-} else {
-  BUILD_PATH         = /tmp/openspeedshop-gui-build
-}
-
-APPLICATION_PATH   = $${BUILD_PATH}/bin
-LIBRARY_PATH       = $${BUILD_PATH}/lib
-PLUGIN_PATH        = $${LIBRARY_PATH}/plugin
-
-INCLUDEPATH       += $${SOURCE_PATH}/core/lib
-DEPENDPATH        += $${SOURCE_PATH}/core/lib
-LIBS              += -L$${LIBRARY_PATH} -L$${PLUGIN_PATH}
+INCLUDEPATH       += $$quote($${SOURCE_PATH}/core/lib) $$quote($${SOURCE_PATH}/plugins)
+DEPENDPATH        += $$quote($${SOURCE_PATH}/core/lib) $$quote($${SOURCE_PATH}/plugins)

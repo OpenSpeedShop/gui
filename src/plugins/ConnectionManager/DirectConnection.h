@@ -31,12 +31,12 @@
 #include <QObject>
 #include <QTcpSocket>
 #include <QDataStream>
-#include <SettingManager/SettingManager.h>
 #include "IConnection.h"
-#include "DirectConnectionPage.h"
 
 namespace Plugins {
 namespace ConnectionManager {
+
+class DirectConnectionPage;
 
 class DirectConnection : public IConnection
 {

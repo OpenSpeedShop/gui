@@ -26,7 +26,9 @@
  */
 
 #include "DirectConnection.h"
-#include <QCoreApplication>
+
+#include "DirectConnectionPage.h"
+#include <SettingManager/SettingManager.h>
 
 namespace Plugins {
 namespace ConnectionManager {

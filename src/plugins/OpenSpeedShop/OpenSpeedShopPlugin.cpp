@@ -70,27 +70,21 @@ bool OpenSpeedShopPlugin::initialize(QStringList &args, QString *err)
 
     /*** We're a main plugin, so we need to make changes to the mainWindow,
          like the application icon and the title ***/
-    Core::MainWindow::MainWindow *mainWindow =
-            Core::MainWindow::MainWindow::instance();
+    Core::MainWindow::MainWindow *mainWindow = Core::MainWindow::MainWindow::instance();
     mainWindow->setWindowIcon(QIcon(":/OpenSpeedShop/app.png"));
     mainWindow->setWindowTitle(QString("Open|SpeedShop%1").arg(QChar(0x2122))); //Trademark
 
-    //DEBUG: Just stick an empty widget into the central area for now
-    mainWindow->setCentralWidget(new QWidget(mainWindow));
+    /*** Set our main widget in the main window ***/
+    _mainWidget = new OpenSpeedShopWidget(mainWindow);
+    mainWindow->setCentralWidget(_mainWidget);
 
     /*** Register the settings page ***/
-    Core::SettingManager::SettingManager *settingManager =
-             Core::SettingManager::SettingManager::instance();
+    Core::SettingManager::SettingManager *settingManager = Core::SettingManager::SettingManager::instance();
     settingManager->registerPageFactory(new SettingPageFactory());
 
     /*** Register our menu structure ***/
     foreach(QAction *action, mainWindow->menuBar()->actions()) {
-        if(action->text() == tr("File")) {
-            QAction *load = new QAction(tr("Load"), this);
-            load->setToolTip(tr("Just a test object for the OSS plugin"));
-            connect(load, SIGNAL(triggered()), this, SLOT(load()));
-            action->menu()->addAction(load);
-        } else if(action->text() == tr("Help")) {
+        if(action->text() == tr("Help")) {
             QAction *about = new QAction(tr("About Open|SpeedShop"), this);
             about->setToolTip(tr("Displays the Open|SpeedShop about dialog"));
             connect(about, SIGNAL(triggered()), this, SLOT(aboutDialog()));
@@ -104,14 +98,6 @@ bool OpenSpeedShopPlugin::initialize(QStringList &args, QString *err)
 void OpenSpeedShopPlugin::shutdown()
 {
     writeSettings();
-}
-
-void OpenSpeedShopPlugin::load()
-{
-#ifdef QT_DEBUG
-    qDebug() << __FILE__ << __LINE__ << "Plugins::OpenSpeedShop::OpenSpeedShopPlugin::load()";
-#endif
-
 }
 
 void OpenSpeedShopPlugin::aboutDialog()

@@ -26,6 +26,7 @@
  */
 
 #include "ConnectionManagerPlugin.h"
+#include "ConnectionManager.h"
 
 namespace Plugins {
 namespace ConnectionManager {
