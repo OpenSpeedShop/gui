@@ -16,6 +16,19 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 TEMPLATE = subdirs
-CONFIG  += ordered
 
-SUBDIRS  = Example ConnectionManager ViewManager OpenSpeedShop
+SUBDIRS  = Example \
+           ConnectionManager \
+           ViewManager \
+           OpenSpeedShop
+
+OpenSpeedShop.subdir         = OpenSpeedShop
+
+ConnectionManager.subdir     = ConnectionManager
+ConnectionManager.depends    = OpenSpeedShop
+
+ViewManager.subdir           = ViewManager
+ViewManager.depends          = OpenSpeedShop
+
+Example.subdir               = Example
+Example.depends              = OpenSpeedShop

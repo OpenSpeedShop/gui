@@ -16,6 +16,10 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 TEMPLATE = subdirs
-CONFIG  += ordered
 
 SUBDIRS  = lib app
+
+app.subdir = app
+app.depends = lib
+
+lib.subdir = lib
