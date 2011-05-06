@@ -31,9 +31,10 @@
 #include <QObject>
 #include <QWidget>
 #include <QMetaType>
+#include "ConnectionManagerLibrary.h"
 
 namespace Plugins {
-namespace ConnectionManager {
+namespace OpenSpeedShop {
 
 enum ConnectionStates {
     ConnectionState_Connecting,
@@ -43,12 +44,12 @@ enum ConnectionStates {
     ConnectionState_Error
 };
 
-class IConnection : public QObject
+class CONNECTIONMANAGER_EXPORT IConnection : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit IConnection(QObject *parent = 0);
+    explicit IConnection(QObject *parent = 0) : QObject(parent) {}
     virtual ~IConnection() {}
 
     virtual QWidget *page() = 0;
@@ -67,10 +68,14 @@ signals:
 
 };
 
+
 } // namespace OpenSpeedShop
 } // namespace Plugins
 
+
 //! We do this so that we can use the pointer in a QVariant
-Q_DECLARE_METATYPE(Plugins::ConnectionManager::IConnection *);
+Q_DECLARE_METATYPE(Plugins::OpenSpeedShop::IConnection *);
+
+Q_DECLARE_INTERFACE(Plugins::OpenSpeedShop::IConnection, "org.openspeedshop.gui.IConnection/0.1");
 
 #endif // ICONNECTION_H

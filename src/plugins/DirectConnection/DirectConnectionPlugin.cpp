@@ -25,21 +25,22 @@
 
  */
 
-#include "ConnectionManagerPlugin.h"
-#include "ConnectionManager.h"
+#include "DirectConnectionPlugin.h"
+
+#include <ConnectionManager/ConnectionManager.h>
+#include "DirectConnection.h"
 
 namespace Plugins {
-namespace ConnectionManager {
+namespace DirectConnection {
 
-/*! \namespace Plugins::ConnectionManager
-    \brief Contains the base plugin for the Open|SpeedShop ConnectionManager
-           set of plugins.
+/*! \namespace Plugins::DirectConnection
+    \brief 
  */
 
-/*! \class ConnectionManagerPlugin
+/*! \class DirectConnectionPlugin
     \version 0.1.dev
     \brief Main plugin which manages the loading and initialization of the
-           ConnectionManager.
+           DirectConnection.
 
     \par Depends on Plugins:
          OpenSpeedShop
@@ -47,48 +48,50 @@ namespace ConnectionManager {
     \sa ConnectionManager
  */
 
-ConnectionManagerPlugin::ConnectionManagerPlugin(QObject *parent) :
+using namespace Plugins::OpenSpeedShop;
+
+DirectConnectionPlugin::DirectConnectionPlugin(QObject *parent) :
     QObject(parent)
 {
-    m_Name = "ConnectionManager";
+    m_Name = "DirectConnection";
     m_Version = "0.1.dev";
     m_Dependencies.append( Dependency("OpenSpeedShop", "^0\\.1.*$") );
-
-    ConnectionManager::instance(); // Create the singleton instance
 }
 
-ConnectionManagerPlugin::~ConnectionManagerPlugin()
+DirectConnectionPlugin::~DirectConnectionPlugin()
 {
 }
 
-bool ConnectionManagerPlugin::initialize(QStringList &args, QString *err)
+bool DirectConnectionPlugin::initialize(QStringList &args, QString *err)
 {
-    ConnectionManager *connectionManager = ConnectionManager::instance();
-    return connectionManager->initialize();
+    Q_UNUSED(args)
+    Q_UNUSED(err)
+
+    ConnectionManager::instance()->registerConnection(new DirectConnection());
+
+    return true;
 }
 
-void ConnectionManagerPlugin::shutdown()
+void DirectConnectionPlugin::shutdown()
 {
-    ConnectionManager *connectionManager = ConnectionManager::instance();
-    connectionManager->shutdown();
 }
 
-QString ConnectionManagerPlugin::name()
+QString DirectConnectionPlugin::name()
 {
     return m_Name;
 }
 
-QString ConnectionManagerPlugin::version()
+QString DirectConnectionPlugin::version()
 {
     return m_Version;
 }
 
-QList<Dependency> ConnectionManagerPlugin::dependencies()
+QList<Dependency> DirectConnectionPlugin::dependencies()
 {
     return m_Dependencies;
 }
 
-Q_EXPORT_PLUGIN(Plugins::ConnectionManager::ConnectionManagerPlugin)
-
-} // namespace ConnectionManager
+} // namespace DirectConnection
 } // namespace Plugins
+
+Q_EXPORT_PLUGIN(Plugins::DirectConnection::DirectConnectionPlugin)

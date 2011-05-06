@@ -18,17 +18,13 @@
 TEMPLATE = subdirs
 
 SUBDIRS  = Example \
-           ConnectionManager \
-           ViewManager \
-           OpenSpeedShop
+           OpenSpeedShop \
+           DirectConnection
 
 OpenSpeedShop.subdir         = OpenSpeedShop
 
-ConnectionManager.subdir     = ConnectionManager
-ConnectionManager.depends    = OpenSpeedShop
-
-ViewManager.subdir           = ViewManager
-ViewManager.depends          = OpenSpeedShop
+DirectConnection.subdir      = DirectConnection
+DirectConnection.depends     = OpenSpeedShop
 
 Example.subdir               = Example
 Example.depends              = OpenSpeedShop

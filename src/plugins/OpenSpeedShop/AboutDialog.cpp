@@ -48,7 +48,7 @@ AboutDialog::AboutDialog(QWidget *parent) :
                      arg(QCoreApplication::applicationName()).
                      arg(QCoreApplication::applicationVersion()));
     aboutText.append(tr("Built on %1 at %2\n").arg(__DATE__).arg(__TIME__));
-    aboutText.append(tr("Copyright 2010-2011 Argo Navis Technologies LLC\n"));
+    aboutText.append(tr("Copyright 2010-2011 Argo Navis Technologies LLC.  All rights reserved.\n"));
     ui->lblAbout->setText(aboutText);
 }
 

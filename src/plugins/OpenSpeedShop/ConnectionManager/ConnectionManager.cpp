@@ -33,10 +33,9 @@
 #include "IConnection.h"
 #include "ServerCommand.h"
 #include "ConnectionWidget.h"
-#include "DirectConnection.h"
 
 namespace Plugins {
-namespace ConnectionManager {
+namespace OpenSpeedShop {
 
 /*! \class ConnectionManager
     \brief Handles the interaction between the Open|SpeedShop plugin set, and
@@ -76,7 +75,6 @@ bool ConnectionManager::initialize()
 
     readSettings();
 
-    registerConnection(new DirectConnection());
     return true;
 }
 

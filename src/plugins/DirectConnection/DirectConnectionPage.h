@@ -25,57 +25,39 @@
 
  */
 
-#ifndef DIRECTCONNECTION_H
-#define DIRECTCONNECTION_H
+#ifndef DIRECTCONNECTIONPAGE_H
+#define DIRECTCONNECTIONPAGE_H
 
-#include <QObject>
-#include <QTcpSocket>
-#include <QDataStream>
-#include "IConnection.h"
+#include <QWidget>
 
 namespace Plugins {
-namespace ConnectionManager {
+namespace DirectConnection {
 
-class DirectConnectionPage;
+class DirectConnection;
+namespace Ui { class DirectConnectionPage; }
 
-class DirectConnection : public IConnection
+class DirectConnectionPage : public QWidget
 {
     Q_OBJECT
+
 public:
-    explicit DirectConnection(QObject *parent = 0);
-    ~DirectConnection();
-
-    QWidget *page();
-    ConnectionStates state();
-    QString errorMessage();
-    void connectToServer();
-    void disconnectFromServer();
-    void abort();
-
-    void send(QString command);
-    QString receive();
+    explicit DirectConnectionPage(DirectConnection *parentConnection, QWidget *parent = 0);
+    ~DirectConnectionPage();
 
 protected slots:
-    void readReady();
-    void error(QAbstractSocket::SocketError);
-    void connected();
-    void disconnected();
+    void on_txtHostname_textChanged();
+    void on_txtPort_textChanged();
+    void on_btnSetDefault_clicked();
 
 protected:
-    void writeSettings();
-    void readSettings();
-    void setState(ConnectionStates state);
+    DirectConnection *m_ParentConnection;
 
-    QTcpSocket *m_TcpSocket;
-    QTimer *m_TimeOut;
-    QString m_HostName;
-    int m_Port;
-    ConnectionStates m_State;
-    QString m_ErrorMessage;
-
-    friend class DirectConnectionPage;
+private:
+    Ui::DirectConnectionPage *ui;
 };
 
-} // namespace OpenSpeedShop
+
+} // namespace DirectConnection
 } // namespace Plugins
-#endif // DIRECTCONNECTION_H
+
+#endif // DIRECTCONNECTIONPAGE_H

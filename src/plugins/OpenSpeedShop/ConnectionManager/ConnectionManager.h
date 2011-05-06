@@ -25,51 +25,58 @@
 
  */
 
-#ifndef CONNECTIONWIDGET_H
-#define CONNECTIONWIDGET_H
+#ifndef CONNECTIONMANAGER_H
+#define CONNECTIONMANAGER_H
 
-#include <QWidget>
-#include <QProgressBar>
-#include <QTimer>
-#include <QMessageBox>
-
+#include <QObject>
+#include <QList>
+#include <QDockWidget>
+#include <QUuid>
+#include <QGridLayout>
+#include "ConnectionManagerLibrary.h"
 
 namespace Plugins {
-namespace ConnectionManager {
+namespace OpenSpeedShop {
 
 class IConnection;
-namespace Ui { class ConnectionWidget; }
+class ServerCommand;
 
-class ConnectionWidget : public QWidget
+class CONNECTIONMANAGER_EXPORT ConnectionManager : public QObject
 {
     Q_OBJECT
-
 public:
-    explicit ConnectionWidget(QWidget *parent = 0);
-    ~ConnectionWidget();
+    static ConnectionManager *instance();
+    bool initialize();
+    void shutdown();
 
-protected slots:
-    void connectionRegistered(IConnection *);
-    void on_btnConnect_clicked();
-    void on_btnConnect_toggled(bool checked);
-    void on_cmbConnectionType_currentIndexChanged(int index);
+    void registerConnection(IConnection *connection);
 
-    void connectionStateChanged();
-    void progress();
+    IConnection *currentConnection();
+    bool sendCommand(ServerCommand *command);
+
+signals:
+    void connectionRegistered(IConnection *connection);
+    void currentConnectionChanged();
 
 protected:
-    void startTimeOut(int msec = 3500);
-    void stopTimeOut();
+    ConnectionManager(QObject *parent = 0);
+    ~ConnectionManager();
+    void readSettings();
+    void writeSettings();
+    void setCurrentConnection(IConnection *connection);
 
-    QProgressBar *m_ProgressBar;
-    QTimer m_ProgressTimer;
-    QMessageBox m_ErrorMessageBox;
-    QMessageBox m_TimeoutMessageBox;
+    QList<IConnection *> m_Connections;
+    QList<ServerCommand *> m_ServerCommands;
+    QDockWidget *m_DockWidget;
+    IConnection *m_CurrentConnection;
 
-private:
-    Ui::ConnectionWidget *ui;
+protected slots:
+    void connectionReadyRecieve();
+    void connectionStateChanged();
+
+    friend class ConnectionWidget;
 };
 
 } // namespace OpenSpeedShop
 } // namespace Plugins
-#endif // CONNECTIONWIDGET_H
+#endif // CONNECTIONMANAGER_H

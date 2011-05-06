@@ -1,5 +1,5 @@
 /*!
-   \file DataModel.h
+   \file DataItem.h
    \author Dane Gardner <dane.gardner@gmail.com>
    \version 
 
@@ -25,46 +25,45 @@
 
  */
 
-#ifndef DATAMODEL_H
-#define DATAMODEL_H
+#ifndef DATAITEM_H
+#define DATAITEM_H
 
-#include <QAbstractItemModel>
-#include <QtXml/QDomDocument>
-#include <QtXml/QDomElement>
-#include "DataItem.h"
+#include <QVariant>
 
 namespace Plugins {
-namespace ViewManager {
+namespace OpenSpeedShop {
 
-class DataModel : public QAbstractItemModel
+class DataItem
 {
-    Q_OBJECT
 public:
-    explicit DataModel(QObject *parent = 0);
-    ~DataModel();
+    DataItem(const QString &type, const QVariant &data, DataItem *parent);
+    ~DataItem();
 
-    void loadData(QString xml);
-    QString saveData() const;
+    int columnCount() const;
+    DataItem *column(int column);
+    QString columnType(int column) const;
+    QVariant columnData(int column) const;
+    void addColumn(DataItem *columnItem);
 
-    /* QAbstractItemModel interface */
-    QModelIndex index(int row, int column, const QModelIndex &parent) const;
-    QModelIndex parent(const QModelIndex &child) const;
-    int rowCount(const QModelIndex &parent) const;
-    int columnCount(const QModelIndex &parent) const;
-    QVariant data(const QModelIndex &index, int role) const;
+    int childCount() const;
+    DataItem *child(int row);
+    void addChild(DataItem *childItem);
 
-signals:
-
-public slots:
+    DataItem *parent();
+    int row() const;
 
 protected:
-    DataItem *createDataItem(QDomElement element, DataItem *parent);
-    DataItem *m_RootDataItem;
+    DataItem *m_Parent;
 
+    QString m_Type;
+    QVariant m_Data;
+
+    QList<DataItem *> m_Columns;
+    QList<DataItem *> m_Rows;
 
 };
 
-} // namespace ViewManager
+} // namespace OpenSpeedShop
 } // namespace Plugins
 
-#endif // DATAMODEL_H
+#endif // DATAITEM_H

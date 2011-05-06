@@ -30,15 +30,16 @@
 #include "DirectConnectionPage.h"
 #include <SettingManager/SettingManager.h>
 
+using namespace Plugins::OpenSpeedShop;
+
 namespace Plugins {
-namespace ConnectionManager {
+namespace DirectConnection {
 
 /*! \class DirectConnection
     \brief Handles the interaction with a standard, remote (or local) TCP
            connected server.
     \sa DirectConnectionPage, ConnectionManager
  */
-
 
 DirectConnection::DirectConnection(QObject *parent) :
     IConnection(parent)
@@ -229,6 +230,6 @@ QString DirectConnection::receive()
 }
 
 
-} // namespace OpenSpeedShop
+} // namespace DirectConnection
 } // namespace Plugins
 

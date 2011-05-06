@@ -25,57 +25,48 @@
 
  */
 
-#ifndef CONNECTIONMANAGER_H
-#define CONNECTIONMANAGER_H
+#ifndef DIRECTCONNECTIONPLUGIN_H
+#define DIRECTCONNECTIONPLUGIN_H
 
 #include <QObject>
-#include <QList>
-#include <QDockWidget>
-#include <QUuid>
-#include <QGridLayout>
+#include <PluginManager/IPlugin.h>
 
 namespace Plugins {
-namespace ConnectionManager {
+namespace DirectConnection {
 
-class IConnection;
-class ServerCommand;
+class DirectConnection;
 
-class ConnectionManager : public QObject
+class DirectConnectionPlugin : public QObject, public IPlugin
 {
     Q_OBJECT
+    Q_INTERFACES(IPlugin)
+
 public:
-    static ConnectionManager *instance();
-    bool initialize();
+    explicit DirectConnectionPlugin(QObject *parent = 0);
+    ~DirectConnectionPlugin();
+
+    bool initialize(QStringList &args, QString *err);
     void shutdown();
 
-    void registerConnection(IConnection *connection);
-
-    IConnection *currentConnection();
-    bool sendCommand(ServerCommand *command);
+    QString name();
+    QString version();
+    QList<Dependency> dependencies();
 
 signals:
-    void connectionRegistered(IConnection *connection);
-    void currentConnectionChanged();
+
+public slots:
 
 protected:
-    ConnectionManager(QObject *parent = 0);
-    ~ConnectionManager();
+    QString m_Name;
+    QString m_Version;
+    QList<Dependency> m_Dependencies;
+
     void readSettings();
     void writeSettings();
-    void setCurrentConnection(IConnection *connection);
 
-    QList<IConnection *> m_Connections;
-    QList<ServerCommand *> m_ServerCommands;
-    QDockWidget *m_DockWidget;
-    IConnection *m_CurrentConnection;
-
-protected slots:
-    void connectionReadyRecieve();
-    void connectionStateChanged();
-
-    friend class ConnectionWidget;
 };
 
-} // namespace OpenSpeedShop
+} // namespace DirectConnection
 } // namespace Plugins
-#endif // CONNECTIONMANAGER_H
+
+#endif // DIRECTCONNECTIONPLUGIN_H

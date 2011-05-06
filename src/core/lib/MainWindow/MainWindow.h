@@ -36,6 +36,7 @@
 #include <SettingManager/SettingManager.h>
 #include <PluginManager/PluginManager.h>
 
+#include "MainWindowLibrary.h"
 #include "MainSettingPageFactory.h"
 #include "NotificationWidget.h"
 
@@ -46,7 +47,7 @@ namespace Ui {
     class MainWindow;
 }
 
-class MainWindow : public QMainWindow
+class MAINWINDOW_EXPORT MainWindow : public QMainWindow
 {
     Q_OBJECT
 

@@ -1,5 +1,5 @@
 /*!
-   \file 
+   \file DataModel.h
    \author Dane Gardner <dane.gardner@gmail.com>
    \version 
 
@@ -25,55 +25,46 @@
 
  */
 
-#include "IConnection.h"
+#ifndef DATAMODEL_H
+#define DATAMODEL_H
+
+#include <QAbstractItemModel>
+#include <QtXml/QDomDocument>
+#include <QtXml/QDomElement>
+#include "DataItem.h"
 
 namespace Plugins {
-namespace ConnectionManager {
+namespace OpenSpeedShop {
 
-/*! \class IConnection
-    \brief Interface definition for a connection object that can be
-           registered with the ConnectionManager.
-    \sa ConnectionManager
- */
-
-//! \todo Document ConnectionManager::IConnection more completely
-
-/*! \fn IConnection::IConnection()
-    \brief
- */
-IConnection::IConnection(QObject *parent) :
-    QObject(parent)
+class DataModel : public QAbstractItemModel
 {
-}
+    Q_OBJECT
+public:
+    explicit DataModel(QObject *parent = 0);
+    ~DataModel();
 
-/*! \fn IConnection::~IConnection()
-    \brief
- */
+    void loadData(QString xml);
+    QString saveData() const;
 
-/*! \fn IConnection::connectToServer()
-    \brief
- */
+    /* QAbstractItemModel interface */
+    QModelIndex index(int row, int column, const QModelIndex &parent) const;
+    QModelIndex parent(const QModelIndex &child) const;
+    int rowCount(const QModelIndex &parent) const;
+    int columnCount(const QModelIndex &parent) const;
+    QVariant data(const QModelIndex &index, int role) const;
 
-/*! \fn IConnection::disconnectFromServer()
-    \brief
- */
+signals:
 
-/*! \fn IConnection::connectingToServer()
-    \brief
- */
+public slots:
 
-/*! \fn IConnection::connectedToServer()
-    \brief
- */
+protected:
+    DataItem *createDataItem(QDomElement element, DataItem *parent);
+    DataItem *m_RootDataItem;
 
-/*! \fn IConnection::disconnectingFromServer()
-    \brief
- */
 
-/*! \fn IConnection::disconnectedFromServer()
-    \brief
- */
-
+};
 
 } // namespace OpenSpeedShop
 } // namespace Plugins
+
+#endif // DATAMODEL_H

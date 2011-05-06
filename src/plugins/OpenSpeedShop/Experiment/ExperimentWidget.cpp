@@ -1,8 +1,7 @@
 #include "ExperimentWidget.h"
 #include "ui_ExperimentWidget.h"
 
-#include <ConnectionManager/ConnectionManager.h>
-#include <ConnectionManager/ServerCommand.h>
+#include "ConnectionManager/ConnectionManager.h"
 
 namespace Plugins {
 namespace OpenSpeedShop {
@@ -30,8 +29,7 @@ void ExperimentWidget::load()
     // Ensure that we're connected to a server
     // Start sending commands
 
-//    Plugins::ConnectionManager::ConnectionManager *connectionManager =
-//            Plugins::ConnectionManager::ConnectionManager::instance();
+//    ConnectionManager *connectionManager = ConnectionManager::instance();
 //    connectionManager->setObjectName("test");
 
 

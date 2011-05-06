@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Plugins::ConnectionManager::ConnectionWidget</class>
- <widget class="QWidget" name="Plugins::ConnectionManager::ConnectionWidget">
+ <class>Plugins::OpenSpeedShop::ConnectionWidget</class>
+ <widget class="QWidget" name="Plugins::OpenSpeedShop::ConnectionWidget">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -44,7 +44,7 @@
         <string>...</string>
        </property>
        <property name="icon">
-        <iconset resource="../OpenSpeedShop/Resources/OpenSpeedShop.qrc">
+        <iconset resource="../Resources/OpenSpeedShop.qrc">
          <normaloff>:/OpenSpeedShop/connect.svg</normaloff>
          <normalon>:/OpenSpeedShop/disconnect.svg</normalon>:/OpenSpeedShop/connect.svg</iconset>
        </property>
@@ -61,7 +61,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="../OpenSpeedShop/Resources/OpenSpeedShop.qrc"/>
+  <include location="../Resources/OpenSpeedShop.qrc"/>
  </resources>
  <connections/>
 </ui>

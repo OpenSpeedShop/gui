@@ -32,11 +32,12 @@
 #include <QString>
 #include <QIcon>
 #include "ISettingPage.h"
+#include "SettingManagerLibrary.h"
 
 namespace Core {
 namespace SettingManager {
 
-class ISettingPageFactory
+class SETTINGMANAGER_EXPORT ISettingPageFactory
 {
 public:
     virtual ~ISettingPageFactory() {}

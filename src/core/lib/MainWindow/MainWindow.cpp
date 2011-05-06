@@ -29,6 +29,10 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
 
+#ifdef MAINWINDOW_DEBUG
+#  include <QDebug>
+#endif
+
 namespace Core {
 namespace MainWindow {
 
@@ -51,6 +55,10 @@ MainWindow *m_Instance;
  */
 MainWindow *MainWindow::instance()
 {
+#ifdef MAINWINDOW_DEBUG
+    qDebug() << __FILE__ << ":" << __LINE__ << "\tMainWindow::instance";
+#endif
+
     return m_Instance ? m_Instance : m_Instance = new MainWindow();
 }
 
@@ -64,6 +72,10 @@ MainWindow::MainWindow(QWidget *parent) :
     m_Initialized(false),
   ui(new Ui::MainWindow)
 {
+#ifdef MAINWINDOW_DEBUG
+    qDebug() << __FILE__ << ":" << __LINE__ << "\tMainWindow::MainWindow";
+#endif
+
     ui->setupUi(this);
 
     initActions();
@@ -76,6 +88,10 @@ MainWindow::MainWindow(QWidget *parent) :
  */
 MainWindow::~MainWindow()
 {
+#ifdef MAINWINDOW_DEBUG
+    qDebug() << __FILE__ << ":" << __LINE__ << "\tMainWindow::~MainWindow";
+#endif
+
     delete ui;
 
     if(m_Instance)
@@ -84,6 +100,10 @@ MainWindow::~MainWindow()
 
 bool MainWindow::initialize()
 {
+#ifdef MAINWINDOW_DEBUG
+    qDebug() << __FILE__ << ":" << __LINE__ << "\tMainWindow::initialize";
+#endif
+
     readSettings();
 
     Core::SettingManager::SettingManager *settingManager =
@@ -95,11 +115,19 @@ bool MainWindow::initialize()
 
 bool MainWindow::initialized()
 {
+#ifdef MAINWINDOW_DEBUG
+    qDebug() << __FILE__ << ":" << __LINE__ << "\tMainWindow::initialized";
+#endif
+
     return m_Initialized;
 }
 
 void MainWindow::shutdown()
 {
+#ifdef MAINWINDOW_DEBUG
+    qDebug() << __FILE__ << ":" << __LINE__ << "\tMainWindow::shutdown";
+#endif
+
     writeSettings();
 }
 
@@ -110,6 +138,10 @@ void MainWindow::shutdown()
  */
 void MainWindow::readSettings()
 {
+#ifdef MAINWINDOW_DEBUG
+    qDebug() << __FILE__ << ":" << __LINE__ << "\tMainWindow::readSettings";
+#endif
+
     SettingManager::SettingManager *settingManager =
             SettingManager::SettingManager::instance();
 
@@ -133,6 +165,10 @@ void MainWindow::readSettings()
  */
 void MainWindow::writeSettings()
 {
+#ifdef MAINWINDOW_DEBUG
+    qDebug() << __FILE__ << ":" << __LINE__ << "\tMainWindow::writeSettings";
+#endif
+
     SettingManager::SettingManager *settingManager =
             SettingManager::SettingManager::instance();
 
@@ -149,10 +185,17 @@ void MainWindow::writeSettings()
 
 void MainWindow::initActions()
 {
+#ifdef MAINWINDOW_DEBUG
+    qDebug() << __FILE__ << ":" << __LINE__ << "\tMainWindow::initActions";
+#endif
 }
 
 QProgressBar *MainWindow::addProgressBar()
 {
+#ifdef MAINWINDOW_DEBUG
+    qDebug() << __FILE__ << ":" << __LINE__ << "\tMainWindow::addProgressBar";
+#endif
+
     QProgressBar *retval = new QProgressBar(this);
     retval->hide();
     retval->setTextVisible(false);
@@ -164,12 +207,20 @@ QProgressBar *MainWindow::addProgressBar()
 
 void MainWindow::removeProgressBar(QProgressBar *progressBar)
 {
+#ifdef MAINWINDOW_DEBUG
+    qDebug() << __FILE__ << ":" << __LINE__ << "\tMainWindow::removeProgressBar";
+#endif
+
     progressBar->setParent(NULL);
     ui->statusbar->removeWidget(progressBar);
 }
 
 void MainWindow::setCentralWidget(QWidget *widget)
 {
+#ifdef MAINWINDOW_DEBUG
+    qDebug() << __FILE__ << ":" << __LINE__ << "\tMainWindow::setCentralWidget";
+#endif
+
     QWidget *oldWidget = ui->placehoderWidget;
     ui->centralLayout->removeWidget(oldWidget);
     delete oldWidget;
@@ -182,6 +233,10 @@ void MainWindow::setCentralWidget(QWidget *widget)
 void MainWindow::notify(const QString &text, NotificationWidget::Icon icon, NotificationWidget::StandardButtons buttons,
             const QObject *reciever, const char *member)
 {
+#ifdef MAINWINDOW_DEBUG
+    qDebug() << __FILE__ << ":" << __LINE__ << "\tMainWindow::notify";
+#endif
+
     NotificationWidget *notificationWidget = new NotificationWidget(text, icon, buttons, reciever, member, this);
     ui->centralLayout->insertWidget(0, notificationWidget);
     notificationWidget->setFocus();

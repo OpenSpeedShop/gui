@@ -1,5 +1,5 @@
 /*!
-   \file DataItem.h
+   \file 
    \author Dane Gardner <dane.gardner@gmail.com>
    \version 
 
@@ -25,45 +25,51 @@
 
  */
 
-#ifndef DATAITEM_H
-#define DATAITEM_H
-
-#include <QVariant>
+#include "IConnection.h"
 
 namespace Plugins {
-namespace ViewManager {
+namespace OpenSpeedShop {
 
-class DataItem
-{
-public:
-    DataItem(const QString &type, const QVariant &data, DataItem *parent);
-    ~DataItem();
+/*! \class IConnection
+    \brief Interface definition for a connection object that can be
+           registered with the ConnectionManager.
+    \sa ConnectionManager
+ */
 
-    int columnCount() const;
-    DataItem *column(int column);
-    QString columnType(int column) const;
-    QVariant columnData(int column) const;
-    void addColumn(DataItem *columnItem);
+//! \todo Document ConnectionManager::IConnection more completely
 
-    int childCount() const;
-    DataItem *child(int row);
-    void addChild(DataItem *childItem);
+/*! \fn IConnection::IConnection()
+    \brief
+ */
 
-    DataItem *parent();
-    int row() const;
+/*! \fn IConnection::~IConnection()
+    \brief
+ */
 
-protected:
-    DataItem *m_Parent;
+/*! \fn IConnection::connectToServer()
+    \brief
+ */
 
-    QString m_Type;
-    QVariant m_Data;
+/*! \fn IConnection::disconnectFromServer()
+    \brief
+ */
 
-    QList<DataItem *> m_Columns;
-    QList<DataItem *> m_Rows;
+/*! \fn IConnection::connectingToServer()
+    \brief
+ */
 
-};
+/*! \fn IConnection::connectedToServer()
+    \brief
+ */
 
-} // namespace ViewManager
+/*! \fn IConnection::disconnectingFromServer()
+    \brief
+ */
+
+/*! \fn IConnection::disconnectedFromServer()
+    \brief
+ */
+
+
+} // namespace OpenSpeedShop
 } // namespace Plugins
-
-#endif // DATAITEM_H

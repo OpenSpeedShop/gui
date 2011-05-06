@@ -110,6 +110,10 @@
 #include <PluginManager/PluginManager.h>
 #include <MainWindow/MainWindow.h>
 
+#ifdef MAIN_DEBUG
+#  include <QDebug>
+#endif
+
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
@@ -119,12 +123,20 @@ int main(int argc, char *argv[])
     QCoreApplication::setApplicationName("OpenSpeedShop GUI");
     QCoreApplication::setApplicationVersion("0.1");
 
+#ifdef MAIN_DEBUG
+    qDebug() << __FILE__ << ":" << __LINE__ << "\tInstantiating the singleton classes";
+#endif
+
     Core::SettingManager::SettingManager *settingManager =
             Core::SettingManager::SettingManager::instance();
     Core::MainWindow::MainWindow *mainWindow =
             Core::MainWindow::MainWindow::instance();
     Core::PluginManager::PluginManager *pluginManager =
             Core::PluginManager::PluginManager::instance();
+
+#ifdef MAIN_DEBUG
+    qDebug() << __FILE__ << ":" << __LINE__ << "\tInitializing the singleton classes";
+#endif
 
     if(!settingManager->initialized())
         settingManager->initialize();
@@ -133,9 +145,22 @@ int main(int argc, char *argv[])
     if(!pluginManager->initialized())
         pluginManager->initialize();
 
+#ifdef MAIN_DEBUG
+    qDebug() << __FILE__ << ":" << __LINE__ << "\tLoading plugins";
+#endif
+
     pluginManager->loadPlugins();
+
+#ifdef MAIN_DEBUG
+    qDebug() << __FILE__ << ":" << __LINE__ << "\tShowing the MainWindow";
+#endif
+
     mainWindow->show();
     int retval = a.exec();
+
+#ifdef MAIN_DEBUG
+    qDebug() << __FILE__ << ":" << __LINE__ << "\tShutting down singleton classes";
+#endif
 
     if(pluginManager->initialized())
         pluginManager->shutdown();
@@ -144,9 +169,17 @@ int main(int argc, char *argv[])
     if(settingManager->initialized())
         settingManager->shutdown();
 
+#ifdef MAIN_DEBUG
+    qDebug() << __FILE__ << ":" << __LINE__ << "\tDeleting singleton classes";
+#endif
+
     delete mainWindow;
     delete pluginManager;
     delete settingManager;
+
+#ifdef MAIN_DEBUG
+    qDebug() << __FILE__ << ":" << __LINE__ << "\tDone";
+#endif
 
     return retval;
 }

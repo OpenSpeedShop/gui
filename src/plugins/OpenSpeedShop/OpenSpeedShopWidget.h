@@ -3,6 +3,7 @@
 
 #include <QTabWidget>
 #include <MainWindow/MainWindow.h>
+#include "OpenSpeedShopLibrary.h"
 #include "Experiment/ExperimentWidget.h"
 
 namespace Plugins {
@@ -12,7 +13,7 @@ namespace Ui {
     class OpenSpeedShopWidget;
 }
 
-class OpenSpeedShopWidget : public QTabWidget
+class OPENSPEEDSHOP_EXPORT OpenSpeedShopWidget : public QTabWidget
 {
     Q_OBJECT
 

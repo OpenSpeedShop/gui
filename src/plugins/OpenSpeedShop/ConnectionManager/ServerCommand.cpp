@@ -3,7 +3,7 @@
 #include "IConnection.h"
 
 namespace Plugins {
-namespace ConnectionManager {
+namespace OpenSpeedShop {
 
 ServerCommand::ServerCommand(QDomDocument command, QObject *parent) :
     QObject(parent)
@@ -62,5 +62,5 @@ void ServerCommand::setState(ServerCommandStates state)
     emit stateChanged();
 }
 
-} // namespace ConnectionManager
+} // namespace OpenSpeedShop
 } // namespace Plugins

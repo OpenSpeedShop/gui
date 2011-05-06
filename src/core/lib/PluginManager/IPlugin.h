@@ -31,6 +31,7 @@
 #include <QtCore>
 #include <QString>
 #include <QStringList>
+#include "PluginManagerLibrary.h"
 
 struct Dependency {
     QString name;
@@ -42,7 +43,7 @@ struct Dependency {
     }
 };
 
-class IPlugin
+class PLUGINMANAGER_EXPORT IPlugin
 {
 public:
     IPlugin();

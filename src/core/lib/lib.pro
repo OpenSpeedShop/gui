@@ -32,7 +32,11 @@ HEADERS +=  ActionManager/ActionManager.h \
             PluginManager/PluginSettingPageFactory.h \
             MainWindow/MainSettingPage.h \
             MainWindow/MainSettingPageFactory.h \
-            MainWindow/NotificationWidget.h
+            MainWindow/NotificationWidget.h \
+    PluginManager/PluginManagerLibrary.h \
+    SettingManager/SettingManagerLibrary.h \
+    MainWindow/MainWindowLibrary.h \
+    ActionManager/ActionManagerLibrary.h
 
 SOURCES +=  ActionManager/ActionManager.cpp \
             PluginManager/PluginManager.cpp \
@@ -58,6 +62,8 @@ FORMS   +=  SettingManager/SettingDialog.ui \
 LIBS    += 
 
 RESOURCES += Resources/Core.qrc
+
+DEFINES += MAINWINDOW_LIBRARY PLUGINMANAGER_LIBRARY SETTINGMANAGER_LIBRARY ACTIONMANAGER_LIBRARY
 
 target.path = /lib
 INSTALLS += target

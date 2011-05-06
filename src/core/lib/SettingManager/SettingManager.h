@@ -34,6 +34,7 @@
 
 #include "MainWindow/MainWindow.h"
 
+#include "SettingManagerLibrary.h"
 #include "ISettingPageFactory.h"
 #include "SettingDialog.h"
 
@@ -41,7 +42,7 @@
 namespace Core {
 namespace SettingManager {
 
-class SettingManager : public QObject
+class SETTINGMANAGER_EXPORT SettingManager : public QObject
 {
     Q_OBJECT
 public:

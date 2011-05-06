@@ -5,7 +5,7 @@
 
 
 namespace Plugins {
-namespace ConnectionManager {
+namespace OpenSpeedShop {
 
 IServerAdapter::IServerAdapter(QObject *parent) :
     QObject(parent)
@@ -27,5 +27,5 @@ void IServerAdapter::rawCommand(QString command)
 }
 
 
-} // namespace ConnectionManager
+} // namespace OpenSpeedShop
 } // namespace Plugins

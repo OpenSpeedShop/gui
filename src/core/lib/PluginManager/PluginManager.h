@@ -37,7 +37,7 @@
 namespace Core {
 namespace PluginManager {
 
-class PluginManager : public QObject
+class PLUGINMANAGER_EXPORT PluginManager : public QObject
 {
     Q_OBJECT
 public:

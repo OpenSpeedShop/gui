@@ -15,18 +15,25 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
-
 include(../plugins.pri)
-TARGET   =  ViewManager
 
-SOURCES += ViewManagerPlugin.cpp \
-    DataModel.cpp \
-    DataItem.cpp
-HEADERS += ViewManagerPlugin.h \
-    DataModel.h \
-    DataItem.h
-FORMS +=    
-RESOURCES += 
+TARGET             = DirectConnection
 
-LIBS    +=  -lCore
-QT += xml
+SOURCES           += DirectConnectionPlugin.cpp \
+                     DirectConnection.cpp \
+                     DirectConnectionPage.cpp
+             
+
+HEADERS           += DirectConnectionPlugin.h \
+                     DirectConnection.h \
+                     DirectConnectionPage.h
+
+FORMS             += DirectConnectionPage.ui
+
+RESOURCES         +=
+
+QT                += network xml
+
+INCLUDEPATH       += $$quote($${SOURCE_PATH}/plugins/OpenSpeedShop)
+DEPENDPATH        += $$quote($${SOURCE_PATH}/plugins/OpenSpeedShop)
+LIBS              += -L$$quote(${BUILDDIR}/plugins/OpenSpeedShop/debug) -lOpenSpeedShop

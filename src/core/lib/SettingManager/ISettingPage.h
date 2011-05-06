@@ -30,11 +30,12 @@
 
 #include <QtPlugin>
 #include <QWidget>
+#include "SettingManagerLibrary.h"
 
 namespace Core {
 namespace SettingManager {
 
-class ISettingPage : public QWidget
+class SETTINGMANAGER_EXPORT ISettingPage : public QWidget
 {
     Q_OBJECT
 public:

@@ -32,11 +32,12 @@
 #include <QString>
 #include <QList>
 #include "MenuItem.h"
+#include "ActionManagerLibrary.h"
 
 namespace Core {
 namespace ActionManager {
 
-class ActionManager : public QObject
+class ACTIONMANAGER_EXPORT ActionManager : public QObject
 {
     Q_OBJECT
 public:

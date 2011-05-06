@@ -33,7 +33,7 @@
 #include "IConnection.h"
 
 namespace Plugins {
-namespace ConnectionManager {
+namespace OpenSpeedShop {
 
 /*! \class ConnectionWidget
     \brief Widget that displays connection data and settings to the user in a

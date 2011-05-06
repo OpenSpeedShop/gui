@@ -31,7 +31,7 @@
 #include "DirectConnection.h"
 
 namespace Plugins {
-namespace ConnectionManager {
+namespace DirectConnection {
 
 /*! \class DirectConnectionPage
     \brief Widget that displays connection data and settings to the user for
@@ -74,5 +74,5 @@ void DirectConnectionPage::on_btnSetDefault_clicked()
 }
 
 
-} // namespace OpenSpeedShop
+} // namespace DirectConnection
 } // namespace Plugins

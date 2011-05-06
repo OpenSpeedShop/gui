@@ -25,39 +25,51 @@
 
  */
 
-#ifndef DIRECTCONNECTIONPAGE_H
-#define DIRECTCONNECTIONPAGE_H
+#ifndef CONNECTIONWIDGET_H
+#define CONNECTIONWIDGET_H
 
 #include <QWidget>
+#include <QProgressBar>
+#include <QTimer>
+#include <QMessageBox>
+
 
 namespace Plugins {
-namespace ConnectionManager {
+namespace OpenSpeedShop {
 
-class DirectConnection;
-namespace Ui { class DirectConnectionPage; }
+class IConnection;
+namespace Ui { class ConnectionWidget; }
 
-class DirectConnectionPage : public QWidget
+class ConnectionWidget : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit DirectConnectionPage(DirectConnection *parentConnection, QWidget *parent = 0);
-    ~DirectConnectionPage();
+    explicit ConnectionWidget(QWidget *parent = 0);
+    ~ConnectionWidget();
 
 protected slots:
-    void on_txtHostname_textChanged();
-    void on_txtPort_textChanged();
-    void on_btnSetDefault_clicked();
+    void connectionRegistered(IConnection *);
+    void on_btnConnect_clicked();
+    void on_btnConnect_toggled(bool checked);
+    void on_cmbConnectionType_currentIndexChanged(int index);
+
+    void connectionStateChanged();
+    void progress();
 
 protected:
-    DirectConnection *m_ParentConnection;
+    void startTimeOut(int msec = 3500);
+    void stopTimeOut();
+
+    QProgressBar *m_ProgressBar;
+    QTimer m_ProgressTimer;
+    QMessageBox m_ErrorMessageBox;
+    QMessageBox m_TimeoutMessageBox;
 
 private:
-    Ui::DirectConnectionPage *ui;
+    Ui::ConnectionWidget *ui;
 };
-
 
 } // namespace OpenSpeedShop
 } // namespace Plugins
-
-#endif // DIRECTCONNECTIONPAGE_H
+#endif // CONNECTIONWIDGET_H

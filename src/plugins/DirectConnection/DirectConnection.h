@@ -25,48 +25,61 @@
 
  */
 
-#ifndef CONNECTIONMANAGERPLUGIN_H
-#define CONNECTIONMANAGERPLUGIN_H
+#ifndef DIRECTCONNECTION_H
+#define DIRECTCONNECTION_H
 
 #include <QObject>
-#include <PluginManager/IPlugin.h>
+#include <QTcpSocket>
+#include <QDataStream>
+#include <ConnectionManager/IConnection.h>
+
+using namespace Plugins::OpenSpeedShop;
 
 namespace Plugins {
-namespace ConnectionManager {
+namespace DirectConnection {
 
-class ConnectionManager;
+class DirectConnectionPage;
 
-class ConnectionManagerPlugin : public QObject, public IPlugin
+class DirectConnection : public IConnection
 {
     Q_OBJECT
-    Q_INTERFACES(IPlugin)
+    Q_INTERFACES(Plugins::OpenSpeedShop::IConnection)
 
 public:
-    explicit ConnectionManagerPlugin(QObject *parent = 0);
-    ~ConnectionManagerPlugin();
+    explicit DirectConnection(QObject *parent = 0);
+    ~DirectConnection();
 
-    bool initialize(QStringList &args, QString *err);
-    void shutdown();
+    QWidget *page();
+    ConnectionStates state();
+    QString errorMessage();
+    void connectToServer();
+    void disconnectFromServer();
+    void abort();
 
-    QString name();
-    QString version();
-    QList<Dependency> dependencies();
+    void send(QString command);
+    QString receive();
 
-signals:
-
-public slots:
+protected slots:
+    void readReady();
+    void error(QAbstractSocket::SocketError);
+    void connected();
+    void disconnected();
 
 protected:
-    QString m_Name;
-    QString m_Version;
-    QList<Dependency> m_Dependencies;
-
-    void readSettings();
     void writeSettings();
+    void readSettings();
+    void setState(ConnectionStates state);
 
+    QTcpSocket *m_TcpSocket;
+    QTimer *m_TimeOut;
+    QString m_HostName;
+    int m_Port;
+    ConnectionStates m_State;
+    QString m_ErrorMessage;
+
+    friend class DirectConnectionPage;
 };
 
-} // namespace ConnectionManager
+} // namespace DirectConnection
 } // namespace Plugins
-
-#endif // CONNECTIONMANAGERPLUGIN_H
+#endif // DIRECTCONNECTION_H

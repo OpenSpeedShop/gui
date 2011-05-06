@@ -4,9 +4,10 @@
 #include <QObject>
 #include <QDomDocument>
 #include <QUuid>
+#include "ConnectionManagerLibrary.h"
 
 namespace Plugins {
-namespace ConnectionManager {
+namespace OpenSpeedShop {
 
 class IConnection;
 
@@ -49,7 +50,7 @@ protected:
     friend class ConnectionManager;
 };
 
-} // namespace ConnectionManager
+} // namespace OpenSpeedShop
 } // namespace Plugins
 
 #endif // SERVERCOMMAND_H

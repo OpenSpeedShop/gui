@@ -28,7 +28,7 @@
 #include "DataItem.h"
 
 namespace Plugins {
-namespace ViewManager {
+namespace OpenSpeedShop {
 
 /*! \class DataItem
     \brief DataItem objects are used to represent heirarchical data returned
@@ -186,5 +186,5 @@ int DataItem::row() const
 
 
 
-} // namespace ViewManager
+} // namespace OpenSpeedShop
 } // namespace Plugins

@@ -28,6 +28,11 @@
 #include "ActionManager.h"
 #include "MainWindow/MainWindow.h"
 
+#ifdef ACTIONMANAGER_DEBUG
+#  include <QDebug>
+#endif
+
+
 namespace Core {
 namespace ActionManager {
 

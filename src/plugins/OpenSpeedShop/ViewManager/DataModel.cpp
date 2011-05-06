@@ -28,7 +28,7 @@
 #include "DataModel.h"
 
 namespace Plugins {
-namespace ViewManager {
+namespace OpenSpeedShop {
 
 /*! \class Plugins::ViewManager::DataModel
     \brief A DataModel is used as the interface between a data view and the set
@@ -286,5 +286,5 @@ QVariant DataModel::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
-} // namespace ViewManager
+} // namespace OpenSpeedShop
 } // namespace Plugins

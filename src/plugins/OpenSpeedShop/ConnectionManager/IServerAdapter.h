@@ -2,9 +2,10 @@
 #define ISERVERADAPTER_H
 
 #include <QObject>
+#include "ConnectionManagerLibrary.h"
 
 namespace Plugins {
-namespace ConnectionManager {
+namespace OpenSpeedShop {
 
 class ConnectionManager;
 class ServerCommand;
@@ -14,7 +15,7 @@ enum ExperimentModes {
     ExperimentMode_Online
 };
 
-class IServerAdapter : public QObject
+class CONNECTIONMANAGER_EXPORT IServerAdapter : public QObject
 {
     Q_OBJECT
 public:
@@ -77,7 +78,7 @@ protected:
 
 };
 
-} // namespace ConnectionManager
+} // namespace OpenSpeedShop
 } // namespace Plugins
 
 #endif // ISERVERADAPTER_H
