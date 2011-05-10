@@ -26,8 +26,6 @@ extern ParseResult *p_parse_result;
 extern InputLineObject *Current_ILO;
 extern CommandObject *Current_CO;
 
-//bool Start_COMMAND_LINE_Mode (CMDWID my_window, int argc, char ** argv, bool need_cli, bool need_gui, OpenSpeedShop_Start_Modes oss_start_mode);
-
 class OpenSpeedShopCLI {
 public:
   OpenSpeedShopCLI();
@@ -46,6 +44,8 @@ protected:
 
   int m_windowID;
   static int m_windowCount;
+
+  inline std::string &trim(std::string &s);
 
 };
 

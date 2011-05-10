@@ -30,13 +30,15 @@
 
 #include <QtCore>
 #include <PluginManager/IPlugin.h>
+#include <ConnectionManager/IConnection.h>
+#include <ConnectionManager/ConnectionManager.h>
 
 namespace Plugins {
 namespace Example {
 
-class ExamplePlugin : public QObject, public IPlugin {
+class ExamplePlugin : public QObject, public Core::PluginManager::IPlugin {
 Q_OBJECT
-Q_INTERFACES(IPlugin)
+Q_INTERFACES(Core::PluginManager::IPlugin)
 
 public:
     ExamplePlugin();
@@ -47,12 +49,12 @@ public:
     void shutdown();
     QString name();
     QString version();
-    QList<Dependency> dependencies();
+    QList<Core::PluginManager::Dependency> dependencies();
 
 protected:
     QString m_Name;
     QString m_Version;
-    QList<Dependency> m_Dependencies;
+    QList<Core::PluginManager::Dependency> m_Dependencies;
 
 };
 

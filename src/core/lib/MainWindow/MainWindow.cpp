@@ -56,7 +56,7 @@ MainWindow *m_Instance;
 MainWindow *MainWindow::instance()
 {
 #ifdef MAINWINDOW_DEBUG
-    qDebug() << __FILE__ << ":" << __LINE__ << "\tMainWindow::instance";
+    qDebug() << __FILE__ << __LINE__ << "\tMainWindow::instance";
 #endif
 
     return m_Instance ? m_Instance : m_Instance = new MainWindow();
@@ -73,7 +73,7 @@ MainWindow::MainWindow(QWidget *parent) :
   ui(new Ui::MainWindow)
 {
 #ifdef MAINWINDOW_DEBUG
-    qDebug() << __FILE__ << ":" << __LINE__ << "\tMainWindow::MainWindow";
+    qDebug() << __FILE__ << __LINE__ << "\tMainWindow::MainWindow";
 #endif
 
     ui->setupUi(this);
@@ -89,7 +89,7 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
 #ifdef MAINWINDOW_DEBUG
-    qDebug() << __FILE__ << ":" << __LINE__ << "\tMainWindow::~MainWindow";
+    qDebug() << __FILE__ << __LINE__ << "\tMainWindow::~MainWindow";
 #endif
 
     delete ui;
@@ -101,7 +101,7 @@ MainWindow::~MainWindow()
 bool MainWindow::initialize()
 {
 #ifdef MAINWINDOW_DEBUG
-    qDebug() << __FILE__ << ":" << __LINE__ << "\tMainWindow::initialize";
+    qDebug() << __FILE__ << __LINE__ << "\tMainWindow::initialize";
 #endif
 
     readSettings();
@@ -116,7 +116,7 @@ bool MainWindow::initialize()
 bool MainWindow::initialized()
 {
 #ifdef MAINWINDOW_DEBUG
-    qDebug() << __FILE__ << ":" << __LINE__ << "\tMainWindow::initialized";
+    qDebug() << __FILE__ << __LINE__ << "\tMainWindow::initialized";
 #endif
 
     return m_Initialized;
@@ -125,7 +125,7 @@ bool MainWindow::initialized()
 void MainWindow::shutdown()
 {
 #ifdef MAINWINDOW_DEBUG
-    qDebug() << __FILE__ << ":" << __LINE__ << "\tMainWindow::shutdown";
+    qDebug() << __FILE__ << __LINE__ << "\tMainWindow::shutdown";
 #endif
 
     writeSettings();
@@ -139,7 +139,7 @@ void MainWindow::shutdown()
 void MainWindow::readSettings()
 {
 #ifdef MAINWINDOW_DEBUG
-    qDebug() << __FILE__ << ":" << __LINE__ << "\tMainWindow::readSettings";
+    qDebug() << __FILE__ << __LINE__ << "\tMainWindow::readSettings";
 #endif
 
     SettingManager::SettingManager *settingManager =
@@ -166,7 +166,7 @@ void MainWindow::readSettings()
 void MainWindow::writeSettings()
 {
 #ifdef MAINWINDOW_DEBUG
-    qDebug() << __FILE__ << ":" << __LINE__ << "\tMainWindow::writeSettings";
+    qDebug() << __FILE__ << __LINE__ << "\tMainWindow::writeSettings";
 #endif
 
     SettingManager::SettingManager *settingManager =
@@ -186,14 +186,14 @@ void MainWindow::writeSettings()
 void MainWindow::initActions()
 {
 #ifdef MAINWINDOW_DEBUG
-    qDebug() << __FILE__ << ":" << __LINE__ << "\tMainWindow::initActions";
+    qDebug() << __FILE__ << __LINE__ << "\tMainWindow::initActions";
 #endif
 }
 
 QProgressBar *MainWindow::addProgressBar()
 {
 #ifdef MAINWINDOW_DEBUG
-    qDebug() << __FILE__ << ":" << __LINE__ << "\tMainWindow::addProgressBar";
+    qDebug() << __FILE__ << __LINE__ << "\tMainWindow::addProgressBar";
 #endif
 
     QProgressBar *retval = new QProgressBar(this);
@@ -208,7 +208,7 @@ QProgressBar *MainWindow::addProgressBar()
 void MainWindow::removeProgressBar(QProgressBar *progressBar)
 {
 #ifdef MAINWINDOW_DEBUG
-    qDebug() << __FILE__ << ":" << __LINE__ << "\tMainWindow::removeProgressBar";
+    qDebug() << __FILE__ << __LINE__ << "\tMainWindow::removeProgressBar";
 #endif
 
     progressBar->setParent(NULL);
@@ -218,7 +218,7 @@ void MainWindow::removeProgressBar(QProgressBar *progressBar)
 void MainWindow::setCentralWidget(QWidget *widget)
 {
 #ifdef MAINWINDOW_DEBUG
-    qDebug() << __FILE__ << ":" << __LINE__ << "\tMainWindow::setCentralWidget";
+    qDebug() << __FILE__ << __LINE__ << "\tMainWindow::setCentralWidget";
 #endif
 
     QWidget *oldWidget = ui->placehoderWidget;
@@ -234,7 +234,7 @@ void MainWindow::notify(const QString &text, NotificationWidget::Icon icon, Noti
             const QObject *reciever, const char *member)
 {
 #ifdef MAINWINDOW_DEBUG
-    qDebug() << __FILE__ << ":" << __LINE__ << "\tMainWindow::notify";
+    qDebug() << __FILE__ << __LINE__ << "\tMainWindow::notify";
 #endif
 
     NotificationWidget *notificationWidget = new NotificationWidget(text, icon, buttons, reciever, member, this);

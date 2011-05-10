@@ -44,7 +44,7 @@ namespace DirectConnection {
 DirectConnection::DirectConnection(QObject *parent) :
     IConnection(parent)
 {
-    m_State = ConnectionState_Disconnected;
+    m_State = State_Disconnected;
 
     readSettings();
 
@@ -67,19 +67,19 @@ QWidget *DirectConnection::page()
 
 void DirectConnection::connectToServer()
 {
-    setState(ConnectionState_Connecting);
+    setState(State_Connecting);
     m_TcpSocket->connectToHost(m_HostName, m_Port);
 }
 
 void DirectConnection::disconnectFromServer()
 {
-    setState(ConnectionState_Disconnecting);
+    setState(State_Disconnecting);
     m_TcpSocket->disconnectFromHost();
 }
 
 void DirectConnection::abort()
 {
-    setState(ConnectionState_Disconnected);
+    setState(State_Disconnected);
     m_TcpSocket->abort();
 }
 
@@ -155,7 +155,7 @@ void DirectConnection::error(QAbstractSocket::SocketError error)
         break;
     }
 
-    setState(ConnectionState_Error);
+    setState(State_Error);
 }
 
 QString DirectConnection::errorMessage()
@@ -165,12 +165,12 @@ QString DirectConnection::errorMessage()
 
 void DirectConnection::connected()
 {
-    setState(ConnectionState_Connected);
+    setState(State_Connected);
 }
 
 void DirectConnection::disconnected()
 {
-    setState(ConnectionState_Disconnected);
+    setState(State_Disconnected);
 }
 
 void DirectConnection::writeSettings()
@@ -206,12 +206,12 @@ void DirectConnection::readSettings()
     settingManager->endGroup();
 }
 
-ConnectionStates DirectConnection::state()
+IConnection::States DirectConnection::state()
 {
     return m_State;
 }
 
-void DirectConnection::setState(ConnectionStates state)
+void DirectConnection::setState(States state)
 {
     m_State = state;
     emit stateChanged();

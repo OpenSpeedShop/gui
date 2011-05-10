@@ -35,17 +35,18 @@
 namespace Core {
 namespace ActionManager {
 
-enum MenuItemTypes {
-    MenuItemType_SubMenu,
-    MenuItemType_Group,
-    MenuItemType_Separator,
-    MenuItemType_Action
-};
-
 class MenuItem : public QObject
 {
     Q_OBJECT
 public:
+
+    enum Types {
+        Type_SubMenu,
+        Type_Group,
+        Type_Separator,
+        Type_Action
+    };
+
     explicit MenuItem(QObject *parent = 0);
     MenuItem(MenuItem *menuItem, QObject *parent = 0);
 
@@ -54,7 +55,7 @@ public:
 
     QAction *action();
 
-    MenuItemTypes menuItemType();
+    Types type();
 
     QList<MenuItem *> menuItems();
     void addMenuItem(MenuItem *menuItem);

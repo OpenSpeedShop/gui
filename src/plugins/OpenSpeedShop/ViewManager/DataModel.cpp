@@ -40,7 +40,7 @@ namespace OpenSpeedShop {
 
 
 /*!
-   \fn Plugins::ViewManager::DataModel::DataModel()
+   \fn DataModel::DataModel()
    \brief Constructs a DataModel with the given parent.
  */
 DataModel::DataModel(QObject *parent) :
@@ -50,7 +50,7 @@ DataModel::DataModel(QObject *parent) :
 }
 
 /*!
-   \fn Plugins::ViewManager::DataModel::~DataModel()
+   \fn DataModel::~DataModel()
    \brief Destroys the DataModel.
  */
 DataModel::~DataModel()
@@ -62,7 +62,7 @@ DataModel::~DataModel()
 }
 
 /*!
-   \fn Plugins::ViewManager::DataModel::loadData()
+   \fn DataModel::loadData()
    \brief Builds a data model out of DataItems from the provided XML string.
    \param xml A QString containing the XML document object model that
                describes this DataModel.
@@ -87,7 +87,7 @@ void DataModel::loadData(QString xml)
 }
 
 /*!
-   \fn Plugins::ViewManager::DataModel::createDataItem()
+   \fn DataModel::createDataItem()
    \brief Creates a DataItem from an XML element, including it's children.
 
           Columns are created from attribute data, whereas children are
@@ -127,7 +127,7 @@ DataItem *DataModel::createDataItem(QDomElement element, DataItem *parent)
 }
 
 /*!
-   \fn Plugins::ViewManager::DataModel::saveData()
+   \fn DataModel::saveData()
    \brief Generates an XML document object model from this DataModel's data set.
    \returns An XML document in flat text for easy file saving.
  */
@@ -140,7 +140,7 @@ QString DataModel::saveData() const
 
 /* -=] QAbstractItemModel interface [=- */
 /*!
-   \fn Plugins::ViewManager::DataModel::index()
+   \fn DataModel::index()
    \brief Returns the index of the item in the model specified by the given
           row, column and parent index.
 
@@ -176,7 +176,7 @@ QModelIndex DataModel::index(int row, int column, const QModelIndex &parent) con
 }
 
 /*!
-   \fn Plugins::ViewManager::DataModel::parent()
+   \fn DataModel::parent()
    \brief Returns the parent of the model item with the given index.
 
           If the item has no parent, an invalid QModelIndex is returned.
@@ -212,7 +212,7 @@ QModelIndex DataModel::parent(const QModelIndex &child) const
 }
 
 /*!
-   \fn Plugins::ViewManager::DataModel::rowCount()
+   \fn DataModel::rowCount()
    \brief Returns the number of rows under the given parent.
 
           When the parent is valid it means that rowCount is returning the
@@ -232,7 +232,7 @@ int DataModel::rowCount(const QModelIndex &parent) const
 }
 
 /*!
-   \fn Plugins::ViewManager::DataModel::columnCount()
+   \fn DataModel::columnCount()
    \brief Returns the number of columns for the children of the given parent.
 
    \reimp Reimplemented from QAbstractItemModel.
@@ -249,7 +249,7 @@ int DataModel::columnCount(const QModelIndex &parent) const
 }
 
 /*!
-   \fn Plugins::ViewManager::DataModel::data()
+   \fn DataModel::data()
    \brief Returns the data stored under the given role for the item referred
           to by the index.
 

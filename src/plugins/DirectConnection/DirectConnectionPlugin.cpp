@@ -27,8 +27,11 @@
 
 #include "DirectConnectionPlugin.h"
 
+#include <PluginManager/PluginManager.h>
 #include <ConnectionManager/ConnectionManager.h>
 #include "DirectConnection.h"
+
+using namespace Plugins::OpenSpeedShop;
 
 namespace Plugins {
 namespace DirectConnection {
@@ -48,14 +51,13 @@ namespace DirectConnection {
     \sa ConnectionManager
  */
 
-using namespace Plugins::OpenSpeedShop;
 
 DirectConnectionPlugin::DirectConnectionPlugin(QObject *parent) :
     QObject(parent)
 {
     m_Name = "DirectConnection";
     m_Version = "0.1.dev";
-    m_Dependencies.append( Dependency("OpenSpeedShop", "^0\\.1.*$") );
+    m_Dependencies.append( Core::PluginManager::Dependency("OpenSpeedShop", "^0\\.1.*$") );
 }
 
 DirectConnectionPlugin::~DirectConnectionPlugin()
@@ -67,7 +69,12 @@ bool DirectConnectionPlugin::initialize(QStringList &args, QString *err)
     Q_UNUSED(args)
     Q_UNUSED(err)
 
-    ConnectionManager::instance()->registerConnection(new DirectConnection());
+    Core::PluginManager::PluginManager *pluginManager = Core::PluginManager::PluginManager::instance();
+    QList<ConnectionManager *> *managers = pluginManager->getObjects<ConnectionManager>();
+    if(managers->count()) {
+        ConnectionManager *connectionManager = managers->at(0);
+        connectionManager->registerConnection(new DirectConnection());
+    }
 
     return true;
 }
@@ -86,7 +93,7 @@ QString DirectConnectionPlugin::version()
     return m_Version;
 }
 
-QList<Dependency> DirectConnectionPlugin::dependencies()
+QList<Core::PluginManager::Dependency> DirectConnectionPlugin::dependencies()
 {
     return m_Dependencies;
 }

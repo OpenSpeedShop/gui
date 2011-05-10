@@ -40,6 +40,7 @@ namespace OpenSpeedShop {
 
 class IConnection;
 class ServerCommand;
+class ServerAdapter;
 
 class CONNECTIONMANAGER_EXPORT ConnectionManager : public QObject
 {
@@ -50,6 +51,8 @@ public:
     void shutdown();
 
     void registerConnection(IConnection *connection);
+
+    ServerAdapter *currentServerAdapter();
 
     IConnection *currentConnection();
     bool sendCommand(ServerCommand *command);
@@ -69,6 +72,7 @@ protected:
     QList<ServerCommand *> m_ServerCommands;
     QDockWidget *m_DockWidget;
     IConnection *m_CurrentConnection;
+    ServerAdapter *m_CurrentServerAdapter;
 
 protected slots:
     void connectionReadyRecieve();

@@ -26,5 +26,7 @@ FORMS   +=
 
 LIBS    += -L$$quote(${BUILDDIR}/core/lib/debug) -lCore
 
+#debug:DEFINES    += MAIN_DEBUG
+
 target.path = /bin
 INSTALLS += target

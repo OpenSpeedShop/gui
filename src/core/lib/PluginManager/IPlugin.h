@@ -33,6 +33,9 @@
 #include <QStringList>
 #include "PluginManagerLibrary.h"
 
+namespace Core {
+namespace PluginManager {
+
 struct Dependency {
     QString name;
     QString version;
@@ -57,6 +60,9 @@ public:
     virtual QList<Dependency> dependencies() = 0;
 };
 
-Q_DECLARE_INTERFACE(IPlugin, "org.openspeedshop.gui.IPlugin/0.1")
+} // namespace PluginManager
+} // namespace Core
+
+Q_DECLARE_INTERFACE(Core::PluginManager::IPlugin, "org.openspeedshop.gui.IPlugin/0.1")
 
 #endif // IPLUGIN_H

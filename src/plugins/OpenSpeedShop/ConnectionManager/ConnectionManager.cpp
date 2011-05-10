@@ -31,6 +31,7 @@
 #include <SettingManager/SettingManager.h>
 
 #include "IConnection.h"
+#include "ServerAdapter.h"
 #include "ServerCommand.h"
 #include "ConnectionWidget.h"
 
@@ -52,6 +53,7 @@ ConnectionManager *ConnectionManager::instance()
 ConnectionManager::ConnectionManager(QObject *parent) :
     QObject(parent)
 {
+    m_CurrentServerAdapter = NULL;
     m_CurrentConnection = NULL;
     m_DockWidget = NULL;
 }
@@ -63,10 +65,12 @@ ConnectionManager::~ConnectionManager()
         delete(m_Connections.takeFirst());
 }
 
+/*! \fn ConnectionManager::initialize()
+    \brief Called when the GUI plugins are initializing
+ */
 bool ConnectionManager::initialize()
 {
-    Core::MainWindow::MainWindow *mainWindow =
-            Core::MainWindow::MainWindow::instance();
+    Core::MainWindow::MainWindow *mainWindow = Core::MainWindow::MainWindow::instance();
 
     m_DockWidget = new QDockWidget(mainWindow);
     m_DockWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
@@ -78,11 +82,17 @@ bool ConnectionManager::initialize()
     return true;
 }
 
+/*! \fn ConnectionManager::shutdown()
+    \brief Called when the system is shutting down
+ */
 void ConnectionManager::shutdown()
 {
     writeSettings();
 }
 
+/*! \fn ConnectionManager::readSettings()
+    \brief Reads settings for the ConnectionManager from the SettingManager
+ */
 void ConnectionManager::readSettings()
 {
     Core::SettingManager::SettingManager *settingManager =
@@ -95,6 +105,9 @@ void ConnectionManager::readSettings()
     settingManager->endGroup();
 }
 
+/*! \fn ConnectionManager::writeSettings()
+    \brief Writes settings for the ConnectionManager to the SettingManager
+ */
 void ConnectionManager::writeSettings()
 {
     Core::SettingManager::SettingManager *settingManager =
@@ -107,6 +120,10 @@ void ConnectionManager::writeSettings()
     settingManager->endGroup();
 }
 
+/*! \fn ConnectionManager::registerConnection()
+    \brief Registers a potential connection type, and allows it to be displayed to the user as an option
+    \param connection The new connection
+ */
 void ConnectionManager::registerConnection(IConnection *connection)
 {
     connection->setParent(this);
@@ -114,6 +131,10 @@ void ConnectionManager::registerConnection(IConnection *connection)
     emit connectionRegistered(connection);
 }
 
+/*! \fn ConnectionManager::setCurrentConnection()
+    \brief Sets the current connection to a new value
+    \param connection The new current connection
+ */
 void ConnectionManager::setCurrentConnection(IConnection *connection)
 {
     if(connection && !m_Connections.contains(connection))
@@ -133,29 +154,54 @@ void ConnectionManager::setCurrentConnection(IConnection *connection)
     emit currentConnectionChanged();
 }
 
+ServerAdapter *ConnectionManager::currentServerAdapter()
+{
+    return m_CurrentServerAdapter;
+}
+
+
+/*! \fn ConnectionManager::currentConnection()
+    \brief returns the currently selected connection.
+ */
 IConnection *ConnectionManager::currentConnection()
 {
     return m_CurrentConnection;
 }
 
+/*! \fn ConnectionManager::connectionStateChanged()
+    \brief Deals with the current connection's state changes.
+ */
 void ConnectionManager::connectionStateChanged()
 {
     switch(m_CurrentConnection->state()) {
-    case ConnectionState_Connected:
+    case IConnection::State_Connected:
+        m_CurrentServerAdapter = new ServerAdapter(this);
         break;
-    case ConnectionState_Connecting:
-    case ConnectionState_Disconnecting:
-    case ConnectionState_Disconnected:
-    case ConnectionState_Error:
+    case IConnection::State_Connecting:
+    case IConnection::State_Disconnecting:
+    case IConnection::State_Disconnected:
+    case IConnection::State_Error:
+        if(m_CurrentServerAdapter) {
+            delete m_CurrentServerAdapter;
+            m_CurrentServerAdapter = NULL;
+        }
+
         foreach(ServerCommand *serverCommand, m_ServerCommands) {
-            serverCommand->setState(ServerCommandState_Invalid);
+            serverCommand->setState(ServerCommand::State_Invalid);
         }
         m_ServerCommands.clear();
+
         break;
     }
 
 }
 
+/*! \fn ConnectionManager::connectionReadyRecieve()
+    \brief Recieves responses from a connection and sets the command's response.
+    When the command's response is set, the state is changed to ServerCommand::State_Response and the
+    ServerCommand::readyResponse() signal is emitted.
+    \sa ServerCommand, ServerCommand::readyResponse(), ServerCommand::State_Response
+ */
 void ConnectionManager::connectionReadyRecieve()
 {
     IConnection *connection = qobject_cast<IConnection *>(QObject::sender());
@@ -178,17 +224,28 @@ void ConnectionManager::connectionReadyRecieve()
     //! \todo Deal with not finding the ServerCommand
 }
 
+/*! \fn ConnectionManager::sendCommand()
+    \brief Sends a ServerCommand object to the currentConnection, if it's connected.
+    If a command sends to fail this function will return false, and the command's status will be set to
+    ServerCommand::State_Invalid.  If it is successful, the function will return true and the command's state will be set to
+    ServerCommand::State_Sent.
+    \param command the ServerCommand to send.
+    \returns false if there is no connection or the current connection is not connected to a server.
+ */
 bool ConnectionManager::sendCommand(ServerCommand *command)
 {
-    if(currentConnection()->state() != ConnectionState_Connected) {
-        command->setState(ServerCommandState_Invalid);
+    if(!currentConnection())
+        return false;
+
+    if(currentConnection()->state() != IConnection::State_Connected) {
+        command->setState(ServerCommand::State_Invalid);
         return false;
     }
 
     m_ServerCommands.append(command);
     currentConnection()->send(command->command().toString());
 
-    command->setState(ServerCommandState_Sent);
+    command->setState(ServerCommand::State_Sent);
     return true;
 }
 

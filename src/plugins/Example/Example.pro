@@ -16,9 +16,11 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 include(../plugins.pri)
-TARGET   = Example
+TARGET             = Example
 
-SOURCES += ExamplePlugin.cpp
-HEADERS += ExamplePlugin.h
+SOURCES           += ExamplePlugin.cpp
+HEADERS           += ExamplePlugin.h
 
-LIBS    += -lCore
+INCLUDEPATH       += $$quote($${SOURCE_PATH}/plugins/OpenSpeedShop)
+DEPENDPATH        += $$quote($${SOURCE_PATH}/plugins/OpenSpeedShop)
+LIBS              += -L$$quote(${BUILDDIR}/plugins/OpenSpeedShop/debug) -lOpenSpeedShop

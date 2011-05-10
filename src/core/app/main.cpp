@@ -124,7 +124,7 @@ int main(int argc, char *argv[])
     QCoreApplication::setApplicationVersion("0.1");
 
 #ifdef MAIN_DEBUG
-    qDebug() << __FILE__ << ":" << __LINE__ << "\tInstantiating the singleton classes";
+    qDebug() << __FILE__ << __LINE__ << "\tInstantiating the singleton classes";
 #endif
 
     Core::SettingManager::SettingManager *settingManager =
@@ -135,7 +135,7 @@ int main(int argc, char *argv[])
             Core::PluginManager::PluginManager::instance();
 
 #ifdef MAIN_DEBUG
-    qDebug() << __FILE__ << ":" << __LINE__ << "\tInitializing the singleton classes";
+    qDebug() << __FILE__ << __LINE__ << "\tInitializing the singleton classes";
 #endif
 
     if(!settingManager->initialized())
@@ -146,20 +146,20 @@ int main(int argc, char *argv[])
         pluginManager->initialize();
 
 #ifdef MAIN_DEBUG
-    qDebug() << __FILE__ << ":" << __LINE__ << "\tLoading plugins";
+    qDebug() << __FILE__ << __LINE__ << "\tLoading plugins";
 #endif
 
     pluginManager->loadPlugins();
 
 #ifdef MAIN_DEBUG
-    qDebug() << __FILE__ << ":" << __LINE__ << "\tShowing the MainWindow";
+    qDebug() << __FILE__ << __LINE__ << "\tShowing the MainWindow";
 #endif
 
     mainWindow->show();
     int retval = a.exec();
 
 #ifdef MAIN_DEBUG
-    qDebug() << __FILE__ << ":" << __LINE__ << "\tShutting down singleton classes";
+    qDebug() << __FILE__ << __LINE__ << "\tShutting down singleton classes";
 #endif
 
     if(pluginManager->initialized())
@@ -170,7 +170,7 @@ int main(int argc, char *argv[])
         settingManager->shutdown();
 
 #ifdef MAIN_DEBUG
-    qDebug() << __FILE__ << ":" << __LINE__ << "\tDeleting singleton classes";
+    qDebug() << __FILE__ << __LINE__ << "\tDeleting singleton classes";
 #endif
 
     delete mainWindow;
@@ -178,7 +178,7 @@ int main(int argc, char *argv[])
     delete settingManager;
 
 #ifdef MAIN_DEBUG
-    qDebug() << __FILE__ << ":" << __LINE__ << "\tDone";
+    qDebug() << __FILE__ << __LINE__ << "\tDone";
 #endif
 
     return retval;

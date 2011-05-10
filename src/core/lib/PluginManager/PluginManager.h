@@ -54,10 +54,10 @@ public:
     bool delObject(QObject *object);
 
     template <typename Type> QList<Type *> *getObjects() const {
-        QList<Type *> *list = QList<Type *>();
+        QList<Type *> *list = new QList<Type *>();
         Type *type = 0;
         foreach (QObject *object, m_Objects) {
-            if (type = qobject_cast<Type>(object))
+            if( (type = qobject_cast<Type *>(object)) )
                 list->append(type);
         }
         return list;

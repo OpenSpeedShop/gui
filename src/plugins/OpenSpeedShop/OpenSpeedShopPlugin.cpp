@@ -30,6 +30,7 @@
 #endif
 
 #include "OpenSpeedShopPlugin.h"
+#include <PluginManager/PluginManager.h>
 
 namespace Plugins {
 namespace OpenSpeedShop {
@@ -92,11 +93,16 @@ bool OpenSpeedShopPlugin::initialize(QStringList &args, QString *err)
         }
     }
 
+    ConnectionManager::instance()->initialize();
+    Core::PluginManager::PluginManager::instance()->addObject(ConnectionManager::instance());
+
     return true;
 }
 
 void OpenSpeedShopPlugin::shutdown()
 {
+    ConnectionManager::instance()->shutdown();
+
     writeSettings();
 }
 
@@ -116,7 +122,7 @@ QString OpenSpeedShopPlugin::version()
     return m_Version;
 }
 
-QList<Dependency> OpenSpeedShopPlugin::dependencies()
+QList<Core::PluginManager::Dependency> OpenSpeedShopPlugin::dependencies()
 {
     return m_Dependencies;
 }

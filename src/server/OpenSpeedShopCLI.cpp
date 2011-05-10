@@ -1,5 +1,11 @@
 #include "OpenSpeedShopCLI.h"
 
+std::string &OpenSpeedShopCLI::trim(std::string &s) {
+  s.erase(s.begin(), std::find_if(s.begin(), s.end(), std::not1(std::ptr_fun<int, int>(std::isspace))));
+  s.erase(std::find_if(s.rbegin(), s.rend(), std::not1(std::ptr_fun<int, int>(std::isspace))).base(), s.end());
+  return s;
+}
+
 OpenSpeedShopCLI::OpenSpeedShopCLI()
 {
   m_windowID = initializeOSS();
@@ -106,8 +112,10 @@ std::list<rapidxml::xml_node<> *> OpenSpeedShopCLI::processCommandResults(
       }
 
     } else {
-      char *attributeValue = memoryPool->allocate_string(commandResult->Form().c_str());
+      std::string value = commandResult->Form();
+      char *attributeValue = memoryPool->allocate_string(trim(value).c_str());
       commandResultNode->append_attribute(memoryPool->allocate_attribute("value", attributeValue));
+
     }
 
     commandResults.push_back(commandResultNode);

@@ -37,22 +37,23 @@
 namespace Core {
 namespace PluginManager {
 
-enum PluginStatus {
-    PluginStatus_Error,
-    PluginStatus_Loaded,
-    PluginStatus_Initialized,
-    PluginStatus_Shutdown
-};
-
 class PluginWrapper : public QObject, public IPlugin {
     Q_OBJECT
-    Q_INTERFACES(IPlugin)
+    Q_INTERFACES(Core::PluginManager::IPlugin)
 
 public:
+
+    enum States {
+        State_Error,
+        State_Loaded,
+        State_Initialized,
+        State_Shutdown
+    };
+
     PluginWrapper(IPlugin *plugin, QString filePath, QObject *parent = 0);
     ~PluginWrapper();
 
-    PluginStatus status();
+    States state();
 
     int priority();
     void setPriority(int priority);
@@ -67,7 +68,7 @@ public:
 protected:
     QString m_FilePath;
     IPlugin *m_Plugin;
-    PluginStatus m_Status;
+    States m_State;
     int m_Priority;
 };
 

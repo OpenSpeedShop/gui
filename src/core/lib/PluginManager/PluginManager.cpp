@@ -25,7 +25,7 @@
 
  */
 
-#ifdef QT_DEBUG
+#ifdef PLUGINMANAGER_DEBUG
   #include <QtDebug>
 #endif
 
@@ -120,8 +120,13 @@ bool PluginManager::initialized()
 
 void PluginManager::shutdown()
 {
-    qSort(m_Plugins.begin(), m_Plugins.end(), descending);
+    qSort(m_Plugins.begin(), m_Plugins.end(), ascending);
     foreach(IPlugin *plugin, m_Plugins) {
+
+#ifdef PLUGINMANAGER_DEBUG
+        qDebug() << __FILE__ << __LINE__ << "Shutting down plugin:" << plugin->name();
+#endif
+
         plugin->shutdown();
     }
 }
@@ -176,7 +181,7 @@ void PluginManager::loadPlugins()
     foreach (QString fileName, pluginDir.entryList(QDir::Files)) {
         QString filePath = pluginDir.absoluteFilePath(fileName);
 
-#ifdef QT_DEBUG
+#ifdef PLUGINMANAGER_DEBUG
         qDebug() << __FILE__ << __LINE__ << "Attempting to load plugin:" << fileName;
 #endif
 
@@ -190,7 +195,7 @@ void PluginManager::loadPlugins()
                 PluginWrapper *wrapper = new PluginWrapper(plugin, filePath, this);
                 m_Plugins.append(wrapper);
 
-#ifdef QT_DEBUG
+#ifdef PLUGINMANAGER_DEBUG
                 qDebug() << __FILE__ << __LINE__ << "Loaded plugin:" << fileName;
 #endif
 
@@ -259,13 +264,18 @@ void PluginManager::initializePlugins()
         }
     }
 
-    qSort(m_Plugins.begin(), m_Plugins.end(), ascending);
+    qSort(m_Plugins.begin(), m_Plugins.end(), descending);
 
     /* Intialize via the queue */
     QString *err = NULL;
     QStringList args;
     foreach(PluginWrapper *plugin, m_Plugins) {
-        if( plugin->status() == PluginStatus_Loaded && plugin->initialize(args, err) ) {
+
+#ifdef PLUGINMANAGER_DEBUG
+        qDebug() << __FILE__ << __LINE__ << "Initializing plugin:" << plugin->name();
+#endif
+
+        if( plugin->state() == PluginWrapper::State_Loaded && plugin->initialize(args, err) ) {
             emit pluginInitialized(plugin);
         }
     }

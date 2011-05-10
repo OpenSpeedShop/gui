@@ -102,7 +102,7 @@ int Socket::recv(std::string &str)
   std::cerr << __FILE__ << ":" << __LINE__ << "\t\tReceiving data" << std::endl;
   retval = ::recv(_socketDescriptor, buffer, bufferSize, 0);
   if(retval < 0) {
-    std::cerr << "Error while recieving" << std::endl;    // More than likely an immediate disconnect
+    std::cerr << __FILE__ << ":" << __LINE__ << "\t\tError while recieving -- more than likely, this was an immediate disconnect from the client" << std::endl;
     return 0;
   }
 

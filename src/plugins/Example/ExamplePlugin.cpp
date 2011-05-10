@@ -50,7 +50,7 @@ ExamplePlugin::ExamplePlugin()
 {
     m_Name = "Example";
     m_Version = "0.1.dev";
-    m_Dependencies.append( Dependency("OpenSpeedShop", "^0\\.1.*$") );
+    m_Dependencies.append( Core::PluginManager::Dependency("OpenSpeedShop", "^0\\.1.*$") );
 }
 
 ExamplePlugin::~ExamplePlugin()
@@ -61,6 +61,9 @@ bool ExamplePlugin::initialize(QStringList &args, QString *err)
 {
     Q_UNUSED(args)
     Q_UNUSED(err)
+
+    Plugins::OpenSpeedShop::ConnectionManager *connectionManager = Plugins::OpenSpeedShop::ConnectionManager::instance();
+    connectionManager->objectName();
 
     return true;
 }
@@ -79,7 +82,7 @@ QString ExamplePlugin::version()
     return m_Version;
 }
 
-QList<Dependency> ExamplePlugin::dependencies()
+QList<Core::PluginManager::Dependency> ExamplePlugin::dependencies()
 {
     return m_Dependencies;
 }

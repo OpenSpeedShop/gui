@@ -27,6 +27,9 @@
 
 #include "IPlugin.h"
 
+namespace Core {
+namespace PluginManager {
+
 /*!
   \struct Dependency
   \brief Object that describes a dependent object
@@ -91,4 +94,7 @@ IPlugin::IPlugin()
    \returns QStringList where each QString in the list contains the name
             of a parent plugin which must be initialized before this one
  */
+
+} // namespace PluginManager
+} // namespace Core
 

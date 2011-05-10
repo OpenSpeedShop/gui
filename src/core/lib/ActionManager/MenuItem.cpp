@@ -66,15 +66,15 @@ void MenuItem::setPriority(int priority)
     m_Priority = priority;
 }
 
-MenuItemTypes MenuItem::menuItemType()
+MenuItem::Types MenuItem::type()
 {
     if(action()->actionGroup())
-        return MenuItemType_Group;
+        return Type_Group;
     if(action()->menu())
-        return MenuItemType_SubMenu;
+        return Type_SubMenu;
     if(action()->isSeparator())
-        return MenuItemType_Separator;
-    return MenuItemType_Action;
+        return Type_Separator;
+    return Type_Action;
 }
 
 QList<MenuItem *> MenuItem::menuItems()
@@ -114,7 +114,7 @@ MenuItem *MenuItem::merge(MenuItem* left, MenuItem *right)
     //! \todo We need to figure out how to support groups!
 
     // Merge the submenu items
-    if(left->menuItemType() == MenuItemType_SubMenu) {
+    if(left->type() == Type_SubMenu) {
         // Merge the children
         QList<MenuItem *> leftMenuItems = left->menuItems();
         QList<MenuItem *> rightMenuItems = right->menuItems();
@@ -147,7 +147,7 @@ QAction *MenuItem::generate()
 {
     QAction *retval = NULL;
 
-    if(menuItemType() == MenuItemType_SubMenu) {
+    if(type() == Type_SubMenu) {
         QMenu *menu = new QMenu();
         retval = menu->menuAction();
     } else {
@@ -161,7 +161,7 @@ QAction *MenuItem::generate()
     retval->setCheckable(action()->isCheckable());
     retval->setSeparator(action()->isSeparator());
 
-    if(menuItemType() == MenuItemType_SubMenu) {
+    if(type() == Type_SubMenu) {
         foreach(MenuItem *menuItem, menuItems()) {
             QAction *action = menuItem->generate();
             action->setParent(retval);

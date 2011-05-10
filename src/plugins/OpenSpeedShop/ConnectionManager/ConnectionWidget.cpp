@@ -81,13 +81,13 @@ void ConnectionWidget::on_btnConnect_clicked()
         int index = ui->cmbConnectionType->currentIndex();
         IConnection *connection = ui->cmbConnectionType->itemData(index).value<IConnection *>();
 
-        if(connection->state() == ConnectionState_Disconnected)
+        if(connection->state() == IConnection::State_Disconnected)
             connection->connectToServer();
     } else {
         int index = ui->cmbConnectionType->currentIndex();
         IConnection *connection = ui->cmbConnectionType->itemData(index).value<IConnection *>();
 
-        if(connection->state() == ConnectionState_Connected)
+        if(connection->state() == IConnection::State_Connected)
             connection->disconnectFromServer();
     }
 }
@@ -111,7 +111,7 @@ void ConnectionWidget::on_cmbConnectionType_currentIndexChanged(int index)
                 ui->cmbConnectionType->itemData(oldIndex).value<IConnection *>();
 
         // Check the state of the current connection
-        if(oldConnection->state() != ConnectionState_Disconnected) {
+        if(oldConnection->state() != IConnection::State_Disconnected) {
             QMessageBox msg;
             msg.setIcon(QMessageBox::Warning);
             msg.setWindowTitle(tr("Warning!"));
@@ -194,27 +194,27 @@ void ConnectionWidget::connectionStateChanged()
         throw new QString("Caught signal from unexpected object");
 
     switch(connection->state()) {
-    case ConnectionState_Connecting:
+    case IConnection::State_Connecting:
         ui->btnConnect->setEnabled(false);
         ui->btnConnect->setChecked(true);
         startTimeOut();
         break;
-    case ConnectionState_Connected:
+    case IConnection::State_Connected:
         ui->btnConnect->setEnabled(true);
         ui->btnConnect->setChecked(true);
         stopTimeOut();
         break;
-    case ConnectionState_Disconnecting:
+    case IConnection::State_Disconnecting:
         ui->btnConnect->setEnabled(false);
         ui->btnConnect->setChecked(false);
         startTimeOut();
         break;
-    case ConnectionState_Disconnected:
+    case IConnection::State_Disconnected:
         ui->btnConnect->setEnabled(true);
         ui->btnConnect->setChecked(false);
         stopTimeOut();
         break;
-    case ConnectionState_Error:
+    case IConnection::State_Error:
         ui->btnConnect->setEnabled(false);
 
         stopTimeOut();

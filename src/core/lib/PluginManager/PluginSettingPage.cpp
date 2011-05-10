@@ -160,20 +160,20 @@ void PluginSettingPage::buildTree(QList<PluginWrapper *> plugins)
         item->setText(0, plugin->name());
         item->setText(1, plugin->version());
 
-        switch(plugin->status()) {
-            case PluginStatus_Loaded:
+        switch(plugin->state()) {
+            case PluginWrapper::State_Loaded:
                 item->setToolTip(0, tr("Plugin loaded"));
                 item->setIcon(0, QIcon(":/PluginManager/check.png"));
                 break;
-            case PluginStatus_Initialized:
+            case PluginWrapper::State_Initialized:
                 item->setToolTip(0, tr("Plugin initialized"));
                 item->setIcon(0, QIcon(":/PluginManager/check.png"));
                 break;
-            case PluginStatus_Error:
+            case PluginWrapper::State_Error:
                 item->setToolTip(0, tr("Plugin failed"));
                 item->setIcon(0, QIcon(":/PluginManager/fail.png"));
                 break;
-            case PluginStatus_Shutdown:
+            case PluginWrapper::State_Shutdown:
                 item->setToolTip(0, tr("Plugin shutdown"));
                 item->setIcon(0, QIcon(":/PluginManager/fail.png"));
                 break;

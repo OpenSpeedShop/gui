@@ -26,12 +26,12 @@ SOURCES      += OpenSpeedShopPlugin.cpp \
                 Experiment/ExperimentWidget.cpp \
                 OpenSpeedShopWidget.cpp \
                 ConnectionManager/ServerCommand.cpp \
-                ConnectionManager/IServerAdapter.cpp \
                 ConnectionManager/IConnection.cpp \
                 ConnectionManager/ConnectionWidget.cpp \
                 ConnectionManager/ConnectionManager.cpp \
                 ViewManager/DataModel.cpp \
-                ViewManager/DataItem.cpp
+                ViewManager/DataItem.cpp \
+                ConnectionManager/ServerAdapter.cpp
 
 HEADERS      += OpenSpeedShopPlugin.h \
                 Settings/SettingPageFactory.h \
@@ -40,14 +40,14 @@ HEADERS      += OpenSpeedShopPlugin.h \
                 Experiment/ExperimentWidget.h \
                 OpenSpeedShopWidget.h \
                 ConnectionManager/ServerCommand.h \
-                ConnectionManager/IServerAdapter.h \
                 ConnectionManager/IConnection.h \
                 ConnectionManager/ConnectionWidget.h \
                 ConnectionManager/ConnectionManager.h \
                 ViewManager/DataModel.h \
                 ViewManager/DataItem.h \
                 ConnectionManager/ConnectionManagerLibrary.h \
-                OpenSpeedShopLibrary.h
+                OpenSpeedShopLibrary.h \
+                ConnectionManager/ServerAdapter.h
 
 FORMS        += Settings/SettingPage.ui \
                 AboutDialog.ui \
@@ -57,6 +57,7 @@ FORMS        += Settings/SettingPage.ui \
 
 RESOURCES    += Resources/OpenSpeedShop.qrc
 
-QT           += xml network
+QT           += xml
 
-DEFINES      += OPENSPEEDSHOP_LIBRARY CONNECTIONMANAGER_LIBRARY
+DEFINES      += OPENSPEEDSHOP_LIBRARY \
+                CONNECTIONMANAGER_LIBRARY

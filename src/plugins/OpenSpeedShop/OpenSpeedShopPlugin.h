@@ -32,18 +32,19 @@
 #include <MainWindow/MainWindow.h>
 #include <PluginManager/IPlugin.h>
 #include <SettingManager/SettingManager.h>
+
 #include "Settings/SettingPageFactory.h"
 #include "AboutDialog.h"
-
 #include "OpenSpeedShopWidget.h"
+#include "ConnectionManager/ConnectionManager.h"
 
 namespace Plugins {
 namespace OpenSpeedShop {
 
-class OpenSpeedShopPlugin : public QObject, public IPlugin
+class OpenSpeedShopPlugin : public QObject, public Core::PluginManager::IPlugin
 {
 Q_OBJECT
-Q_INTERFACES(IPlugin)
+Q_INTERFACES(Core::PluginManager::IPlugin)
 
 public:
     OpenSpeedShopPlugin();
@@ -54,7 +55,7 @@ public:
 
     QString name();
     QString version();
-    QList<Dependency> dependencies();
+    QList<Core::PluginManager::Dependency> dependencies();
 
 public slots:
     void aboutDialog();
@@ -62,7 +63,7 @@ public slots:
 protected:
     QString m_Name;
     QString m_Version;
-    QList<Dependency> m_Dependencies;
+    QList<Core::PluginManager::Dependency> m_Dependencies;
 
     OpenSpeedShopWidget *_mainWidget;
 

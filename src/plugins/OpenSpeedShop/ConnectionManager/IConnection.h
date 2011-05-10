@@ -36,24 +36,25 @@
 namespace Plugins {
 namespace OpenSpeedShop {
 
-enum ConnectionStates {
-    ConnectionState_Connecting,
-    ConnectionState_Connected,
-    ConnectionState_Disconnecting,
-    ConnectionState_Disconnected,
-    ConnectionState_Error
-};
-
 class CONNECTIONMANAGER_EXPORT IConnection : public QObject
 {
     Q_OBJECT
 
 public:
+
+    enum States {
+        State_Connecting,
+        State_Connected,
+        State_Disconnecting,
+        State_Disconnected,
+        State_Error
+    };
+
     explicit IConnection(QObject *parent = 0) : QObject(parent) {}
     virtual ~IConnection() {}
 
     virtual QWidget *page() = 0;
-    virtual ConnectionStates state() = 0;
+    virtual States state() = 0;
     virtual QString errorMessage() = 0;
     virtual void connectToServer() = 0;
     virtual void disconnectFromServer() = 0;

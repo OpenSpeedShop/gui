@@ -23,9 +23,4 @@ SUBDIRS  = core plugins
 
 OTHER_FILES += Doxyfile fileheader.txt
 
-debug:DEFINES    += MAIN_DEBUG \
-                    MAINWINDOW_DEBUG \
-                    ACTIONMANAGER_DEBUG \
-                    PLUGINMANAGER_DEBUG \
-                    SETTINGMANAGER_DEBUG
 

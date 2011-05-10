@@ -36,10 +36,10 @@ namespace DirectConnection {
 
 class DirectConnection;
 
-class DirectConnectionPlugin : public QObject, public IPlugin
+class DirectConnectionPlugin : public QObject, public Core::PluginManager::IPlugin
 {
     Q_OBJECT
-    Q_INTERFACES(IPlugin)
+    Q_INTERFACES(Core::PluginManager::IPlugin)
 
 public:
     explicit DirectConnectionPlugin(QObject *parent = 0);
@@ -50,7 +50,7 @@ public:
 
     QString name();
     QString version();
-    QList<Dependency> dependencies();
+    QList<Core::PluginManager::Dependency> dependencies();
 
 signals:
 
@@ -59,7 +59,7 @@ public slots:
 protected:
     QString m_Name;
     QString m_Version;
-    QList<Dependency> m_Dependencies;
+    QList<Core::PluginManager::Dependency> m_Dependencies;
 
     void readSettings();
     void writeSettings();
