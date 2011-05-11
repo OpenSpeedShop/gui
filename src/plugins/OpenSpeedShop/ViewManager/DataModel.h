@@ -44,6 +44,7 @@ public:
     ~DataModel();
 
     void loadData(QString xml);
+    void buildModel(QDomDocument xml);
     QString saveData() const;
 
     /* QAbstractItemModel interface */
@@ -59,8 +60,15 @@ public slots:
 
 protected:
     DataItem *createDataItem(QDomElement element, DataItem *parent);
-    DataItem *m_RootDataItem;
 
+    QList<QString> m_Headers;
+
+    QList<Cell *> m_Rows;
+    struct Cell {
+        QMap<QString, QVariant> data;
+        QList<Cell *> columns;
+        QList<Cell *> children;
+    };
 
 };
 

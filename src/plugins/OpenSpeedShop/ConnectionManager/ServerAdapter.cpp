@@ -375,7 +375,7 @@ QList<qint64> ServerAdapter::waitExperimentRanks(qint64 expId)
 
 ServerCommand *ServerAdapter::experimentView(qint64 expId, QString expType, int resolution)
 {
-    QString command = QString("expView -x %1").arg(expId);
+    QString command = QString("expView -x %1 -v CallTrees,FullStack").arg(expId);
     if(!expType.isEmpty()) {
         command.append(QString(" %1%2").arg(expType).arg(resolution));
     }

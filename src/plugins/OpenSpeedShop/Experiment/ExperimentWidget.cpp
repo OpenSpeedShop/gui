@@ -46,7 +46,7 @@ void ExperimentWidget::load()
     qDebug() << serverAdapter->waitVersion();
 
     qDebug() << serverAdapter->waitExperimentTypes();
-    qint64 expId = serverAdapter->waitRestore("/home/dane/smg2000-pcsamp.openss");
+    qint64 expId = serverAdapter->waitRestore("/home/dane/smg2000-io.openss");
     serverAdapter->waitExperimentView(expId);
 
     serverAdapter->waitExit();
