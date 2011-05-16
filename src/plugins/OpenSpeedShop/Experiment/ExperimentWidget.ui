@@ -22,10 +22,10 @@
      <property name="currentIndex">
       <number>1</number>
      </property>
-     <property name="movable">
+     <property name="documentMode">
       <bool>true</bool>
      </property>
-     <widget class="QWidget" name="tabExperimentProperties">
+     <widget class="QWidget" name="tabProperties">
       <attribute name="title">
        <string>Properties</string>
       </attribute>
@@ -47,7 +47,7 @@
            </widget>
           </item>
           <item row="0" column="1">
-           <widget class="QComboBox" name="comboBox">
+           <widget class="QComboBox" name="cmbExperimentTypes">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -186,7 +186,7 @@
               <number>0</number>
              </property>
              <item row="0" column="0">
-              <widget class="QTableView" name="tableView"/>
+              <widget class="QListWidget" name="listWidget"/>
              </item>
             </layout>
            </widget>
@@ -308,6 +308,12 @@
               <height>0</height>
              </size>
             </property>
+            <property name="frameShape">
+             <enum>QFrame::Box</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Plain</enum>
+            </property>
            </widget>
           </item>
           <item>
@@ -376,10 +382,32 @@
          <property name="title">
           <string>View</string>
          </property>
-         <layout class="QHBoxLayout" name="horizontalLayout_4"/>
+         <layout class="QHBoxLayout" name="horizontalLayout_4">
+          <item>
+           <widget class="QTreeView" name="treeView">
+            <property name="frameShape">
+             <enum>QFrame::Box</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Plain</enum>
+            </property>
+            <property name="alternatingRowColors">
+             <bool>true</bool>
+            </property>
+            <property name="indentation">
+             <number>10</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
        </item>
       </layout>
+     </widget>
+     <widget class="QWidget" name="tabProcesses">
+      <attribute name="title">
+       <string>Processes</string>
+      </attribute>
      </widget>
     </widget>
    </item>

@@ -42,12 +42,31 @@ std::list<rapidxml::xml_node<> *> OpenSpeedShopCLI::processCommandResults(
       std::list<rapidxml::xml_node<> *> childNodes = processCommandResults(columns, memoryPool);
 
       // Add them to this node as children
+      bool killThisRow = true;
       std::list<rapidxml::xml_node<> *>::iterator childNodesListIterator;
       for(childNodesListIterator = childNodes.begin();
           childNodesListIterator != childNodes.end();
           childNodesListIterator++) {
-        commandResultNode->append_node(*childNodesListIterator);
+        rapidxml::xml_node<> *child = *childNodesListIterator;
+  
+        // We need to test if this is a disparate CallStackEntry row
+        std::string childName(child->name());
+        if(childName.compare("String") != 0 && childName.compare("CallStackEntry") != 0) {
+          // Anything but a String or CallStackEntry cancels the kill
+          killThisRow = false;
+        } else if(childName.compare("String") == 0) {
+          // A string with a non-empty value will also cancel the kill
+          std::string childValue(child->first_attribute("value")->value());
+          if(!childValue.empty()) {
+            killThisRow = false;
+          }
+        }
+        
+        commandResultNode->append_node(child);
       }
+
+      // If we iterated over the children, and found this row to be a what we're testing for, move on to the next CommandResult
+      if(killThisRow) { continue; }
 
     } else if(typeid(*commandResult) == typeid(CommandResult_Headers)) {
       // Get a list of header nodes
@@ -66,7 +85,7 @@ std::list<rapidxml::xml_node<> *> OpenSpeedShopCLI::processCommandResults(
     } else if(typeid(*commandResult) == typeid(CommandResult_Function)) {
       CommandResult_Function *function = (CommandResult_Function *)commandResult;
       char *attributeValue = memoryPool->allocate_string(function->getName().c_str());
-      commandResultNode->append_attribute(memoryPool->allocate_attribute("name", attributeValue));
+      commandResultNode->append_attribute(memoryPool->allocate_attribute("value", attributeValue));
 
       /* NOTE: This may be the wrong way of going about it
        * See plugins/panels/StatsPanel/StatsPanel.cxx:11927 for more
@@ -103,6 +122,12 @@ std::list<rapidxml::xml_node<> *> OpenSpeedShopCLI::processCommandResults(
       std::list<CommandResult *> callStackEntryList(callStackEntryVector->rbegin(), callStackEntryVector->rend());
       std::list<rapidxml::xml_node<> *> childNodes = processCommandResults(callStackEntryList, memoryPool);
 
+      /* //NOTE: It looks like the CallStackEntries aren't created as expected.  We get both a row-based hierarchy, and a 
+                 "building" stack object.  We're looking for only the "full-stack" entry, and then removing the previous 
+                 partial-stack rows, based on the count.  See the CommandResult_Columns elseif for more details on the 
+                 culling process.
+       */
+
       // Add them to this node as children
       std::list<rapidxml::xml_node<> *>::iterator childNodesListIterator;
       for(childNodesListIterator = childNodes.begin();
@@ -110,7 +135,7 @@ std::list<rapidxml::xml_node<> *> OpenSpeedShopCLI::processCommandResults(
           childNodesListIterator++) {
         commandResultNode->append_node(*childNodesListIterator);
       }
-
+      
     } else {
       std::string value = commandResult->Form();
       char *attributeValue = memoryPool->allocate_string(trim(value).c_str());

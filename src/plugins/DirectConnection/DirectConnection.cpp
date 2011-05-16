@@ -30,6 +30,10 @@
 #include "DirectConnectionPage.h"
 #include <SettingManager/SettingManager.h>
 
+#ifdef DIRECTCONNECTION_DEBUG
+#  include <QDebug>
+#endif
+
 using namespace Plugins::OpenSpeedShop;
 
 namespace Plugins {
@@ -45,6 +49,9 @@ DirectConnection::DirectConnection(QObject *parent) :
     IConnection(parent)
 {
     m_State = State_Disconnected;
+
+    m_Buffer.clear();
+    m_BufferSize = 0;
 
     readSettings();
 
@@ -85,7 +92,37 @@ void DirectConnection::abort()
 
 void DirectConnection::readReady()
 {
-    emit readyReceive();
+    // If the buffer is empty, get the next transmission size
+    if(m_BufferSize <= 0) {
+        QByteArray buffer = m_TcpSocket->read(sizeof(m_BufferSize));
+
+        bool okay;
+        qint32 size = buffer.toHex().toUInt(&okay, 16);
+        if(okay) m_BufferSize = size;
+
+#ifdef DIRECTCONNECTION_DEBUG
+        qDebug() << "Buffer size set to:" << m_BufferSize << "bytes";
+#endif
+    }
+
+    // Read the socket's buffer into ours until we've got everything
+    if(m_Buffer.count() < m_BufferSize) {
+        QByteArray data = m_TcpSocket->read(m_BufferSize - m_Buffer.count());
+        m_Buffer.append(data);
+
+#ifdef DIRECTCONNECTION_DEBUG
+        qDebug() << "Received:" << data.count() << "bytes";
+#endif
+    }
+
+    // If we've received everything, let everybody know about it
+    if(m_Buffer.count() >= m_BufferSize) {
+#ifdef DIRECTCONNECTION_DEBUG
+        qDebug() << "Buffer has reached the size of expected data";
+#endif
+
+        emit readyReceive();
+    }
 }
 
 void DirectConnection::error(QAbstractSocket::SocketError error)
@@ -226,7 +263,14 @@ void DirectConnection::send(QString command)
 
 QString DirectConnection::receive()
 {
-    return m_TcpSocket->readAll();
+    if(m_Buffer.count() >= m_BufferSize) {
+        QString buffer(m_Buffer);
+        m_Buffer.clear();
+        m_BufferSize = 0;
+        return buffer;
+    }
+
+    return QString();
 }
 
 

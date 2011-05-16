@@ -27,6 +27,10 @@
 
 #include "DataModel.h"
 
+#ifdef DATAMODEL_DEBUG
+#  include <QDebug>
+#endif
+
 namespace Plugins {
 namespace OpenSpeedShop {
 
@@ -38,14 +42,30 @@ namespace OpenSpeedShop {
            an XML source, and the interaction with data views.
  */
 
-
 /*! \fn DataModel::DataModel()
     \brief Constructs a DataModel with the given parent.
  */
 DataModel::DataModel(QObject *parent) :
     QAbstractItemModel(parent)
 {
-    //! \todo Import and create model data in memory
+}
+
+/*! \fn DataModel::DataModel()
+    \brief Constructs a DataModel with the given parent.
+ */
+DataModel::DataModel(QString xml, QObject *parent) :
+    QAbstractItemModel(parent)
+{
+    loadData(xml);
+}
+
+/*! \fn DataModel::DataModel()
+    \brief Constructs a DataModel with the given parent.
+ */
+DataModel::DataModel(QDomDocument document, QObject *parent) :
+  QAbstractItemModel(parent)
+{
+    buildModel(document);
 }
 
 /*! \fn DataModel::~DataModel()
@@ -53,9 +73,13 @@ DataModel::DataModel(QObject *parent) :
  */
 DataModel::~DataModel()
 {
-    if(m_RootDataItem) {
-        delete m_RootDataItem;
-        m_RootDataItem = NULL;
+    if(m_Header)
+        delete m_Header;
+
+    while(!m_Rows.isEmpty()) {
+        Cell *cell = m_Rows.first();
+        m_Rows.removeOne(cell);
+        delete cell;
     }
 }
 
@@ -65,9 +89,18 @@ DataModel::~DataModel()
  */
 void DataModel::loadData(QString xml)
 {
-    QDomDocument doc;
-    doc.setContent(xml);
+    QDomDocument document;
+    document.setContent(xml);
     buildModel(document);
+}
+
+QString DataModel::dumpModel()
+{
+    QString dumpOut;
+    foreach(Cell *row, m_Rows) {
+        dumpOut.append(row->dump());
+    }
+    return dumpOut;
 }
 
 /*! \fn DataModel::buildModel()
@@ -77,82 +110,65 @@ void DataModel::loadData(QString xml)
 void DataModel::buildModel(QDomDocument document)
 {
     QDomElement responseElement = document.firstChildElement("Response");
-    if(responseElement.isNull()) throw QString("'Response' element doesn't exist, as expected.");
+    if(responseElement.isNull()) throw tr("'Response' element doesn't exist, as expected.");
 
     QDomElement ossElement = responseElement.firstChildElement("OpenSpeedShopCLI");
-    if(ossElement.isNull()) throw QString("'OpenSpeedShopCLI' element doesn't exist, as expected.");
+    if(ossElement.isNull()) throw tr("'OpenSpeedShopCLI' element doesn't exist, as expected.");
 
     QDomElement commandObjectElement = ossElement.firstChildElement("CommandObject");
-    //! \todo Deal with other responses, like errors
-    if(commandObjectElement.isNull()) throw QString("'CommandObject' element doesn't exist, as expected.");
+    if(commandObjectElement.isNull()) {
 
-
-    m_Headers.clear();
-    QDomElement headersElement = commandObjectElement.firstChildElement("Headers");
-    if(!headersElement.isNull()) {
-        QString header = headersElement.attribute("value");
-        m_Headers.append(header);
-        headersElement = headersElement.nextSiblingElement(headersElement.tagName());
-    }
-
-
-    if(m_RootDataItem) {
-        delete m_RootDataItem;
-        m_RootDataItem = NULL;
-    }
-
-    QDomElement rowElement = commandObjectElement.firstChildElement("Columns");
-    while(!rowElement.isNull()) {
-
-        QDomElement cellElement = rowElement.firstChildElement();
-        while(!cellElement.isNull()) {
-            QString cellType = cellElement.tagName();
-
-
-
-            cellElement = cellElement.nextSiblingElement();
+        // Deal with other responses, like errors
+        QDomElement exceptionElement = ossElement.firstChildElement("Exception");
+        if(!exceptionElement.isNull()) {
+            throw tr("Exception returned from server: '%1'").arg(exceptionElement.text());
         }
 
-        rowElement = rowElement.nextSiblingElement(rowElement.tagName());
+        throw tr("'CommandObject' element doesn't exist, as expected. No error was given from the server.");
+    }
+
+    m_Rows.clear();
+
+    QDomElement rowElement = commandObjectElement.firstChildElement();
+    while(!rowElement.isNull()) {
+        Cell *cell = processCell(rowElement, NULL);
+        if(cell) m_Rows.append(cell);
+        rowElement = rowElement.nextSiblingElement();
     }
 }
 
-
-/*! \fn DataModel::createDataItem()
-    \brief Creates a DataItem from an XML element, including it's children.
-
-    Columns are created from attribute data, whereas children are created from child elements.
-
-    \param element A QDomElement describing the returned DataItem and it's children
-    \param parent A pointer to the parent DataItem for which this item will be a child.
-    \returns A pointer to the created DataItem
- */
-DataItem *DataModel::createDataItem(QDomElement element, DataItem *parent)
+DataModel::Cell *DataModel::processCell(QDomElement cellElement, Cell *parent)
 {
-    QString type = element.tagName();
-    QVariant data = element.text();
-    DataItem *dataItem = new DataItem(type, data, parent);
+    Cell *cell = new Cell(parent);
+    cell->data["type"] = QVariant(cellElement.tagName());
 
-    /*! \test This might need to be more elaborate, based on what data is
-              coming in. Then again, maybe the server should handle that. */
-
-    QDomNodeList childNodes = element.childNodes();
-    for(int i = 0; i < childNodes.count(); i++) {
-        QDomNode childNode = childNodes.item(i);
-        if(childNode.isElement()) {
-            QDomElement childElement = childNode.toElement();
-            DataItem *childItem = createDataItem(childElement, dataItem);
-            dataItem->addChild(childItem);
-        } else if(childNode.isAttr()) {
-            QDomAttr attribute = childNode.toAttr();
-            QString columnType = attribute.name();
-            QVariant columnData = attribute.value();
-            DataItem *column = new DataItem(columnType, columnData, parent);
-            dataItem->addColumn(column);
+    QDomNamedNodeMap attributes = cellElement.attributes();
+    for(uint i=0; i < attributes.length(); i++) {
+        QDomAttr cellAttr = attributes.item(i).toAttr();
+        if(!cellAttr.isNull()) {
+            /// \todo Test for non-string values, and use those instead
+            cell->data[cellAttr.name()] = QVariant(cellAttr.value());
         }
     }
 
-    return dataItem;
+    QDomElement childElement = cellElement.firstChildElement();
+    while(!childElement.isNull()) {
+        Cell *childCell = processCell(childElement, cell);
+        if(childCell) cell->children.append(childCell);
+        childElement = childElement.nextSiblingElement();
+    }
+
+    if(cellElement.tagName() == "Headers" || cellElement.tagName() == "Columns") {
+        cell->columns = cell->children;
+        cell->children.clear();
+    }
+
+    if(cellElement.tagName() == "Headers") {
+        m_Header = cell;
+        return NULL;
+    }
+
+    return cell;
 }
 
 /*! \fn DataModel::saveData()
@@ -185,17 +201,14 @@ QModelIndex DataModel::index(int row, int column, const QModelIndex &parent) con
         return QModelIndex();
     }
 
-    // Create an index based on the data
-    DataItem *parentItem;
     if(!parent.isValid()) {
-        parentItem = m_RootDataItem;
+        Cell *rowCell = m_Rows.at(row);
+        Cell *cell = rowCell->columns.at(column);
+        return createIndex(row, column, cell);
     } else {
-        parentItem = static_cast<DataItem *>(parent.internalPointer());
-    }
-
-    DataItem *childItem = parentItem->child(row);
-    if(childItem) {
-        return createIndex(row, column, childItem);
+        Cell *parentCell = static_cast<Cell *>(parent.internalPointer());
+        Cell *cell = parentCell->children.at(row);
+        return createIndex(row, column, cell);
     }
 
     // Return an empty index if there's no data for this request
@@ -227,11 +240,17 @@ QModelIndex DataModel::parent(const QModelIndex &child) const
         return QModelIndex();
     }
 
-    DataItem *childItem = static_cast<DataItem *>(child.internalPointer());
+    Cell *childItem = static_cast<Cell *>(child.internalPointer());
 
-    DataItem *parentItem = childItem->parent();
-    if(parentItem != m_RootDataItem) {
-        return createIndex(parentItem->row(), 0, parentItem);
+    Cell *parentItem = childItem->parent;
+    if(parentItem != NULL) {
+        QString parentType = parentItem->data["type"].toString();
+
+        if(!parentType.compare("Headers", Qt::CaseInsensitive) || !parentType.compare("Columns", Qt::CaseInsensitive)) {
+            return QModelIndex();
+        }
+
+        return createIndex(parentItem->row(), parentItem->column(), parentItem);
     }
 
     return QModelIndex();
@@ -249,11 +268,13 @@ QModelIndex DataModel::parent(const QModelIndex &child) const
 int DataModel::rowCount(const QModelIndex &parent) const
 {
     if(!parent.isValid()) {
-        return m_RootDataItem->childCount();
+        return m_Rows.count();
     }
 
-    DataItem *parentItem = static_cast<DataItem *>(parent.internalPointer());
-    return parentItem->childCount();
+    Cell *parentItem = static_cast<Cell *>(parent.internalPointer());
+    return parentItem->children.count();
+
+    return 0;
 }
 
 /*! \fn DataModel::columnCount()
@@ -265,11 +286,16 @@ int DataModel::rowCount(const QModelIndex &parent) const
 int DataModel::columnCount(const QModelIndex &parent) const
 {
     if(!parent.isValid()) {
-        return m_RootDataItem->columnCount();
+        if(m_Header) {
+            return m_Header->columns.count();
+        }
+        return 0;
     }
 
-    DataItem *parentItem = static_cast<DataItem *>(parent.internalPointer());
-    return parentItem->columnCount();
+    Cell *parentItem = static_cast<Cell *>(parent.internalPointer());
+    return parentItem->columns.count();
+
+    return 0;
 }
 
 /*! \fn DataModel::data()
@@ -281,33 +307,91 @@ int DataModel::columnCount(const QModelIndex &parent) const
  */
 QVariant DataModel::data(const QModelIndex &index, int role) const
 {
-    if(!index.isValid())
+    if(!index.isValid()) {
         return QVariant();
+    }
 
-    DataItem *dataItem = static_cast<DataItem *>(index.internalPointer());
+    Cell *dataItem = static_cast<Cell *>(index.internalPointer());
 
     if(role == Qt::DisplayRole) {
-        return dataItem->columnData(index.column());
-    } else if(role == Qt::DecorationRole) {
-        //! \todo Create and associate icons with DataItem types
-
-//        if(index.column() == 0) {
-//            QString dataType = dataItem->columnType(index.column());
-//            if(dataType.toLower() == "") {
-//                return QVariant(QIcon(""));
-//            } else if(dataType.toLower().startsWith("commandresult_")) {
-//                if(dataType.toLower().endsWith("")) {
-//                    return QVariant(QIcon(""));
-//                } else if(dataType.toLower().endsWith("")) {
-//                    return QVariant(QIcon(""));
-//                }
-//            }
+//        if(!dataItem->columns.isEmpty()) {
+//            return displayRole(dataItem->columns.at(index.column()));
 //        }
 
+        return displayRole(dataItem);
+    } else if(role == Qt::ToolTipRole) {
+        return toolTipRole(dataItem);
     }
 
     return QVariant();
 }
+
+QVariant DataModel::displayRole(Cell *cell) const
+{
+    QString cellType = cell->data["type"].toString();
+
+    if(!cellType.compare("CallStackEntry", Qt::CaseInsensitive)) {
+        //! \todo this could get very slow for larger datasets, we need to use a string builder
+        QString stack;
+
+        //! \todo make the maximum shown user editable
+        // Figure out if we're clipping the list or not
+        int max = 5;
+        if(max > cell->children.count()) {
+            max = cell->children.count();
+        }
+
+        // Iterate over the children and append their values to this cell's return value
+        for(int i = 0; i < max; i++) {
+            stack.append(displayRole(cell->children.at(i)).toString() + '\n');
+        }
+
+        // Remove any new lines from the end
+        while(stack.endsWith('\n')) {
+            stack.chop(1);
+        }
+
+        // If we clipped the list, let the user know
+        if(max < cell->children.count()) {
+            stack.append(tr("  [...]"));
+        }
+
+        return QVariant(stack);
+
+    } else if(!cellType.compare("Function", Qt::CaseInsensitive)) {
+        QString value = cell->data["value"].toString();
+        if(cell->data.contains("path")) {
+            value.append(" (" + cell->data["path"].toString());
+            if(cell->data.contains("line")) {
+                value.append(":" + cell->data["line"].toString());
+            }
+            value.append(")");
+        }
+        return QVariant(value);
+    }
+
+    if(!cell->data.contains("value")) {
+        return QVariant();
+    }
+
+    return cell->data["value"];
+}
+
+QVariant DataModel::toolTipRole(Cell *cell) const
+{
+    return cell->data["type"];
+}
+
+QVariant DataModel::headerData(int section, Qt::Orientation orientation, int role) const
+{
+    if(orientation == Qt::Horizontal && role == Qt::DisplayRole) {
+        Cell *header = m_Header->columns.at(section);
+        return header->data["value"];
+    }
+
+    return QVariant();
+}
+
 
 } // namespace OpenSpeedShop
 } // namespace Plugins

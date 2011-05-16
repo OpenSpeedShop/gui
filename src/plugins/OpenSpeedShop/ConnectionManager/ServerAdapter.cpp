@@ -165,7 +165,9 @@ QString ServerAdapter::waitVersion()
     if(!serverResponseElement.hasAttribute("version"))
         throw QString("'ServerResponse'' doesn't have 'version' attribute, as expected.");
 
-    return serverResponseElement.attribute("version");
+    QString version = serverResponseElement.attribute("version");
+    delete serverCommand;
+    return version;
 }
 
 /*! \fn ServerAdapter::exit()
@@ -184,6 +186,7 @@ void ServerAdapter::waitExit()
     ServerCommand *serverCommand = exit();
     while(serverCommand->state() != ServerCommand::State_Response)
         QApplication::processEvents();
+    delete serverCommand;
 }
 
 /*** END SocketServer commands ***********************************************/
@@ -254,6 +257,7 @@ qint64 ServerAdapter::waitRestore(QString filepath)
 {
     ServerCommand *serverCommand = restore(filepath);
     QDomElement responseElement = waitCommand(serverCommand);
+    delete serverCommand;
     return getInt(responseElement);
 }
 
@@ -275,6 +279,7 @@ QList<qint64> ServerAdapter::waitListOpenExperiments()
 {
     ServerCommand *serverCommand = listOpenExperiments();
     QDomElement responseElement = waitCommand(serverCommand);
+    delete serverCommand;
     return getIntList(responseElement);
 }
 
@@ -298,6 +303,7 @@ QStringList ServerAdapter::waitExperimentTypes(qint64 expId)
 {
     ServerCommand *serverCommand = experimentTypes(expId);
     QDomElement responseElement = waitCommand(serverCommand);
+    delete serverCommand;
     return getStringList(responseElement);
 }
 
@@ -321,6 +327,7 @@ QString ServerAdapter::waitExperimentDatabase(qint64 expId)
 {
     ServerCommand *serverCommand = experimentDatabase(expId);
     QDomElement responseElement = waitCommand(serverCommand);
+    delete serverCommand;
     return getString(responseElement);
 }
 
@@ -344,6 +351,7 @@ QStringList ServerAdapter::waitExperimentMetrics(qint64 expId)
 {
     ServerCommand *serverCommand = experimentMetrics(expId);
     QDomElement responseElement = waitCommand(serverCommand);
+    delete serverCommand;
     return getStringList(responseElement);
 }
 
@@ -367,6 +375,7 @@ QList<qint64> ServerAdapter::waitExperimentRanks(qint64 expId)
 {
     ServerCommand *serverCommand = experimentRanks(expId);
     QDomElement responseElement = waitCommand(serverCommand);
+    delete serverCommand;
     return getIntList(responseElement);
 }
 
@@ -375,19 +384,27 @@ QList<qint64> ServerAdapter::waitExperimentRanks(qint64 expId)
 
 ServerCommand *ServerAdapter::experimentView(qint64 expId, QString expType, int resolution)
 {
-    QString command = QString("expView -x %1 -v CallTrees,FullStack").arg(expId);
+    QString command = QString("expView -x %1").arg(expId);
+
+//    QString command = QString("expView -x %1 -v CallTrees,FullStack").arg(expId);
+//    QString command = QString("expview io100 -v CallTrees,FullStack -m counts -m io::exclusive_times -m io::inclusive_times").arg(expId);
+
     if(!expType.isEmpty()) {
         command.append(QString(" %1%2").arg(expType).arg(resolution));
     }
     return rawOpenSpeedShopCommand(command);
 }
-void ServerAdapter::waitExperimentView(qint64 expId, QString expType, int resolution)
+DataModel *ServerAdapter::waitExperimentView(qint64 expId, QString expType, int resolution)
 {
     ServerCommand *serverCommand = experimentView(expId, expType, resolution);
-    QDomElement responseElement = waitCommand(serverCommand);
+    waitCommand(serverCommand);
 
-    qDebug() << serverCommand->response().toString();
-//    return getStringList(responseElement);
+    DataModel *dataModel = NULL;
+    try { dataModel = new DataModel(serverCommand->response(), this); }
+    catch(QString err) { throw tr("Failed to create data model. Error from model: '%1'").arg(err); }
+
+    delete serverCommand;
+    return dataModel;
 }
 
 

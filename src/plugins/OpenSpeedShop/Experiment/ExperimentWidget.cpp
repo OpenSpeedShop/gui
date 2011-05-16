@@ -19,6 +19,18 @@ ExperimentWidget::ExperimentWidget(QWidget *parent) :
     ui(new Ui::ExperimentWidget)
 {
     ui->setupUi(this);
+
+    ServerAdapter *serverAdapter = ConnectionManager::instance()->currentServerAdapter();
+
+    if(!serverAdapter) {
+        Core::MainWindow::MainWindow::instance()->notify("Server not connected");
+        return;
+    }
+
+    QStringList experimentTypes = serverAdapter->waitExperimentTypes();
+    if(!experimentTypes.isEmpty()) {
+        ui->cmbExperimentTypes->addItems(experimentTypes);
+    }
 }
 
 ExperimentWidget::~ExperimentWidget()
@@ -43,13 +55,21 @@ void ExperimentWidget::load()
         return;
     }
 
-    qDebug() << serverAdapter->waitVersion();
+//    qDebug() << serverAdapter->waitVersion();
+//    qDebug() << serverAdapter->waitExperimentTypes();
 
-    qDebug() << serverAdapter->waitExperimentTypes();
-    qint64 expId = serverAdapter->waitRestore("/home/dane/smg2000-io.openss");
-    serverAdapter->waitExperimentView(expId);
+    qint64 expId = serverAdapter->waitRestore("/home/dane/smg2000-pcsamp.openss");
+    try {
+    DataModel *dataModel = serverAdapter->waitExperimentView(expId);
+//    qDebug() << dataModel->dumpModel();
+    ui->treeView->setModel(dataModel);
+    } catch(QString err) {
+        using namespace Core::MainWindow;
+        QString errorMessage = tr("An error occured while loading the experiment view: '%1'").arg(err);
+        MainWindow::instance()->notify(errorMessage, NotificationWidget::Critical);
+    }
 
-    serverAdapter->waitExit();
+//    serverAdapter->waitExit();
 
 }
 

@@ -77,6 +77,9 @@ protected:
     IConnection::States m_State;
     QString m_ErrorMessage;
 
+    QByteArray m_Buffer;
+    quint32 m_BufferSize;
+
     friend class DirectConnectionPage;
 };
 

@@ -45,7 +45,7 @@ SocketServer::SocketServer()
           responseNode->append_attribute(responseDocument.allocate_attribute("commandID", commandID));
           responseDocument.append_node(responseNode);
 
-          // Deal with an OpenSpeedShopCLI command
+          // Deal with a socket server command
           if(commandType == "Server") {
             rapidxml::xml_node<> *serverResponse =
                     responseDocument.allocate_node(rapidxml::node_element, responseDocument.allocate_string("ServerResponse"));
@@ -58,6 +58,7 @@ SocketServer::SocketServer()
 
             responseNode->append_node(serverResponse);
 
+          // Deal with an OpenSpeedShopCLI command
           } else if(commandType == "OpenSpeedShopCLI") {
             commandText += '\n';
             rapidxml::xml_node<> *cliResponse = _cli.execute(commandText, &responseDocument);
@@ -67,7 +68,7 @@ SocketServer::SocketServer()
 
 
           // Send the result back to the client
-          std::cout << "responseDocument " << responseDocument << std::endl;
+          std::cout << "responseDocument \"\n" << responseDocument << "\n\"" << std::endl;
           std::ostringstream responseString;
           responseString << responseDocument;
           clientConnection.send(responseString.str());

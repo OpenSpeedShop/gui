@@ -37,3 +37,5 @@ QT                += network xml
 INCLUDEPATH       += $$quote($${SOURCE_PATH}/plugins/OpenSpeedShop)
 DEPENDPATH        += $$quote($${SOURCE_PATH}/plugins/OpenSpeedShop)
 LIBS              += -L$$quote(${BUILDDIR}/plugins/OpenSpeedShop/debug) -lOpenSpeedShop
+
+#debug: DEFINES += DIRECTCONNECTION_DEBUG

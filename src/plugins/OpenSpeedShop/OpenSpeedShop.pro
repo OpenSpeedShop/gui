@@ -31,7 +31,9 @@ SOURCES      += OpenSpeedShopPlugin.cpp \
                 ConnectionManager/ConnectionManager.cpp \
                 ViewManager/DataModel.cpp \
                 ViewManager/DataItem.cpp \
-                ConnectionManager/ServerAdapter.cpp
+                ConnectionManager/ServerAdapter.cpp \
+    RemoteFileSystem/RemoteFileEngine.cpp \
+    RemoteFileSystem/RemoteFileEngineHandler.cpp
 
 HEADERS      += OpenSpeedShopPlugin.h \
                 Settings/SettingPageFactory.h \
@@ -47,7 +49,9 @@ HEADERS      += OpenSpeedShopPlugin.h \
                 ViewManager/DataItem.h \
                 ConnectionManager/ConnectionManagerLibrary.h \
                 OpenSpeedShopLibrary.h \
-                ConnectionManager/ServerAdapter.h
+                ConnectionManager/ServerAdapter.h \
+    RemoteFileSystem/RemoteFileEngine.h \
+    RemoteFileSystem/RemoteFileEngineHandler.h
 
 FORMS        += Settings/SettingPage.ui \
                 AboutDialog.ui \
@@ -61,3 +65,5 @@ QT           += xml
 
 DEFINES      += OPENSPEEDSHOP_LIBRARY \
                 CONNECTIONMANAGER_LIBRARY
+
+#debug: DEFINES += DATAMODEL_DEBUG

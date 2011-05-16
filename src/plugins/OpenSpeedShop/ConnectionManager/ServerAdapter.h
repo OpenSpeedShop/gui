@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QDomElement>
 #include "ConnectionManagerLibrary.h"
+#include "../ViewManager/DataModel.h"
 
 namespace Plugins {
 namespace OpenSpeedShop {
@@ -46,7 +47,7 @@ public:
     ServerCommand *experimentDatabase(qint64 expId);
     ServerCommand *experimentMetrics(qint64 expId);
     ServerCommand *experimentRanks(qint64 expId);
-    ServerCommand *experimentView(qint64 expId, QString expType = QString(), int resolution = 100);
+    ServerCommand *experimentView(qint64 expId, QString expType = QString(), int resolution = 1000);
 
     QStringList waitOssHelp();
     QStringList waitExperimentTypes();
@@ -56,7 +57,7 @@ public:
     QString waitExperimentDatabase(qint64 expId);
     QStringList waitExperimentMetrics(qint64 expId);
     QList<qint64> waitExperimentRanks(qint64 expId);
-    void waitExperimentView(qint64 expId, QString expType = QString(), int resolution = 100);
+    DataModel *waitExperimentView(qint64 expId, QString expType = QString(), int resolution = 1000);
     /*** END OpenSpeedShopCLI commands *******************************************/
 
 

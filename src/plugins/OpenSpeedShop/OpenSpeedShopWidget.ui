@@ -13,16 +13,12 @@
   <property name="windowTitle">
    <string>TabWidget</string>
   </property>
-  <widget class="QWidget" name="tab1">
-   <attribute name="title">
-    <string>Tab 1</string>
-   </attribute>
-  </widget>
-  <widget class="QWidget" name="tab2">
-   <attribute name="title">
-    <string>Tab 2</string>
-   </attribute>
-  </widget>
+  <property name="documentMode">
+   <bool>true</bool>
+  </property>
+  <property name="tabsClosable">
+   <bool>true</bool>
+  </property>
  </widget>
  <resources/>
  <connections/>

@@ -87,7 +87,16 @@ bool Socket::close()
 bool Socket::send(std::string str)
 {
   std::cerr << __FILE__ << ":" << __LINE__ << "\t\tSending data" << std::endl;
-  return (::send(_socketDescriptor, str.c_str(), str.size(), MSG_NOSIGNAL) >= 0);
+
+  uint32_t header = htonl((uint32_t)str.size());
+  unsigned char headerArray[sizeof(header)];
+  memcpy(headerArray, &header, sizeof(header));
+
+  if(::send(_socketDescriptor, headerArray, sizeof(headerArray), MSG_NOSIGNAL) >= 0) {
+    return ( ::send(_socketDescriptor, str.c_str(), str.size(), MSG_NOSIGNAL) >= 0 );
+  }
+
+  return false;
 }
 
 int Socket::recv(std::string &str)
