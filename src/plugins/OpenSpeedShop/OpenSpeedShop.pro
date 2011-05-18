@@ -32,8 +32,9 @@ SOURCES      += OpenSpeedShopPlugin.cpp \
                 ViewManager/DataModel.cpp \
                 ViewManager/DataItem.cpp \
                 ConnectionManager/ServerAdapter.cpp \
-    RemoteFileSystem/RemoteFileEngine.cpp \
-    RemoteFileSystem/RemoteFileEngineHandler.cpp
+                RemoteFileSystem/RemoteFileEngine.cpp \
+                RemoteFileSystem/RemoteFileEngineHandler.cpp \
+                Experiment/ModelBuilderDialog.cpp
 
 HEADERS      += OpenSpeedShopPlugin.h \
                 Settings/SettingPageFactory.h \
@@ -50,14 +51,16 @@ HEADERS      += OpenSpeedShopPlugin.h \
                 ConnectionManager/ConnectionManagerLibrary.h \
                 OpenSpeedShopLibrary.h \
                 ConnectionManager/ServerAdapter.h \
-    RemoteFileSystem/RemoteFileEngine.h \
-    RemoteFileSystem/RemoteFileEngineHandler.h
+                RemoteFileSystem/RemoteFileEngine.h \
+                RemoteFileSystem/RemoteFileEngineHandler.h \
+                Experiment/ModelBuilderDialog.h
 
 FORMS        += Settings/SettingPage.ui \
                 AboutDialog.ui \
                 Experiment/ExperimentWidget.ui \
                 OpenSpeedShopWidget.ui \
-                ConnectionManager/ConnectionWidget.ui
+                ConnectionManager/ConnectionWidget.ui \
+                Experiment/ModelBuilderDialog.ui
 
 RESOURCES    += Resources/OpenSpeedShop.qrc
 
@@ -67,3 +70,9 @@ DEFINES      += OPENSPEEDSHOP_LIBRARY \
                 CONNECTIONMANAGER_LIBRARY
 
 #debug: DEFINES += DATAMODEL_DEBUG
+
+OTHER_FILES += Experiment/metrics.xml
+descriptors.path = /
+descriptors.files = Experiment/metrics.xml
+INSTALLS += descriptors
+

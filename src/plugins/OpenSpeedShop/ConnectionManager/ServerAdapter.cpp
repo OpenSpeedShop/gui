@@ -1,5 +1,6 @@
 #include "ServerAdapter.h"
 
+#include <QFile>
 #include <QApplication>
 #include "ConnectionManager.h"
 #include "ServerCommand.h"
@@ -56,7 +57,7 @@ QDomElement ServerAdapter::waitCommand(ServerCommand *serverCommand)
         QApplication::processEvents();
 
     QDomElement responseElement = serverCommand->response().firstChildElement("Response");
-    if(responseElement.isNull()) throw QString("'Response' element doesn't exist, as expected.");
+    if(responseElement.isNull()) throw tr("'Response' element doesn't exist, as expected.");
 
     return responseElement;
 }
@@ -67,10 +68,10 @@ QDomElement ServerAdapter::waitCommand(ServerCommand *serverCommand)
 QString ServerAdapter::getString(QDomElement responseElement)
 {
     QDomElement openSpeedShopCliElement = responseElement.firstChildElement("OpenSpeedShopCLI");
-    if(openSpeedShopCliElement.isNull()) throw QString("'OpenSpeedShopCLI' doesn't exist, as expected.");
+    if(openSpeedShopCliElement.isNull()) throw tr("'OpenSpeedShopCLI' doesn't exist, as expected.");
 
     QDomElement commandObjectElement = openSpeedShopCliElement.firstChildElement("CommandObject");
-    if(commandObjectElement.isNull()) throw QString("'CommandObject' doesn't exist, as expected.");
+    if(commandObjectElement.isNull()) throw tr("'CommandObject' doesn't exist, as expected.");
 
     QDomElement child = commandObjectElement.firstChildElement("String");
 
@@ -83,17 +84,17 @@ QString ServerAdapter::getString(QDomElement responseElement)
 QStringList ServerAdapter::getStringList(QDomElement responseElement)
 {
     QDomElement openSpeedShopCliElement = responseElement.firstChildElement("OpenSpeedShopCLI");
-    if(openSpeedShopCliElement.isNull()) throw QString("'OpenSpeedShopCLI' doesn't exist, as expected.");
+    if(openSpeedShopCliElement.isNull()) throw tr("'OpenSpeedShopCLI' doesn't exist, as expected.");
 
     QDomElement commandObjectElement = openSpeedShopCliElement.firstChildElement("CommandObject");
-    if(commandObjectElement.isNull()) throw QString("'CommandObject' doesn't exist, as expected.");
+    if(commandObjectElement.isNull()) throw tr("'CommandObject' doesn't exist, as expected.");
 
     QStringList stringList;
     QDomElement child = commandObjectElement.firstChildElement("String");
     while(!child.isNull()) {
         // If the 'value' attribute hasn't been set, an empty string is automatically entered
         stringList.append(child.attribute("value"));
-        child = child.nextSiblingElement("String");
+        child = child.nextSiblingElement(child.tagName());
     }
 
     return stringList;
@@ -105,10 +106,10 @@ QStringList ServerAdapter::getStringList(QDomElement responseElement)
 qint64 ServerAdapter::getInt(QDomElement responseElement)
 {
     QDomElement openSpeedShopCliElement = responseElement.firstChildElement("OpenSpeedShopCLI");
-    if(openSpeedShopCliElement.isNull()) throw QString("'OpenSpeedShopCLI' doesn't exist, as expected.");
+    if(openSpeedShopCliElement.isNull()) throw tr("'OpenSpeedShopCLI' doesn't exist, as expected.");
 
     QDomElement commandObjectElement = openSpeedShopCliElement.firstChildElement("CommandObject");
-    if(commandObjectElement.isNull()) throw QString("'CommandObject' doesn't exist, as expected.");
+    if(commandObjectElement.isNull()) throw tr("'CommandObject' doesn't exist, as expected.");
 
     QDomElement child = commandObjectElement.firstChildElement("Int");
 
@@ -121,16 +122,16 @@ qint64 ServerAdapter::getInt(QDomElement responseElement)
 QList<qint64> ServerAdapter::getIntList(QDomElement responseElement)
 {
     QDomElement openSpeedShopCliElement = responseElement.firstChildElement("OpenSpeedShopCLI");
-    if(openSpeedShopCliElement.isNull()) throw QString("'OpenSpeedShopCLI' doesn't exist, as expected.");
+    if(openSpeedShopCliElement.isNull()) throw tr("'OpenSpeedShopCLI' doesn't exist, as expected.");
 
     QDomElement commandObjectElement = openSpeedShopCliElement.firstChildElement("CommandObject");
-    if(commandObjectElement.isNull()) throw QString("'CommandObject' doesn't exist, as expected.");
+    if(commandObjectElement.isNull()) throw tr("'CommandObject' doesn't exist, as expected.");
 
     QList<qint64> integerList;
     QDomElement child = commandObjectElement.firstChildElement("Int");
     while(!child.isNull()) {
         integerList.append(child.attribute("value", "-1").toLongLong());
-        child = child.nextSiblingElement("String");
+        child = child.nextSiblingElement(child.tagName());
     }
 
     return integerList;
@@ -157,13 +158,13 @@ QString ServerAdapter::waitVersion()
         QApplication::processEvents();
 
     QDomElement responseElement = serverCommand->response().firstChildElement("Response");
-    if(responseElement.isNull()) throw QString("'Response' element doesn't exist, as expected.");
+    if(responseElement.isNull()) throw tr("'Response' element doesn't exist, as expected.");
 
     QDomElement serverResponseElement = responseElement.firstChildElement("ServerResponse");
-    if(serverResponseElement.isNull()) throw QString("'ServerResponse' doesn't exist, as expected.");
+    if(serverResponseElement.isNull()) throw tr("'ServerResponse' doesn't exist, as expected.");
 
     if(!serverResponseElement.hasAttribute("version"))
-        throw QString("'ServerResponse'' doesn't have 'version' attribute, as expected.");
+        throw tr("'ServerResponse'' doesn't have 'version' attribute, as expected.");
 
     QString version = serverResponseElement.attribute("version");
     delete serverCommand;
@@ -220,7 +221,7 @@ QStringList ServerAdapter::waitOssHelp()
  */
 ServerCommand *ServerAdapter::experimentTypes()
 {
-    QString command = QString("list -v exptypes -v all");
+    QString command = QString("list -v expTypes -v all");
     return rawOpenSpeedShopCommand(command);
 }
 
@@ -285,47 +286,47 @@ QList<qint64> ServerAdapter::waitListOpenExperiments()
 
 /*! \fn ServerAdapter::experimentTypes()
     \brief Lists the experiment types associated with an experiment.
-    \param expId the experiment identifier.
+    \param experimentId the experiment identifier.
     \returns the asynchronous command object
  */
-ServerCommand *ServerAdapter::experimentTypes(qint64 expId)
+ServerCommand *ServerAdapter::experimentTypes(qint64 experimentId)
 {
-    QString command = QString("list -v exp -x %1").arg(expId);
+    QString command = QString("list -v expTypes -x %1").arg(experimentId);
     return rawOpenSpeedShopCommand(command);
 }
 
 /*! \fn ServerAdapter::waitExperimentTypes()
     \brief Sycnronously lists the experiment types associated with an experiment.
-    \param expId the experiment identifier.
+    \param experimentId the experiment identifier.
     \returns a list of experiment type names associated with the experiment
  */
-QStringList ServerAdapter::waitExperimentTypes(qint64 expId)
+QString ServerAdapter::waitExperimentTypes(qint64 experimentId)
 {
-    ServerCommand *serverCommand = experimentTypes(expId);
+    ServerCommand *serverCommand = experimentTypes(experimentId);
     QDomElement responseElement = waitCommand(serverCommand);
     delete serverCommand;
-    return getStringList(responseElement);
+    return getString(responseElement);
 }
 
 /*! \fn ServerAdapter::experimentDatabase()
     \brief Lists the database filepath associated with an experiment
-    \param expId the experiment identifier.
+    \param experimentId the experiment identifier.
     \returns the asynchronous command object
  */
-ServerCommand *ServerAdapter::experimentDatabase(qint64 expId)
+ServerCommand *ServerAdapter::experimentDatabase(qint64 experimentId)
 {
-    QString command = QString("list -v database -x %1").arg(expId);
+    QString command = QString("list -v database -x %1").arg(experimentId);
     return rawOpenSpeedShopCommand(command);
 }
 
 /*! \fn ServerAdapter::waitExperimentDatabase()
     \brief Synchronously lists the database filepath associated with an experiment.
-    \param expId the experiment identifier.
+    \param experimentId the experiment identifier.
     \returns the database filepath associated with the experiment.
  */
-QString ServerAdapter::waitExperimentDatabase(qint64 expId)
+QString ServerAdapter::waitExperimentDatabase(qint64 experimentId)
 {
-    ServerCommand *serverCommand = experimentDatabase(expId);
+    ServerCommand *serverCommand = experimentDatabase(experimentId);
     QDomElement responseElement = waitCommand(serverCommand);
     delete serverCommand;
     return getString(responseElement);
@@ -333,23 +334,23 @@ QString ServerAdapter::waitExperimentDatabase(qint64 expId)
 
 /*! \fn ServerAdapter::experimentMetrics()
     \brief Lists the metrics associated with an experiment.
-    \param expId the experiment identifier.
+    \param experimentId the experiment identifier.
     \returns the asynchronous command object
  */
-ServerCommand *ServerAdapter::experimentMetrics(qint64 expId)
+ServerCommand *ServerAdapter::experimentMetrics(qint64 experimentId)
 {
-    QString command = QString("list -v metrics -x %1").arg(expId);
+    QString command = QString("list -v metrics -x %1").arg(experimentId);
     return rawOpenSpeedShopCommand(command);
 }
 
 /*! \fn ServerAdapter::waitExperimentMetrics()
     \brief Synchronously lists the metrics associated with an experiment.
-    \param expId the experiment identifier.
+    \param experimentId the experiment identifier.
     \returns the list of metrics associated with the experiment.
  */
-QStringList ServerAdapter::waitExperimentMetrics(qint64 expId)
+QStringList ServerAdapter::waitExperimentMetrics(qint64 experimentId)
 {
-    ServerCommand *serverCommand = experimentMetrics(expId);
+    ServerCommand *serverCommand = experimentMetrics(experimentId);
     QDomElement responseElement = waitCommand(serverCommand);
     delete serverCommand;
     return getStringList(responseElement);
@@ -357,46 +358,214 @@ QStringList ServerAdapter::waitExperimentMetrics(qint64 expId)
 
 /*! \fn ServerAdapter::experimentRanks()
     \brief Lists the ranks associated with an experiment.
-    \param expId the experiment identifier.
+    \param experimentId the experiment identifier.
     \returns the asynchronous command object
  */
-ServerCommand *ServerAdapter::experimentRanks(qint64 expId)
+ServerCommand *ServerAdapter::experimentRanks(qint64 experimentId)
 {
-    QString command = QString("list -v ranks -x %1").arg(expId);
+    QString command = QString("list -v ranks -x %1").arg(experimentId);
     return rawOpenSpeedShopCommand(command);
 }
 
 /*! \fn ServerAdapter::waitExperimentRanks()
     \brief Synchronously lists the ranks associated with an experiment.
-    \param expId the experiment identifier.
+    \param experimentId the experiment identifier.
     \returns the list of ranks associated with the experiment.
  */
-QList<qint64> ServerAdapter::waitExperimentRanks(qint64 expId)
+QList<qint64> ServerAdapter::waitExperimentRanks(qint64 experimentId)
 {
-    ServerCommand *serverCommand = experimentRanks(expId);
+    ServerCommand *serverCommand = experimentRanks(experimentId);
     QDomElement responseElement = waitCommand(serverCommand);
     delete serverCommand;
     return getIntList(responseElement);
 }
 
 
-
-
-ServerCommand *ServerAdapter::experimentView(qint64 expId, QString expType, int resolution)
+ServerCommand *ServerAdapter::experimentAppCommand(qint64 experimentId)
 {
-    QString command = QString("expView -x %1").arg(expId);
-
-//    QString command = QString("expView -x %1 -v CallTrees,FullStack").arg(expId);
-//    QString command = QString("expview io100 -v CallTrees,FullStack -m counts -m io::exclusive_times -m io::inclusive_times").arg(expId);
-
-    if(!expType.isEmpty()) {
-        command.append(QString(" %1%2").arg(expType).arg(resolution));
-    }
+    QString command = QString("list -v appcommand -x %1").arg(experimentId);
     return rawOpenSpeedShopCommand(command);
 }
-DataModel *ServerAdapter::waitExperimentView(qint64 expId, QString expType, int resolution)
+QString ServerAdapter::waitExperimentAppCommand(qint64 experimentId)
 {
-    ServerCommand *serverCommand = experimentView(expId, expType, resolution);
+    ServerCommand *serverCommand = experimentAppCommand(experimentId);
+    QDomElement responseElement = waitCommand(serverCommand);
+    delete serverCommand;
+    return getString(responseElement);
+}
+
+ServerCommand *ServerAdapter::experimentExecutable(qint64 experimentId)
+{
+    QString command = QString("list -v executable -x %1").arg(experimentId);
+    return rawOpenSpeedShopCommand(command);
+}
+QString ServerAdapter::waitExperimentExecutable(qint64 experimentId)
+{
+    ServerCommand *serverCommand = experimentExecutable(experimentId);
+    QDomElement responseElement = waitCommand(serverCommand);
+    delete serverCommand;
+    return getString(responseElement);
+}
+
+ServerCommand *ServerAdapter::experimentHosts(qint64 experimentId)
+{
+    QString command = QString("list -v hosts -x %1").arg(experimentId);
+    return rawOpenSpeedShopCommand(command);
+}
+QStringList ServerAdapter::waitExperimentHosts(qint64 experimentId)
+{
+    ServerCommand *serverCommand = experimentHosts(experimentId);
+    QDomElement responseElement = waitCommand(serverCommand);
+    delete serverCommand;
+    return getStringList(responseElement);
+}
+
+ServerCommand *ServerAdapter::experimentPids(qint64 experimentId)
+{
+    QString command = QString("list -v pids -x %1").arg(experimentId);
+    return rawOpenSpeedShopCommand(command);
+}
+QList<qint64> ServerAdapter::waitExperimentPids(qint64 experimentId)
+{
+    ServerCommand *serverCommand = experimentPids(experimentId);
+    QDomElement responseElement = waitCommand(serverCommand);
+    delete serverCommand;
+    return getIntList(responseElement);
+}
+
+
+ServerCommand *ServerAdapter::experimentSourceFiles(qint64 experimentId)
+{
+    QString command = QString("list -v src -x %1").arg(experimentId);
+    return rawOpenSpeedShopCommand(command);
+}
+QStringList ServerAdapter::waitExperimentSourceFiles(qint64 experimentId)
+{
+    ServerCommand *serverCommand = experimentSourceFiles(experimentId);
+    QDomElement responseElement = waitCommand(serverCommand);
+    delete serverCommand;
+    return getStringList(responseElement);
+}
+
+ServerCommand *ServerAdapter::experimentObjectFiles(qint64 experimentId)
+{
+    QString command = QString("list -v src -x %1").arg(experimentId);
+    return rawOpenSpeedShopCommand(command);
+}
+QStringList ServerAdapter::waitExperimentObjectFiles(qint64 experimentId)
+{
+    ServerCommand *serverCommand = experimentObjectFiles(experimentId);
+    QDomElement responseElement = waitCommand(serverCommand);
+    delete serverCommand;
+    return getStringList(responseElement);
+}
+
+ServerCommand *ServerAdapter::experimentThreads(qint64 experimentId)
+{
+    QString command = QString("list -v threads -x %1").arg(experimentId);
+    return rawOpenSpeedShopCommand(command);
+}
+QList<qint64> ServerAdapter::waitExperimentThreads(qint64 experimentId)
+{
+    ServerCommand *serverCommand = experimentThreads(experimentId);
+    QDomElement responseElement = waitCommand(serverCommand);
+    delete serverCommand;
+    return getIntList(responseElement);
+}
+
+ServerCommand *ServerAdapter::experimentViews(QString experimentType)
+{
+    QString command = QString("list -v views %1").arg(experimentType);
+    return rawOpenSpeedShopCommand(command);
+}
+QStringList ServerAdapter::waitExperimentViews(QString experimentType)
+{
+    ServerCommand *serverCommand = experimentViews(experimentType);
+    QDomElement responseElement = waitCommand(serverCommand);
+    delete serverCommand;
+    return getStringList(responseElement);
+}
+
+ServerCommand *ServerAdapter::experimentParameterValues(qint64 experimentId)
+{
+    QString command = QString("list -v paramvalues -x %1").arg(experimentId);
+    return rawOpenSpeedShopCommand(command);
+}
+QMap<QString, QVariant> ServerAdapter::waitExperimentParameterValues(qint64 experimentId)
+{
+    ServerCommand *serverCommand = experimentParameterValues(experimentId);
+    QDomElement responseElement = waitCommand(serverCommand);
+
+    QDomElement openSpeedShopCliElement = responseElement.firstChildElement("OpenSpeedShopCLI");
+    if(openSpeedShopCliElement.isNull()) throw tr("'OpenSpeedShopCLI' doesn't exist, as expected.");
+
+    QDomElement commandObjectElement = openSpeedShopCliElement.firstChildElement("CommandObject");
+    if(commandObjectElement.isNull()) throw tr("'CommandObject' doesn't exist, as expected.");
+
+    // Iterate over the list of parameters and parse it into a QMap for the returned value
+    QRegExp regex("[\\s=]*$");      // So we can remove the equal sign and spaces at the end
+    QMap<QString, QVariant> parameters;
+    QDomElement row = commandObjectElement.firstChildElement("Columns");
+    while(!row.isNull()) {
+        // Clean up the parameter name
+        QDomElement nameElement = row.firstChildElement();
+        QString nameString = nameElement.attribute("value");
+        nameString = nameString.remove(regex);
+
+        // Get the value string and value type
+        QDomElement valueElement = nameElement.nextSiblingElement();
+        QVariant value;
+        bool okay = false;
+        QString valueType = valueElement.tagName();
+        QString valueString = valueElement.attribute("value");
+
+        // If we know how to convert the type, attempt it
+        if(!valueType.compare("Duration", Qt::CaseInsensitive) ||
+           !valueType.compare("Float", Qt::CaseInsensitive)) {
+            value = valueString.toDouble(&okay);
+
+        } else if(!valueType.compare("Int", Qt::CaseInsensitive)) {
+            value = valueString.toLongLong(&okay);
+
+        } else if(!valueType.compare("Interval", Qt::CaseInsensitive) ||
+                  !valueType.compare("Uint", Qt::CaseInsensitive)) {
+            value = valueString.toULongLong(&okay);
+        }
+
+        // If all else fails, just use the string value
+        if(!okay) value = valueString;
+
+        // Save the key-value pair and move on to the next one
+        parameters[nameString] = value;
+        row = row.nextSiblingElement(row.tagName());
+    }
+
+    delete serverCommand;
+    return parameters;
+}
+
+
+ServerCommand *ServerAdapter::experimentView(qint64 experimentId, QStringList modifiers, QStringList metrics, QString experimentType, int count)
+{
+    QString command = QString("expView -x %1").arg(experimentId);
+
+    if(!modifiers.isEmpty()) {
+        command.append(" -v " + modifiers.join(","));
+    }
+
+    if(!metrics.isEmpty()) {
+        command.append(" -m " + metrics.join(","));
+    }
+
+    if(!experimentType.isEmpty()) {
+        command.append(QString(" %1%2").arg(experimentType).arg(count));
+    }
+
+    return rawOpenSpeedShopCommand(command);
+}
+DataModel *ServerAdapter::waitExperimentView(qint64 experimentId, QStringList modifiers, QStringList metrics, QString experimentType, int count)
+{
+    ServerCommand *serverCommand = experimentView(experimentId, modifiers, metrics, experimentType, count);
     waitCommand(serverCommand);
 
     DataModel *dataModel = NULL;
@@ -407,8 +576,109 @@ DataModel *ServerAdapter::waitExperimentView(qint64 expId, QString expType, int 
     return dataModel;
 }
 
+ServerCommand *ServerAdapter::experimentView(qint64 experimentId, QString experimentType, int count)
+{
+    return experimentView(experimentId, QStringList(), QStringList(), experimentType, count);
+}
+DataModel *ServerAdapter::waitExperimentView(qint64 experimentId, QString experimentType, int count)
+{
+    return waitExperimentView(experimentId, QStringList(), QStringList(), experimentType, count);
+}
 
 
+QList<ServerAdapter::Process> ServerAdapter::waitExperimentProcesses(qint64 experimentId)
+{
+    QString command = QString("expStatus -x %1").arg(experimentId);
+    ServerCommand *serverCommand = rawOpenSpeedShopCommand(command);
+    QDomElement responseElement = waitCommand(serverCommand);
+    QStringList stringList = getStringList(responseElement);
+
+    QList<Process> processes;
+    //FIXME: I don't know why I can't use character sets.  Bug in Qt4.7.1?
+    QRegExp regex("^\\s*-h (.+) -p (.+) -t (.+) -r (.+) \\((.+)\\)\\s*$");
+    foreach(QString string, stringList) {
+        if(regex.exactMatch(string)) {
+            Process process;
+            process.host = regex.cap(1);
+            process.processId = regex.cap(2).toLongLong();
+            process.threadId = regex.cap(3).toLongLong();
+            process.rank = regex.cap(4).toLongLong();
+            process.executable = regex.cap(5);
+            processes.append(process);
+        }
+    }
+
+    return processes;
+}
+
+
+/*! \fn ServerAdapter::loadMetrics()
+    \brief This doesn't belong here, it should be retreived from the server.
+    \todo This doesn't belong here, it should be retreived from the server.
+ */
+void ServerAdapter::loadMetrics()
+{
+    m_MetricsList = QDomDocument("Modifiers");
+    QFile file("metrics.xml");
+    if (!file.open(QIODevice::ReadOnly)) {
+        throw tr("Could not open metrics description file");
+    }
+    if (!m_MetricsList.setContent(&file)) {
+        file.close();
+        throw tr("Could not use metrics description file after opening, possibly invalid text");
+    }
+    file.close();
+}
+QMap<QString,QString> ServerAdapter::waitExperimentTypeModifiers(QString experimentType)
+{
+    QMap<QString,QString> modifiers;
+
+    if(m_MetricsList.isNull()) {
+        loadMetrics();
+    }
+
+    //NOTE: This seems fast enough on its own, but we may have to do some caching later
+    QDomElement element = m_MetricsList.firstChildElement("ExperimentTypes");
+    element = element.firstChildElement("ExperimentType");
+    while(!element.isNull()) {
+        if(!element.attribute("value").compare(experimentType, Qt::CaseInsensitive)) {
+            element = element.firstChildElement("Modifier");
+            while(!element.isNull()) {
+                modifiers[element.attribute("value")] = element.attribute("summary");
+                element = element.nextSiblingElement(element.tagName());
+            }
+            return modifiers;
+        }
+        element = element.nextSiblingElement(element.tagName());
+    }
+
+    qDebug() << "Could not find experiment type";
+    return modifiers;
+}
+QMap<QString,QString> ServerAdapter::waitExperimentTypeMetrics(QString experimentType)
+{
+    QMap<QString,QString> metrics;
+
+    if(m_MetricsList.isNull()) {
+        loadMetrics();
+    }
+
+    //NOTE: This seems fast enough on its own, but we may have to do some caching later
+    QDomElement element = m_MetricsList.firstChildElement("ExperimentTypes");
+    element = element.firstChildElement("ExperimentType");
+    while(!element.isNull()) {
+        if(!element.attribute("value").compare(experimentType, Qt::CaseInsensitive)) {
+            element = element.firstChildElement("Metric");
+            while(!element.isNull()) {
+                metrics[element.attribute("value")] = element.attribute("summary");
+                element = element.nextSiblingElement(element.tagName());
+            }
+            return metrics;
+        }
+        element = element.nextSiblingElement(element.tagName());
+    }
+    return metrics;
+}
 
 /*** END OpenSpeedShopCLI commands *******************************************/
 

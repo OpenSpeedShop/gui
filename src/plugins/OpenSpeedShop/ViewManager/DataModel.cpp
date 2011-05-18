@@ -146,8 +146,39 @@ DataModel::Cell *DataModel::processCell(QDomElement cellElement, Cell *parent)
     for(uint i=0; i < attributes.length(); i++) {
         QDomAttr cellAttr = attributes.item(i).toAttr();
         if(!cellAttr.isNull()) {
-            /// \todo Test for non-string values, and use those instead
-            cell->data[cellAttr.name()] = QVariant(cellAttr.value());
+            QString attrName = cellAttr.name();
+            QString attrValue = cellAttr.value();
+
+            // Do we know what type of value this is?
+            QString valueType;
+            if(!attrName.compare("value", Qt::CaseInsensitive)) {
+                valueType = cell->data["type"].toString();
+            }
+
+            bool okay = false;
+            QVariant value;
+            if(valueType.isEmpty()) {
+                // We don't know what type it is test for non-string values, and use those if we can
+                if(!okay) value = attrValue.toULongLong(&okay);
+                if(!okay) value = attrValue.toLongLong(&okay);
+                if(!okay) value = attrValue.toDouble(&okay);
+
+            } else if(!valueType.compare("Duration", Qt::CaseInsensitive) ||
+                      !valueType.compare("Float", Qt::CaseInsensitive)) {
+                value = attrValue.toDouble(&okay);
+
+            } else if(!valueType.compare("Int", Qt::CaseInsensitive)) {
+                value = attrValue.toLongLong(&okay);
+
+            } else if(!valueType.compare("Interval", Qt::CaseInsensitive) ||
+                      !valueType.compare("Uint", Qt::CaseInsensitive)) {
+                value = attrValue.toULongLong(&okay);
+            }
+
+            // If it made it past all that and we still don't have a value type, just use the string
+            if(!okay) value = attrValue;
+
+            cell->data[attrName] = value;
         }
     }
 

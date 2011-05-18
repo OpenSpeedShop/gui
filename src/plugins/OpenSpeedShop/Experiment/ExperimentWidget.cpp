@@ -7,6 +7,8 @@
 #include "ConnectionManager/ServerCommand.h"
 #include <QDomDocument>
 
+#include "ModelBuilderDialog.h"
+
 #ifdef QT_DEBUG
 #  include <QDebug>
 #endif
@@ -56,21 +58,58 @@ void ExperimentWidget::load()
     }
 
 //    qDebug() << serverAdapter->waitVersion();
-//    qDebug() << serverAdapter->waitExperimentTypes();
 
-    qint64 expId = serverAdapter->waitRestore("/home/dane/smg2000-pcsamp.openss");
-    try {
-    DataModel *dataModel = serverAdapter->waitExperimentView(expId);
-//    qDebug() << dataModel->dumpModel();
-    ui->treeView->setModel(dataModel);
-    } catch(QString err) {
-        using namespace Core::MainWindow;
-        QString errorMessage = tr("An error occured while loading the experiment view: '%1'").arg(err);
-        MainWindow::instance()->notify(errorMessage, NotificationWidget::Critical);
-    }
+    qint64 expId = serverAdapter->waitRestore("/home/dane/smg2000-io.openss");
+    ui->txtDatabasePath->setText(serverAdapter->waitExperimentDatabase(expId));
+    ui->txtExecutablePath->setText(serverAdapter->waitExperimentExecutable(expId));
+    ui->txtCommand->setText(serverAdapter->waitExperimentAppCommand(expId));
+
+    ui->cmbExperimentTypes->setCurrentIndex(ui->cmbExperimentTypes->findText(serverAdapter->waitExperimentTypes(expId)));
+
+//    qDebug() << "parameters" << serverAdapter->waitExperimentParameterValues(expId);
+
+//    qDebug() << "hosts" << serverAdapter->waitExperimentHosts(expId);
+//    qDebug() << "ranks" << serverAdapter->waitExperimentRanks(expId);
+//    qDebug() << "pids" << serverAdapter->waitExperimentPids(expId);
+
+//    qDebug() << "sources" << serverAdapter->waitExperimentSourceFiles(expId);
+//    qDebug() << "objects" << serverAdapter->waitExperimentObjectFiles(expId);
+//    qDebug() << "threads" << serverAdapter->waitExperimentThreads(expId);
+
+//    qDebug() << "Processes:";
+//    QList<ServerAdapter::Process> processes = serverAdapter->experimentProcesses(expId);
+//    foreach(ServerAdapter::Process process, processes) {
+//        qDebug() << "\t" << process.host << process.processId << process.threadId << process.rank << process.executable;
+//    }
+
+
+//    QString experimentType = serverAdapter->waitExperimentTypes(expId);
+
+//    qDebug() << "Modifiers" << serverAdapter->waitExperimentTypeModifiers(experimentType);
+//    qDebug() << "Metrics" << serverAdapter->waitExperimentTypeMetrics(experimentType);
+
+//    QStringList modifiers;
+//    modifiers << "CallTrees" << "FullStack";
+//    QStringList metrics;
+//    metrics << "counts" << "io::exclusive_times"; // << "io::inclusive_times";
+
+//    try {
+//    DataModel *dataModel = serverAdapter->waitExperimentView(expId, modifiers, metrics, experimentType, 10);
+//    ui->treeView->setModel(dataModel);
+//    } catch(QString err) {
+//        using namespace Core::MainWindow;
+//        QString errorMessage = tr("An error occured while loading the experiment view: '%1'").arg(err);
+//        MainWindow::instance()->notify(errorMessage, NotificationWidget::Critical);
+//    }
 
 //    serverAdapter->waitExit();
 
+}
+
+void ExperimentWidget::on_btnAddModel_clicked()
+{
+    ModelBuilderDialog dlg;
+    dlg.exec();
 }
 
 

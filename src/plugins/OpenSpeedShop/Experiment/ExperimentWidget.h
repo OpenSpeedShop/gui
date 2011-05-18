@@ -19,6 +19,9 @@ public:
     void create();
     void load();
 
+protected slots:
+    void on_btnAddModel_clicked();
+
 private:
     Ui::ExperimentWidget *ui;
 

@@ -10,6 +10,7 @@ class RemoteFileEngine : public QAbstractFileEngine
 {
 public:
     RemoteFileEngine();
+    RemoteFileEngine(const QString &fileName);
 
     /* if it's a file */
 //    virtual void setFileName(const QString &file);
@@ -19,15 +20,15 @@ public:
     /* if it's a directory */
 //    virtual bool mkdir(const QString &dirName, bool createParentDirectories) const;
 //    virtual bool rmdir(const QString &dirName, bool recurseParentDirectories) const;
-    virtual QStringList entryList(QDir::Filters filters, const QStringList &filterNames) const;
+//    virtual QStringList entryList(QDir::Filters filters, const QStringList &filterNames) const;
 
     /* all filesystem objects */
-    virtual bool caseSensitive() const;
-    virtual bool isRelativePath() const;
-    virtual FileFlags fileFlags(FileFlags type) const;
-    virtual uint ownerId(FileOwner owner) const;
-    virtual QString owner(FileOwner owner) const;
-    virtual QDateTime fileTime(FileTime time) const;
+//    virtual bool caseSensitive() const;
+//    virtual bool isRelativePath() const;
+//    virtual FileFlags fileFlags(FileFlags type) const;
+//    virtual uint ownerId(FileOwner owner) const;
+//    virtual QString owner(FileOwner owner) const;
+//    virtual QDateTime fileTime(FileTime time) const;
 
 
 };
