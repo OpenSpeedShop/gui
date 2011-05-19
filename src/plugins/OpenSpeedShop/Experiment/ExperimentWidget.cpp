@@ -7,7 +7,7 @@
 #include "ConnectionManager/ServerCommand.h"
 #include <QDomDocument>
 
-#include "ModelBuilderDialog.h"
+#include "ModelManager/ModelDescriptorWidget.h"
 
 #ifdef QT_DEBUG
 #  include <QDebug>
@@ -108,8 +108,6 @@ void ExperimentWidget::load()
 
 void ExperimentWidget::on_btnAddModel_clicked()
 {
-    ModelBuilderDialog dlg;
-    dlg.exec();
 }
 
 
