@@ -1,5 +1,7 @@
 #include "ModelDescriptor.h"
 
+#include <QFileInfo>
+
 namespace Plugins {
 namespace OpenSpeedShop {
 
@@ -8,6 +10,7 @@ ModelDescriptor::ModelDescriptor(QObject *parent) :
     m_Id(QUuid::createUuid())
 {
     m_Empty = true;
+    m_Default = false;
 }
 
 QUuid ModelDescriptor::id() const
@@ -126,6 +129,17 @@ bool ModelDescriptor::isEmpty()
     return m_Empty;
 }
 
+bool ModelDescriptor::isDefault()
+{
+    return m_Default;
+}
+
+void ModelDescriptor::setDefault(bool value)
+{
+    m_Default = value;
+}
+
+
 QList<ModelDescriptor *> ModelDescriptor::fromXml(const QString &filePath, QObject *parent)
 {
     QDomDocument document = QDomDocument("ModelDescriptors");
@@ -143,7 +157,7 @@ QList<ModelDescriptor *> ModelDescriptor::fromXml(const QString &filePath, QObje
 
     file.close();
 
-    return fromXml(document);
+    return fromXml(document, parent);
 }
 
 QList<ModelDescriptor *> ModelDescriptor::fromXml(QDomDocument modelDescriptorDocument, QObject *parent)
@@ -183,6 +197,43 @@ ModelDescriptor *ModelDescriptor::fromXml(const QDomElement &modelDescriptorElem
     }
 
     return modelDescriptor;
+}
+
+void ModelDescriptor::toXml(const QString &filepath, QList<ModelDescriptor *> modelDescriptors)
+{
+    QDomDocument document = ModelDescriptor::toXml(modelDescriptors);
+
+    QFile file(filepath);
+    if(!file.open(QIODevice::WriteOnly)) {
+        QFileInfo fileInfo(filepath);
+        throw tr("Failed to open model descriptor export file: %1").arg(fileInfo.absoluteFilePath());
+    }
+
+    QByteArray documentByteArray = document.toString(-1).toLatin1();
+    qint64 writtenBytes = file.write(documentByteArray);
+    if(writtenBytes < documentByteArray.count()) {
+        QFileInfo fileInfo(filepath);
+        throw tr("Failed to export entire model descriptor document to file: %1").arg(fileInfo.absoluteFilePath());
+    }
+
+    file.flush();
+    file.close();
+}
+
+QDomDocument ModelDescriptor::toXml(QList<ModelDescriptor *> modelDescriptors)
+{
+    QDomDocument document("ModelDescriptors");
+    QDomElement rootElement = document.createElement("ModelDescriptors");
+    document.appendChild(rootElement);
+
+    foreach(ModelDescriptor *modelDescriptor, modelDescriptors) {
+        if(modelDescriptor->isDefault())
+            continue;
+
+        rootElement.appendChild(modelDescriptor->toXml(document));
+    }
+
+    return document;
 }
 
 QDomElement ModelDescriptor::toXml(QDomDocument document)

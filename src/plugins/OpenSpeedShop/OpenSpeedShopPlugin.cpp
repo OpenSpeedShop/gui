@@ -31,6 +31,12 @@
 
 #include "OpenSpeedShopPlugin.h"
 #include <PluginManager/PluginManager.h>
+#include "ConnectionManager/ConnectionManager.h"
+#include "ModelManager/ModelManager.h"
+
+#include "Settings/SettingPageFactory.h"
+#include "AboutDialog.h"
+#include "OpenSpeedShopWidget.h"
 
 namespace Plugins {
 namespace OpenSpeedShop {
@@ -93,8 +99,21 @@ bool OpenSpeedShopPlugin::initialize(QStringList &args, QString *err)
         }
     }
 
-    ConnectionManager::instance()->initialize();
-    Core::PluginManager::PluginManager::instance()->addObject(ConnectionManager::instance());
+    /*** Register any managers with the plugin manager ***/
+    Core::PluginManager::PluginManager *pluginManager = Core::PluginManager::PluginManager::instance();
+
+    ConnectionManager *connectionManager = ConnectionManager::instance();
+    connectionManager->initialize();
+    pluginManager->addObject(connectionManager);
+
+    ModelManager *modelManager = ModelManager::instance();
+    modelManager->initialize();
+    pluginManager->addObject(modelManager);
+
+    //TODO: Register ViewManager
+//    ViewManager *viewManager = ViewManager::instance();
+//    viewManager->initialize();
+//    pluginManager->addObject(viewManager);
 
     return true;
 }
@@ -102,6 +121,8 @@ bool OpenSpeedShopPlugin::initialize(QStringList &args, QString *err)
 void OpenSpeedShopPlugin::shutdown()
 {
     ConnectionManager::instance()->shutdown();
+    ModelManager::instance()->shutdown();
+//TODO: ViewManager::instance()->shutdown();
 
     writeSettings();
 }

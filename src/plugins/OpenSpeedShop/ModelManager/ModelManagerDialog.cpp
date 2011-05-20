@@ -4,7 +4,7 @@
 #include <QSplitter>
 #include "ModelManager.h"
 #include "ModelDescriptorWidget.h"
-#include "ModelListWidget.h"
+#include "ModelDescriptorListWidget.h"
 
 namespace Plugins {
 namespace OpenSpeedShop {
@@ -15,10 +15,12 @@ ModelManagerDialog::ModelManagerDialog(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    QWidget *listParent = ui->lstModelDescriptors->parentWidget();
     delete(ui->lstModelDescriptors);
-    ModelListWidget *modelListWidget = ModelManager::instance()->createModelListWidget(QString(), this);
-    ui->lstModelDescriptors = modelListWidget;
-    connect(modelListWidget, SIGNAL(currentModelDescriptorChanged(ModelDescriptor*)),
+    ModelDescriptorListWidget *descriptorListWidget = ModelManager::instance()->createDescriptorListWidget(listParent);
+    listParent->layout()->addWidget(descriptorListWidget);
+    ui->lstModelDescriptors = descriptorListWidget;
+    connect(descriptorListWidget, SIGNAL(currentModelDescriptorChanged(ModelDescriptor*)),
             this, SLOT(currentModelDescriptorChanged(ModelDescriptor*)));
 
 }
@@ -41,6 +43,14 @@ void ModelManagerDialog::currentModelDescriptorChanged(ModelDescriptor *current)
     }
 
     ui->modelDescriptor = new ModelDescriptorWidget(current, this);
+}
+
+void ModelManagerDialog::on_btnCreate_clicked()
+{
+}
+
+void ModelManagerDialog::on_btnRemove_clicked()
+{
 }
 
 

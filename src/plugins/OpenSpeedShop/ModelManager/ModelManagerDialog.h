@@ -20,6 +20,8 @@ public:
 
 protected slots:
     void currentModelDescriptorChanged(ModelDescriptor *current);
+    void on_btnCreate_clicked();
+    void on_btnRemove_clicked();
 
 protected:
     ModelDescriptorWidget *m_CurrentModelDescriptorWidget;

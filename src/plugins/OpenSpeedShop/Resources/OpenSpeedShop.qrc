@@ -12,5 +12,7 @@
         <file alias="add.png">add.png</file>
         <file alias="connect.svg">media-playback-start-8.svg</file>
         <file alias="disconnect.svg">media-playback-stop-8.svg</file>
+        <file alias="removeModelDescriptor.png">remove.png</file>
+        <file alias="createModelDescriptor.png">add.png</file>
     </qresource>
 </RCC>

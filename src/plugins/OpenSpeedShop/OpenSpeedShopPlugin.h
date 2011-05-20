@@ -33,13 +33,10 @@
 #include <PluginManager/IPlugin.h>
 #include <SettingManager/SettingManager.h>
 
-#include "Settings/SettingPageFactory.h"
-#include "AboutDialog.h"
-#include "OpenSpeedShopWidget.h"
-#include "ConnectionManager/ConnectionManager.h"
-
 namespace Plugins {
 namespace OpenSpeedShop {
+
+class OpenSpeedShopWidget;
 
 class OpenSpeedShopPlugin : public QObject, public Core::PluginManager::IPlugin
 {

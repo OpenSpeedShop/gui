@@ -44,10 +44,10 @@ namespace OpenSpeedShop {
     \sa ConnectionManagerPlugin
  */
 
-ConnectionManager *m_Instance;
+ConnectionManager *m_ConnectionManagerInstance;
 ConnectionManager *ConnectionManager::instance()
 {
-    return m_Instance ? m_Instance : m_Instance = new ConnectionManager();
+    return m_ConnectionManagerInstance? m_ConnectionManagerInstance: m_ConnectionManagerInstance = new ConnectionManager();
 }
 
 ConnectionManager::ConnectionManager(QObject *parent) :
@@ -88,6 +88,11 @@ bool ConnectionManager::initialize()
 void ConnectionManager::shutdown()
 {
     writeSettings();
+
+    /* self destruct */
+    //FIXME: There should be some handling for the case where instance() is called again after this
+    delete(m_ConnectionManagerInstance);
+    m_ConnectionManagerInstance = NULL;
 }
 
 /*! \fn ConnectionManager::readSettings()

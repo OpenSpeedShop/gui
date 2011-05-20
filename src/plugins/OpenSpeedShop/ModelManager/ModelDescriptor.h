@@ -39,9 +39,14 @@ public:
 
     bool isEmpty();
 
+    bool isDefault();
+    void setDefault(bool value);
+
     static QList<ModelDescriptor *> fromXml(const QString &filePath, QObject *parent = NULL);
     static QList<ModelDescriptor *> fromXml(QDomDocument modelDescriptorDocument, QObject *parent = NULL);
     static ModelDescriptor *fromXml(const QDomElement &modelDescriptorElement, QObject *parent = NULL);
+    static void toXml(const QString &filepath, QList<ModelDescriptor *> modelDescriptors);
+    static QDomDocument toXml(QList<ModelDescriptor *> modelDescriptors);
     QDomElement toXml(QDomDocument document);
 
 signals:
@@ -61,6 +66,7 @@ protected:
     QStringList m_Modifiers;
     QStringList m_Metrics;
     bool m_Empty;
+    bool m_Default;
 
 };
 
