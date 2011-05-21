@@ -1,7 +1,7 @@
 /*!
-   \file 
+   \file
    \author Dane Gardner <dane.gardner@gmail.com>
-   \version 
+   \version
 
    \section LICENSE
    This file is part of the Open|SpeedShop Graphical User Interface
@@ -106,7 +106,7 @@ void DirectConnection::readReady()
     }
 
     // Read the socket's buffer into ours until we've got everything
-    if(m_Buffer.count() < m_BufferSize) {
+    if((quint32)m_Buffer.count() < m_BufferSize) {
         QByteArray data = m_TcpSocket->read(m_BufferSize - m_Buffer.count());
         m_Buffer.append(data);
 
@@ -116,7 +116,7 @@ void DirectConnection::readReady()
     }
 
     // If we've received everything, let everybody know about it
-    if(m_Buffer.count() >= m_BufferSize) {
+    if((quint32)m_Buffer.count() >= m_BufferSize) {
 #ifdef DIRECTCONNECTION_DEBUG
         qDebug() << "Buffer has reached the size of expected data";
 #endif
@@ -263,7 +263,7 @@ void DirectConnection::send(QString command)
 
 QString DirectConnection::receive()
 {
-    if(m_Buffer.count() >= m_BufferSize) {
+    if((quint32)m_Buffer.count() >= m_BufferSize) {
         QString buffer(m_Buffer);
         m_Buffer.clear();
         m_BufferSize = 0;

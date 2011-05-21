@@ -39,8 +39,9 @@ void ModelManager::initialize()
 void ModelManager::shutdown()
 {
     try {
-        importDescriptors();
+        exportDescriptors();
     } catch(QString err) {
+        //TODO: This should probably be a popup, considering the MainWindow is shutting down.
         using namespace Core::MainWindow;
         MainWindow::instance()->notify(err, NotificationWidget::Critical);
     }

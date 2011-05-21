@@ -2,6 +2,8 @@
 #define MODELMANAGERDIALOG_H
 
 #include <QDialog>
+#include <QSplitter>
+#include <QUuid>
 
 namespace Plugins {
 namespace OpenSpeedShop {
@@ -19,7 +21,7 @@ public:
     ~ModelManagerDialog();
 
 protected slots:
-    void currentModelDescriptorChanged(ModelDescriptor *current);
+    void currentModelDescriptorChanged(const QUuid &current);
     void on_btnCreate_clicked();
     void on_btnRemove_clicked();
 

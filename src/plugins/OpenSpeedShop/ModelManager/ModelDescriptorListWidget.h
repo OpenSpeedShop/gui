@@ -30,7 +30,7 @@ public:
     void setFilter(const QString &regex);
 
 signals:
-    void currentModelDescriptorChanged(QUuid);
+    void currentModelDescriptorChanged(const QUuid&);
 
 protected:
     void setModel(QAbstractItemModel *descriptorsModel);
