@@ -22,7 +22,7 @@ TARGET             = DirectConnection
 SOURCES           += DirectConnectionPlugin.cpp \
                      DirectConnection.cpp \
                      DirectConnectionPage.cpp
-             
+
 
 HEADERS           += DirectConnectionPlugin.h \
                      DirectConnection.h \
@@ -36,6 +36,6 @@ QT                += network xml
 
 INCLUDEPATH       += $$quote($${SOURCE_PATH}/plugins/OpenSpeedShop)
 DEPENDPATH        += $$quote($${SOURCE_PATH}/plugins/OpenSpeedShop)
-LIBS              += -L$$quote(${BUILDDIR}/plugins/OpenSpeedShop/debug) -lOpenSpeedShop
+LIBS              += -L$$quote(${BUILDDIR}/plugins/OpenSpeedShop/$${POSTFIX}) -lOpenSpeedShop
 
 #debug: DEFINES += DIRECTCONNECTION_DEBUG

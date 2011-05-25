@@ -23,4 +23,4 @@ HEADERS           += ExamplePlugin.h
 
 INCLUDEPATH       += $$quote($${SOURCE_PATH}/plugins/OpenSpeedShop)
 DEPENDPATH        += $$quote($${SOURCE_PATH}/plugins/OpenSpeedShop)
-LIBS              += -L$$quote(${BUILDDIR}/plugins/OpenSpeedShop/debug) -lOpenSpeedShop
+LIBS              += -L$$quote(${BUILDDIR}/plugins/OpenSpeedShop/$${POSTFIX}) -lOpenSpeedShop

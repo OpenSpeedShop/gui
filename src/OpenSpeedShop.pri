@@ -19,6 +19,10 @@ QT += core gui
 
 APPLICATION_TARGET = OpenSpeedShop
 
+
+release: POSTFIX   = release
+debug:   POSTFIX   = debug
+
 SOURCE_PATH        = $$quote($${PWD})
 
 INCLUDEPATH       += $$quote($${SOURCE_PATH}/core/lib) $$quote($${SOURCE_PATH}/plugins)

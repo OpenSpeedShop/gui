@@ -35,10 +35,10 @@ SOURCES      += OpenSpeedShopPlugin.cpp \
                 RemoteFileSystem/RemoteFileEngine.cpp \
                 RemoteFileSystem/RemoteFileEngineHandler.cpp \
                 ModelManager/ModelDescriptor.cpp \
-    ModelManager/ModelDescriptorWidget.cpp \
-    ModelManager/ModelManager.cpp \
-    ModelManager/ModelManagerDialog.cpp \
-    ModelManager/ModelDescriptorListWidget.cpp
+                ModelManager/ModelDescriptorWidget.cpp \
+                ModelManager/ModelManager.cpp \
+                ModelManager/ModelManagerDialog.cpp \
+                ModelManager/ModelDescriptorListWidget.cpp
 
 HEADERS      += OpenSpeedShopPlugin.h \
                 Settings/SettingPageFactory.h \
@@ -58,19 +58,19 @@ HEADERS      += OpenSpeedShopPlugin.h \
                 RemoteFileSystem/RemoteFileEngine.h \
                 RemoteFileSystem/RemoteFileEngineHandler.h \
                 ModelManager/ModelDescriptor.h \
-    ModelManager/ModelDescriptorWidget.h \
-    ModelManager/ModelManager.h \
-    ModelManager/ModelManagerDialog.h \
-    ModelManager/ModelDescriptorListWidget.h
+                ModelManager/ModelDescriptorWidget.h \
+                ModelManager/ModelManager.h \
+                ModelManager/ModelManagerDialog.h \
+                ModelManager/ModelDescriptorListWidget.h
 
 FORMS        += Settings/SettingPage.ui \
                 AboutDialog.ui \
                 Experiment/ExperimentWidget.ui \
                 OpenSpeedShopWidget.ui \
                 ConnectionManager/ConnectionWidget.ui \
-    ModelManager/ModelDescriptorWidget.ui \
-    ModelManager/ModelManagerDialog.ui \
-    ModelManager/ModelDescriptorListWidget.ui
+                ModelManager/ModelDescriptorWidget.ui \
+                ModelManager/ModelManagerDialog.ui \
+                ModelManager/ModelDescriptorListWidget.ui
 
 RESOURCES    += Resources/OpenSpeedShop.qrc
 

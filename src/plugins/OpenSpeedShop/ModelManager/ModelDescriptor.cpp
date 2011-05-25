@@ -9,6 +9,7 @@ ModelDescriptor::ModelDescriptor(QObject *parent) :
     QObject(parent),
     m_Id(QUuid::createUuid())
 {
+    m_RowCount = 100;
     m_Empty = true;
     m_Default = false;
 }
