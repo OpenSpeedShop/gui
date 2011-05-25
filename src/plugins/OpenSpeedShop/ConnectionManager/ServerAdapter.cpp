@@ -254,12 +254,17 @@ ServerCommand *ServerAdapter::restore(QString filepath)
     \param filepath is the complete path to the database file.
     \returns The experiment identifier associated with the now open database file.
  */
-qint64 ServerAdapter::waitRestore(QString filepath)
+QUuid ServerAdapter::waitRestore(QString filepath)
 {
     ServerCommand *serverCommand = restore(filepath);
     QDomElement responseElement = waitCommand(serverCommand);
     delete serverCommand;
-    return getInt(responseElement);
+
+    // Associate an experiment UID with the experiment ID, and return it
+    qint64 experimentId = getInt(responseElement);
+    QUuid experimentUid = QUuid::createUuid();
+    m_ExperimentIds.insert(experimentUid, experimentId);
+    return experimentUid;
 }
 
 /*! \fn ServerAdapter::listOpenExperiments()
@@ -307,6 +312,10 @@ QString ServerAdapter::waitExperimentTypes(qint64 experimentId)
     delete serverCommand;
     return getString(responseElement);
 }
+QString ServerAdapter::waitExperimentTypes(QUuid experimentUid)
+{
+    return waitExperimentTypes(experimentId(experimentUid));
+}
 
 /*! \fn ServerAdapter::experimentDatabase()
     \brief Lists the database filepath associated with an experiment
@@ -330,6 +339,10 @@ QString ServerAdapter::waitExperimentDatabase(qint64 experimentId)
     QDomElement responseElement = waitCommand(serverCommand);
     delete serverCommand;
     return getString(responseElement);
+}
+QString ServerAdapter::waitExperimentDatabase(QUuid experimentUid)
+{
+    return waitExperimentDatabase(experimentId(experimentUid));
 }
 
 /*! \fn ServerAdapter::experimentMetrics()
@@ -355,6 +368,11 @@ QStringList ServerAdapter::waitExperimentMetrics(qint64 experimentId)
     delete serverCommand;
     return getStringList(responseElement);
 }
+QStringList ServerAdapter::waitExperimentMetrics(QUuid experimentUid)
+{
+    return waitExperimentMetrics(experimentId(experimentUid));
+
+}
 
 /*! \fn ServerAdapter::experimentRanks()
     \brief Lists the ranks associated with an experiment.
@@ -379,7 +397,10 @@ QList<qint64> ServerAdapter::waitExperimentRanks(qint64 experimentId)
     delete serverCommand;
     return getIntList(responseElement);
 }
-
+QList<qint64> ServerAdapter::waitExperimentRanks(QUuid experimentUid)
+{
+    return waitExperimentRanks(experimentId(experimentUid));
+}
 
 ServerCommand *ServerAdapter::experimentAppCommand(qint64 experimentId)
 {
@@ -392,6 +413,10 @@ QString ServerAdapter::waitExperimentAppCommand(qint64 experimentId)
     QDomElement responseElement = waitCommand(serverCommand);
     delete serverCommand;
     return getString(responseElement);
+}
+QString ServerAdapter::waitExperimentAppCommand(QUuid experimentUid)
+{
+    return waitExperimentAppCommand(experimentId(experimentUid));
 }
 
 ServerCommand *ServerAdapter::experimentExecutable(qint64 experimentId)
@@ -406,6 +431,10 @@ QString ServerAdapter::waitExperimentExecutable(qint64 experimentId)
     delete serverCommand;
     return getString(responseElement);
 }
+QString ServerAdapter::waitExperimentExecutable(QUuid experimentUid)
+{
+    return waitExperimentExecutable(experimentId(experimentUid));
+}
 
 ServerCommand *ServerAdapter::experimentHosts(qint64 experimentId)
 {
@@ -418,6 +447,10 @@ QStringList ServerAdapter::waitExperimentHosts(qint64 experimentId)
     QDomElement responseElement = waitCommand(serverCommand);
     delete serverCommand;
     return getStringList(responseElement);
+}
+QStringList ServerAdapter::waitExperimentHosts(QUuid experimentUid)
+{
+    return waitExperimentHosts(experimentId(experimentUid));
 }
 
 ServerCommand *ServerAdapter::experimentPids(qint64 experimentId)
@@ -432,7 +465,10 @@ QList<qint64> ServerAdapter::waitExperimentPids(qint64 experimentId)
     delete serverCommand;
     return getIntList(responseElement);
 }
-
+QList<qint64> ServerAdapter::waitExperimentPids(QUuid experimentUid)
+{
+    return waitExperimentPids(experimentId(experimentUid));
+}
 
 ServerCommand *ServerAdapter::experimentSourceFiles(qint64 experimentId)
 {
@@ -445,6 +481,10 @@ QStringList ServerAdapter::waitExperimentSourceFiles(qint64 experimentId)
     QDomElement responseElement = waitCommand(serverCommand);
     delete serverCommand;
     return getStringList(responseElement);
+}
+QStringList ServerAdapter::waitExperimentSourceFiles(QUuid experimentUid)
+{
+    return waitExperimentSourceFiles(experimentId(experimentUid));
 }
 
 ServerCommand *ServerAdapter::experimentObjectFiles(qint64 experimentId)
@@ -459,6 +499,10 @@ QStringList ServerAdapter::waitExperimentObjectFiles(qint64 experimentId)
     delete serverCommand;
     return getStringList(responseElement);
 }
+QStringList ServerAdapter::waitExperimentObjectFiles(QUuid experimentUid)
+{
+    return waitExperimentObjectFiles(experimentId(experimentUid));
+}
 
 ServerCommand *ServerAdapter::experimentThreads(qint64 experimentId)
 {
@@ -471,6 +515,10 @@ QList<qint64> ServerAdapter::waitExperimentThreads(qint64 experimentId)
     QDomElement responseElement = waitCommand(serverCommand);
     delete serverCommand;
     return getIntList(responseElement);
+}
+QList<qint64> ServerAdapter::waitExperimentThreads(QUuid experimentUid)
+{
+    return waitExperimentThreads(experimentId(experimentUid));
 }
 
 ServerCommand *ServerAdapter::experimentViews(QString experimentType)
@@ -543,6 +591,10 @@ QMap<QString, QVariant> ServerAdapter::waitExperimentParameterValues(qint64 expe
     delete serverCommand;
     return parameters;
 }
+QMap<QString, QVariant> ServerAdapter::waitExperimentParameterValues(QUuid experimentUid)
+{
+    return waitExperimentParameterValues(experimentId(experimentUid));
+}
 
 
 ServerCommand *ServerAdapter::experimentView(qint64 experimentId, QStringList modifiers, QStringList metrics, QString experimentType, int count)
@@ -575,6 +627,11 @@ DataModel *ServerAdapter::waitExperimentView(qint64 experimentId, QStringList mo
     delete serverCommand;
     return dataModel;
 }
+DataModel *ServerAdapter::waitExperimentView(QUuid experimentUid, QStringList modifiers, QStringList metrics, QString experimentType, int count)
+{
+    return waitExperimentView(experimentId(experimentUid), modifiers, metrics, experimentType, count);
+}
+
 
 ServerCommand *ServerAdapter::experimentView(qint64 experimentId, QString experimentType, int count)
 {
@@ -584,7 +641,10 @@ DataModel *ServerAdapter::waitExperimentView(qint64 experimentId, QString experi
 {
     return waitExperimentView(experimentId, QStringList(), QStringList(), experimentType, count);
 }
-
+DataModel *ServerAdapter::waitExperimentView(QUuid experimentUid, QString experimentType, int count)
+{
+    return waitExperimentView(experimentId(experimentUid), experimentType, count);
+}
 
 QList<ServerAdapter::Process> ServerAdapter::waitExperimentProcesses(qint64 experimentId)
 {
@@ -609,6 +669,10 @@ QList<ServerAdapter::Process> ServerAdapter::waitExperimentProcesses(qint64 expe
     }
 
     return processes;
+}
+QList<ServerAdapter::Process> ServerAdapter::waitExperimentProcesses(QUuid experimentUid)
+{
+    return waitExperimentProcesses(experimentId(experimentUid));
 }
 
 
@@ -681,6 +745,15 @@ QMap<QString,QString> ServerAdapter::waitExperimentTypeMetrics(QString experimen
 }
 
 /*** END OpenSpeedShopCLI commands *******************************************/
+
+int ServerAdapter::experimentId(QUuid experimentUid)
+{
+    return m_ExperimentIds.value(experimentUid, -1);
+}
+QUuid ServerAdapter::experimentUid(qint64 experimentId)
+{
+    return m_ExperimentIds.key(experimentId, QUuid());
+}
 
 
 } // namespace OpenSpeedShop

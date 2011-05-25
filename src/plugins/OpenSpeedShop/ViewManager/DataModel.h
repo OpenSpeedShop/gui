@@ -1,7 +1,7 @@
 /*!
    \file DataModel.h
    \author Dane Gardner <dane.gardner@gmail.com>
-   \version 
+   \version
 
    \section LICENSE
    This file is part of the Open|SpeedShop Graphical User Interface
@@ -29,6 +29,7 @@
 #define DATAMODEL_H
 
 #include <QAbstractItemModel>
+#include <QUuid>
 #include <QtXml/QDomDocument>
 #include <QtXml/QDomElement>
 
@@ -45,6 +46,8 @@ public:
     explicit DataModel(QDomDocument document, QObject *parent = 0);
 
     ~DataModel();
+
+    QUuid uid() const;
 
     QString dumpModel();
 
@@ -128,6 +131,7 @@ protected:
     QVariant displayRole(Cell *cell) const;
     QVariant toolTipRole(Cell *cell) const;
 
+    QUuid m_Uid;
 
 };
 

@@ -1,7 +1,7 @@
 /*!
    \file DataModel.cpp
    \author Dane Gardner <dane.gardner@gmail.com>
-   \version 
+   \version
 
    \section LICENSE
    This file is part of the Open|SpeedShop Graphical User Interface
@@ -48,6 +48,7 @@ namespace OpenSpeedShop {
 DataModel::DataModel(QObject *parent) :
     QAbstractItemModel(parent)
 {
+    m_Uid = QUuid::createUuid();
 }
 
 /*! \fn DataModel::DataModel()
@@ -56,6 +57,7 @@ DataModel::DataModel(QObject *parent) :
 DataModel::DataModel(QString xml, QObject *parent) :
     QAbstractItemModel(parent)
 {
+    m_Uid = QUuid::createUuid();
     loadData(xml);
 }
 
@@ -65,6 +67,7 @@ DataModel::DataModel(QString xml, QObject *parent) :
 DataModel::DataModel(QDomDocument document, QObject *parent) :
   QAbstractItemModel(parent)
 {
+    m_Uid = QUuid::createUuid();
     buildModel(document);
 }
 
@@ -81,6 +84,11 @@ DataModel::~DataModel()
         m_Rows.removeOne(cell);
         delete cell;
     }
+}
+
+QUuid DataModel::uid() const
+{
+    return m_Uid;
 }
 
 /*! \fn DataModel::loadData()

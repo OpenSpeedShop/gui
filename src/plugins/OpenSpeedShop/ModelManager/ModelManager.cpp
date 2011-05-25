@@ -2,11 +2,13 @@
 
 #include <QApplication>
 #include <MainWindow/MainWindow.h>
+#include "ConnectionManager/ConnectionManager.h"
+#include "ConnectionManager/ServerAdapter.h"
+#include "ViewManager/DataModel.h"
 #include "ModelManagerDialog.h"
 #include "ModelDescriptor.h"
 #include "ModelDescriptorWidget.h"
 #include "ModelDescriptorListWidget.h"
-#include "ViewManager/DataModel.h"
 
 namespace Plugins {
 namespace OpenSpeedShop {
@@ -219,8 +221,27 @@ QAbstractItemModel *ModelManager::descriptorModel()
 /*! \brief Fetches the model's data from the server, using the descriptor specified. */
 QUuid ModelManager::fetchModel(const QUuid &descriptorId, const QUuid &experimentId)
 {
-    //TODO:
-    throw tr("Function not yet implemented.");
+    ServerAdapter *serverAdapter = ConnectionManager::instance()->currentServerAdapter();
+    if(!serverAdapter) {
+        throw tr("Cannot fetch model from server; not connected to server.");
+    }
+
+    // Fetch everything from the server, based on the descriptor
+    ModelDescriptor *modelDescriptor = descriptor(descriptorId);
+    DataModel *dataModel = serverAdapter->waitExperimentView(
+                experimentId,
+                modelDescriptor->modifiers(),
+                modelDescriptor->metrics(),
+                modelDescriptor->experimentType(),
+                modelDescriptor->rowCount());
+    m_ModelPool.insert(experimentId, dataModel);
+
+    // Add everything to the look up table
+    QHash<QUuid, QUuid> *experimentModels = new QHash<QUuid, QUuid>();
+    experimentModels->insert(experimentId, dataModel->uid());
+    m_ModelLookupTable.insert(descriptorId, experimentModels);
+
+    return dataModel->uid();
 }
 
 /*! \brief Imports the model's data into the data pool.
@@ -240,10 +261,29 @@ void ModelManager::ModelManager::exportModel(const QUuid &modelId, const QString
 }
 
 /*! \brief Removes the model's data from memory, requiring a re-fetch from the server if it is accessed again. */
-void ModelManager::unloadModel(const QUuid &descriptorId)
+void ModelManager::unloadModel(const QUuid &descriptorId, const QUuid &experimentId)
 {
-    //TODO:
-    throw tr("Function not yet implemented.");
+    QHash<QUuid, QUuid> *experimentModels = m_ModelLookupTable.value(descriptorId);
+    if(!experimentModels || experimentModels->count() <= 0) {
+        return;
+    }
+
+    QUuid modelId = experimentModels->value(experimentId);
+    if(modelId.isNull()) {
+        return;
+    }
+
+    DataModel *dataModel = m_ModelPool.value(modelId);
+    if(!dataModel) {
+        return;
+    }
+
+    m_ModelPool.remove(modelId);
+    experimentModels->remove(experimentId);
+
+    if(experimentModels->count() <= 0) {
+        m_ModelLookupTable.remove(descriptorId, experimentModels);
+    }
 }
 
 /*! \brief Returns a container for the MIME type data for the specified descriptor.
@@ -257,8 +297,20 @@ QMimeData ModelManager::modelMimeData(const QUuid &descriptorId, const QUuid &ex
 /*! \brief Returns the model from the cache. If it's not in the cache a fetch is automatically performed. */
 QAbstractItemModel *ModelManager::model(const QUuid &descriptorId, const QUuid &experimentId)
 {
-    //TODO:
-    throw tr("Function not yet implemented.");
+    QUuid modelId;
+
+    // Try to find it in the cache
+    QHash<QUuid, QUuid> *experimentModels = m_ModelLookupTable.value(descriptorId);
+    if(experimentModels && experimentModels->count() > 0) {
+        modelId = experimentModels->value(experimentId);
+    }
+
+    // If the model wasn't cached, fetch it from the server
+    if(modelId.isNull()) {
+        modelId = fetchModel(descriptorId, experimentId);
+    }
+
+    return m_ModelPool.value(modelId);
 }
 
 

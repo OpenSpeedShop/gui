@@ -59,7 +59,7 @@ void ExperimentWidget::load()
 
 //    qDebug() << serverAdapter->waitVersion();
 
-    qint64 expId = serverAdapter->waitRestore("/home/dane/smg2000-io.openss");
+    QUuid expId = serverAdapter->waitRestore("/home/dane/smg2000-io.openss");
     ui->txtDatabasePath->setText(serverAdapter->waitExperimentDatabase(expId));
     ui->txtExecutablePath->setText(serverAdapter->waitExperimentExecutable(expId));
     ui->txtCommand->setText(serverAdapter->waitExperimentAppCommand(expId));
