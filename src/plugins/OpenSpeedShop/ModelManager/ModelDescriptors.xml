@@ -29,6 +29,13 @@
   <Modifier value="Functions"/>
   <Metric value="ThreadAverage"/>
  </ModelDescriptor>
+ <ModelDescriptor experimentType="io" rowCount="1" id="{4a996167-610c-4c4b-b8bc-c68421733bbd}" name="Hot call path">
+  <Modifier value="CallTrees"/>
+  <Modifier value="FullStack"/>
+  <Metric value="count"/>
+  <Metric value="exclusive_times"/>
+  <Metric value="percent"/>
+ </ModelDescriptor>
  <ModelDescriptor experimentType="io" rowCount="100" id="{7442dbdf-ef36-49d7-9264-f9d5375bf887}" name="Default">
   <Modifier value="Functions"/>
   <Metric value="exclusive_times"/>
