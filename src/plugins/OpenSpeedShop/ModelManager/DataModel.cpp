@@ -359,7 +359,7 @@ QVariant DataModel::data(const QModelIndex &index, int role) const
 
         return displayRole(dataItem);
     } else if(role == Qt::ToolTipRole) {
-        return toolTipRole(dataItem);
+//        return toolTipRole(dataItem);
     }
 
     return QVariant();
@@ -423,9 +423,13 @@ QVariant DataModel::toolTipRole(Cell *cell) const
 
 QVariant DataModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    if(orientation == Qt::Horizontal && role == Qt::DisplayRole) {
+    if(orientation == Qt::Horizontal) {
         Cell *header = m_Header->columns.at(section);
-        return header->data["value"];
+        if(role == Qt::DisplayRole) {
+            return header->data["value"];
+        } else if(role == Qt::ToolTipRole) {
+            return header->data["columnType"];
+        }
     }
 
     return QVariant();
