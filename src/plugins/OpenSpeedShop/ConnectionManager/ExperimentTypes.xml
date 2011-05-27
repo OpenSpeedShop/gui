@@ -16,6 +16,7 @@
     <Modifier value="Functions" summary="will produce a summary report."/>
     <Modifier value="Trace" summary="will produce a report of each individual  call to an io function."/>
     <Modifier value="CallTrees" summary="will produce a calling stack report that is presented in calling tree order - from the start of the program to the measured program."/>
+    <Modifier value="FullStack" summary="will produce a full stack report."/>
     <Modifier value="TraceBacks" summary="will produce a calling stack report that is presented in traceback order - from the measured function to the start of the program."/>
     <Modifier value="ButterFly" summary="will produce a report that summarizes the calls to and from a given function list."/>
     <Modifier value="Summary" summary="will result in an additional line of output at the end of the report that summarizes the information in each column."/>

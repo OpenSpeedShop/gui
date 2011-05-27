@@ -9,7 +9,8 @@ ModelDescriptor::ModelDescriptor(QObject *parent) :
     QObject(parent),
     m_Id(QUuid::createUuid())
 {
-    m_RowCount = 100;
+    m_Name = tr("New Model");
+    m_RowCount = 1000;
     m_Empty = true;
     m_Default = false;
 }
@@ -84,6 +85,11 @@ QStringList ModelDescriptor::modifiers() const
     return m_Modifiers;
 }
 
+void ModelDescriptor::clearModifiers()
+{
+    m_Modifiers.clear();
+}
+
 void ModelDescriptor::removeModifier(const QString &modifier)
 {
     m_Modifiers.removeOne(modifier);
@@ -105,6 +111,11 @@ void ModelDescriptor::insertModifier(const QString &modifier)
 QStringList ModelDescriptor::metrics() const
 {
     return m_Metrics;
+}
+
+void ModelDescriptor::clearMetrics()
+{
+    m_Metrics.clear();
 }
 
 void ModelDescriptor::removeMetric(const QString &metric)
@@ -210,7 +221,7 @@ void ModelDescriptor::toXml(const QString &filepath, QList<ModelDescriptor *> mo
         throw tr("Failed to open model descriptor export file: %1").arg(fileInfo.absoluteFilePath());
     }
 
-    QByteArray documentByteArray = document.toString(-1).toLatin1();
+    QByteArray documentByteArray = document.toString().toLatin1();
     qint64 writtenBytes = file.write(documentByteArray);
     if(writtenBytes < documentByteArray.count()) {
         QFileInfo fileInfo(filepath);

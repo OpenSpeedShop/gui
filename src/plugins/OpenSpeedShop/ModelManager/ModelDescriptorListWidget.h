@@ -30,14 +30,18 @@ public:
     void setFilter(const QString &regex);
 
 signals:
-    void currentModelDescriptorChanged(const QUuid&);
+    void currentSelectionChanged(const QUuid&);
+
+public slots:
+    void selectRow(const QUuid &uid);
 
 protected:
     void setModel(QAbstractItemModel *descriptorsModel);
     QSortFilterProxyModel *m_DescriptorsModel;
+    QModelIndex findIndex(const QUuid &uid, const QModelIndex &parent = QModelIndex()) const;
 
 protected slots:
-    void on_treeWidget_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous);
+    void selectionChanged(QItemSelection selected, QItemSelection deselected);
 
 private:
     Ui::ModelDescriptorListWidget *ui;

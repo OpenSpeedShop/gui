@@ -1,0 +1,45 @@
+<!DOCTYPE ModelDescriptors>
+<ModelDescriptors>
+ <ModelDescriptor experimentType="iot" rowCount="100" id="{15e3079b-d92f-4d54-b664-0849773b3e4c}" name="Default">
+  <Modifier value="Functions"/>
+  <Metric value="percent"/>
+  <Metric value="count"/>
+  <Metric value="average"/>
+ </ModelDescriptor>
+ <ModelDescriptor experimentType="pcsamp" rowCount="100" id="{c959206d-bd12-4901-908b-eb233e80035a}" name="Functions Default">
+  <Modifier value="Functions"/>
+  <Metric value="Time"/>
+  <Metric value="Percent"/>
+ </ModelDescriptor>
+ <ModelDescriptor experimentType="pcsamp" rowCount="100" id="{9790588a-1fcb-48df-9a9b-b85f9d3cdbb7}" name="Statements Default">
+  <Modifier value="Statements"/>
+  <Metric value="Time"/>
+  <Metric value="Percent"/>
+ </ModelDescriptor>
+ <ModelDescriptor experimentType="pcsamp" rowCount="100" id="{30ecd7e2-a67f-4472-8882-2d0369322019}" name="Linked Objects Default">
+  <Modifier value="LinkedObjects"/>
+  <Metric value="Time"/>
+  <Metric value="Percent"/>
+ </ModelDescriptor>
+ <ModelDescriptor experimentType="pcsamp" rowCount="100" id="{e58f45e7-1f84-4e76-aa84-cdd87a38ac50}" name="Load balance">
+  <Modifier value="Functions"/>
+  <Metric value="LoadBalance"/>
+ </ModelDescriptor>
+ <ModelDescriptor experimentType="pcsamp" rowCount="100" id="{910e4dad-e4fa-47c2-89c5-74caf671a8f5}" name="Compare and analyze">
+  <Modifier value="Functions"/>
+  <Metric value="ThreadAverage"/>
+ </ModelDescriptor>
+ <ModelDescriptor experimentType="io" rowCount="100" id="{7442dbdf-ef36-49d7-9264-f9d5375bf887}" name="Default">
+  <Modifier value="Functions"/>
+  <Metric value="exclusive_times"/>
+  <Metric value="percent"/>
+  <Metric value="count"/>
+ </ModelDescriptor>
+ <ModelDescriptor experimentType="io" rowCount="100" id="{42a10ec3-5d7b-48f5-b517-f907f9d49f73}" name="Call paths with full stack">
+  <Modifier value="CallTrees"/>
+  <Modifier value="FullStack"/>
+  <Metric value="exclusive_times"/>
+  <Metric value="percent"/>
+  <Metric value="count"/>
+ </ModelDescriptor>
+</ModelDescriptors>

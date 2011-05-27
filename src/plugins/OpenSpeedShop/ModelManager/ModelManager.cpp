@@ -32,10 +32,6 @@ void ModelManager::initialize()
         using namespace Core::MainWindow;
         MainWindow::instance()->notify(err, NotificationWidget::Critical);
     }
-
-    //DEBUG: Need to get the dialog working
-    ModelManagerDialog dlg;
-    dlg.exec();
 }
 
 void ModelManager::shutdown()
@@ -100,6 +96,7 @@ void ModelManager::insertDescriptorIntoModel(QUuid descriptorId)
     switch(experimentTypeItems.count()) {
         case 0:
             experimentTypeItem = new QStandardItem(descriptor->experimentType());
+            experimentTypeItem->setSelectable(false);
             m_DescriptorPoolModel.appendRow(experimentTypeItem);
             break;
         case 1:
@@ -114,7 +111,19 @@ void ModelManager::insertDescriptorIntoModel(QUuid descriptorId)
     descriptorItem->setData(descriptor->name(), Qt::DisplayRole);
     descriptorItem->setData(descriptor->id().toString(), Qt::UserRole);
     experimentTypeItem->appendRow(descriptorItem);
+
+    // Associate the descriptorItem for easier/quicker lookup
+    m_DescriptorToItem.insert(descriptor->id(), descriptorItem);
+    connect(descriptor, SIGNAL(dataChanged()), this, SLOT(descriptorDataChanged()));
 }
+
+void ModelManager::descriptorDataChanged()
+{
+    ModelDescriptor *descriptor = qobject_cast<ModelDescriptor *>(QObject::sender());
+    QStandardItem *descriptorItem = m_DescriptorToItem.value(descriptor->id());
+    descriptorItem->setData(descriptor->name(), Qt::DisplayRole);
+}
+
 
 
 /*! \brief Fetches default descriptors from the server and adds them to the descriptor pool.
@@ -169,6 +178,12 @@ void ModelManager::removeDescriptor(const QUuid &descriptorId)
 
     //TODO: remove any associated items in the m_ModelLookupTable
     //TODO: remove any associated items in the m_ModelPool
+
+    // Remove associated objects from the model, and the model item cache
+    QStandardItem *descriptorItem = m_DescriptorToItem.value(descriptorId);
+    descriptorItem->parent()->removeRow(descriptorItem->row());
+    m_DescriptorToItem.remove(descriptorId);
+    delete(descriptorItem);
 
     m_DescriptorPool.remove(descriptorId);
 

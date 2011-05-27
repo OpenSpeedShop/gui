@@ -81,7 +81,17 @@ DEFINES      += OPENSPEEDSHOP_LIBRARY \
 
 #debug: DEFINES += DATAMODEL_DEBUG
 
-OTHER_FILES += Experiment/metrics.xml
-descriptors.path = /
-descriptors.files = Experiment/metrics.xml
-INSTALLS += descriptors
+# List of experiment types and their possible modifiers/metrics
+# In the future, this should be pulled from the server
+OTHER_FILES += ConnectionManager/ExperimentTypes.xml
+experimentTypes.path = /bin
+experimentTypes.files = ConnectionManager/ExperimentTypes.xml
+INSTALLS += experimentTypes
+
+# Default data for the model descriptors
+# In the future, this should be pulled from the server
+OTHER_FILES += ModelManager/ModelDescriptors.xml
+modelDescriptors.path = /bin
+modelDescriptors.files = ModelManager/ModelDescriptors.xml
+INSTALLS += modelDescriptors
+

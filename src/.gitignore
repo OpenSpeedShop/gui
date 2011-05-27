@@ -1,7 +1,7 @@
 .tmp
 *~
 Make*
-*.pro.user
+*.pro.user*
 .*.swp
 
 #Mac OSX

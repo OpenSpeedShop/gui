@@ -34,6 +34,11 @@ protected slots:
     void on_cmbExperimentType_currentIndexChanged(int index);
     void on_buttonBox_clicked(QAbstractButton *button);
 
+    void accept();
+    void reject();
+
+    bool hasChanged();
+
 private:
     Ui::ModelDescriptorWidget *ui;
 };

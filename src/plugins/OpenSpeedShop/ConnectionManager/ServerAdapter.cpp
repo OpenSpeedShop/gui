@@ -683,7 +683,9 @@ QList<ServerAdapter::Process> ServerAdapter::waitExperimentProcesses(QUuid exper
 void ServerAdapter::loadMetrics()
 {
     m_MetricsList = QDomDocument("Modifiers");
-    QFile file("metrics.xml");
+
+    QFile file(QString("%1/ExperimentTypes.xml").arg(QApplication::instance()->applicationDirPath()));
+
     if (!file.open(QIODevice::ReadOnly)) {
         throw tr("Could not open metrics description file");
     }

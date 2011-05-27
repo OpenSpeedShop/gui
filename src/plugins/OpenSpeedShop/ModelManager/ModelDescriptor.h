@@ -30,10 +30,12 @@ public:
     void setRowCount(const quint64 &rowCount);
 
     QStringList modifiers() const;
+    void clearModifiers();
     void removeModifier(const QString &modifier);
     void insertModifier(const QString &modifier);
 
     QStringList metrics() const;
+    void clearMetrics();
     void removeMetric(const QString &metric);
     void insertMetric(const QString &metric);
 

@@ -26,6 +26,12 @@
       <bool>false</bool>
      </property>
      <widget class="QFrame" name="frame">
+      <property name="minimumSize">
+       <size>
+        <width>250</width>
+        <height>0</height>
+       </size>
+      </property>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <property name="spacing">
         <number>0</number>
@@ -85,18 +91,34 @@
         </layout>
        </item>
        <item>
-        <widget class="QWidget" name="lstModelDescriptors" native="true">
+        <widget class="QWidget" name="descriptorListParent" native="true">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <layout class="QVBoxLayout" name="verticalLayout_4"/>
         </widget>
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="modelDescriptor" native="true"/>
+     <widget class="QWidget" name="descriptorParent" native="true">
+      <property name="minimumSize">
+       <size>
+        <width>250</width>
+        <height>0</height>
+       </size>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <property name="margin">
+        <number>0</number>
+       </property>
+      </layout>
+     </widget>
     </widget>
    </item>
    <item>

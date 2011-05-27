@@ -52,11 +52,15 @@ protected:
     QAbstractItemModel *descriptorModel();
 
     QHash<QUuid, ModelDescriptor *> m_DescriptorPool;
+    QHash<QUuid, QStandardItem *> m_DescriptorToItem;
     QStandardItemModel m_DescriptorPoolModel;
 
     // DescriptorID -> ExperimentID -> ModelID
     QMultiHash<QUuid, QHash<QUuid, QUuid>*> m_ModelLookupTable;
     QHash<QUuid, DataModel*> m_ModelPool;
+
+protected slots:
+    void descriptorDataChanged();
 
 };
 

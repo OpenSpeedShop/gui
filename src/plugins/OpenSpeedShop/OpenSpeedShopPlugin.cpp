@@ -33,6 +33,7 @@
 #include <PluginManager/PluginManager.h>
 #include "ConnectionManager/ConnectionManager.h"
 #include "ModelManager/ModelManager.h"
+#include "ModelManager/ModelManagerDialog.h"
 
 #include "Settings/SettingPageFactory.h"
 #include "AboutDialog.h"
@@ -97,6 +98,12 @@ bool OpenSpeedShopPlugin::initialize(QStringList &args, QString *err)
             connect(about, SIGNAL(triggered()), this, SLOT(aboutDialog()));
             action->menu()->addAction(about);
         }
+        if(action->text() == tr("File")) {
+            QAction *models = new QAction(tr("Open|SpeedShop Models"), this);
+            models->setToolTip(tr("Displays the Open|SpeedShop models dialog"));
+            connect(models, SIGNAL(triggered()), this, SLOT(modelsDialog()));
+            action->menu()->addAction(models);
+        }
     }
 
     /*** Register any managers with the plugin manager ***/
@@ -131,6 +138,12 @@ void OpenSpeedShopPlugin::aboutDialog()
 {
     AboutDialog about;
     about.exec();
+}
+
+void OpenSpeedShopPlugin::modelsDialog()
+{
+    ModelManagerDialog models;
+    models.exec();
 }
 
 QString OpenSpeedShopPlugin::name()
