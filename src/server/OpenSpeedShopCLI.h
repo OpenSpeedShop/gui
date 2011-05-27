@@ -40,9 +40,11 @@ protected:
   InputLineObject *getInputLineObject(int windowID, const char *command);
   std::list<rapidxml::xml_node<> *> processCommandResults(
         std::list<CommandResult *> commandResultList,
-        rapidxml::memory_pool<> *memoryPool );
+        rapidxml::memory_pool<> *memoryPool,
+        const std::string &parentName = std::string() );
 
   int m_windowID;
+  std::vector<rapidxml::xml_node<> *> _headerNodes;
   static int m_windowCount;
 
   inline std::string &trim(std::string &s);

@@ -18,7 +18,8 @@ OpenSpeedShopCLI::~OpenSpeedShopCLI()
 
 std::list<rapidxml::xml_node<> *> OpenSpeedShopCLI::processCommandResults(
     std::list<CommandResult *> commandResultList,
-    rapidxml::memory_pool<> *memoryPool )
+    rapidxml::memory_pool<> *memoryPool,
+    const std::string &parentName)
 {
   std::list<rapidxml::xml_node<> *> commandResults;
 
@@ -32,14 +33,59 @@ std::list<rapidxml::xml_node<> *> OpenSpeedShopCLI::processCommandResults(
     
     std::string nodeName(typeid(*commandResult).name());
     int start = nodeName.find("CommandResult_") + 14;
-    char *nodeNameString = memoryPool->allocate_string(nodeName.substr(start).c_str());
+    nodeName = nodeName.substr(start);
+
+    char *nodeNameString = NULL;
+    if(parentName.compare("Headers") == 0) {
+      // If it's a header string rename it to "Header"
+      nodeNameString = memoryPool->allocate_string("Header");
+
+    } else if(parentName.compare("Columns") == 0) {
+      //MAGIC: If this is a column child, we have to do some magic to check the column type
+      nodeNameString = memoryPool->allocate_string(nodeName.c_str());
+
+      // Ignore empty strings (this is apparently equivalent to a NULL value in the OSS CLI)
+      bool ignore = false;
+      if(nodeName.compare("String") == 0) {
+        ignore = commandResult->Form().empty();
+      }
+
+      //TODO: Add any more ignore-case conditions
+      
+      if(!ignore && _headerNodes.size() > 0 && _headerNodes.size() >= commandResults.size()) {
+        rapidxml::xml_node<> *headerNode = _headerNodes.at(commandResults.size());
+        rapidxml::xml_attribute<> *headerTypeAttribute = headerNode->first_attribute("columnType");
+
+        if(!headerTypeAttribute) {
+          // If the header type doesn't exist create it
+          char *attributeValue = memoryPool->allocate_string(nodeName.c_str());
+          headerNode->append_attribute(memoryPool->allocate_attribute("columnType", attributeValue));
+
+        } else {
+          // If the header type does exist, compare it, and see what we've got
+          std::string headerType(headerTypeAttribute->value());
+
+          // Set the header type to "Mixed" if we don't match the other types
+          if(headerType.compare("Mixed") != 0 && headerType.compare(nodeName) != 0) {
+            char *attributeValue = memoryPool->allocate_string("Mixed");
+            headerTypeAttribute->value(attributeValue);
+          }
+        }
+      } else {
+        //TODO: Determine what to do if we have a size mismatch!
+      }
+
+    } else {
+      nodeNameString = memoryPool->allocate_string(nodeName.c_str());
+    }
+
     commandResultNode = memoryPool->allocate_node(rapidxml::node_element, nodeNameString);
 
     if(typeid(*commandResult) == typeid(CommandResult_Columns)) {
       // Get a list of the column nodes
       std::list<CommandResult *> columns;
       ((CommandResult_Columns *)commandResult)->Value(columns);
-      std::list<rapidxml::xml_node<> *> childNodes = processCommandResults(columns, memoryPool);
+      std::list<rapidxml::xml_node<> *> childNodes = processCommandResults(columns, memoryPool, std::string(commandResultNode->name()));
 
       // Add them to this node as children
       bool killThisRow = true;
@@ -48,8 +94,8 @@ std::list<rapidxml::xml_node<> *> OpenSpeedShopCLI::processCommandResults(
           childNodesListIterator != childNodes.end();
           childNodesListIterator++) {
         rapidxml::xml_node<> *child = *childNodesListIterator;
-  
-        // We need to test if this is a disparate CallStackEntry row
+
+        //MAGIC: We need to test if this is a disparate CallStackEntry row
         std::string childName(child->name());
         if(childName.compare("String") != 0 && childName.compare("CallStackEntry") != 0) {
           // Anything but a String or CallStackEntry cancels the kill
@@ -61,7 +107,7 @@ std::list<rapidxml::xml_node<> *> OpenSpeedShopCLI::processCommandResults(
             killThisRow = false;
           }
         }
-        
+
         commandResultNode->append_node(child);
       }
 
@@ -72,13 +118,17 @@ std::list<rapidxml::xml_node<> *> OpenSpeedShopCLI::processCommandResults(
       // Get a list of header nodes
       std::list<CommandResult *> headers;
       ((CommandResult_Headers *)commandResult)->Value(headers);
-      std::list<rapidxml::xml_node<> *> childNodes = processCommandResults(headers, memoryPool);
+      std::list<rapidxml::xml_node<> *> childNodes = processCommandResults(headers, memoryPool, std::string(commandResultNode->name()));
 
       // Add them to this node as children
       std::list<rapidxml::xml_node<> *>::iterator childNodesListIterator;
       for(childNodesListIterator = childNodes.begin();
           childNodesListIterator != childNodes.end();
           childNodesListIterator++) {
+
+        // Save the pointer list locally, so we can add types to the headers later
+        _headerNodes.push_back(*childNodesListIterator);
+        
         commandResultNode->append_node(*childNodesListIterator);
       }
 
@@ -224,6 +274,8 @@ rapidxml::xml_node<> *OpenSpeedShopCLI::execute(std::string command, rapidxml::m
 
       std::list<rapidxml::xml_node<> *> childNodes =
               processCommandResults((*commandObjectListIterator)->Result_List(), memoryPool);
+
+      _headerNodes.clear();   // Wipe the header cache
 
       std::list<rapidxml::xml_node<> *>::iterator childNodesListIterator;
       for(childNodesListIterator = childNodes.begin();
