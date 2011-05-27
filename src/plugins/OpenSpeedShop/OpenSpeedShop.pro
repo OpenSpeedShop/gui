@@ -37,7 +37,8 @@ SOURCES      += OpenSpeedShopPlugin.cpp \
                 ModelManager/ModelDescriptorWidget.cpp \
                 ModelManager/ModelManager.cpp \
                 ModelManager/ModelManagerDialog.cpp \
-                ModelManager/ModelDescriptorListWidget.cpp
+                ModelManager/ModelDescriptorListWidget.cpp \
+    ViewManager/Delegate.cpp
 
 
 HEADERS      += OpenSpeedShopPlugin.h \
@@ -60,7 +61,8 @@ HEADERS      += OpenSpeedShopPlugin.h \
                 ModelManager/ModelDescriptorWidget.h \
                 ModelManager/ModelManager.h \
                 ModelManager/ModelManagerDialog.h \
-                ModelManager/ModelDescriptorListWidget.h
+                ModelManager/ModelDescriptorListWidget.h \
+    ViewManager/Delegate.h
 
 FORMS        += Settings/SettingPage.ui \
                 AboutDialog.ui \
@@ -94,4 +96,3 @@ OTHER_FILES += ModelManager/ModelDescriptors.xml
 modelDescriptors.path = /bin
 modelDescriptors.files = ModelManager/ModelDescriptors.xml
 INSTALLS += modelDescriptors
-
