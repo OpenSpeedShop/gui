@@ -5,7 +5,7 @@
 #include <QDomElement>
 #include <QUuid>
 #include "ConnectionManagerLibrary.h"
-#include "../ViewManager/DataModel.h"
+#include "ModelManager/DataModel.h"
 
 namespace Plugins {
 namespace OpenSpeedShop {

@@ -4,7 +4,7 @@
 #include <MainWindow/MainWindow.h>
 #include "ConnectionManager/ConnectionManager.h"
 #include "ConnectionManager/ServerAdapter.h"
-#include "ViewManager/DataModel.h"
+#include "DataModel.h"
 #include "ModelManagerDialog.h"
 #include "ModelDescriptor.h"
 #include "ModelDescriptorWidget.h"
