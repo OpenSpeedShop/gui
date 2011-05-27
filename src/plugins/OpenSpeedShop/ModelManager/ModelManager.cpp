@@ -10,6 +10,10 @@
 #include "ModelDescriptorWidget.h"
 #include "ModelDescriptorListWidget.h"
 
+#ifdef MODELMANAGER_DEBUG
+#  include <QDebug>
+#endif
+
 namespace Plugins {
 namespace OpenSpeedShop {
 
@@ -75,14 +79,61 @@ void ModelManager::importDescriptors(const QString &filepath)
         m_DescriptorPool.insert(modelDescriptor->id(), modelDescriptor);
         insertDescriptorIntoModel(modelDescriptor->id());
     }
+
+    m_DescriptorPoolModel.setHeaderData(0, Qt::Horizontal, tr("Model"), Qt::DisplayRole);
 }
 
 /*! \brief Helper function that adds a descriptor from the descriptor pool into the standard model. */
-void ModelManager::insertDescriptorIntoModel(QUuid descriptorId)
+void ModelManager::insertDescriptorIntoModel(QUuid descriptorUid)
 {
     //FIXME: This is horribly inefficient.
 
-    ModelDescriptor *descriptor = this->descriptor(descriptorId);
+    ModelDescriptor *descriptor = this->descriptor(descriptorUid);
+
+    QStandardItem *descriptorItem = new QStandardItem();
+    descriptorItem->setData(descriptor->id().toString(), Qt::UserRole);
+
+    // Associate the descriptorItem for easier/quicker lookup
+    m_DescriptorToItem.insert(descriptor->id(), descriptorItem);
+
+    descriptorNameChanged(descriptor);
+    connect(descriptor, SIGNAL(nameChanged()), this, SLOT(descriptorNameChanged()));
+
+    descriptorTypeChanged(descriptor);
+    connect(descriptor, SIGNAL(experimentTypeChanged()), this, SLOT(descriptorTypeChanged()));
+}
+
+void ModelManager::descriptorNameChanged(ModelDescriptor *descriptor)
+{
+    if(!descriptor) {
+        descriptor = qobject_cast<ModelDescriptor *>(QObject::sender());
+    }
+
+    QStandardItem *descriptorItem = m_DescriptorToItem.value(descriptor->id());
+
+    descriptorItem->setData(descriptor->name(), Qt::DisplayRole);
+}
+
+void ModelManager::descriptorTypeChanged(ModelDescriptor *descriptor)
+{
+    if(!descriptor) {
+        descriptor = qobject_cast<ModelDescriptor *>(QObject::sender());
+    }
+
+    QStandardItem *descriptorItem = m_DescriptorToItem.value(descriptor->id());
+    QStandardItem *parentItem = descriptorItem->parent();
+    if(parentItem) {
+        if(!parentItem->data(Qt::DisplayRole).toString().compare(descriptor->experimentType())) {
+            return;
+        }
+
+        parentItem->takeRow(descriptorItem->row());
+
+        if(parentItem->rowCount() <= 0) {
+            parentItem->model()->removeRow(parentItem->row());
+        }
+    }
+
     QList<QStandardItem *> experimentTypeItems = m_DescriptorPoolModel.findItems(descriptor->experimentType());
 
     // Remove any child items that happened to match
@@ -107,23 +158,8 @@ void ModelManager::insertDescriptorIntoModel(QUuid descriptorId)
                      "This is an unexpected behavior");
     }
 
-    QStandardItem *descriptorItem = new QStandardItem();
-    descriptorItem->setData(descriptor->name(), Qt::DisplayRole);
-    descriptorItem->setData(descriptor->id().toString(), Qt::UserRole);
     experimentTypeItem->appendRow(descriptorItem);
-
-    // Associate the descriptorItem for easier/quicker lookup
-    m_DescriptorToItem.insert(descriptor->id(), descriptorItem);
-    connect(descriptor, SIGNAL(dataChanged()), this, SLOT(descriptorDataChanged()));
 }
-
-void ModelManager::descriptorDataChanged()
-{
-    ModelDescriptor *descriptor = qobject_cast<ModelDescriptor *>(QObject::sender());
-    QStandardItem *descriptorItem = m_DescriptorToItem.value(descriptor->id());
-    descriptorItem->setData(descriptor->name(), Qt::DisplayRole);
-}
-
 
 
 /*! \brief Fetches default descriptors from the server and adds them to the descriptor pool.
@@ -164,9 +200,9 @@ QUuid ModelManager::createDescriptor()
 }
 
 /*! \brief Removes the descriptor from the manager's descriptor pool. Models are automatically updated. */
-void ModelManager::removeDescriptor(const QUuid &descriptorId)
+void ModelManager::removeDescriptor(const QUuid &descriptorUid)
 {
-    ModelDescriptor *descriptor = this->descriptor(descriptorId);
+    ModelDescriptor *descriptor = this->descriptor(descriptorUid);
     QList<QStandardItem *> standardItems = m_DescriptorPoolModel.findItems(descriptor->name());
 
     foreach(QStandardItem *standardItem, standardItems) {
@@ -180,21 +216,21 @@ void ModelManager::removeDescriptor(const QUuid &descriptorId)
     //TODO: remove any associated items in the m_ModelPool
 
     // Remove associated objects from the model, and the model item cache
-    QStandardItem *descriptorItem = m_DescriptorToItem.value(descriptorId);
+    QStandardItem *descriptorItem = m_DescriptorToItem.value(descriptorUid);
     descriptorItem->parent()->removeRow(descriptorItem->row());
-    m_DescriptorToItem.remove(descriptorId);
+    m_DescriptorToItem.remove(descriptorUid);
     delete(descriptorItem);
 
-    m_DescriptorPool.remove(descriptorId);
+    m_DescriptorPool.remove(descriptorUid);
 
     delete descriptor;
 }
 
 /*! \brief Creates and returns a widget to be used to interact with a single model descriptor.
     You are responsible for deleting this object. */
-ModelDescriptorWidget *ModelManager::createDescriptorWidget(const QUuid &descriptorId, QWidget *parent)
+ModelDescriptorWidget *ModelManager::createDescriptorWidget(const QUuid &descriptorUid, QWidget *parent)
 {
-    ModelDescriptorWidget *modelDescriptorWidget = new ModelDescriptorWidget(descriptor(descriptorId), parent);
+    ModelDescriptorWidget *modelDescriptorWidget = new ModelDescriptorWidget(descriptor(descriptorUid), parent);
     return modelDescriptorWidget;
 }
 
@@ -209,7 +245,7 @@ ModelDescriptorListWidget *ModelManager::createDescriptorListWidget(QWidget *par
 
 /*! \brief Returns a container for the MIME type data for the specified descriptor.
     Used during copy-and-paste and drag-and-drop operations. */
-QMimeData ModelManager::descriptorMimeData(const QUuid &descriptorId)
+QMimeData ModelManager::descriptorMimeData(const QUuid &descriptorUid)
 {
     //TODO:
     throw tr("Function not yet implemented.");
@@ -217,9 +253,9 @@ QMimeData ModelManager::descriptorMimeData(const QUuid &descriptorId)
 
 /*! \brief Returns the descriptor object from the manager's descriptor pool.
     You don't own it; do not destroy it. */
-ModelDescriptor *ModelManager::descriptor(QUuid descriptorId)
+ModelDescriptor *ModelManager::descriptor(QUuid descriptorUid)
 {
-    return m_DescriptorPool.value(descriptorId, NULL);
+    return m_DescriptorPool.value(descriptorUid, NULL);
 }
 
 /*! \brief Returns the model containing the list of descriptors in the manager's descriptor pool.
@@ -234,27 +270,37 @@ QAbstractItemModel *ModelManager::descriptorModel()
 
 
 /*! \brief Fetches the model's data from the server, using the descriptor specified. */
-QUuid ModelManager::fetchModel(const QUuid &descriptorId, const QUuid &experimentId)
+QUuid ModelManager::fetchModel(const QUuid &descriptorUid, const QUuid &experimentUid)
 {
+
     ServerAdapter *serverAdapter = ConnectionManager::instance()->currentServerAdapter();
     if(!serverAdapter) {
         throw tr("Cannot fetch model from server; not connected to server.");
     }
 
+#ifdef MODELMANAGER_DEBUG
+        qDebug() << __FILE__ << ":" << __LINE__ << "Fetching model from server";
+#endif
+
     // Fetch everything from the server, based on the descriptor
-    ModelDescriptor *modelDescriptor = descriptor(descriptorId);
+    ModelDescriptor *modelDescriptor = descriptor(descriptorUid);
     DataModel *dataModel = serverAdapter->waitExperimentView(
-                experimentId,
+                experimentUid,
                 modelDescriptor->modifiers(),
                 modelDescriptor->metrics(),
                 modelDescriptor->experimentType(),
                 modelDescriptor->rowCount());
-    m_ModelPool.insert(experimentId, dataModel);
+    m_ModelPool.insert(dataModel->uid(), dataModel);
+
+#ifdef MODELMANAGER_DEBUG
+    qDebug() << __FILE__ << ":" << __LINE__ << "dataModel:" << (dataModel? "!NULL": "NULL");
+    qDebug() << __FILE__ << ":" << __LINE__ << "dataModelUid" << dataModel->uid();
+#endif
 
     // Add everything to the look up table
     QHash<QUuid, QUuid> *experimentModels = new QHash<QUuid, QUuid>();
-    experimentModels->insert(experimentId, dataModel->uid());
-    m_ModelLookupTable.insert(descriptorId, experimentModels);
+    experimentModels->insert(experimentUid, dataModel->uid());
+    m_ModelLookupTable.insert(descriptorUid, experimentModels);
 
     return dataModel->uid();
 }
@@ -269,63 +315,67 @@ QUuid ModelManager::importModel(const QString &filepath)
 
 /*! \brief Exports the model's data to a local XML file.
     Phase II */
-void ModelManager::ModelManager::exportModel(const QUuid &modelId, const QString &filepath)
+void ModelManager::ModelManager::exportModel(const QUuid &modelUid, const QString &filepath)
 {
     //TODO: Phase II.
     throw tr("Function not yet implemented.");
 }
 
 /*! \brief Removes the model's data from memory, requiring a re-fetch from the server if it is accessed again. */
-void ModelManager::unloadModel(const QUuid &descriptorId, const QUuid &experimentId)
+void ModelManager::unloadModel(const QUuid &descriptorUid, const QUuid &experimentUid)
 {
-    QHash<QUuid, QUuid> *experimentModels = m_ModelLookupTable.value(descriptorId);
+    QHash<QUuid, QUuid> *experimentModels = m_ModelLookupTable.value(descriptorUid);
     if(!experimentModels || experimentModels->count() <= 0) {
         return;
     }
 
-    QUuid modelId = experimentModels->value(experimentId);
-    if(modelId.isNull()) {
+    QUuid modelUid = experimentModels->value(experimentUid);
+    if(modelUid.isNull()) {
         return;
     }
 
-    DataModel *dataModel = m_ModelPool.value(modelId);
+    DataModel *dataModel = m_ModelPool.value(modelUid);
     if(!dataModel) {
         return;
     }
 
-    m_ModelPool.remove(modelId);
-    experimentModels->remove(experimentId);
+    m_ModelPool.remove(modelUid);
+    experimentModels->remove(experimentUid);
 
     if(experimentModels->count() <= 0) {
-        m_ModelLookupTable.remove(descriptorId, experimentModels);
+        m_ModelLookupTable.remove(descriptorUid, experimentModels);
     }
 }
 
 /*! \brief Returns a container for the MIME type data for the specified descriptor.
     Used during copy-and-paste and drag-and-drop operations. */
-QMimeData ModelManager::modelMimeData(const QUuid &descriptorId, const QUuid &experimentId)
+QMimeData ModelManager::modelMimeData(const QUuid &descriptorUid, const QUuid &experimentUid)
 {
     //TODO:
     throw tr("Function not yet implemented.");
 }
 
 /*! \brief Returns the model from the cache. If it's not in the cache a fetch is automatically performed. */
-QAbstractItemModel *ModelManager::model(const QUuid &descriptorId, const QUuid &experimentId)
+QAbstractItemModel *ModelManager::model(const QUuid &descriptorUid, const QUuid &experimentUid)
 {
-    QUuid modelId;
+    QUuid modelUid;
 
     // Try to find it in the cache
-    QHash<QUuid, QUuid> *experimentModels = m_ModelLookupTable.value(descriptorId);
+    QHash<QUuid, QUuid> *experimentModels = m_ModelLookupTable.value(descriptorUid);
     if(experimentModels && experimentModels->count() > 0) {
-        modelId = experimentModels->value(experimentId);
+        modelUid = experimentModels->value(experimentUid);
     }
 
     // If the model wasn't cached, fetch it from the server
-    if(modelId.isNull()) {
-        modelId = fetchModel(descriptorId, experimentId);
+    if(modelUid.isNull()) {
+        modelUid = fetchModel(descriptorUid, experimentUid);
     }
 
-    return m_ModelPool.value(modelId);
+#ifdef MODELMANAGER_DEBUG
+    qDebug() << __FILE__ << ":" << __LINE__ << "ModeUid:" << modelUid;
+#endif
+
+    return m_ModelPool.value(modelUid, NULL);
 }
 
 

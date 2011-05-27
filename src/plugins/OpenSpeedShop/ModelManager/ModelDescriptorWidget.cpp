@@ -148,7 +148,7 @@ bool ModelDescriptorWidget::hasChanged()
         return true;
     if(m_ModelDescriptor->experimentType().compare(ui->cmbExperimentType->currentText()))
         return true;
-    if(m_ModelDescriptor->rowCount() != ui->txtRowCount->value())
+    if((int)m_ModelDescriptor->rowCount() != ui->txtRowCount->value())
         return true;
 
     // Check the modifiers list lengths to shortcut the check

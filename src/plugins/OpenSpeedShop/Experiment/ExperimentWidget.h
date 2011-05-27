@@ -2,6 +2,7 @@
 #define EXPERIMENTWIDGET_H
 
 #include <QWidget>
+#include <QUuid>
 
 namespace Plugins {
 namespace OpenSpeedShop {
@@ -19,8 +20,12 @@ public:
     void create();
     void load();
 
+protected:
+    QUuid m_ExperimentUid;
+
 protected slots:
     void on_btnAddModel_clicked();
+    void getModel(QUuid descriptorUid);
 
 private:
     Ui::ExperimentWidget *ui;

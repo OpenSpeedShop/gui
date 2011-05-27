@@ -28,27 +28,27 @@ public:
     void importDescriptors(const QString &filepath = QString());
     void exportDescriptors(const QString &filepath = QString());
     QUuid createDescriptor();
-    void removeDescriptor(const QUuid &descriptorId);
-    ModelDescriptorWidget *createDescriptorWidget(const QUuid &descriptorId, QWidget *parent = NULL);
+    void removeDescriptor(const QUuid &descriptorUid);
+    ModelDescriptorWidget *createDescriptorWidget(const QUuid &descriptorUid, QWidget *parent = NULL);
     ModelDescriptorListWidget *createDescriptorListWidget(QWidget *parent = NULL);
-    QMimeData descriptorMimeData(const QUuid &descriptorId);
+    QMimeData descriptorMimeData(const QUuid &descriptorUid);
 
     QUuid importModel(const QString &filepath = QString());
-    void exportModel(const QUuid &modelId, const QString &filepath = QString());
-    QUuid fetchModel(const QUuid &descriptorId, const QUuid &experimentId);
-    void unloadModel(const QUuid &modelId);
-    void unloadModel(const QUuid &descriptorId, const QUuid &experimentId);
-    QMimeData modelMimeData(const QUuid &modelId);
-    QMimeData modelMimeData(const QUuid &descriptorId, const QUuid &experimentId);
-    QAbstractItemModel *model(const QUuid &modelId);
-    QAbstractItemModel *model(const QUuid &descriptorId, const QUuid &experimentId);
-    QUuid modelId(const QUuid &descriptorId, const QUuid &experimentId) const;
+    void exportModel(const QUuid &modelUid, const QString &filepath = QString());
+    QUuid fetchModel(const QUuid &descriptorUid, const QUuid &experimentUid);
+    void unloadModel(const QUuid &modelUid);
+    void unloadModel(const QUuid &descriptorUid, const QUuid &experimentUid);
+    QMimeData modelMimeData(const QUuid &modelUid);
+    QMimeData modelMimeData(const QUuid &descriptorUid, const QUuid &experimentUid);
+    QAbstractItemModel *model(const QUuid &modelUid);
+    QAbstractItemModel *model(const QUuid &descriptorUid, const QUuid &experimentUid);
+    QUuid modelUid(const QUuid &descriptorUid, const QUuid &experimentUid) const;
 
 protected:
     explicit ModelManager(QObject *parent = 0);
 
-    void insertDescriptorIntoModel(QUuid descriptorId);
-    ModelDescriptor *descriptor(QUuid descriptorId);
+    void insertDescriptorIntoModel(QUuid descriptorUid);
+    ModelDescriptor *descriptor(QUuid descriptorUid);
     QAbstractItemModel *descriptorModel();
 
     QHash<QUuid, ModelDescriptor *> m_DescriptorPool;
@@ -60,7 +60,8 @@ protected:
     QHash<QUuid, DataModel*> m_ModelPool;
 
 protected slots:
-    void descriptorDataChanged();
+    void descriptorNameChanged(ModelDescriptor *descriptor = NULL);
+    void descriptorTypeChanged(ModelDescriptor *descriptor = NULL);
 
 };
 

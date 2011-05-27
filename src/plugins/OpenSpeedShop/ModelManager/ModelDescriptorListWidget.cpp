@@ -33,14 +33,31 @@ void ModelDescriptorListWidget::setFilter(const QString &regex)
     m_DescriptorsModel->setFilterRegExp(regex);
     m_DescriptorsModel->setFilterKeyColumn(0);
     m_DescriptorsModel->setFilterRole(Qt::DisplayRole);
+}
 
-    //DEBUG: I don't know if this will actually work.  We may have to count the filtered rows by some other method.
-    // Collapse tree if there's only one root item
-    if(m_DescriptorsModel->rowCount() <= 1) {
-        ui->treeView->setRootIndex(m_DescriptorsModel->index(0,0));
-    } else {
-        ui->treeView->setRootIndex(QModelIndex());
+QString ModelDescriptorListWidget::experimentType() const
+{
+    return ui->treeView->rootIndex().data(Qt::DisplayRole).toString();
+}
+
+void ModelDescriptorListWidget::setExperimentType(const QString &experimentType)
+{
+    //NOTE: QAbstractItemModel::match() seems to search children, we only want root level items searched!
+
+    if(!experimentType.isEmpty()) {
+        for(int row=0; row < m_DescriptorsModel->rowCount(QModelIndex()); row++) {
+            QModelIndex index = m_DescriptorsModel->index(row, 0, QModelIndex());
+            if(!index.data(Qt::DisplayRole).toString().compare(experimentType, Qt::CaseInsensitive)) {
+                ui->treeView->setRootIndex(index);
+                ui->treeView->setRootIsDecorated(false);
+                return;
+            }
+        }
     }
+
+    ui->treeView->setRootIndex(QModelIndex());
+    ui->treeView->setRootIsDecorated(true);
+    ui->treeView->expandAll();
 }
 
 void ModelDescriptorListWidget::setModel(QAbstractItemModel *descriptorsModel)
@@ -53,13 +70,6 @@ void ModelDescriptorListWidget::setModel(QAbstractItemModel *descriptorsModel)
 
     connect(ui->treeView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
             this, SLOT(selectionChanged(QItemSelection,QItemSelection)));
-
-    // Collapse tree if there's only one root item
-    if(m_DescriptorsModel->rowCount() <= 1) {
-        ui->treeView->setRootIndex(m_DescriptorsModel->index(0,0));
-    } else {
-        ui->treeView->setRootIndex(QModelIndex());
-    }
 }
 
 void ModelDescriptorListWidget::selectionChanged(QItemSelection selected, QItemSelection deselected)
@@ -82,6 +92,13 @@ void ModelDescriptorListWidget::selectionChanged(QItemSelection selected, QItemS
     QUuid uid(selectedRow.data(Qt::UserRole).toString());
     emit currentSelectionChanged(uid);
 }
+
+void ModelDescriptorListWidget::on_treeView_doubleClicked(QModelIndex index)
+{
+    QUuid descriptorUid(index.data(Qt::UserRole).toString());
+    emit doubleClicked(descriptorUid);
+}
+
 
 void ModelDescriptorListWidget::selectRow(const QUuid &uid)
 {

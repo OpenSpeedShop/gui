@@ -29,8 +29,7 @@ SOURCES      += OpenSpeedShopPlugin.cpp \
                 ConnectionManager/IConnection.cpp \
                 ConnectionManager/ConnectionWidget.cpp \
                 ConnectionManager/ConnectionManager.cpp \
-                ViewManager/DataModel.cpp \
-                ViewManager/DataItem.cpp \
+                ModelManager/DataModel.cpp \
                 ConnectionManager/ServerAdapter.cpp \
                 RemoteFileSystem/RemoteFileEngine.cpp \
                 RemoteFileSystem/RemoteFileEngineHandler.cpp \
@@ -39,6 +38,7 @@ SOURCES      += OpenSpeedShopPlugin.cpp \
                 ModelManager/ModelManager.cpp \
                 ModelManager/ModelManagerDialog.cpp \
                 ModelManager/ModelDescriptorListWidget.cpp
+
 
 HEADERS      += OpenSpeedShopPlugin.h \
                 Settings/SettingPageFactory.h \
@@ -50,8 +50,7 @@ HEADERS      += OpenSpeedShopPlugin.h \
                 ConnectionManager/IConnection.h \
                 ConnectionManager/ConnectionWidget.h \
                 ConnectionManager/ConnectionManager.h \
-                ViewManager/DataModel.h \
-                ViewManager/DataItem.h \
+                ModelManager/DataModel.h \
                 ConnectionManager/ConnectionManagerLibrary.h \
                 OpenSpeedShopLibrary.h \
                 ConnectionManager/ServerAdapter.h \
@@ -80,6 +79,7 @@ DEFINES      += OPENSPEEDSHOP_LIBRARY \
                 CONNECTIONMANAGER_LIBRARY
 
 #debug: DEFINES += DATAMODEL_DEBUG
+#debug: DEFINES += MODELMANAGER_DEBUG
 
 # List of experiment types and their possible modifiers/metrics
 # In the future, this should be pulled from the server

@@ -29,8 +29,12 @@ public:
     QString filter() const;
     void setFilter(const QString &regex);
 
+    QString experimentType() const;
+    void setExperimentType(const QString &experimentType);
+
 signals:
-    void currentSelectionChanged(const QUuid&);
+    void currentSelectionChanged(const QUuid &descriptorUid);
+    void doubleClicked(const QUuid &descriptorUid);
 
 public slots:
     void selectRow(const QUuid &uid);
@@ -40,8 +44,11 @@ protected:
     QSortFilterProxyModel *m_DescriptorsModel;
     QModelIndex findIndex(const QUuid &uid, const QModelIndex &parent = QModelIndex()) const;
 
+    QString m_ExperimentType;
+
 protected slots:
     void selectionChanged(QItemSelection selected, QItemSelection deselected);
+    void on_treeView_doubleClicked(QModelIndex index);
 
 private:
     Ui::ModelDescriptorListWidget *ui;

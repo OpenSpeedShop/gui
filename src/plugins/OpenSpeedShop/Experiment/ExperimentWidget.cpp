@@ -7,7 +7,8 @@
 #include "ConnectionManager/ServerCommand.h"
 #include <QDomDocument>
 
-#include "ModelManager/ModelDescriptorWidget.h"
+#include "ModelManager/ModelManager.h"
+#include "ModelManager/ModelDescriptorListWidget.h"
 
 #ifdef QT_DEBUG
 #  include <QDebug>
@@ -59,12 +60,18 @@ void ExperimentWidget::load()
 
 //    qDebug() << serverAdapter->waitVersion();
 
-    QUuid expId = serverAdapter->waitRestore("/home/dane/smg2000-io.openss");
-    ui->txtDatabasePath->setText(serverAdapter->waitExperimentDatabase(expId));
-    ui->txtExecutablePath->setText(serverAdapter->waitExperimentExecutable(expId));
-    ui->txtCommand->setText(serverAdapter->waitExperimentAppCommand(expId));
+    m_ExperimentUid = serverAdapter->waitRestore("/home/dane/smg2000-io.openss");
+    ui->txtDatabasePath->setText(serverAdapter->waitExperimentDatabase(m_ExperimentUid));
+    ui->txtExecutablePath->setText(serverAdapter->waitExperimentExecutable(m_ExperimentUid));
+    ui->txtCommand->setText(serverAdapter->waitExperimentAppCommand(m_ExperimentUid));
 
-    ui->cmbExperimentTypes->setCurrentIndex(ui->cmbExperimentTypes->findText(serverAdapter->waitExperimentTypes(expId)));
+    QString experimentType = serverAdapter->waitExperimentTypes(m_ExperimentUid);
+    ui->cmbExperimentTypes->setCurrentIndex(ui->cmbExperimentTypes->findText(experimentType));
+
+    ModelDescriptorListWidget *listWidget = ModelManager::instance()->createDescriptorListWidget(ui->modelListViewParent);
+    listWidget->setExperimentType(experimentType);
+    ui->modelListViewParent->layout()->addWidget(listWidget);
+    connect(listWidget, SIGNAL(doubleClicked(QUuid)), this, SLOT(getModel(QUuid)));
 
 //    qDebug() << "parameters" << serverAdapter->waitExperimentParameterValues(expId);
 
@@ -93,18 +100,30 @@ void ExperimentWidget::load()
 //    QStringList metrics;
 //    metrics << "counts" << "io::exclusive_times"; // << "io::inclusive_times";
 
-//    try {
-//    DataModel *dataModel = serverAdapter->waitExperimentView(expId, modifiers, metrics, experimentType, 10);
-//    ui->treeView->setModel(dataModel);
-//    } catch(QString err) {
-//        using namespace Core::MainWindow;
-//        QString errorMessage = tr("An error occured while loading the experiment view: '%1'").arg(err);
-//        MainWindow::instance()->notify(errorMessage, NotificationWidget::Critical);
-//    }
 
 //    serverAdapter->waitExit();
 
 }
+
+void ExperimentWidget::getModel(QUuid descriptorUid)
+{
+    ServerAdapter *serverAdapter = ConnectionManager::instance()->currentServerAdapter();
+
+    if(!serverAdapter) {
+        Core::MainWindow::MainWindow::instance()->notify("Server not connected");
+        return;
+    }
+
+    try {
+        QAbstractItemModel *dataModel = ModelManager::instance()->model(descriptorUid, m_ExperimentUid);
+        ui->treeView->setModel(dataModel);
+    } catch(QString err) {
+        using namespace Core::MainWindow;
+        QString errorMessage = tr("An error occured while loading the experiment view: '%1'").arg(err);
+        MainWindow::instance()->notify(errorMessage, NotificationWidget::Critical);
+    }
+}
+
 
 void ExperimentWidget::on_btnAddModel_clicked()
 {

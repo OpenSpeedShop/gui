@@ -24,7 +24,6 @@ ModelManagerDialog::ModelManagerDialog(QWidget *parent) :
     connect(descriptorListWidget, SIGNAL(currentSelectionChanged(QUuid)),
             this, SLOT(currentSelectionChanged(QUuid)));
 
-
     Core::SettingManager::SettingManager *settingManager = Core::SettingManager::SettingManager::instance();
 
     settingManager->beginGroup("Plugins");
