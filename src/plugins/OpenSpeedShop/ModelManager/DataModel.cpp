@@ -27,6 +27,8 @@
 
 #include "DataModel.h"
 
+#include <QStringList>
+
 #ifdef DATAMODEL_DEBUG
 #  include <QDebug>
 #endif
@@ -353,13 +355,22 @@ QVariant DataModel::data(const QModelIndex &index, int role) const
     Cell *dataItem = static_cast<Cell *>(index.internalPointer());
 
     if(role == Qt::DisplayRole) {
-//        if(!dataItem->columns.isEmpty()) {
-//            return displayRole(dataItem->columns.at(index.column()));
-//        }
-
         return displayRole(dataItem);
     } else if(role == Qt::ToolTipRole) {
-//        return toolTipRole(dataItem);
+        return toolTipRole(dataItem);
+    } else if(role == Qt::UserRole) {      //TODO: UID
+        return QVariant();
+    } else if(role == Qt::UserRole + 1) {  // Data type
+        return dataItem->data["type"];
+    } else if(role == Qt::UserRole + 2) {  // Additional data
+        QString cellType = dataItem->data["type"].toString();
+        if(!cellType.compare("CallStackEntry", Qt::CaseInsensitive)) {
+            QStringList stack;
+            foreach(Cell *child, dataItem->children) {
+                stack.append(displayRole(child).toString());
+            }
+            return stack;
+        }
     }
 
     return QVariant();
@@ -370,32 +381,17 @@ QVariant DataModel::displayRole(Cell *cell) const
     QString cellType = cell->data["type"].toString();
 
     if(!cellType.compare("CallStackEntry", Qt::CaseInsensitive)) {
-        //! \todo this could get very slow for larger datasets, we need to use a string builder
         QString stack;
-
-        //! \todo make the maximum shown user editable
-        // Figure out if we're clipping the list or not
-        int max = 5;
-        if(max > cell->children.count()) {
-            max = cell->children.count();
+        int max = 3;
+        int i = 0;
+        while(i < max && i < cell->children.count()) {
+            Cell *child = cell->children.at(i);
+            stack.append(displayRole(child).toString());
+            if(++i < max && i < cell->children.count()) {
+                stack.append(QString(" %1 ").arg(QChar(0x00AB)));
+            }
         }
-
-        // Iterate over the children and append their values to this cell's return value
-        for(int i = 0; i < max; i++) {
-            stack.append(displayRole(cell->children.at(i)).toString() + '\n');
-        }
-
-        // Remove any new lines from the end
-        while(stack.endsWith('\n')) {
-            stack.chop(1);
-        }
-
-        // If we clipped the list, let the user know
-        if(max < cell->children.count()) {
-            stack.append(tr("  [...]"));
-        }
-
-        return QVariant(stack);
+        return stack;
 
     } else if(!cellType.compare("Function", Qt::CaseInsensitive)) {
         QString value = cell->data["value"].toString();
@@ -418,7 +414,22 @@ QVariant DataModel::displayRole(Cell *cell) const
 
 QVariant DataModel::toolTipRole(Cell *cell) const
 {
-    return cell->data["type"];
+    QString cellType = cell->data["type"].toString();
+
+    if(!cellType.compare("CallStackEntry", Qt::CaseInsensitive)) {
+        QString stack;
+        int i=0;
+        while(i < cell->children.count()) {
+            Cell *child = cell->children.at(i);
+            stack.append(displayRole(child).toString());
+            if(++i < cell->children.count()) {
+                stack.append(QChar::LineSeparator);
+            }
+        }
+        return stack;
+    }
+
+    return QVariant();
 }
 
 QVariant DataModel::headerData(int section, Qt::Orientation orientation, int role) const

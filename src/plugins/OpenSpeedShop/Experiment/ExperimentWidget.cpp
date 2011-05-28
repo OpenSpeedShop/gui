@@ -7,8 +7,11 @@
 #include "ConnectionManager/ServerCommand.h"
 #include <QDomDocument>
 
+#include "ViewManager/TreeView.h"
+
 #include "ModelManager/ModelManager.h"
 #include "ModelManager/ModelDescriptorListWidget.h"
+
 
 #ifdef QT_DEBUG
 #  include <QDebug>
@@ -22,6 +25,9 @@ ExperimentWidget::ExperimentWidget(QWidget *parent) :
     ui(new Ui::ExperimentWidget)
 {
     ui->setupUi(this);
+
+    m_CurrentView = new TreeView(this);
+    ui->grpView->layout()->addWidget(m_CurrentView);
 
     ServerAdapter *serverAdapter = ConnectionManager::instance()->currentServerAdapter();
 
@@ -60,7 +66,9 @@ void ExperimentWidget::load()
 
 //    qDebug() << serverAdapter->waitVersion();
 
+//    m_ExperimentUid = serverAdapter->waitRestore("/home/dane/smg2000-pcsamp.openss");
     m_ExperimentUid = serverAdapter->waitRestore("/home/dane/smg2000-io.openss");
+
     ui->txtDatabasePath->setText(serverAdapter->waitExperimentDatabase(m_ExperimentUid));
     ui->txtExecutablePath->setText(serverAdapter->waitExperimentExecutable(m_ExperimentUid));
     ui->txtCommand->setText(serverAdapter->waitExperimentAppCommand(m_ExperimentUid));
@@ -116,7 +124,7 @@ void ExperimentWidget::getModel(QUuid descriptorUid)
 
     try {
         QAbstractItemModel *dataModel = ModelManager::instance()->model(descriptorUid, m_ExperimentUid);
-        ui->treeView->setModel(dataModel);
+        m_CurrentView->setModel(dataModel);
     } catch(QString err) {
         using namespace Core::MainWindow;
         QString errorMessage = tr("An error occured while loading the experiment view: '%1'").arg(err);

@@ -25,38 +25,28 @@
 
  */
 
-#ifndef DELEGATE_H
-#define DELEGATE_H
+#ifndef TREEVIEW_H
+#define TREEVIEW_H
 
-#include <QStyledItemDelegate>
-#include <QAbstractItemModel>
-#include <QSet>
+#include <QTreeView>
 
 namespace Plugins {
 namespace OpenSpeedShop {
 
-class Delegate : public QStyledItemDelegate
+class TreeView : public QTreeView
 {
     Q_OBJECT
 public:
-    explicit Delegate(QObject *parent = 0);
+    explicit TreeView(QWidget *parent = 0);
 
-    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-    QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    QAbstractItemModel *model() const;
+    void setModel(QAbstractItemModel *model);
 
-public slots:
-    bool helpEvent(QHelpEvent *event, QAbstractItemView *view, const QStyleOptionViewItem &option, const QModelIndex &index);
-
-    void selected(const QModelIndex &index);
-    void deselected(const QModelIndex &index);
-
-
-protected:
-    QSet<QModelIndex> m_SelectedRows;
-
+protected slots:
+    void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
 };
 
 } // namespace OpenSpeedShop
 } // namespace Plugins
 
-#endif // DELEGATE_H
+#endif // TREEVIEW_H

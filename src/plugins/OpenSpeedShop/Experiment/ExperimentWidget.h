@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QUuid>
+#include <QAbstractItemView>
 
 namespace Plugins {
 namespace OpenSpeedShop {
@@ -22,6 +23,7 @@ public:
 
 protected:
     QUuid m_ExperimentUid;
+    QAbstractItemView *m_CurrentView;
 
 protected slots:
     void on_btnAddModel_clicked();

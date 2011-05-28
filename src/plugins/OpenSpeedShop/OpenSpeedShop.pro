@@ -38,7 +38,8 @@ SOURCES      += OpenSpeedShopPlugin.cpp \
                 ModelManager/ModelManager.cpp \
                 ModelManager/ModelManagerDialog.cpp \
                 ModelManager/ModelDescriptorListWidget.cpp \
-    ViewManager/Delegate.cpp
+    ViewManager/Delegate.cpp \
+    ViewManager/TreeView.cpp
 
 
 HEADERS      += OpenSpeedShopPlugin.h \
@@ -62,7 +63,8 @@ HEADERS      += OpenSpeedShopPlugin.h \
                 ModelManager/ModelManager.h \
                 ModelManager/ModelManagerDialog.h \
                 ModelManager/ModelDescriptorListWidget.h \
-    ViewManager/Delegate.h
+    ViewManager/Delegate.h \
+    ViewManager/TreeView.h
 
 FORMS        += Settings/SettingPage.ui \
                 AboutDialog.ui \
