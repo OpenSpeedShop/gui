@@ -1,78 +1,83 @@
 #include "ModelDescriptorListWidget.h"
-#include "ui_ModelDescriptorListWidget.h"
-
-#include "ModelDescriptor.h"
 
 #include <QStandardItem>
+#include "ModelDescriptor.h"
 
 namespace Plugins {
 namespace OpenSpeedShop {
 
 ModelDescriptorListWidget::ModelDescriptorListWidget(QAbstractItemModel *descriptorsModel, QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::ModelDescriptorListWidget)
+    QTreeView(parent)
 {
-    m_DescriptorsModel = new QSortFilterProxyModel(this);
-    ui->setupUi(this);
+    QTreeView::setModel(new QSortFilterProxyModel(this));
+    setEditTriggers(QAbstractItemView::NoEditTriggers);
+    setSortingEnabled(true);
 
     setModel(descriptorsModel);
+
+    connect(this, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(itemDoubleClicked(QModelIndex)));
+    connect(this, SIGNAL(clicked(QModelIndex)), this, SLOT(itemSingleClicked(QModelIndex)));
 }
 
 ModelDescriptorListWidget::~ModelDescriptorListWidget()
 {
-    delete ui;
 }
 
 QString ModelDescriptorListWidget::filter() const
 {
-    return m_DescriptorsModel->filterRegExp().pattern();
+    QSortFilterProxyModel *proxyModel = qobject_cast<QSortFilterProxyModel *>(QTreeView::model());
+    return proxyModel->filterRegExp().pattern();
 }
 
 void ModelDescriptorListWidget::setFilter(const QString &regex)
 {
-    m_DescriptorsModel->setFilterRegExp(regex);
-    m_DescriptorsModel->setFilterKeyColumn(0);
-    m_DescriptorsModel->setFilterRole(Qt::DisplayRole);
+    QSortFilterProxyModel *proxyModel = qobject_cast<QSortFilterProxyModel *>(QTreeView::model());
+    proxyModel->setFilterRegExp(regex);
+    proxyModel->setFilterKeyColumn(0);
+    proxyModel->setFilterRole(Qt::DisplayRole);
 }
 
 QString ModelDescriptorListWidget::experimentType() const
 {
-    return ui->treeView->rootIndex().data(Qt::DisplayRole).toString();
+    return rootIndex().data(Qt::DisplayRole).toString();
 }
 
 void ModelDescriptorListWidget::setExperimentType(const QString &experimentType)
 {
     //NOTE: QAbstractItemModel::match() seems to search children, we only want root level items searched!
+    QSortFilterProxyModel *proxyModel = qobject_cast<QSortFilterProxyModel *>(QTreeView::model());
 
     if(!experimentType.isEmpty()) {
-        for(int row=0; row < m_DescriptorsModel->rowCount(QModelIndex()); row++) {
-            QModelIndex index = m_DescriptorsModel->index(row, 0, QModelIndex());
+        for(int row=0; row < proxyModel->rowCount(QModelIndex()); row++) {
+            QModelIndex index = proxyModel->index(row, 0, QModelIndex());
             if(!index.data(Qt::DisplayRole).toString().compare(experimentType, Qt::CaseInsensitive)) {
-                ui->treeView->setRootIndex(index);
-                ui->treeView->setRootIsDecorated(false);
+                setRootIndex(index);
+                setRootIsDecorated(false);
                 return;
             }
         }
     }
 
-    ui->treeView->setRootIndex(QModelIndex());
-    ui->treeView->setRootIsDecorated(true);
-    ui->treeView->expandAll();
+    setRootIndex(QModelIndex());
+    setRootIsDecorated(true);
+    expandAll();
 }
 
-void ModelDescriptorListWidget::setModel(QAbstractItemModel *descriptorsModel)
+QAbstractItemModel *ModelDescriptorListWidget::model() const
 {
-    m_DescriptorsModel->setSourceModel(descriptorsModel);
-    m_DescriptorsModel->setDynamicSortFilter(true);         // Re sort and filter if the source model changes
-    ui->treeView->setModel(m_DescriptorsModel);
-    ui->treeView->setSortingEnabled(true);
-    ui->treeView->expandAll();
-
-    connect(ui->treeView->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)),
-            this, SLOT(selectionChanged(QItemSelection,QItemSelection)));
+    QSortFilterProxyModel *proxyModel = qobject_cast<QSortFilterProxyModel *>(QTreeView::model());
+    return proxyModel->sourceModel();
 }
 
-void ModelDescriptorListWidget::selectionChanged(QItemSelection selected, QItemSelection deselected)
+void ModelDescriptorListWidget::setModel(QAbstractItemModel *model)
+{
+    QSortFilterProxyModel *proxyModel = qobject_cast<QSortFilterProxyModel *>(QTreeView::model());
+    proxyModel->setSourceModel(model);
+    proxyModel->setDynamicSortFilter(true);
+    expandAll();
+}
+
+void ModelDescriptorListWidget::selectionChanged(const QItemSelection &selected, const QItemSelection &deselected)
 {
     QModelIndexList selectedIndexes = selected.indexes();
     QModelIndexList selectedRows;
@@ -83,30 +88,48 @@ void ModelDescriptorListWidget::selectionChanged(QItemSelection selected, QItemS
     }
 
     if(selectedRows.count() != 1) {
-        emit currentSelectionChanged(QUuid());
+        emit currentDescriptorChanged(QUuid());
         return;
     }
 
     QModelIndex selectedRow = selectedRows.at(0);
 
     QUuid uid(selectedRow.data(Qt::UserRole).toString());
-    emit currentSelectionChanged(uid);
+    emit currentDescriptorChanged(uid);
+
+    QTreeView::selectionChanged(selected, deselected);
 }
 
-void ModelDescriptorListWidget::on_treeView_doubleClicked(QModelIndex index)
+void ModelDescriptorListWidget::itemSingleClicked(QModelIndex index)
 {
-    QUuid descriptorUid(index.data(Qt::UserRole).toString());
-    emit doubleClicked(descriptorUid);
+    QString uidString = index.data(Qt::UserRole).toString();
+    if(!uidString.isEmpty()) {
+        emit descriptorSingleClicked(QUuid(uidString));
+    }
+}
+
+void ModelDescriptorListWidget::itemDoubleClicked(QModelIndex index)
+{
+    QString uidString = index.data(Qt::UserRole).toString();
+    if(!uidString.isEmpty()) {
+        emit descriptorDoubleClicked(QUuid(uidString));
+    }
 }
 
 
 void ModelDescriptorListWidget::selectRow(const QUuid &uid)
 {
-    QItemSelectionModel *selectionModel = ui->treeView->selectionModel();
+    QItemSelectionModel *selectionModel = this->selectionModel();
     if(selectionModel) {
         selectionModel->clear();
         QModelIndex selectedIndex = findIndex(uid);
         if(selectedIndex.isValid()) {
+
+            QModelIndex selectedIndexParent = model()->parent(selectedIndex);
+            if(selectedIndexParent.isValid()) {
+                expand(selectedIndexParent);
+            }
+
             selectionModel->setCurrentIndex(selectedIndex, QItemSelectionModel::SelectCurrent);
         }
     }
@@ -114,9 +137,11 @@ void ModelDescriptorListWidget::selectRow(const QUuid &uid)
 
 QModelIndex ModelDescriptorListWidget::findIndex(const QUuid &uid, const QModelIndex &parent) const
 {
+    QSortFilterProxyModel *proxyModel = qobject_cast<QSortFilterProxyModel *>(QTreeView::model());
+
     QModelIndex modelIndex;
-    for(int row = 0; row < m_DescriptorsModel->rowCount(parent); row++) {
-        QModelIndex modelIndex = m_DescriptorsModel->index(row, 0, parent);
+    for(int row = 0; row < proxyModel->rowCount(parent); row++) {
+        QModelIndex modelIndex = proxyModel->index(row, 0, parent);
         if(modelIndex.isValid() && QUuid(modelIndex.data(Qt::UserRole).toString()) == uid) {
             return modelIndex;
         }
@@ -125,7 +150,6 @@ QModelIndex ModelDescriptorListWidget::findIndex(const QUuid &uid, const QModelI
 
     return modelIndex;
 }
-
 
 } // namespace OpenSpeedShop
 } // namespace Plugins

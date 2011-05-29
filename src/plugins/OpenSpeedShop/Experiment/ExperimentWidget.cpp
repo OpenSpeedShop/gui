@@ -10,6 +10,7 @@
 #include "ViewManager/TreeView.h"
 
 #include "ModelManager/ModelManager.h"
+#include "ModelManager/ModelManagerDialog.h"
 #include "ModelManager/ModelDescriptorListWidget.h"
 
 
@@ -25,12 +26,12 @@ ExperimentWidget::ExperimentWidget(QWidget *parent) :
     ui(new Ui::ExperimentWidget)
 {
     ui->setupUi(this);
+    ui->tabWidget->setCurrentIndex(0);
 
     m_CurrentView = new TreeView(this);
     ui->grpView->layout()->addWidget(m_CurrentView);
 
     ServerAdapter *serverAdapter = ConnectionManager::instance()->currentServerAdapter();
-
     if(!serverAdapter) {
         Core::MainWindow::MainWindow::instance()->notify("Server not connected");
         return;
@@ -53,12 +54,13 @@ void ExperimentWidget::create()
 
 void ExperimentWidget::load()
 {
+    ui->tabProperties->setEnabled(false);
+
     // Grab the current server adapter
     // Ensure that we're connected to a server
     // Start sending commands
 
     ServerAdapter *serverAdapter = ConnectionManager::instance()->currentServerAdapter();
-
     if(!serverAdapter) {
         Core::MainWindow::MainWindow::instance()->notify("Server not connected");
         return;
@@ -76,10 +78,7 @@ void ExperimentWidget::load()
     QString experimentType = serverAdapter->waitExperimentTypes(m_ExperimentUid);
     ui->cmbExperimentTypes->setCurrentIndex(ui->cmbExperimentTypes->findText(experimentType));
 
-    ModelDescriptorListWidget *listWidget = ModelManager::instance()->createDescriptorListWidget(ui->modelListViewParent);
-    listWidget->setExperimentType(experimentType);
-    ui->modelListViewParent->layout()->addWidget(listWidget);
-    connect(listWidget, SIGNAL(doubleClicked(QUuid)), this, SLOT(getModel(QUuid)));
+    loadModelDescriptors(experimentType);
 
 //    qDebug() << "parameters" << serverAdapter->waitExperimentParameterValues(expId);
 
@@ -113,6 +112,21 @@ void ExperimentWidget::load()
 
 }
 
+void ExperimentWidget::loadModelDescriptors(QString experimentType)
+{
+    ServerAdapter *serverAdapter = ConnectionManager::instance()->currentServerAdapter();
+    if(!serverAdapter) { throw tr("Server not connected"); }
+
+    //TODO: Remove any previous model descriptor lists.
+
+    /* Create and initialize the model descriptor list. */
+    ModelDescriptorListWidget *listWidget = ModelManager::instance()->createDescriptorListWidget(ui->modelListViewParent);
+    listWidget->setHeaderHidden(true);
+    listWidget->setExperimentType(experimentType);
+    ui->modelListViewParent->layout()->addWidget(listWidget);
+    connect(listWidget, SIGNAL(currentDescriptorChanged(QUuid)), this, SLOT(getModel(QUuid)));
+}
+
 void ExperimentWidget::getModel(QUuid descriptorUid)
 {
     ServerAdapter *serverAdapter = ConnectionManager::instance()->currentServerAdapter();
@@ -125,6 +139,15 @@ void ExperimentWidget::getModel(QUuid descriptorUid)
     try {
         QAbstractItemModel *dataModel = ModelManager::instance()->model(descriptorUid, m_ExperimentUid);
         m_CurrentView->setModel(dataModel);
+
+        /* Reset the view filter for this model */
+        ui->grpViewFilter->setChecked(false);
+        ui->txtViewFilter->setText(QString());
+        ui->cmbViewFilterColumn->clear();
+        for(int i = 0; i < dataModel->columnCount(); i++) {
+            ui->cmbViewFilterColumn->addItem(dataModel->headerData(i, Qt::Horizontal, Qt::DisplayRole).toString());
+        }
+
     } catch(QString err) {
         using namespace Core::MainWindow;
         QString errorMessage = tr("An error occured while loading the experiment view: '%1'").arg(err);
@@ -135,7 +158,33 @@ void ExperimentWidget::getModel(QUuid descriptorUid)
 
 void ExperimentWidget::on_btnAddModel_clicked()
 {
+    ModelManagerDialog models;
+    models.exec();
 }
+
+void ExperimentWidget::on_txtViewFilter_textChanged(const QString &text)
+{
+    TreeView *treeView = qobject_cast<TreeView *>(m_CurrentView);
+    if(treeView) {
+        treeView->setFilter(ui->txtViewFilter->text());
+    }
+}
+
+void ExperimentWidget::on_cmbViewFilterColumn_currentIndexChanged(int index)
+{
+    TreeView *treeView = qobject_cast<TreeView *>(m_CurrentView);
+    if(treeView) {
+        treeView->setFilterColumn(index);
+    }
+}
+
+void ExperimentWidget::on_grpViewFilter_toggled(bool on)
+{
+    ui->txtViewFilter->setText(QString());
+}
+
+
+
 
 
 } // namespace OpenSpeedShop

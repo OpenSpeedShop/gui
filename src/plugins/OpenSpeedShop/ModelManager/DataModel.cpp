@@ -358,6 +358,8 @@ QVariant DataModel::data(const QModelIndex &index, int role) const
         return displayRole(dataItem);
     } else if(role == Qt::ToolTipRole) {
         return toolTipRole(dataItem);
+    } else if(role == Qt::EditRole) {
+        return editRole(dataItem);
     } else if(role == Qt::UserRole) {      //TODO: UID
         return QVariant();
     } else if(role == Qt::UserRole + 1) {  // Data type
@@ -382,13 +384,15 @@ QVariant DataModel::displayRole(Cell *cell) const
 
     if(!cellType.compare("CallStackEntry", Qt::CaseInsensitive)) {
         QString stack;
-        int max = 3;
+        int max = 5;
         int i = 0;
         while(i < max && i < cell->children.count()) {
             Cell *child = cell->children.at(i);
             stack.append(displayRole(child).toString());
             if(++i < max && i < cell->children.count()) {
                 stack.append(QString(" %1 ").arg(QChar(0x00AB)));
+            } else if(i >= max) {
+                stack.append(QString(" %1 %2").arg(QChar(0x00AB)).arg(QChar(0x2026)));
             }
         }
         return stack;
@@ -415,7 +419,6 @@ QVariant DataModel::displayRole(Cell *cell) const
 QVariant DataModel::toolTipRole(Cell *cell) const
 {
     QString cellType = cell->data["type"].toString();
-
     if(!cellType.compare("CallStackEntry", Qt::CaseInsensitive)) {
         QString stack;
         int i=0;
@@ -430,6 +433,25 @@ QVariant DataModel::toolTipRole(Cell *cell) const
     }
 
     return QVariant();
+}
+
+QVariant DataModel::editRole(Cell *cell) const
+{
+    QString cellType = cell->data["type"].toString();
+    if(!cellType.compare("CallStackEntry", Qt::CaseInsensitive)) {
+        QString stack;
+        int i = 0;
+        while(i < cell->children.count()) {
+            Cell *child = cell->children.at(i);
+            stack.append(displayRole(child).toString());
+            if(++i < cell->children.count()) {
+                stack.append(" ");
+            }
+        }
+        return stack;
+    }
+
+    return displayRole(cell);
 }
 
 QVariant DataModel::headerData(int section, Qt::Orientation orientation, int role) const

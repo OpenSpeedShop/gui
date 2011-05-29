@@ -16,9 +16,8 @@ namespace Plugins {
 namespace OpenSpeedShop {
 
 class ModelDescriptor;
-namespace Ui { class ModelDescriptorListWidget; }
 
-class ModelDescriptorListWidget : public QWidget
+class ModelDescriptorListWidget : public QTreeView
 {
     Q_OBJECT
 
@@ -32,26 +31,26 @@ public:
     QString experimentType() const;
     void setExperimentType(const QString &experimentType);
 
+    QAbstractItemModel *model() const;
+    void setModel(QAbstractItemModel *model);
+
 signals:
-    void currentSelectionChanged(const QUuid &descriptorUid);
-    void doubleClicked(const QUuid &descriptorUid);
+    void currentDescriptorChanged(const QUuid &descriptorUid);
+    void descriptorSingleClicked(const QUuid &descriptorUid);
+    void descriptorDoubleClicked(const QUuid &descriptorUid);
 
 public slots:
     void selectRow(const QUuid &uid);
 
 protected:
-    void setModel(QAbstractItemModel *descriptorsModel);
-    QSortFilterProxyModel *m_DescriptorsModel;
+    void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
     QModelIndex findIndex(const QUuid &uid, const QModelIndex &parent = QModelIndex()) const;
-
     QString m_ExperimentType;
 
 protected slots:
-    void selectionChanged(QItemSelection selected, QItemSelection deselected);
-    void on_treeView_doubleClicked(QModelIndex index);
+    void itemSingleClicked(QModelIndex index);
+    void itemDoubleClicked(QModelIndex index);
 
-private:
-    Ui::ModelDescriptorListWidget *ui;
 };
 
 

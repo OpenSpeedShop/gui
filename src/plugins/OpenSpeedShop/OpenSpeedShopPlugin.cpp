@@ -98,11 +98,16 @@ bool OpenSpeedShopPlugin::initialize(QStringList &args, QString *err)
             connect(about, SIGNAL(triggered()), this, SLOT(aboutDialog()));
             action->menu()->addAction(about);
         }
-        if(action->text() == tr("File")) {
-            QAction *models = new QAction(tr("Open|SpeedShop Models"), this);
-            models->setToolTip(tr("Displays the Open|SpeedShop models dialog"));
+        if(action->text() == tr("Tools")) {
+            QAction *serverConnect = new QAction(tr("Connect to server"), this);
+            serverConnect->setToolTip(tr("Connects to an Open|SpeedShop server"));
+            connect(serverConnect, SIGNAL(triggered()), this, SLOT(serverConnect()));
+            action->menu()->insertAction(action->menu()->actions().at(0), serverConnect);
+
+            QAction *models = new QAction(tr("Models Manager"), this);
+            models->setToolTip(tr("Displays the Open|SpeedShop model manager dialog"));
             connect(models, SIGNAL(triggered()), this, SLOT(modelsDialog()));
-            action->menu()->addAction(models);
+            action->menu()->insertAction(action->menu()->actions().at(0), models);
         }
     }
 
@@ -144,6 +149,11 @@ void OpenSpeedShopPlugin::modelsDialog()
 {
     ModelManagerDialog models;
     models.exec();
+}
+
+void OpenSpeedShopPlugin::serverConnect()
+{
+    ConnectionManager *connectionManager = ConnectionManager::instance();
 }
 
 QString OpenSpeedShopPlugin::name()

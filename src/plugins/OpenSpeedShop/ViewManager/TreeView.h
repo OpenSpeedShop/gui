@@ -42,8 +42,14 @@ public:
     QAbstractItemModel *model() const;
     void setModel(QAbstractItemModel *model);
 
+    QString filter() const;
+    void setFilter(const QString &regex);
+    int filterColumn() const;
+    void setFilterColumn(int column = 0);
+
 protected slots:
     void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
+
 };
 
 } // namespace OpenSpeedShop

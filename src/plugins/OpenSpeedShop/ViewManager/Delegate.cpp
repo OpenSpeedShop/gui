@@ -59,15 +59,33 @@ void Delegate::paint(QPainter *painter, const QStyleOptionViewItem &option, cons
     QString indexType = index.data(Qt::UserRole+1).toString();
     QString headerTitle = index.model()->headerData(index.column(), Qt::Horizontal, Qt::DisplayRole).toString();
     if(indexType.compare("Float", Qt::CaseInsensitive) == 0 && headerTitle.contains("%")) {
-        double progress = index.data().toDouble();
 
-        QStyleOptionProgressBar progressBarOption;
-        progressBarOption.rect = option.rect;
+        // Draw the background first
+        QStyleOptionViewItemV4 opt = option;
+        initStyleOption(&opt, index);
+        opt.text = QString();
+        QApplication::style()->drawControl(QStyle::CE_ItemViewItem, &opt, painter);
+
+        // Setup the progress bar
+        double progress = index.data().toDouble();
+        QStyleOptionProgressBarV2 progressBarOption;
+        progressBarOption.state = opt.state;
+        progressBarOption.palette = opt.palette;
+        progressBarOption.palette.setBrush(QPalette::WindowText, Qt::red);
+        progressBarOption.fontMetrics = opt.fontMetrics;
         progressBarOption.minimum = 0;
         progressBarOption.maximum = 100;
         progressBarOption.progress = (int)progress;
-        progressBarOption.text = QString::number(progress, 'f', 3) + "%";
+        progressBarOption.text = QString("%1%").arg(progress, 5, 'f', 2, QChar(0x2002));
         progressBarOption.textVisible = true;
+
+        // Don't exceed a maximum height, or it looks silly
+        QRect rect(option.rect);
+        QPoint center = rect.center();
+        rect.setHeight( ((rect.height() <= rect.width()/5)? rect.height(): rect.width()/5) );
+        rect.moveCenter(center);
+        progressBarOption.rect = rect;
+
         QApplication::style()->drawControl(QStyle::CE_ProgressBar, &progressBarOption, painter);
         return;
 
@@ -134,6 +152,8 @@ QSize Delegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &
     return QStyledItemDelegate::sizeHint(option, index);
 }
 
+
+
 /*! \fn Delegate::selected()
     \brief Keeps track of selected items, and notifies the view of any size changes.
     This is part of a work around involving the known bug detailed in Delegate::sizeHint().
@@ -180,6 +200,22 @@ bool Delegate::helpEvent(QHelpEvent *event, QAbstractItemView *view, const QStyl
     return QStyledItemDelegate::helpEvent(event, view, option, index);
 }
 
+QString Delegate::displayText(const QVariant &value, const QLocale& locale) const
+{
+    switch (value.userType()) {
+    case QMetaType::Float:
+    case QVariant::Double:
+        return QString("%1").arg(value.toDouble(), 10, 'f', 6, QChar(0x2002));
+    case QVariant::Int:
+    case QVariant::LongLong:
+        return QString("%1").arg(value.toLongLong(), 4, 10, QChar(0x2002));
+    case QVariant::UInt:
+    case QVariant::ULongLong:
+        return QString("%1").arg(value.toULongLong(), 4, 10, QChar(0x2002));
+    default:
+        return QStyledItemDelegate::displayText(value, locale);
+    }
+}
 
 
 } // namespace OpenSpeedShop

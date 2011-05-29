@@ -57,6 +57,7 @@ public:
 public slots:
     void aboutDialog();
     void modelsDialog();
+    void serverConnect();
 
 protected:
     QString m_Name;

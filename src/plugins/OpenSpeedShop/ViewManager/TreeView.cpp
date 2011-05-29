@@ -45,6 +45,16 @@ namespace OpenSpeedShop {
 TreeView::TreeView(QWidget *parent) :
     QTreeView(parent)
 {
+    QSortFilterProxyModel *proxyModel = new QSortFilterProxyModel(this);
+    proxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
+    proxyModel->setFilterRole(Qt::EditRole);
+    proxyModel->setSortCaseSensitivity(Qt::CaseInsensitive);
+    proxyModel->setSortRole(Qt::EditRole);
+    QTreeView::setModel(proxyModel);
+
+    setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
+    setSortingEnabled(true);
+
     QAbstractItemDelegate *oldDelegate = itemDelegate();
     setItemDelegate(new Delegate(this));
     oldDelegate->deleteLater();
@@ -58,11 +68,7 @@ TreeView::TreeView(QWidget *parent) :
 QAbstractItemModel *TreeView::model() const
 {
     QSortFilterProxyModel *proxyModel = qobject_cast<QSortFilterProxyModel *>(QTreeView::model());
-    if(proxyModel) {
-        return proxyModel->sourceModel();
-    }
-
-    return NULL;
+    return proxyModel->sourceModel();
 }
 
 /*! \fn TreeView::setModel()
@@ -72,10 +78,12 @@ QAbstractItemModel *TreeView::model() const
  */
 void TreeView::setModel(QAbstractItemModel *model)
 {
-    QSortFilterProxyModel *proxyModel = new QSortFilterProxyModel(this);
+    QSortFilterProxyModel *proxyModel = qobject_cast<QSortFilterProxyModel *>(QTreeView::model());
     proxyModel->setSourceModel(model);
-    QTreeView::setModel(proxyModel);
-    setSortingEnabled(true);
+
+    for(int i = 0; i < proxyModel->columnCount(); i++) {
+        resizeColumnToContents(i);
+    }
 }
 
 /*! \fn TreeView::selectionChanged()
@@ -90,7 +98,6 @@ void TreeView::selectionChanged(const QItemSelection &selected, const QItemSelec
         foreach(QModelIndex index, selected.indexes()) {
             delegate->selected(index);
         }
-
         foreach(QModelIndex index, deselected.indexes()) {
             delegate->deselected(index);
         }
@@ -98,6 +105,33 @@ void TreeView::selectionChanged(const QItemSelection &selected, const QItemSelec
 
     QTreeView::selectionChanged(selected, deselected);
 }
+
+QString TreeView::filter() const
+{
+    QSortFilterProxyModel *proxyModel = qobject_cast<QSortFilterProxyModel *>(QTreeView::model());
+    return proxyModel->filterRegExp().pattern();
+}
+
+void TreeView::setFilter(const QString &regex)
+{
+    QSortFilterProxyModel *proxyModel = qobject_cast<QSortFilterProxyModel *>(QTreeView::model());
+    selectionModel()->clear();
+    proxyModel->setFilterRegExp(regex);
+}
+
+int TreeView::filterColumn() const
+{
+    QSortFilterProxyModel *proxyModel = qobject_cast<QSortFilterProxyModel *>(QTreeView::model());
+    return proxyModel->filterKeyColumn();
+}
+
+void TreeView::setFilterColumn(int column)
+{
+    QSortFilterProxyModel *proxyModel = qobject_cast<QSortFilterProxyModel *>(QTreeView::model());
+    selectionModel()->clear();
+    proxyModel->setFilterKeyColumn(column);
+}
+
 
 } // namespace OpenSpeedShop
 } // namespace Plugins

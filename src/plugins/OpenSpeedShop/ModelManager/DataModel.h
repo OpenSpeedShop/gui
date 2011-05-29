@@ -130,6 +130,7 @@ protected:
 
     QVariant displayRole(Cell *cell) const;
     QVariant toolTipRole(Cell *cell) const;
+    QVariant editRole(Cell *cell) const;
 
     QUuid m_Uid;
 

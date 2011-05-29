@@ -19,8 +19,11 @@
    </property>
    <item row="0" column="0">
     <widget class="QTabWidget" name="tabWidget">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <property name="documentMode">
       <bool>true</bool>
@@ -31,13 +34,13 @@
       </attribute>
       <layout class="QGridLayout" name="gridLayout_7" rowstretch="1,0,0,0,0,0">
        <item row="0" column="0">
-        <widget class="QGroupBox" name="groupBox">
+        <widget class="QGroupBox" name="grpExperimentProperties">
          <property name="title">
           <string>Experiment Properties</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_5">
           <item row="0" column="0">
-           <widget class="QLabel" name="label_2">
+           <widget class="QLabel" name="lblExperimentTypes">
             <property name="text">
              <string>Experiment Type</string>
             </property>
@@ -57,7 +60,7 @@
            </widget>
           </item>
           <item row="1" column="0">
-           <widget class="QLabel" name="label_3">
+           <widget class="QLabel" name="lblExperimentModes">
             <property name="text">
              <string>Mode</string>
             </property>
@@ -93,13 +96,13 @@
         </widget>
        </item>
        <item row="2" column="0" colspan="2">
-        <widget class="QGroupBox" name="groupBox_2">
+        <widget class="QGroupBox" name="grpExecutable">
          <property name="title">
           <string>Executable</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_2">
           <item row="0" column="0">
-           <widget class="QLabel" name="label">
+           <widget class="QLabel" name="lblExecutablePath">
             <property name="text">
              <string>Executable</string>
             </property>
@@ -112,7 +115,7 @@
            <widget class="QLineEdit" name="txtExecutablePath"/>
           </item>
           <item row="0" column="2">
-           <widget class="QToolButton" name="toolButton">
+           <widget class="QToolButton" name="btnExecutablePath">
             <property name="text">
              <string>...</string>
             </property>
@@ -132,7 +135,7 @@
            </spacer>
           </item>
           <item row="2" column="0" colspan="3">
-           <widget class="QGroupBox" name="groupBox_3">
+           <widget class="QGroupBox" name="grpEnvrionmentVariables">
             <property name="title">
              <string>System Environment</string>
             </property>
@@ -168,7 +171,7 @@
           </spacer>
          </item>
          <item>
-          <widget class="QToolButton" name="toolButton_2">
+          <widget class="QToolButton" name="btnStart">
            <property name="toolTip">
             <string>Start</string>
            </property>
@@ -182,7 +185,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QToolButton" name="toolButton_4">
+          <widget class="QToolButton" name="btnContinue">
            <property name="toolTip">
             <string>Continue</string>
            </property>
@@ -196,7 +199,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QToolButton" name="toolButton_5">
+          <widget class="QToolButton" name="btnPause">
            <property name="toolTip">
             <string>Pause</string>
            </property>
@@ -210,7 +213,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QToolButton" name="toolButton_6">
+          <widget class="QToolButton" name="btnRefresh">
            <property name="toolTip">
             <string>Update</string>
            </property>
@@ -224,7 +227,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QToolButton" name="toolButton_3">
+          <widget class="QToolButton" name="btnStop">
            <property name="toolTip">
             <string>Stop</string>
            </property>
@@ -240,13 +243,13 @@
         </layout>
        </item>
        <item row="0" column="1">
-        <widget class="QGroupBox" name="groupBox_4">
+        <widget class="QGroupBox" name="ExperimentSpecificProperties">
          <property name="title">
           <string>Experiment Specific Properties</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_4">
           <item row="0" column="0">
-           <widget class="QLabel" name="label_4">
+           <widget class="QLabel" name="lblSampleRate">
             <property name="text">
              <string>Sample Rate (Hz)</string>
             </property>
@@ -276,19 +279,31 @@
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
+            <property name="minimum">
+             <number>1</number>
+            </property>
+            <property name="maximum">
+             <number>99999</number>
+            </property>
+            <property name="singleStep">
+             <number>10</number>
+            </property>
+            <property name="value">
+             <number>60</number>
+            </property>
            </widget>
           </item>
          </layout>
         </widget>
        </item>
        <item row="3" column="0" colspan="2">
-        <widget class="QGroupBox" name="groupBox_7">
+        <widget class="QGroupBox" name="grpDatabase">
          <property name="title">
           <string>Database</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_8">
           <item row="0" column="1">
-           <widget class="QLabel" name="label_6">
+           <widget class="QLabel" name="lblDatabasePath">
             <property name="text">
              <string>Database Path</string>
             </property>
@@ -298,7 +313,7 @@
            <widget class="QLineEdit" name="txtDatabasePath"/>
           </item>
           <item row="1" column="1">
-           <widget class="QLabel" name="label_7">
+           <widget class="QLabel" name="lblCommand">
             <property name="text">
              <string>Command</string>
             </property>
@@ -317,7 +332,7 @@
        <string>Views</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_6" columnstretch="1,10">
-       <item row="0" column="0" rowspan="2">
+       <item row="0" column="0" rowspan="3">
         <widget class="QGroupBox" name="grpModelList">
          <property name="title">
           <string>Models</string>
@@ -387,14 +402,14 @@
        <item row="0" column="1">
         <layout class="QHBoxLayout" name="horizontalLayout_3">
          <item>
-          <widget class="QLabel" name="label_5">
+          <widget class="QLabel" name="lblViews">
            <property name="text">
             <string>View</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="comboBox_3">
+          <widget class="QComboBox" name="cmbViews">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -405,7 +420,7 @@
          </item>
         </layout>
        </item>
-       <item row="1" column="1">
+       <item row="2" column="1">
         <widget class="QGroupBox" name="grpView">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -416,7 +431,56 @@
          <property name="title">
           <string>View</string>
          </property>
-         <layout class="QHBoxLayout" name="horizontalLayout_4"/>
+         <property name="flat">
+          <bool>true</bool>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_4">
+          <property name="margin">
+           <number>0</number>
+          </property>
+         </layout>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QGroupBox" name="grpViewFilter">
+         <property name="title">
+          <string>View Filter</string>
+         </property>
+         <property name="flat">
+          <bool>false</bool>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+         <property name="checked">
+          <bool>false</bool>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_9" columnstretch="0,2,0,1">
+          <item row="0" column="0">
+           <widget class="QLabel" name="lblViewFilter">
+            <property name="text">
+             <string>Filter</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="txtViewFilter">
+            <property name="placeholderText">
+             <string>regular expression</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QLabel" name="lblViewFilterColumn">
+            <property name="text">
+             <string>Column</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="3">
+           <widget class="QComboBox" name="cmbViewFilterColumn"/>
+          </item>
+         </layout>
         </widget>
        </item>
       </layout>

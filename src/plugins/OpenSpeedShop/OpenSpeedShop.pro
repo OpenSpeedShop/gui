@@ -72,8 +72,7 @@ FORMS        += Settings/SettingPage.ui \
                 OpenSpeedShopWidget.ui \
                 ConnectionManager/ConnectionWidget.ui \
                 ModelManager/ModelDescriptorWidget.ui \
-                ModelManager/ModelManagerDialog.ui \
-                ModelManager/ModelDescriptorListWidget.ui
+                ModelManager/ModelManagerDialog.ui
 
 RESOURCES    += Resources/OpenSpeedShop.qrc
 

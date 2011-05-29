@@ -21,7 +21,7 @@ ModelManagerDialog::ModelManagerDialog(QWidget *parent) :
             ModelManager::instance()->createDescriptorListWidget(ui->descriptorListParent);
     ui->descriptorListParent->layout()->addWidget(descriptorListWidget);
     ui->descriptorListParent->layout()->setMargin(0);
-    connect(descriptorListWidget, SIGNAL(currentSelectionChanged(QUuid)),
+    connect(descriptorListWidget, SIGNAL(currentDescriptorChanged(QUuid)),
             this, SLOT(currentSelectionChanged(QUuid)));
 
     Core::SettingManager::SettingManager *settingManager = Core::SettingManager::SettingManager::instance();
