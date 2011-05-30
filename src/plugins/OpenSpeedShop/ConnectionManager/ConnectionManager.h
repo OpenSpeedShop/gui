@@ -34,13 +34,13 @@
 #include <MainWindow/MainWindow.h>
 #include <MainWindow/NotificationWidget.h>
 #include "ConnectionManagerLibrary.h"
+#include "IAdapter.h"
 
 namespace Plugins {
 namespace OpenSpeedShop {
 
 class IConnection;
 class ServerCommand;
-class IAdapter;
 
 class CONNECTIONMANAGER_EXPORT ConnectionManager : public QObject
 {

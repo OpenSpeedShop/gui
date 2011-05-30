@@ -21,6 +21,9 @@ public:
     void create();
     void load();
 
+signals:
+    void windowTitleChanged();
+
 protected:
     QUuid m_ExperimentUid;
     QAbstractItemView *m_CurrentView;

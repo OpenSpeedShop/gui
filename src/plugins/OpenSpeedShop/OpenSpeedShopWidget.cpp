@@ -68,6 +68,8 @@ void OpenSpeedShopWidget::loadExperiment()
         int index = addTab(experimentWidget, experimentWidget->windowTitle());
         setCurrentIndex(index);
 
+        connect(experimentWidget, SIGNAL(windowTitleChanged()), this, SLOT(tabTitleChanged()));
+
     } catch(QString err) {
         using namespace Core::MainWindow;
         MainWindow::instance()->notify(tr("Failed to load experiment: %1").arg(err), NotificationWidget::Critical);
@@ -124,6 +126,25 @@ void OpenSpeedShopWidget::tabRemoved(int index)
 
     m_CloseExperiment->setEnabled(count());
 }
+
+void OpenSpeedShopWidget::tabTitleChanged()
+{
+    try {
+
+        QWidget *widget = qobject_cast<QWidget *>(QObject::sender());
+        if(widget) {
+            setTabText(indexOf(widget), widget->windowTitle());
+        }
+
+    } catch(QString err) {
+        using namespace Core::MainWindow;
+        MainWindow::instance()->notify(tr("Failed to change tab name: %1").arg(err), NotificationWidget::Critical);
+    } catch(...) {
+        using namespace Core::MainWindow;
+        MainWindow::instance()->notify(tr("Failed to change tab name."), NotificationWidget::Critical);
+    }
+}
+
 
 
 } // namespace OpenSpeedShop

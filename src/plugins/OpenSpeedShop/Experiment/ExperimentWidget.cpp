@@ -1,11 +1,12 @@
 #include "ExperimentWidget.h"
 #include "ui_ExperimentWidget.h"
 
-#include <MainWindow/MainWindow.h>
-#include "ConnectionManager/ConnectionManager.h"
-#include "ConnectionManager/ServerAdapter.h"
-#include "ConnectionManager/ServerCommand.h"
 #include <QDomDocument>
+#include <QInputDialog>
+
+#include <MainWindow/MainWindow.h>
+#include <ConnectionManager/ConnectionManager.h>
+#include <ConnectionManager/IAdapter.h>
 
 #include "ViewManager/TreeView.h"
 
@@ -62,8 +63,21 @@ void ExperimentWidget::load()
 
 //    qDebug() << serverAdapter->waitVersion();
 
-//    m_ExperimentUid = serverAdapter->waitRestore("/home/dane/smg2000-pcsamp.openss");
-    m_ExperimentUid = serverAdapter->waitRestore("/home/dane/smg2000-io.openss");
+    //TODO: Create a real way for the user to interact with the remote filesystem
+    bool okay;
+    QString filePath = QInputDialog::getText(this,
+                                             tr("Load experiment"),
+                                             tr("Filepath"),
+                                             QLineEdit::Normal,
+//                                             "/home/dane/smg2000-pcsamp.openss",
+                                             "/home/dane/smg2000-io.openss",
+                                             &okay);
+    if(!okay || filePath.isEmpty()) throw tr("Could not load experiemnt; invalid filepath.");
+
+    setWindowFilePath(filePath);
+    setWindowTitle(filePath);
+    emit windowTitleChanged();
+    m_ExperimentUid = serverAdapter->waitRestore(filePath);
 
     ui->txtDatabasePath->setText(serverAdapter->waitExperimentDatabase(m_ExperimentUid));
     ui->txtExecutablePath->setText(serverAdapter->waitExperimentExecutable(m_ExperimentUid));
@@ -219,9 +233,6 @@ void ExperimentWidget::on_grpViewFilter_toggled(bool on)
         MainWindow::instance()->notify(tr("Failed to open filtering."), NotificationWidget::Critical);
     }
 }
-
-
-
 
 
 } // namespace OpenSpeedShop

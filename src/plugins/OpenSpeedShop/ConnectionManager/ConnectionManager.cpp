@@ -32,7 +32,6 @@
 #include <SettingManager/SettingManager.h>
 
 #include "IConnection.h"
-#include "IAdapter.h"
 #include "ServerAdapter.h"
 #include "ServerCommand.h"
 #include "ConnectionManagerSettingPageFactory.h"

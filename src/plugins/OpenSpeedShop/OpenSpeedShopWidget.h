@@ -33,6 +33,9 @@ protected:
 
     QAction *m_CloseExperiment;
 
+protected slots:
+    void tabTitleChanged();
+
 private:
     Ui::OpenSpeedShopWidget *ui;
 
