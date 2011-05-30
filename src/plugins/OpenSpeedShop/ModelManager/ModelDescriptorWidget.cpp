@@ -45,11 +45,15 @@ void ModelDescriptorWidget::init()
     ui->txtRowCount->setValue(m_ModelDescriptor->rowCount());
 
     // We need a server connection to populate the combo box
-    ServerAdapter *serverAdapter = ConnectionManager::instance()->currentServerAdapter();
-    if(!serverAdapter) {
-        Core::MainWindow::MainWindow::instance()->notify("Server not connected");
-        return;
+    ConnectionManager *connectionManager = ConnectionManager::instance();
+    if(!connectionManager->isConnected()) {
+        if(!connectionManager->askConnect()) {
+            throw tr("Server not connected");
+        }
     }
+
+    IAdapter *serverAdapter = connectionManager->currentAdapter();
+    if(!serverAdapter) throw tr("Server not connected");
 
     // Populate the combo box with possible values
     QStringList experimentTypes = serverAdapter->waitExperimentTypes();
@@ -71,11 +75,16 @@ void ModelDescriptorWidget::on_cmbExperimentType_currentIndexChanged(int index)
     Q_UNUSED(index)
 
     // We need a valid server connection in order
-    ServerAdapter *serverAdapter = ConnectionManager::instance()->currentServerAdapter();
-    if(!serverAdapter) {
-        Core::MainWindow::MainWindow::instance()->notify(tr("Server not connected"));
-        return;
+    ConnectionManager *connectionManager = ConnectionManager::instance();
+    if(!connectionManager->isConnected()) {
+        if(!connectionManager->askConnect()) {
+            throw tr("Server not connected");
+        }
     }
+
+    IAdapter *serverAdapter = connectionManager->currentAdapter();
+    if(!serverAdapter) throw tr("Server not connected");
+
 
     QString experimentType = ui->cmbExperimentType->currentText();
 

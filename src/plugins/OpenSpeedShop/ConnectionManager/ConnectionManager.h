@@ -1,7 +1,7 @@
 /*!
-   \file 
+   \file
    \author Dane Gardner <dane.gardner@gmail.com>
-   \version 
+   \version
 
    \section LICENSE
    This file is part of the Open|SpeedShop Graphical User Interface
@@ -30,9 +30,9 @@
 
 #include <QObject>
 #include <QList>
-#include <QDockWidget>
 #include <QUuid>
-#include <QGridLayout>
+#include <MainWindow/MainWindow.h>
+#include <MainWindow/NotificationWidget.h>
 #include "ConnectionManagerLibrary.h"
 
 namespace Plugins {
@@ -40,7 +40,7 @@ namespace OpenSpeedShop {
 
 class IConnection;
 class ServerCommand;
-class ServerAdapter;
+class IAdapter;
 
 class CONNECTIONMANAGER_EXPORT ConnectionManager : public QObject
 {
@@ -51,28 +51,43 @@ public:
     void shutdown();
 
     void registerConnection(IConnection *connection);
-
-    ServerAdapter *currentServerAdapter();
-
     IConnection *currentConnection();
+
+    void registerAdapter(IAdapter *adapter);
+    IAdapter *currentAdapter();
+    IAdapter *askAdapter();
+
     bool sendCommand(ServerCommand *command);
+
+    void connectToServer();
+    void disconnectFromServer();
+    bool isConnected();
+    bool askConnect();
+
 
 signals:
     void connectionRegistered(IConnection *connection);
     void currentConnectionChanged();
+
+    void adapterRegistered(IAdapter *adapter);
+    void currentAdapterChanged();
 
 protected:
     ConnectionManager(QObject *parent = 0);
     ~ConnectionManager();
     void readSettings();
     void writeSettings();
+
     void setCurrentConnection(IConnection *connection);
+    void setCurrentAdapter(IAdapter *adapter);
 
     QList<IConnection *> m_Connections;
-    QList<ServerCommand *> m_ServerCommands;
-    QDockWidget *m_DockWidget;
     IConnection *m_CurrentConnection;
-    ServerAdapter *m_CurrentServerAdapter;
+    QList<IAdapter *> m_Adapters;
+    IAdapter *m_CurrentAdapter;
+    QList<ServerCommand *> m_ServerCommands;
+
+    Core::MainWindow::NotificationWidget *m_notifyConnecting;
 
 protected slots:
     void connectionReadyRecieve();

@@ -1,7 +1,7 @@
 /*!
-   \file 
+   \file
    \author Dane Gardner <dane.gardner@gmail.com>
-   \version 
+   \version
 
    \section LICENSE
    This file is part of the Open|SpeedShop Graphical User Interface
@@ -29,6 +29,9 @@
 #define CONNECTIONWIDGET_H
 
 #include <QWidget>
+#include <SettingManager/ISettingPage.h>
+#include <SettingManager/SettingManager.h>
+
 #include <QProgressBar>
 #include <QTimer>
 #include <QMessageBox>
@@ -40,31 +43,26 @@ namespace OpenSpeedShop {
 class IConnection;
 namespace Ui { class ConnectionWidget; }
 
-class ConnectionWidget : public QWidget
+class ConnectionWidget : public Core::SettingManager::ISettingPage
 {
     Q_OBJECT
+    Q_INTERFACES(Core::SettingManager::ISettingPage)
 
 public:
     explicit ConnectionWidget(QWidget *parent = 0);
     ~ConnectionWidget();
-
-protected slots:
-    void connectionRegistered(IConnection *);
-    void on_btnConnect_clicked();
-    void on_btnConnect_toggled(bool checked);
-    void on_cmbConnectionType_currentIndexChanged(int index);
-
-    void connectionStateChanged();
-    void progress();
+public slots:
+    void apply();
+    void reset();
 
 protected:
+    void initialize();
     void startTimeOut(int msec = 3500);
     void stopTimeOut();
 
-    QProgressBar *m_ProgressBar;
-    QTimer m_ProgressTimer;
-    QMessageBox m_ErrorMessageBox;
-    QMessageBox m_TimeoutMessageBox;
+protected slots:
+    void connectionRegistered(IConnection *);
+    void on_cmbConnectionType_currentIndexChanged(int index);
 
 private:
     Ui::ConnectionWidget *ui;

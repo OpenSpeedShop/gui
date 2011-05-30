@@ -31,11 +31,8 @@ ExperimentWidget::ExperimentWidget(QWidget *parent) :
     m_CurrentView = new TreeView(this);
     ui->grpView->layout()->addWidget(m_CurrentView);
 
-    ServerAdapter *serverAdapter = ConnectionManager::instance()->currentServerAdapter();
-    if(!serverAdapter) {
-        Core::MainWindow::MainWindow::instance()->notify("Server not connected");
-        return;
-    }
+    IAdapter *serverAdapter = ConnectionManager::instance()->askAdapter();
+    if(!serverAdapter) throw tr("Server not connected");
 
     QStringList experimentTypes = serverAdapter->waitExperimentTypes();
     if(!experimentTypes.isEmpty()) {
@@ -60,11 +57,8 @@ void ExperimentWidget::load()
     // Ensure that we're connected to a server
     // Start sending commands
 
-    ServerAdapter *serverAdapter = ConnectionManager::instance()->currentServerAdapter();
-    if(!serverAdapter) {
-        Core::MainWindow::MainWindow::instance()->notify("Server not connected");
-        return;
-    }
+    IAdapter *serverAdapter = ConnectionManager::instance()->askAdapter();
+    if(!serverAdapter) throw tr("Server not connected");
 
 //    qDebug() << serverAdapter->waitVersion();
 
@@ -75,7 +69,7 @@ void ExperimentWidget::load()
     ui->txtExecutablePath->setText(serverAdapter->waitExperimentExecutable(m_ExperimentUid));
     ui->txtCommand->setText(serverAdapter->waitExperimentAppCommand(m_ExperimentUid));
 
-    QString experimentType = serverAdapter->waitExperimentTypes(m_ExperimentUid);
+    QString experimentType = serverAdapter->waitExperimentType(m_ExperimentUid);
     ui->cmbExperimentTypes->setCurrentIndex(ui->cmbExperimentTypes->findText(experimentType));
 
     loadModelDescriptors(experimentType);
@@ -114,8 +108,8 @@ void ExperimentWidget::load()
 
 void ExperimentWidget::loadModelDescriptors(QString experimentType)
 {
-    ServerAdapter *serverAdapter = ConnectionManager::instance()->currentServerAdapter();
-    if(!serverAdapter) { throw tr("Server not connected"); }
+    IAdapter *serverAdapter = ConnectionManager::instance()->askAdapter();
+    if(!serverAdapter) throw tr("Server not connected");
 
     //TODO: Remove any previous model descriptor lists.
 
@@ -129,14 +123,11 @@ void ExperimentWidget::loadModelDescriptors(QString experimentType)
 
 void ExperimentWidget::getModel(QUuid descriptorUid)
 {
-    ServerAdapter *serverAdapter = ConnectionManager::instance()->currentServerAdapter();
-
-    if(!serverAdapter) {
-        Core::MainWindow::MainWindow::instance()->notify("Server not connected");
-        return;
-    }
-
     try {
+
+        IAdapter *serverAdapter = ConnectionManager::instance()->askAdapter();
+        if(!serverAdapter) throw tr("Server not connected");
+
         QAbstractItemModel *dataModel = ModelManager::instance()->model(descriptorUid, m_ExperimentUid);
         m_CurrentView->setModel(dataModel);
 
@@ -150,37 +141,83 @@ void ExperimentWidget::getModel(QUuid descriptorUid)
 
     } catch(QString err) {
         using namespace Core::MainWindow;
-        QString errorMessage = tr("An error occured while loading the experiment view: '%1'").arg(err);
-        MainWindow::instance()->notify(errorMessage, NotificationWidget::Critical);
+        MainWindow::instance()->notify(tr("Failed to fetch experiemnt model: %1").arg(err), NotificationWidget::Critical);
+    } catch(...) {
+        using namespace Core::MainWindow;
+        MainWindow::instance()->notify(tr("Failed to fetch experiement model."), NotificationWidget::Critical);
     }
 }
 
 
 void ExperimentWidget::on_btnAddModel_clicked()
 {
-    ModelManagerDialog models;
-    models.exec();
+    try {
+
+        ModelManagerDialog models;
+        models.exec();
+
+    } catch(QString err) {
+        using namespace Core::MainWindow;
+        MainWindow::instance()->notify(tr("Failed to open model descriptor dialog: %1").arg(err), NotificationWidget::Critical);
+    } catch(...) {
+        using namespace Core::MainWindow;
+        MainWindow::instance()->notify(tr("Failed to open model descriptor dialog."), NotificationWidget::Critical);
+    }
 }
 
 void ExperimentWidget::on_txtViewFilter_textChanged(const QString &text)
 {
-    TreeView *treeView = qobject_cast<TreeView *>(m_CurrentView);
-    if(treeView) {
-        treeView->setFilter(ui->txtViewFilter->text());
+    Q_UNUSED(text)
+
+    try {
+
+        TreeView *treeView = qobject_cast<TreeView *>(m_CurrentView);
+        if(treeView) {
+            treeView->setFilter(ui->txtViewFilter->text());
+        }
+
+    } catch(QString err) {
+        using namespace Core::MainWindow;
+        MainWindow::instance()->notify(tr("Failed to change filter text: %1").arg(err), NotificationWidget::Critical);
+    } catch(...) {
+        using namespace Core::MainWindow;
+        MainWindow::instance()->notify(tr("Failed to change filter text."), NotificationWidget::Critical);
     }
 }
 
 void ExperimentWidget::on_cmbViewFilterColumn_currentIndexChanged(int index)
 {
-    TreeView *treeView = qobject_cast<TreeView *>(m_CurrentView);
-    if(treeView) {
-        treeView->setFilterColumn(index);
+    try {
+
+        TreeView *treeView = qobject_cast<TreeView *>(m_CurrentView);
+        if(treeView) {
+            treeView->setFilterColumn(index);
+        }
+
+    } catch(QString err) {
+        using namespace Core::MainWindow;
+        MainWindow::instance()->notify(tr("Failed to change filter column: %1").arg(err), NotificationWidget::Critical);
+    } catch(...) {
+        using namespace Core::MainWindow;
+        MainWindow::instance()->notify(tr("Failed to change filter column."), NotificationWidget::Critical);
     }
 }
 
 void ExperimentWidget::on_grpViewFilter_toggled(bool on)
 {
-    ui->txtViewFilter->setText(QString());
+    Q_UNUSED(on)
+
+    try {
+
+        ui->txtViewFilter->setText(QString());
+
+    } catch(QString err) {
+        using namespace Core::MainWindow;
+        MainWindow::instance()->notify(tr("Failed to open filtering: %1").arg(err), NotificationWidget::Critical);
+    } catch(...) {
+        using namespace Core::MainWindow;
+        MainWindow::instance()->notify(tr("Failed to open filtering."), NotificationWidget::Critical);
+    }
 }
 
 

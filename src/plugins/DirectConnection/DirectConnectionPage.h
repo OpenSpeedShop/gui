@@ -1,7 +1,7 @@
 /*!
-   \file 
+   \file
    \author Dane Gardner <dane.gardner@gmail.com>
-   \version 
+   \version
 
    \section LICENSE
    This file is part of the Open|SpeedShop Graphical User Interface
@@ -29,6 +29,7 @@
 #define DIRECTCONNECTIONPAGE_H
 
 #include <QWidget>
+#include <ConnectionManager/IConnectionPage.h>
 
 namespace Plugins {
 namespace DirectConnection {
@@ -36,18 +37,18 @@ namespace DirectConnection {
 class DirectConnection;
 namespace Ui { class DirectConnectionPage; }
 
-class DirectConnectionPage : public QWidget
+class DirectConnectionPage : public Plugins::OpenSpeedShop::IConnectionPage
 {
     Q_OBJECT
+    Q_INTERFACES(Plugins::OpenSpeedShop::IConnectionPage)
 
 public:
     explicit DirectConnectionPage(DirectConnection *parentConnection, QWidget *parent = 0);
     ~DirectConnectionPage();
 
-protected slots:
-    void on_txtHostname_textChanged();
-    void on_txtPort_textChanged();
-    void on_btnSetDefault_clicked();
+public slots:
+    void apply();
+    void reset();
 
 protected:
     DirectConnection *m_ParentConnection;

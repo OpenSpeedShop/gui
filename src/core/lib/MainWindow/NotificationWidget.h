@@ -1,15 +1,16 @@
 #ifndef NOTIFICATIONWIDGET_H
 #define NOTIFICATIONWIDGET_H
 
-#include <QWidget>
-#include <QPalette>
-#include <QHBoxLayout>
-#include <QLabel>
-#include <QDialogButtonBox>
-#include <QPushButton>
-#include <QToolButton>
+#include <QFrame>
+#include <QString>
 #include <QPixmap>
-#include <QKeyEvent>
+#include <QList>
+#include <QPushButton>
+#include <QAbstractButton>
+
+class QLabel;
+class QDialogButtonBox;
+class QToolButton;
 
 namespace Core {
 namespace MainWindow {
@@ -24,7 +25,8 @@ public:
         Information = 1,
         Warning = 2,
         Critical = 3,
-        Question = 4
+        Question = 4,
+        Loading = 32
     };
 
     enum ButtonRole {
@@ -67,7 +69,6 @@ public:
     };
     Q_DECLARE_FLAGS(StandardButtons, StandardButton)
 
-
     explicit NotificationWidget(QWidget *parent = 0);
     NotificationWidget(const QString &text, Icon icon = NoIcon, StandardButtons buttons = NoButton, QWidget *parent = 0);
     NotificationWidget(const QString &text, Icon icon = NoIcon, StandardButtons buttons = NoButton,
@@ -89,7 +90,6 @@ public:
     void addButton(StandardButton button);
     QPushButton *button(StandardButton button) const;
     QList<QAbstractButton *> buttons() const;
-
 
 signals:
     void buttonClicked(StandardButton standardButton);

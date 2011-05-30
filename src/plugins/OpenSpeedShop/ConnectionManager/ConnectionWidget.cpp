@@ -1,7 +1,7 @@
 /*!
-   \file 
+   \file
    \author Dane Gardner <dane.gardner@gmail.com>
-   \version 
+   \version
 
    \section LICENSE
    This file is part of the Open|SpeedShop Graphical User Interface
@@ -42,23 +42,18 @@ namespace OpenSpeedShop {
  */
 
 ConnectionWidget::ConnectionWidget(QWidget *parent) :
-    QWidget(parent),
+    Core::SettingManager::ISettingPage(parent),
     ui(new Ui::ConnectionWidget)
 {
     ui->setupUi(this);
 
-    m_ProgressBar = Core::MainWindow::MainWindow::instance()->addProgressBar();
-    connect(&m_ProgressTimer, SIGNAL(timeout()), this, SLOT(progress()));
-
+    // Grab any connections that already exist and register for notification of any new ones that are registered
     ConnectionManager *connectionManager = ConnectionManager::instance();
-
-    // Grab any connections that already exist
     foreach(IConnection *connection, connectionManager->m_Connections)
         connectionRegistered(connection);
+    connect(connectionManager, SIGNAL(connectionRegistered(IConnection*)), this, SLOT(connectionRegistered(IConnection*)));
 
-    // Register for notification of any new ones that are registered
-    connect(connectionManager, SIGNAL(connectionRegistered(IConnection*)),
-            this, SLOT(connectionRegistered(IConnection*)));
+    initialize();
 }
 
 ConnectionWidget::~ConnectionWidget()
@@ -69,34 +64,8 @@ ConnectionWidget::~ConnectionWidget()
 void ConnectionWidget::connectionRegistered(IConnection *connection)
 {
     QWidget *page = connection->page();
-    ui->stackedWidget->addWidget(page);
-    ui->cmbConnectionType->addItem(page->windowIcon(),
-                                   page->windowTitle(),
-                                   qVariantFromValue(connection));
-}
-
-void ConnectionWidget::on_btnConnect_clicked()
-{
-    if(ui->btnConnect->isChecked()) {
-        int index = ui->cmbConnectionType->currentIndex();
-        IConnection *connection = ui->cmbConnectionType->itemData(index).value<IConnection *>();
-
-        if(connection->state() == IConnection::State_Disconnected)
-            connection->connectToServer();
-    } else {
-        int index = ui->cmbConnectionType->currentIndex();
-        IConnection *connection = ui->cmbConnectionType->itemData(index).value<IConnection *>();
-
-        if(connection->state() == IConnection::State_Connected)
-            connection->disconnectFromServer();
-    }
-}
-
-void ConnectionWidget::on_btnConnect_toggled(bool checked)
-{
-    QString text = checked ? tr("Disconnect") : tr("Connect");
-    ui->btnConnect->setToolTip(text);
-    ui->btnConnect->setStatusTip(text);
+    ui->stackedWidget->addWidget(page);     /* This takes ownership of the page, and is responsible for deleting it from memory */
+    ui->cmbConnectionType->addItem(page->windowIcon(), connection->name(), qVariantFromValue(connection));
 }
 
 void ConnectionWidget::on_cmbConnectionType_currentIndexChanged(int index)
@@ -107,8 +76,7 @@ void ConnectionWidget::on_cmbConnectionType_currentIndexChanged(int index)
         return;
 
     if(oldIndex >= 0) {
-        IConnection *oldConnection =
-                ui->cmbConnectionType->itemData(oldIndex).value<IConnection *>();
+        IConnection *oldConnection = ui->cmbConnectionType->itemData(oldIndex).value<IConnection *>();
 
         // Check the state of the current connection
         if(oldConnection->state() != IConnection::State_Disconnected) {
@@ -121,122 +89,65 @@ void ConnectionWidget::on_cmbConnectionType_currentIndexChanged(int index)
 
             if(msg.exec() == QMessageBox::Yes) {
                 oldConnection->abort();
-                stopTimeOut();
             } else {
                 // User said, "no." Put it back the way it was
                 ui->cmbConnectionType->setCurrentIndex(oldIndex);
                 return;
             }
         }
-
-        // Disconnect the old one
-        disconnect(oldConnection, SIGNAL(stateChanged()),
-                   this, SLOT(connectionStateChanged()));
     }
 
     // Set up the new connection
     ui->stackedWidget->setCurrentIndex(index);
-    IConnection *newConnection =
-            ui->cmbConnectionType->itemData(index).value<IConnection *>();
-    connect(newConnection, SIGNAL(stateChanged()),
-            this, SLOT(connectionStateChanged()));
-
+    IConnection *newConnection = ui->cmbConnectionType->itemData(index).value<IConnection *>();
     ConnectionManager::instance()->setCurrentConnection(newConnection);
-
     oldIndex = index;
 }
 
-void ConnectionWidget::startTimeOut(int msec)
+void ConnectionWidget::initialize()
 {
-    m_ProgressTimer.start(msec/100);
+    // Get settings from SettingManager and populate form
+    Core::SettingManager::SettingManager *settingManager = Core::SettingManager::SettingManager::instance();
+    settingManager->beginGroup("Plugins/OpenSpeedShop/ConnectionManager");
+
+    QString connectionName = settingManager->value("ConnectionName", ui->cmbConnectionType->itemText(0)).toString();
+    int index = ui->cmbConnectionType->findText(connectionName, Qt::MatchExactly);
+    ui->cmbConnectionType->setCurrentIndex(index);
+
+    settingManager->endGroup();
 }
 
-void ConnectionWidget::stopTimeOut()
+void ConnectionWidget::apply()
 {
-    m_ProgressTimer.stop();
-    m_ProgressBar->hide();
-    m_ProgressBar->reset();
-}
+    // Persist changed settings to SettingManager
+    Core::SettingManager::SettingManager *settingManager = Core::SettingManager::SettingManager::instance();
+    settingManager->beginGroup("Plugins/OpenSpeedShop/ConnectionManager");
+    settingManager->setValue("ConnectionName", ui->cmbConnectionType->currentText());
+    settingManager->endGroup();
 
-void ConnectionWidget::progress()
-{
-    if(m_ProgressBar->value() < m_ProgressBar->maximum()) {
-        m_ProgressBar->show();
-        m_ProgressBar->setValue(m_ProgressBar->value() + 1);
-        return;
-    }
-
-    m_ProgressTimer.stop();
-    m_ProgressBar->hide();
-    m_ProgressBar->reset();
-
-    if(m_ErrorMessageBox.isVisible())
-        return;
-
-    m_TimeoutMessageBox.setIcon(QMessageBox::Warning);
-    m_TimeoutMessageBox.setWindowTitle(tr("Connection time out"));
-    m_TimeoutMessageBox.setText(tr("A connection is taking longer than expected to perform an operation. Would you like to continue waiting?"));
-    m_TimeoutMessageBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-
-    if(m_TimeoutMessageBox.exec() == QMessageBox::Yes) {
-        startTimeOut(10000);
-        return;
-    }
-
-    //! \todo Deal with stopping the connection/disconnection thread
-}
-
-void ConnectionWidget::connectionStateChanged()
-{
-    IConnection *connection = qobject_cast<IConnection *>(QObject::sender());
-
-    if(!connection)
-        throw new QString("Caught signal from unexpected object");
-
-    switch(connection->state()) {
-    case IConnection::State_Connecting:
-        ui->btnConnect->setEnabled(false);
-        ui->btnConnect->setChecked(true);
-        startTimeOut();
-        break;
-    case IConnection::State_Connected:
-        ui->btnConnect->setEnabled(true);
-        ui->btnConnect->setChecked(true);
-        stopTimeOut();
-        break;
-    case IConnection::State_Disconnecting:
-        ui->btnConnect->setEnabled(false);
-        ui->btnConnect->setChecked(false);
-        startTimeOut();
-        break;
-    case IConnection::State_Disconnected:
-        ui->btnConnect->setEnabled(true);
-        ui->btnConnect->setChecked(false);
-        stopTimeOut();
-        break;
-    case IConnection::State_Error:
-        ui->btnConnect->setEnabled(false);
-
-        stopTimeOut();
-        if(m_TimeoutMessageBox.isVisible()) {
-            m_TimeoutMessageBox.close();
+    for(int i=0; i < ui->stackedWidget->count(); i++) {
+        IConnectionPage *page = qobject_cast<IConnectionPage *>(ui->stackedWidget->widget(i));
+        if(page) {
+            page->apply();
         }
-
-        m_ErrorMessageBox.setIcon(QMessageBox::Critical);
-        m_ErrorMessageBox.setWindowTitle(tr("Connection Error"));
-        m_ErrorMessageBox.setText(connection->errorMessage());
-        m_ErrorMessageBox.setStandardButtons(QMessageBox::Ok);
-        m_ErrorMessageBox.exec();
-
-        // Deal with stopping the connection/disconnection thread
-        int index = ui->cmbConnectionType->currentIndex();
-        IConnection *connection =
-                ui->cmbConnectionType->itemData(index).value<IConnection *>();
-        connection->abort();
-
-        break;
     }
+
+    // Ask the conncetion manager to refresh it's settings
+    ConnectionManager::instance()->readSettings();
 }
+
+void ConnectionWidget::reset()
+{
+    for(int i=0; i < ui->stackedWidget->count(); i++) {
+        IConnectionPage *page = qobject_cast<IConnectionPage *>(ui->stackedWidget->widget(i));
+        if(page) {
+            page->reset();
+        }
+    }
+
+    initialize();
+}
+
 
 
 } // namespace OpenSpeedShop

@@ -2,10 +2,13 @@
 
 #include <QFile>
 #include <QApplication>
-#include "ConnectionManager.h"
-#include "ServerCommand.h"
+#include "ConnectionManager/ConnectionManager.h"
+#include "ConnectionManager/ServerCommand.h"
+#include "ModelManager/DataModel.h"
 
-#include <QDebug>
+#ifdef SERVERADAPTER_DEBUG
+#  include <QDebug>
+#endif
 
 namespace Plugins {
 namespace OpenSpeedShop {
@@ -14,8 +17,16 @@ namespace OpenSpeedShop {
     \brief
  */
 ServerAdapter::ServerAdapter(QObject *parent) :
-    QObject(parent)
+    IAdapter(parent)
 {
+}
+
+bool ServerAdapter::isCompatible(QString serverVersion)
+{
+    Q_UNUSED(serverVersion);
+
+    //TODO: Implement a regex check for the supplied serverVersion.  Right now there's only one adapter, so this works.
+    return true;
 }
 
 /*! \fn ServerAdapter::rawCommand()
@@ -53,8 +64,12 @@ ServerCommand *ServerAdapter::rawOpenSpeedShopCommand(QString command)
  */
 QDomElement ServerAdapter::waitCommand(ServerCommand *serverCommand)
 {
-    while(serverCommand->state() != ServerCommand::State_Response)
+    while(serverCommand->state() != ServerCommand::State_Response) {
         QApplication::processEvents();
+        if(serverCommand->state() == ServerCommand::State_Invalid) {
+            throw tr("Command has been invalidated");
+        }
+    }
 
     QDomElement responseElement = serverCommand->response().firstChildElement("Response");
     if(responseElement.isNull()) throw tr("'Response' element doesn't exist, as expected.");
@@ -157,8 +172,7 @@ QString ServerAdapter::waitVersion()
     while(serverCommand->state() != ServerCommand::State_Response)
         QApplication::processEvents();
 
-    QDomElement responseElement = serverCommand->response().firstChildElement("Response");
-    if(responseElement.isNull()) throw tr("'Response' element doesn't exist, as expected.");
+    QDomElement responseElement = waitCommand(serverCommand);
 
     QDomElement serverResponseElement = responseElement.firstChildElement("ServerResponse");
     if(serverResponseElement.isNull()) throw tr("'ServerResponse' doesn't exist, as expected.");
@@ -185,8 +199,7 @@ ServerCommand *ServerAdapter::exit()
 void ServerAdapter::waitExit()
 {
     ServerCommand *serverCommand = exit();
-    while(serverCommand->state() != ServerCommand::State_Response)
-        QApplication::processEvents();
+    waitCommand(serverCommand);
     delete serverCommand;
 }
 
@@ -294,27 +307,27 @@ QList<qint64> ServerAdapter::waitListOpenExperiments()
     \param experimentId the experiment identifier.
     \returns the asynchronous command object
  */
-ServerCommand *ServerAdapter::experimentTypes(qint64 experimentId)
+ServerCommand *ServerAdapter::experimentType(qint64 experimentId)
 {
     QString command = QString("list -v expTypes -x %1").arg(experimentId);
     return rawOpenSpeedShopCommand(command);
 }
 
-/*! \fn ServerAdapter::waitExperimentTypes()
+/*! \fn ServerAdapter::waitExperimentType()
     \brief Sycnronously lists the experiment types associated with an experiment.
     \param experimentId the experiment identifier.
     \returns a list of experiment type names associated with the experiment
  */
-QString ServerAdapter::waitExperimentTypes(qint64 experimentId)
+QString ServerAdapter::waitExperimentType(qint64 experimentId)
 {
-    ServerCommand *serverCommand = experimentTypes(experimentId);
+    ServerCommand *serverCommand = experimentType(experimentId);
     QDomElement responseElement = waitCommand(serverCommand);
     delete serverCommand;
     return getString(responseElement);
 }
-QString ServerAdapter::waitExperimentTypes(QUuid experimentUid)
+QString ServerAdapter::waitExperimentType(QUuid experimentUid)
 {
-    return waitExperimentTypes(experimentId(experimentUid));
+    return waitExperimentType(experimentId(experimentUid));
 }
 
 /*! \fn ServerAdapter::experimentDatabase()
@@ -596,7 +609,6 @@ QMap<QString, QVariant> ServerAdapter::waitExperimentParameterValues(QUuid exper
     return waitExperimentParameterValues(experimentId(experimentUid));
 }
 
-
 ServerCommand *ServerAdapter::experimentView(qint64 experimentId, QStringList modifiers, QStringList metrics, QString experimentType, int count)
 {
     QString command = QString("expView -x %1").arg(experimentId);
@@ -615,7 +627,7 @@ ServerCommand *ServerAdapter::experimentView(qint64 experimentId, QStringList mo
 
     return rawOpenSpeedShopCommand(command);
 }
-DataModel *ServerAdapter::waitExperimentView(qint64 experimentId, QStringList modifiers, QStringList metrics, QString experimentType, int count)
+QAbstractItemModel *ServerAdapter::waitExperimentView(qint64 experimentId, QStringList modifiers, QStringList metrics, QString experimentType, int count)
 {
     ServerCommand *serverCommand = experimentView(experimentId, modifiers, metrics, experimentType, count);
     waitCommand(serverCommand);
@@ -627,22 +639,23 @@ DataModel *ServerAdapter::waitExperimentView(qint64 experimentId, QStringList mo
     delete serverCommand;
     return dataModel;
 }
-DataModel *ServerAdapter::waitExperimentView(QUuid experimentUid, QStringList modifiers, QStringList metrics, QString experimentType, int count)
+QAbstractItemModel *ServerAdapter::waitExperimentView(QUuid experimentUid, QStringList modifiers, QStringList metrics, int count)
 {
+    QString experimentType = waitExperimentType(experimentUid);
     return waitExperimentView(experimentId(experimentUid), modifiers, metrics, experimentType, count);
 }
-
 
 ServerCommand *ServerAdapter::experimentView(qint64 experimentId, QString experimentType, int count)
 {
     return experimentView(experimentId, QStringList(), QStringList(), experimentType, count);
 }
-DataModel *ServerAdapter::waitExperimentView(qint64 experimentId, QString experimentType, int count)
+QAbstractItemModel *ServerAdapter::waitExperimentView(qint64 experimentId, QString experimentType, int count)
 {
     return waitExperimentView(experimentId, QStringList(), QStringList(), experimentType, count);
 }
-DataModel *ServerAdapter::waitExperimentView(QUuid experimentUid, QString experimentType, int count)
+QAbstractItemModel *ServerAdapter::waitExperimentView(QUuid experimentUid, int count)
 {
+    QString experimentType = waitExperimentType(experimentUid);
     return waitExperimentView(experimentId(experimentUid), experimentType, count);
 }
 
@@ -674,7 +687,6 @@ QList<ServerAdapter::Process> ServerAdapter::waitExperimentProcesses(QUuid exper
 {
     return waitExperimentProcesses(experimentId(experimentUid));
 }
-
 
 /*! \fn ServerAdapter::loadMetrics()
     \brief This doesn't belong here, it should be retreived from the server.
@@ -718,7 +730,10 @@ QMap<QString,QString> ServerAdapter::waitExperimentTypeModifiers(QString experim
         element = element.nextSiblingElement(element.tagName());
     }
 
-    qDebug() << "Could not find experiment type";
+#ifdef SERVERADAPTER_DEBUG
+    qDebug() << __FILE__ << ":" << __LINE__ << "Could not find experiment type in modifiers file" << experimentType;
+#endif
+
     return modifiers;
 }
 QMap<QString,QString> ServerAdapter::waitExperimentTypeMetrics(QString experimentType)
@@ -743,6 +758,11 @@ QMap<QString,QString> ServerAdapter::waitExperimentTypeMetrics(QString experimen
         }
         element = element.nextSiblingElement(element.tagName());
     }
+
+#ifdef SERVERADAPTER_DEBUG
+    qDebug() << __FILE__ << ":" << __LINE__ << "Could not find experiment type in metrics file" << experimentType;
+#endif
+
     return metrics;
 }
 

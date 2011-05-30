@@ -1,7 +1,7 @@
 /*!
-   \file 
+   \file
    \author Dane Gardner <dane.gardner@gmail.com>
-   \version 
+   \version
 
    \section LICENSE
    This file is part of the Open|SpeedShop Graphical User Interface
@@ -28,6 +28,7 @@
 #include "DirectConnectionPage.h"
 #include "ui_DirectConnectionPage.h"
 
+#include <SettingManager/SettingManager.h>
 #include "DirectConnection.h"
 
 namespace Plugins {
@@ -40,14 +41,14 @@ namespace DirectConnection {
  */
 
 DirectConnectionPage::DirectConnectionPage(DirectConnection *parentConnection, QWidget *parent) :
-    QWidget(parent),
+    IConnectionPage(parent),
     ui(new Ui::DirectConnectionPage)
 {
     ui->setupUi(this);
 
     m_ParentConnection = parentConnection;
-    ui->txtHostname->setText(m_ParentConnection->m_HostName);
-    ui->txtPort->setText(QString("%1").arg(m_ParentConnection->m_Port));
+    setWindowTitle(m_ParentConnection->name());
+    reset();
 }
 
 DirectConnectionPage::~DirectConnectionPage()
@@ -55,24 +56,25 @@ DirectConnectionPage::~DirectConnectionPage()
     delete ui;
 }
 
-void DirectConnectionPage::on_txtHostname_textChanged()
+void DirectConnectionPage::apply()
 {
-    m_ParentConnection->m_HostName = ui->txtHostname->text();
+    Core::SettingManager::SettingManager *settingManager = Core::SettingManager::SettingManager::instance();
+    settingManager->beginGroup("Plugins/ConnectionManager/DirectConnection");
+    settingManager->setValue("HostName", ui->txtHostname->text());
+    settingManager->setValue("Port", ui->txtPort->value());
+    settingManager->endGroup();
+
+    m_ParentConnection->readSettings();
 }
 
-void DirectConnectionPage::on_txtPort_textChanged()
+void DirectConnectionPage::reset()
 {
-    bool okay;
-    int port = ui->txtPort->text().toInt(&okay);
-    if(okay)
-        m_ParentConnection->m_Port = port;
+    Core::SettingManager::SettingManager *settingManager = Core::SettingManager::SettingManager::instance();
+    settingManager->beginGroup("Plugins/ConnectionManager/DirectConnection");
+    ui->txtHostname->setText(settingManager->value("HostName", m_ParentConnection->m_HostName).toString());
+    ui->txtPort->setValue(settingManager->value("Port", m_ParentConnection->m_Port).toInt());
+    settingManager->endGroup();
 }
-
-void DirectConnectionPage::on_btnSetDefault_clicked()
-{
-    m_ParentConnection->writeSettings();
-}
-
 
 } // namespace DirectConnection
 } // namespace Plugins

@@ -1,7 +1,7 @@
 /*!
-   \file 
+   \file
    \author Dane Gardner <dane.gardner@gmail.com>
-   \version 
+   \version
 
    \section LICENSE
    This file is part of the Open|SpeedShop Graphical User Interface
@@ -27,13 +27,15 @@
 
 #include "ConnectionManager.h"
 
-#include <MainWindow/MainWindow.h>
+#include <QApplication>
+#include <QMessageBox>
 #include <SettingManager/SettingManager.h>
 
 #include "IConnection.h"
+#include "IAdapter.h"
 #include "ServerAdapter.h"
 #include "ServerCommand.h"
-#include "ConnectionWidget.h"
+#include "ConnectionManagerSettingPageFactory.h"
 
 namespace Plugins {
 namespace OpenSpeedShop {
@@ -53,16 +55,18 @@ ConnectionManager *ConnectionManager::instance()
 ConnectionManager::ConnectionManager(QObject *parent) :
     QObject(parent)
 {
-    m_CurrentServerAdapter = NULL;
     m_CurrentConnection = NULL;
-    m_DockWidget = NULL;
+    m_CurrentAdapter = NULL;
+    m_notifyConnecting = NULL;
 }
 
 ConnectionManager::~ConnectionManager()
 {
-    // We're responsible for disposing of the connections
+    // We're responsible for disposing of the connections and adapters
     while(!m_Connections.isEmpty())
         delete(m_Connections.takeFirst());
+    while(!m_Adapters.isEmpty())
+        delete(m_Adapters.takeFirst());
 }
 
 /*! \fn ConnectionManager::initialize()
@@ -70,12 +74,12 @@ ConnectionManager::~ConnectionManager()
  */
 bool ConnectionManager::initialize()
 {
-    Core::MainWindow::MainWindow *mainWindow = Core::MainWindow::MainWindow::instance();
+    /*** Register the settings page ***/
+    Core::SettingManager::SettingManager *settingManager = Core::SettingManager::SettingManager::instance();
+    settingManager->registerPageFactory(new ConnectionManagerSettingPageFactory());
 
-    m_DockWidget = new QDockWidget(mainWindow);
-    m_DockWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
-    m_DockWidget->setWidget(new ConnectionWidget(m_DockWidget));
-    mainWindow->addDockWidget(Qt::LeftDockWidgetArea, m_DockWidget, Qt::Vertical);
+    //DEBUG:
+    registerAdapter(new ServerAdapter(this));
 
     readSettings();
 
@@ -87,6 +91,12 @@ bool ConnectionManager::initialize()
  */
 void ConnectionManager::shutdown()
 {
+    /* Shut down any connections to the server that we may have */
+    IConnection *connection = currentConnection();
+    if(connection && connection->state() == IConnection::State_Connected) {
+        disconnectFromServer();
+    }
+
     writeSettings();
 
     /* self destruct */
@@ -100,14 +110,22 @@ void ConnectionManager::shutdown()
  */
 void ConnectionManager::readSettings()
 {
-    Core::SettingManager::SettingManager *settingManager =
-            Core::SettingManager::SettingManager::instance();
-
+    Core::SettingManager::SettingManager *settingManager = Core::SettingManager::SettingManager::instance();
     settingManager->beginGroup("Plugins/OpenSpeedShop/ConnectionManager");
-
-    m_DockWidget->widget()->restoreGeometry(settingManager->value("DockWidget/WidgetGeometry").toByteArray());
-
+    QString connectionName = settingManager->value("ConnectionName", QString()).toString();
     settingManager->endGroup();
+
+    foreach(IConnection *connection, m_Connections) {
+        if(connection->name().compare(connectionName, Qt::CaseInsensitive) == 0) {
+            setCurrentConnection(connection);
+            break;
+        }
+    }
+
+    if(!currentConnection() && m_Connections.count() > 0) {
+        setCurrentConnection(m_Connections.at(0));
+    }
+
 }
 
 /*! \fn ConnectionManager::writeSettings()
@@ -115,12 +133,8 @@ void ConnectionManager::readSettings()
  */
 void ConnectionManager::writeSettings()
 {
-    Core::SettingManager::SettingManager *settingManager =
-            Core::SettingManager::SettingManager::instance();
-
+    Core::SettingManager::SettingManager *settingManager = Core::SettingManager::SettingManager::instance();
     settingManager->beginGroup("Plugins/OpenSpeedShop/ConnectionManager");
-
-    settingManager->setValue("DockWidget/WidgetGeometry", m_DockWidget->widget()->saveGeometry());
 
     settingManager->endGroup();
 }
@@ -134,6 +148,19 @@ void ConnectionManager::registerConnection(IConnection *connection)
     connection->setParent(this);
     m_Connections.append(connection);
     emit connectionRegistered(connection);
+
+    Core::SettingManager::SettingManager *settingManager = Core::SettingManager::SettingManager::instance();
+    settingManager->beginGroup("Plugins/OpenSpeedShop/ConnectionManager");
+    QString connectionName = settingManager->value("ConnectionName", QString()).toString();
+    settingManager->endGroup();
+
+    if(connection->name().compare(connectionName, Qt::CaseInsensitive) == 0) {
+        setCurrentConnection(connection);
+    }
+
+    if(!currentConnection()) {
+        setCurrentConnection(connection);
+    }
 }
 
 /*! \fn ConnectionManager::setCurrentConnection()
@@ -159,12 +186,6 @@ void ConnectionManager::setCurrentConnection(IConnection *connection)
     emit currentConnectionChanged();
 }
 
-ServerAdapter *ConnectionManager::currentServerAdapter()
-{
-    return m_CurrentServerAdapter;
-}
-
-
 /*! \fn ConnectionManager::currentConnection()
     \brief returns the currently selected connection.
  */
@@ -173,32 +194,83 @@ IConnection *ConnectionManager::currentConnection()
     return m_CurrentConnection;
 }
 
+void ConnectionManager::registerAdapter(IAdapter *adapter)
+{
+    adapter->setParent(this);
+    m_Adapters.append(adapter);
+    emit adapterRegistered(adapter);
+}
+
+IAdapter *ConnectionManager::currentAdapter()
+{
+    return m_CurrentAdapter;
+}
+
+void ConnectionManager::setCurrentAdapter(IAdapter *adapter)
+{
+    if(adapter && !m_Adapters.contains(adapter))
+        throw new QString("Cannot set current adapter to an adapter that is not registered");
+
+    if(adapter == m_CurrentAdapter)
+        return;
+
+    m_CurrentAdapter = adapter;
+    emit currentAdapterChanged();
+}
+
+IAdapter *ConnectionManager::askAdapter()
+{
+    ConnectionManager *connectionManager = ConnectionManager::instance();
+    if(!connectionManager->isConnected()) {
+        if(!connectionManager->askConnect()) {
+            return NULL;
+        }
+    }
+
+    return connectionManager->currentAdapter();
+}
+
+
 /*! \fn ConnectionManager::connectionStateChanged()
     \brief Deals with the current connection's state changes.
  */
 void ConnectionManager::connectionStateChanged()
 {
-    switch(m_CurrentConnection->state()) {
-    case IConnection::State_Connected:
-        m_CurrentServerAdapter = new ServerAdapter(this);
-        break;
-    case IConnection::State_Connecting:
-    case IConnection::State_Disconnecting:
-    case IConnection::State_Disconnected:
-    case IConnection::State_Error:
-        if(m_CurrentServerAdapter) {
-            delete m_CurrentServerAdapter;
-            m_CurrentServerAdapter = NULL;
+    if(m_CurrentConnection->state() == IConnection::State_Connected) {
+        /* Get the version string from the server, so we can load the right adapter */
+        ServerCommand *serverCommand = new ServerCommand("version", "Server", this);
+        sendCommand(serverCommand);
+        while(serverCommand->state() != ServerCommand::State_Response) QApplication::processEvents();
+        QDomElement responseElement = serverCommand->response().firstChildElement("Response");
+        if(responseElement.isNull()) throw tr("Unable to get version from server");
+        QDomElement serverResponseElement = responseElement.firstChildElement("ServerResponse");
+        if(serverResponseElement.isNull()) throw tr("Unable to get version from server");
+        if(!serverResponseElement.hasAttribute("version")) throw tr("Unable to get version from server");
+        QString version = serverResponseElement.attribute("version");
+        delete serverCommand;
+
+        /* Find compatible adapter based on the server version */
+        foreach(IAdapter *adapter, m_Adapters) {
+            if(adapter->isCompatible(version)) {
+                setCurrentAdapter(adapter);
+            }
         }
 
+        if(m_notifyConnecting) {
+            m_notifyConnecting->close();
+            m_notifyConnecting->deleteLater();
+            m_notifyConnecting = NULL;
+        }
+    } else {
+        /* Reset the adapter */
+        setCurrentAdapter(NULL);
+
+        /* Invalidate any commands that were part of that adapter */
         foreach(ServerCommand *serverCommand, m_ServerCommands) {
             serverCommand->setState(ServerCommand::State_Invalid);
         }
         m_ServerCommands.clear();
-
-        break;
     }
-
 }
 
 /*! \fn ConnectionManager::connectionReadyRecieve()
@@ -252,6 +324,54 @@ bool ConnectionManager::sendCommand(ServerCommand *command)
 
     command->setState(ServerCommand::State_Sent);
     return true;
+}
+
+bool ConnectionManager::isConnected()
+{
+    return currentConnection()->state() == IConnection::State_Connected;
+}
+
+bool ConnectionManager::askConnect() {
+    IConnection *connection = currentConnection();
+    if(!connection) return false;
+
+    QMessageBox msg(QMessageBox::Question, "Not connected", "Connect to server?", QMessageBox::Yes|QMessageBox::No);
+
+    if(msg.exec() == QMessageBox::Yes) {
+        connectToServer();
+        while(connection->state() == IConnection::State_Connecting) {
+            QApplication::processEvents();
+        }
+    }
+
+    return isConnected();
+}
+
+void ConnectionManager::connectToServer()
+{
+    IConnection *connection = currentConnection();
+    if(!connection) {
+        throw tr("No connection available, while trying to connect to server");
+    }
+
+    if(connection->state() == IConnection::State_Disconnected) {
+        connection->connectToServer();
+    }
+
+    using namespace Core::MainWindow;
+    m_notifyConnecting = MainWindow::instance()->notify("Connecting to server", NotificationWidget::Loading);
+}
+
+void ConnectionManager::disconnectFromServer()
+{
+    IConnection *connection = currentConnection();
+    if(!connection) {
+        throw tr("No connection available, while trying to disconnect from server");
+    }
+
+    if(connection->state() == IConnection::State_Connected) {
+        connection->disconnectFromServer();
+    }
 }
 
 

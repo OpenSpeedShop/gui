@@ -1,5 +1,16 @@
 #include "NotificationWidget.h"
 
+#include <QPixmap>
+#include <QMovie>
+#include <QPalette>
+#include <QHBoxLayout>
+#include <QPushButton>
+#include <QToolButton>
+#include <QKeyEvent>
+#include <QLabel>
+#include <QDialogButtonBox>
+
+
 namespace Core {
 namespace MainWindow {
 
@@ -8,7 +19,6 @@ NotificationWidget::NotificationWidget(QWidget *parent) :
 {
     setupUi();
 }
-
 
 
 NotificationWidget::NotificationWidget(const QString &text, Icon icon, StandardButtons buttons, QWidget *parent) :
@@ -109,6 +119,13 @@ void NotificationWidget::setIcon(const Icon &icon)
         break;
     case Question:
         _iconLabel->setPixmap(QPixmap(":/MainWindow/question.svg"));
+        break;
+    case Loading:
+    {
+        QMovie *movie = new QMovie(":/MainWindow/loading.gif", QByteArray(), this);
+        _iconLabel->setMovie(movie);
+        movie->start();
+    }
         break;
     default:
         _iconLabel->setPixmap(QPixmap());

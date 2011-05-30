@@ -30,10 +30,12 @@
 #endif
 
 #include "OpenSpeedShopPlugin.h"
+
 #include <PluginManager/PluginManager.h>
-#include "ConnectionManager/ConnectionManager.h"
-#include "ModelManager/ModelManager.h"
-#include "ModelManager/ModelManagerDialog.h"
+#include <SettingManager/SettingManager.h>
+#include <ConnectionManager/ConnectionManager.h>
+#include <ModelManager/ModelManager.h>
+#include <ModelManager/ModelManagerDialog.h>
 
 #include "Settings/SettingPageFactory.h"
 #include "AboutDialog.h"
@@ -104,10 +106,10 @@ bool OpenSpeedShopPlugin::initialize(QStringList &args, QString *err)
             connect(serverConnect, SIGNAL(triggered()), this, SLOT(serverConnect()));
             action->menu()->insertAction(action->menu()->actions().at(0), serverConnect);
 
-            QAction *models = new QAction(tr("Models Manager"), this);
-            models->setToolTip(tr("Displays the Open|SpeedShop model manager dialog"));
-            connect(models, SIGNAL(triggered()), this, SLOT(modelsDialog()));
-            action->menu()->insertAction(action->menu()->actions().at(0), models);
+            QAction *modelManagerDialog = new QAction(tr("Models Manager"), this);
+            modelManagerDialog->setToolTip(tr("Displays the Open|SpeedShop model manager dialog"));
+            connect(modelManagerDialog, SIGNAL(triggered()), this, SLOT(modelManagerDialog()));
+            action->menu()->insertAction(action->menu()->actions().at(0), modelManagerDialog);
         }
     }
 
@@ -141,19 +143,44 @@ void OpenSpeedShopPlugin::shutdown()
 
 void OpenSpeedShopPlugin::aboutDialog()
 {
-    AboutDialog about;
-    about.exec();
+    try {
+        AboutDialog about;
+        about.exec();
+    } catch(QString err) {
+        using namespace Core::MainWindow;
+        MainWindow::instance()->notify(tr("Failed to open about dialog: %1").arg(err), NotificationWidget::Critical);
+    } catch(...) {
+        using namespace Core::MainWindow;
+        MainWindow::instance()->notify(tr("Failed to open about dialog."), NotificationWidget::Critical);
+    }
 }
 
-void OpenSpeedShopPlugin::modelsDialog()
+void OpenSpeedShopPlugin::modelManagerDialog()
 {
-    ModelManagerDialog models;
-    models.exec();
+    try {
+        ModelManagerDialog models;
+        models.exec();
+    } catch(QString err) {
+        using namespace Core::MainWindow;
+        MainWindow::instance()->notify(tr("Failed to open model manager dialog: %1").arg(err), NotificationWidget::Critical);
+    } catch(...) {
+        using namespace Core::MainWindow;
+        MainWindow::instance()->notify(tr("Failed to open model manager dialog."), NotificationWidget::Critical);
+    }
 }
 
 void OpenSpeedShopPlugin::serverConnect()
 {
-    ConnectionManager *connectionManager = ConnectionManager::instance();
+    try {
+        ConnectionManager *connectionManager = ConnectionManager::instance();
+        connectionManager->connectToServer();
+    } catch(QString err) {
+        using namespace Core::MainWindow;
+        MainWindow::instance()->notify(tr("Client error while attempting to connect to server: %1").arg(err), NotificationWidget::Critical);
+    } catch(...) {
+        using namespace Core::MainWindow;
+        MainWindow::instance()->notify(tr("Client error while attempting to connect to server."), NotificationWidget::Critical);
+    }
 }
 
 QString OpenSpeedShopPlugin::name()

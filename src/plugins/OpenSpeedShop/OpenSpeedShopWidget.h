@@ -2,6 +2,7 @@
 #define OPENSPEEDSHOPWIDGET_H
 
 #include <QTabWidget>
+#include <QAction>
 #include <MainWindow/MainWindow.h>
 #include "OpenSpeedShopLibrary.h"
 #include "Experiment/ExperimentWidget.h"
@@ -24,6 +25,13 @@ public:
 public slots:
     void createExperiment();
     void loadExperiment();
+    void closeExperiment(int index = -1);
+
+protected:
+    void tabInserted(int index);
+    void tabRemoved(int index);
+
+    QAction *m_CloseExperiment;
 
 private:
     Ui::OpenSpeedShopWidget *ui;

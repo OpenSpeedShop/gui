@@ -1,7 +1,7 @@
 /*!
-   \file 
+   \file
    \author Dane Gardner <dane.gardner@gmail.com>
-   \version 
+   \version
 
    \section LICENSE
    This file is part of the Open|SpeedShop Graphical User Interface
@@ -49,7 +49,8 @@ public:
     explicit DirectConnection(QObject *parent = 0);
     ~DirectConnection();
 
-    QWidget *page();
+    QString name() const;
+    IConnectionPage *page();
     IConnection::States state();
     QString errorMessage();
     void connectToServer();

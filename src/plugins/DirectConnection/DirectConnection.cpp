@@ -63,11 +63,17 @@ DirectConnection::DirectConnection(QObject *parent) :
             this, SLOT(error(QAbstractSocket::SocketError)));
 }
 
+QString DirectConnection::name() const
+{
+    return tr("Direct Connection");
+}
+
+
 DirectConnection::~DirectConnection()
 {
 }
 
-QWidget *DirectConnection::page()
+IConnectionPage *DirectConnection::page()
 {
     return new DirectConnectionPage(this);
 }
@@ -212,26 +218,21 @@ void DirectConnection::disconnected()
 
 void DirectConnection::writeSettings()
 {
-    Core::SettingManager::SettingManager *settingManager =
-            Core::SettingManager::SettingManager::instance();
+    Core::SettingManager::SettingManager *settingManager = Core::SettingManager::SettingManager::instance();
 
-    settingManager->beginGroup("Plugins");
-    settingManager->beginGroup("ConnectionManager");
+    settingManager->beginGroup("Plugins/ConnectionManager");
 
     settingManager->setValue("DirectConnection/HostName", m_HostName);
     settingManager->setValue("DirectConnection/Port", m_Port);
 
     settingManager->endGroup();
-    settingManager->endGroup();
 }
 
 void DirectConnection::readSettings()
 {
-    Core::SettingManager::SettingManager *settingManager =
-            Core::SettingManager::SettingManager::instance();
+    Core::SettingManager::SettingManager *settingManager = Core::SettingManager::SettingManager::instance();
 
-    settingManager->beginGroup("Plugins");
-    settingManager->beginGroup("ConnectionManager");
+    settingManager->beginGroup("Plugins/ConnectionManager");
 
     m_HostName = settingManager->value("DirectConnection/Hostname", "localhost").toString();
 
@@ -239,7 +240,6 @@ void DirectConnection::readSettings()
     m_Port = settingManager->value("DirectConnection/Port").toInt(&okay);
     if(!okay) m_Port = 2048;
 
-    settingManager->endGroup();
     settingManager->endGroup();
 }
 

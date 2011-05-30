@@ -230,7 +230,12 @@ void ModelManager::removeDescriptor(const QUuid &descriptorUid)
     You are responsible for deleting this object. */
 ModelDescriptorWidget *ModelManager::createDescriptorWidget(const QUuid &descriptorUid, QWidget *parent)
 {
-    ModelDescriptorWidget *modelDescriptorWidget = new ModelDescriptorWidget(descriptor(descriptorUid), parent);
+    ModelDescriptor *descriptor = this->descriptor(descriptorUid);
+    if(!descriptor) {
+        return NULL;
+    }
+
+    ModelDescriptorWidget *modelDescriptorWidget = new ModelDescriptorWidget(descriptor, parent);
     return modelDescriptorWidget;
 }
 
@@ -272,11 +277,16 @@ QAbstractItemModel *ModelManager::descriptorModel()
 /*! \brief Fetches the model's data from the server, using the descriptor specified. */
 QUuid ModelManager::fetchModel(const QUuid &descriptorUid, const QUuid &experimentUid)
 {
-
-    ServerAdapter *serverAdapter = ConnectionManager::instance()->currentServerAdapter();
-    if(!serverAdapter) {
-        throw tr("Cannot fetch model from server; not connected to server.");
+    ConnectionManager *connectionManager = ConnectionManager::instance();
+    if(!connectionManager->isConnected()) {
+        if(!connectionManager->askConnect()) {
+            throw tr("Server not connected");
+        }
     }
+
+    IAdapter *serverAdapter = connectionManager->currentAdapter();
+    if(!serverAdapter) throw tr("Server not connected");
+
 
 #ifdef MODELMANAGER_DEBUG
         qDebug() << __FILE__ << ":" << __LINE__ << "Fetching model from server";
@@ -284,12 +294,16 @@ QUuid ModelManager::fetchModel(const QUuid &descriptorUid, const QUuid &experime
 
     // Fetch everything from the server, based on the descriptor
     ModelDescriptor *modelDescriptor = descriptor(descriptorUid);
-    DataModel *dataModel = serverAdapter->waitExperimentView(
+    QAbstractItemModel *model = serverAdapter->waitExperimentView(
                 experimentUid,
                 modelDescriptor->modifiers(),
                 modelDescriptor->metrics(),
-                modelDescriptor->experimentType(),
                 modelDescriptor->rowCount());
+
+    DataModel *dataModel = qobject_cast<DataModel *>(model);
+    if(!dataModel) {
+        throw tr("Odd data type returned from server adapter; expected DataModel QObject from IAdapter::waitExperimentView()");
+    }
     m_ModelPool.insert(dataModel->uid(), dataModel);
 
 #ifdef MODELMANAGER_DEBUG

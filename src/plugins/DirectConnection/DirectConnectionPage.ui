@@ -16,9 +16,6 @@
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <layout class="QFormLayout" name="formLayout">
-     <property name="fieldGrowthPolicy">
-      <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
-     </property>
      <item row="0" column="0">
       <widget class="QLabel" name="lblHostname">
        <property name="text">
@@ -37,29 +34,15 @@
       </widget>
      </item>
      <item row="1" column="1">
-      <widget class="QLineEdit" name="txtPort"/>
-     </item>
-    </layout>
-   </item>
-   <item>
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <spacer name="horizontalSpacer">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
+      <widget class="QSpinBox" name="txtPort">
+       <property name="minimum">
+        <number>1000</number>
        </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
+       <property name="maximum">
+        <number>65535</number>
        </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="QPushButton" name="btnSetDefault">
-       <property name="text">
-        <string>Set as Default</string>
+       <property name="value">
+        <number>2048</number>
        </property>
       </widget>
      </item>

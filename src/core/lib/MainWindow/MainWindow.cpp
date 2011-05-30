@@ -230,7 +230,7 @@ void MainWindow::setCentralWidget(QWidget *widget)
     ui->centralLayout->addWidget(widget);
 }
 
-void MainWindow::notify(const QString &text, NotificationWidget::Icon icon, NotificationWidget::StandardButtons buttons,
+NotificationWidget *MainWindow::notify(const QString &text, NotificationWidget::Icon icon, NotificationWidget::StandardButtons buttons,
             const QObject *reciever, const char *member)
 {
 #ifdef MAINWINDOW_DEBUG
@@ -240,6 +240,8 @@ void MainWindow::notify(const QString &text, NotificationWidget::Icon icon, Noti
     NotificationWidget *notificationWidget = new NotificationWidget(text, icon, buttons, reciever, member, this);
     ui->centralLayout->insertWidget(0, notificationWidget);
     notificationWidget->setFocus();
+
+    return notificationWidget;
 }
 
 

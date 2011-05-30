@@ -21,8 +21,7 @@ ModelManagerDialog::ModelManagerDialog(QWidget *parent) :
             ModelManager::instance()->createDescriptorListWidget(ui->descriptorListParent);
     ui->descriptorListParent->layout()->addWidget(descriptorListWidget);
     ui->descriptorListParent->layout()->setMargin(0);
-    connect(descriptorListWidget, SIGNAL(currentDescriptorChanged(QUuid)),
-            this, SLOT(currentSelectionChanged(QUuid)));
+    connect(descriptorListWidget, SIGNAL(currentDescriptorChanged(QUuid)), this, SLOT(currentSelectionChanged(QUuid)));
 
     Core::SettingManager::SettingManager *settingManager = Core::SettingManager::SettingManager::instance();
 
@@ -69,9 +68,21 @@ void ModelManagerDialog::currentSelectionChanged(const QUuid &current)
     }
 
     if(!current.isNull()) {
-        QWidget *descriptor = ModelManager::instance()->createDescriptorWidget(current, this);
-        ui->descriptorParent->layout()->addWidget(descriptor);
-        ui->descriptorParent->layout()->setMargin(0);
+        try {
+            QWidget *descriptor = ModelManager::instance()->createDescriptorWidget(current, this);
+            if(!descriptor) {
+                return;
+            }
+
+            ui->descriptorParent->layout()->addWidget(descriptor);
+            ui->descriptorParent->layout()->setMargin(0);
+        } catch(QString err) {
+            using namespace Core::MainWindow;
+            MainWindow::instance()->notify(tr("Failed to open model descriptor: %1").arg(err), NotificationWidget::Critical);
+        } catch(...) {
+            using namespace Core::MainWindow;
+            MainWindow::instance()->notify(tr("Failed to open model descriptor."), NotificationWidget::Critical);
+        }
     }
 }
 

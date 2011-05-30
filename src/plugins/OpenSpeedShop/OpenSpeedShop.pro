@@ -39,7 +39,10 @@ SOURCES      += OpenSpeedShopPlugin.cpp \
                 ModelManager/ModelManagerDialog.cpp \
                 ModelManager/ModelDescriptorListWidget.cpp \
     ViewManager/Delegate.cpp \
-    ViewManager/TreeView.cpp
+    ViewManager/TreeView.cpp \
+    ConnectionManager/IAdapter.cpp \
+    ConnectionManager/ConnectionManagerSettingPageFactory.cpp \
+    ConnectionManager/IConnectionPage.cpp
 
 
 HEADERS      += OpenSpeedShopPlugin.h \
@@ -64,7 +67,10 @@ HEADERS      += OpenSpeedShopPlugin.h \
                 ModelManager/ModelManagerDialog.h \
                 ModelManager/ModelDescriptorListWidget.h \
     ViewManager/Delegate.h \
-    ViewManager/TreeView.h
+    ViewManager/TreeView.h \
+    ConnectionManager/IAdapter.h \
+    ConnectionManager/ConnectionManagerSettingPageFactory.h \
+    ConnectionManager/IConnectionPage.h
 
 FORMS        += Settings/SettingPage.ui \
                 AboutDialog.ui \
@@ -83,6 +89,7 @@ DEFINES      += OPENSPEEDSHOP_LIBRARY \
 
 #debug: DEFINES += DATAMODEL_DEBUG
 #debug: DEFINES += MODELMANAGER_DEBUG
+#debug: DEFINES += SERVERADAPTER_DEBUG
 
 # List of experiment types and their possible modifiers/metrics
 # In the future, this should be pulled from the server

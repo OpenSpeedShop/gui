@@ -116,6 +116,12 @@
 
 int main(int argc, char *argv[])
 {
+    int retval = 0;
+
+#ifdef MAIN_DEBUG
+    try {
+#endif
+
     QApplication a(argc, argv);
 
     QCoreApplication::setOrganizationName("OpenSpeedShop");
@@ -156,7 +162,7 @@ int main(int argc, char *argv[])
 #endif
 
     mainWindow->show();
-    int retval = a.exec();
+    retval = a.exec();
 
 #ifdef MAIN_DEBUG
     qDebug() << __FILE__ << __LINE__ << "\tShutting down singleton classes";
@@ -179,6 +185,16 @@ int main(int argc, char *argv[])
 
 #ifdef MAIN_DEBUG
     qDebug() << __FILE__ << __LINE__ << "\tDone";
+#endif
+
+#ifdef MAIN_DEBUG
+    } catch(QString err) {
+        qDebug() << __FILE__ << __LINE__ << "\tCaught error:" << err;
+        retval = 1;
+    } catch(...) {
+        qDebug() << __FILE__ << __LINE__ << "\tCaught error";
+        retval = 1;
+    }
 #endif
 
     return retval;

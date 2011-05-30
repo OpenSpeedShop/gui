@@ -1,7 +1,7 @@
 /*!
-   \file OpenSpeedShopPlugin.h
+   \file 
    \author Dane Gardner <dane.gardner@gmail.com>
-   \version
+   \version 
 
    \section LICENSE
    This file is part of the Open|SpeedShop Graphical User Interface
@@ -25,53 +25,15 @@
 
  */
 
-#ifndef OPENSPEEDSHOPPLUGIN_H
-#define OPENSPEEDSHOPPLUGIN_H
-
-#include <QtCore>
-#include <MainWindow/MainWindow.h>
-#include <PluginManager/IPlugin.h>
+#include "IAdapter.h"
 
 namespace Plugins {
 namespace OpenSpeedShop {
 
-class OpenSpeedShopWidget;
-
-class OpenSpeedShopPlugin : public QObject, public Core::PluginManager::IPlugin
+IAdapter::IAdapter(QObject *parent) :
+    QObject(parent)
 {
-Q_OBJECT
-Q_INTERFACES(Core::PluginManager::IPlugin)
-
-public:
-    OpenSpeedShopPlugin();
-    ~OpenSpeedShopPlugin();
-
-    bool initialize(QStringList &args, QString *err);
-    void shutdown();
-
-    QString name();
-    QString version();
-    QList<Core::PluginManager::Dependency> dependencies();
-
-public slots:
-    void aboutDialog();
-    void modelManagerDialog();
-    void serverConnect();
-
-protected:
-    QString m_Name;
-    QString m_Version;
-    QList<Core::PluginManager::Dependency> m_Dependencies;
-
-    OpenSpeedShopWidget *_mainWidget;
-
-    void readSettings();
-    void writeSettings();
-
-};
-
-
+}
 
 } // namespace OpenSpeedShop
 } // namespace Plugins
-#endif // OPENSPEEDSHOPPLUGIN_H

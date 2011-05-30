@@ -64,7 +64,7 @@ public:
 
     void setCentralWidget(QWidget *widget);
 
-    void notify(const QString &text,
+    NotificationWidget *notify(const QString &text,
                 NotificationWidget::Icon icon = NotificationWidget::NoIcon,
                 NotificationWidget::StandardButtons buttons = NotificationWidget::NoButton,
                 const QObject *reciever = NULL, const char *member = NULL);

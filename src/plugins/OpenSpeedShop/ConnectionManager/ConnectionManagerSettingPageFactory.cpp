@@ -1,5 +1,5 @@
 /*!
-   \file OpenSpeedShopPlugin.h
+   \file
    \author Dane Gardner <dane.gardner@gmail.com>
    \version
 
@@ -25,53 +25,40 @@
 
  */
 
-#ifndef OPENSPEEDSHOPPLUGIN_H
-#define OPENSPEEDSHOPPLUGIN_H
-
-#include <QtCore>
-#include <MainWindow/MainWindow.h>
-#include <PluginManager/IPlugin.h>
+#include "ConnectionManagerSettingPageFactory.h"
+#include "ConnectionWidget.h"
 
 namespace Plugins {
 namespace OpenSpeedShop {
 
-class OpenSpeedShopWidget;
-
-class OpenSpeedShopPlugin : public QObject, public Core::PluginManager::IPlugin
+ConnectionManagerSettingPageFactory::ConnectionManagerSettingPageFactory(QObject *parent) :
+    QObject(parent)
 {
-Q_OBJECT
-Q_INTERFACES(Core::PluginManager::IPlugin)
+}
 
-public:
-    OpenSpeedShopPlugin();
-    ~OpenSpeedShopPlugin();
+ConnectionManagerSettingPageFactory::~ConnectionManagerSettingPageFactory()
+{
+}
 
-    bool initialize(QStringList &args, QString *err);
-    void shutdown();
+QIcon ConnectionManagerSettingPageFactory::icon()
+{
+    return QIcon(":/OpenSpeedShop/app.png");
+}
 
-    QString name();
-    QString version();
-    QList<Core::PluginManager::Dependency> dependencies();
+QString ConnectionManagerSettingPageFactory::name()
+{
+    return tr("Server Connections");
+}
 
-public slots:
-    void aboutDialog();
-    void modelManagerDialog();
-    void serverConnect();
+int ConnectionManagerSettingPageFactory::priority()
+{
+    return 128;
+}
 
-protected:
-    QString m_Name;
-    QString m_Version;
-    QList<Core::PluginManager::Dependency> m_Dependencies;
-
-    OpenSpeedShopWidget *_mainWidget;
-
-    void readSettings();
-    void writeSettings();
-
-};
-
-
+Core::SettingManager::ISettingPage *ConnectionManagerSettingPageFactory::createPage()
+{
+    return new ConnectionWidget();
+}
 
 } // namespace OpenSpeedShop
 } // namespace Plugins
-#endif // OPENSPEEDSHOPPLUGIN_H

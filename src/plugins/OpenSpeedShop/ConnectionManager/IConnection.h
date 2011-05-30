@@ -1,7 +1,7 @@
 /*!
-   \file 
+   \file
    \author Dane Gardner <dane.gardner@gmail.com>
-   \version 
+   \version
 
    \section LICENSE
    This file is part of the Open|SpeedShop Graphical User Interface
@@ -32,6 +32,7 @@
 #include <QWidget>
 #include <QMetaType>
 #include "ConnectionManagerLibrary.h"
+#include "IConnectionPage.h"
 
 namespace Plugins {
 namespace OpenSpeedShop {
@@ -53,7 +54,8 @@ public:
     explicit IConnection(QObject *parent = 0) : QObject(parent) {}
     virtual ~IConnection() {}
 
-    virtual QWidget *page() = 0;
+    virtual QString name() const = 0;
+    virtual IConnectionPage *page() = 0;
     virtual States state() = 0;
     virtual QString errorMessage() = 0;
     virtual void connectToServer() = 0;
