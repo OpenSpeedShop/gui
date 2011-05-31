@@ -25,37 +25,27 @@
 
  */
 
-#ifndef DELEGATE_H
-#define DELEGATE_H
+#ifndef IVIEWPLUGIN_H
+#define IVIEWPLUGIN_H
 
-#include <QStyledItemDelegate>
+#include <QString>
 #include <QAbstractItemModel>
-#include <QSet>
+#include <QAbstractItemView>
 
 namespace Plugins {
 namespace OpenSpeedShop {
 
-class Delegate : public QStyledItemDelegate
+class IViewPlugin
 {
-    Q_OBJECT
 public:
-    explicit Delegate(QObject *parent = 0);
-
-    virtual void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-    virtual QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
-    virtual QString displayText(const QVariant &value, const QLocale &locale) const;
-
-public slots:
-    virtual bool helpEvent(QHelpEvent *event, QAbstractItemView *view, const QStyleOptionViewItem &option, const QModelIndex &index);
-    void selected(const QModelIndex &index);
-    void deselected(const QModelIndex &index);
-
-protected:
-    QSet<QModelIndex> m_SelectedRows;
-
+    explicit IViewPlugin() {}
+    virtual bool handles(QAbstractItemModel *model) = 0;
+    virtual QAbstractItemView *view(QAbstractItemModel *model) = 0;
 };
 
 } // namespace OpenSpeedShop
 } // namespace Plugins
 
-#endif // DELEGATE_H
+Q_DECLARE_INTERFACE(Plugins::OpenSpeedShop::IViewPlugin, "org.openspeedshop.gui.IViewPlugin/0.1")
+
+#endif // IVIEWPLUGIN_H

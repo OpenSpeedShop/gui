@@ -15,20 +15,24 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
-TEMPLATE = subdirs
+include(../plugins.pri)
 
-SUBDIRS  = Example \
-           OpenSpeedShop \
-           DirectConnection \
-           TreeView
+TARGET        = TreeView
 
-OpenSpeedShop.subdir         = OpenSpeedShop
+SOURCES      += TreeViewPlugin.cpp \
+                TreeView.cpp \
+                Delegate.cpp
 
-DirectConnection.subdir      = DirectConnection
-DirectConnection.depends     = OpenSpeedShop
+HEADERS      += TreeView.h \
+                Delegate.h \
+                TreeViewPlugin.h
 
-TreeView.subdir              = TreeView
-TreeView.depends             = OpenSpeedShop
+FORMS        +=
+RESOURCES    +=
+QT           +=
 
-Example.subdir               = Example
-Example.depends              = OpenSpeedShop
+INCLUDEPATH       += $$quote($${SOURCE_PATH}/plugins/OpenSpeedShop)
+DEPENDPATH        += $$quote($${SOURCE_PATH}/plugins/OpenSpeedShop)
+LIBS              += -L$$quote(${BUILDDIR}/plugins/OpenSpeedShop/$${POSTFIX}) -lOpenSpeedShop
+
+#debug: DEFINES += TREEVIEW_DEBUG

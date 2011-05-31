@@ -33,9 +33,9 @@
 #include <QAbstractTextDocumentLayout>
 
 namespace Plugins {
-namespace OpenSpeedShop {
+namespace TreeView {
 
-/*! \class Plugins::OpenSpeedShop::Delegate
+/*! \class Plugins::TreeView::Delegate
     \brief A basic delegate to assist the tree and table views in the set of standard views available for the main
            OpenSpeeShop plugin.
     \sa QStyledItemDelegate QAbstractItemDelegate
@@ -218,5 +218,5 @@ QString Delegate::displayText(const QVariant &value, const QLocale& locale) cons
 }
 
 
-} // namespace OpenSpeedShop
+} // namespace TreeView
 } // namespace Plugins

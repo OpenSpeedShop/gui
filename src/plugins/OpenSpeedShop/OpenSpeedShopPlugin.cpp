@@ -36,6 +36,7 @@
 #include <ConnectionManager/ConnectionManager.h>
 #include <ModelManager/ModelManager.h>
 #include <ModelManager/ModelManagerDialog.h>
+#include <ViewManager/ViewManager.h>
 
 #include "Settings/SettingPageFactory.h"
 #include "AboutDialog.h"
@@ -124,10 +125,9 @@ bool OpenSpeedShopPlugin::initialize(QStringList &args, QString *err)
     modelManager->initialize();
     pluginManager->addObject(modelManager);
 
-    //TODO: Register ViewManager
-//    ViewManager *viewManager = ViewManager::instance();
-//    viewManager->initialize();
-//    pluginManager->addObject(viewManager);
+    ViewManager *viewManager = ViewManager::instance();
+    viewManager->initialize();
+    pluginManager->addObject(viewManager);
 
     return true;
 }
@@ -136,7 +136,7 @@ void OpenSpeedShopPlugin::shutdown()
 {
     ConnectionManager::instance()->shutdown();
     ModelManager::instance()->shutdown();
-//TODO: ViewManager::instance()->shutdown();
+    ViewManager::instance()->shutdown();
 
     writeSettings();
 }

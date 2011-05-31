@@ -8,8 +8,6 @@
 #include <ConnectionManager/ConnectionManager.h>
 #include <ConnectionManager/IAdapter.h>
 
-#include "ViewManager/TreeView.h"
-
 #include "ModelManager/ModelManager.h"
 #include "ModelManager/ModelManagerDialog.h"
 #include "ModelManager/ModelDescriptorListWidget.h"
@@ -29,7 +27,7 @@ ExperimentWidget::ExperimentWidget(QWidget *parent) :
     ui->setupUi(this);
     ui->tabWidget->setCurrentIndex(0);
 
-    m_CurrentView = new TreeView(this);
+//    m_CurrentView = new TreeView(this);
     ui->grpView->layout()->addWidget(m_CurrentView);
 
     IAdapter *serverAdapter = ConnectionManager::instance()->askAdapter();
@@ -185,10 +183,10 @@ void ExperimentWidget::on_txtViewFilter_textChanged(const QString &text)
 
     try {
 
-        TreeView *treeView = qobject_cast<TreeView *>(m_CurrentView);
-        if(treeView) {
-            treeView->setFilter(ui->txtViewFilter->text());
-        }
+//        TreeView *treeView = qobject_cast<TreeView *>(m_CurrentView);
+//        if(treeView) {
+//            treeView->setFilter(ui->txtViewFilter->text());
+//        }
 
     } catch(QString err) {
         using namespace Core::MainWindow;
@@ -203,10 +201,10 @@ void ExperimentWidget::on_cmbViewFilterColumn_currentIndexChanged(int index)
 {
     try {
 
-        TreeView *treeView = qobject_cast<TreeView *>(m_CurrentView);
-        if(treeView) {
-            treeView->setFilterColumn(index);
-        }
+//        TreeView *treeView = qobject_cast<TreeView *>(m_CurrentView);
+//        if(treeView) {
+//            treeView->setFilterColumn(index);
+//        }
 
     } catch(QString err) {
         using namespace Core::MainWindow;

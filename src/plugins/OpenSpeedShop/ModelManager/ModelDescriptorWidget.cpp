@@ -41,6 +41,7 @@ ModelDescriptorWidget::~ModelDescriptorWidget()
 
 void ModelDescriptorWidget::init()
 {
+    ui->buttonBox->hide();
     ui->txtModelName->setText(m_ModelDescriptor->name());
     ui->txtRowCount->setValue(m_ModelDescriptor->rowCount());
 

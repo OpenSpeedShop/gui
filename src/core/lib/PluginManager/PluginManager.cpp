@@ -189,8 +189,13 @@ void PluginManager::loadPlugins()
         QObject *object = pluginLoader.instance();
 
         if (object) {
-            IPlugin *plugin = qobject_cast<IPlugin *>(object);
+#ifdef PLUGINMANAGER_DEBUG
+                qDebug() << __FILE__ << __LINE__ << "Plugin was object:" << fileName;
+#endif
+            qDebug() << (object->inherits("Core::PluginManager::IPlugin") ? "Inherits from IPlugin": "Does not inherit from IPlugin");
+            qDebug() << (object->inherits("Plugins::OpenSpeedShop::IViewPlugin") ? "Inherits from IViewPlugin": "Does not inherit from IViewPlugin");
 
+            IPlugin *plugin = qobject_cast<IPlugin *>(object);
             if (plugin) {
                 PluginWrapper *wrapper = new PluginWrapper(plugin, filePath, this);
                 m_Plugins.append(wrapper);

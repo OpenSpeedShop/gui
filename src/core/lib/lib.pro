@@ -59,7 +59,7 @@ FORMS   +=  SettingManager/SettingDialog.ui \
             PluginManager/PluginSettingPage.ui \
             MainWindow/MainSettingPage.ui
 
-LIBS    += 
+LIBS    +=
 
 RESOURCES += Resources/Core.qrc
 
@@ -70,7 +70,7 @@ DEFINES          += MAINWINDOW_LIBRARY \
 
 #debug:DEFINES    += MAINWINDOW_DEBUG
 #debug:DEFINES    += ACTIONMANAGER_DEBUG
-#debug:DEFINES    += PLUGINMANAGER_DEBUG
+debug:DEFINES    += PLUGINMANAGER_DEBUG
 #debug:DEFINES    += SETTINGMANAGER_DEBUG
 
 target.path = /lib

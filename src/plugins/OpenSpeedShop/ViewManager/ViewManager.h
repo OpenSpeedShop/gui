@@ -25,34 +25,32 @@
 
  */
 
-#ifndef TREEVIEW_H
-#define TREEVIEW_H
+#ifndef VIEWMANAGER_H
+#define VIEWMANAGER_H
 
-#include <QTreeView>
+#include <QObject>
+#include "ViewManagerLibrary.h"
+#include "IViewPlugin.h"
 
 namespace Plugins {
 namespace OpenSpeedShop {
 
-class TreeView : public QTreeView
+class VIEWMANAGER_EXPORT ViewManager : public QObject
 {
     Q_OBJECT
 public:
-    explicit TreeView(QWidget *parent = 0);
+    static ViewManager *instance();
 
-    QAbstractItemModel *model() const;
-    void setModel(QAbstractItemModel *model);
+    void initialize();
+    void shutdown();
 
-    QString filter() const;
-    void setFilter(const QString &regex);
-    int filterColumn() const;
-    void setFilterColumn(int column = 0);
+    void registerView(IViewPlugin *viewPlugin);
 
-protected slots:
-    void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
-
+protected:
+    ViewManager(QObject *parent = 0);
+    QList<IViewPlugin *> m_viewPlugins;
 };
 
 } // namespace OpenSpeedShop
 } // namespace Plugins
-
-#endif // TREEVIEW_H
+#endif // VIEWMANAGER_H

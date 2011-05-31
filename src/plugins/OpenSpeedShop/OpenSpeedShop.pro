@@ -38,12 +38,11 @@ SOURCES      += OpenSpeedShopPlugin.cpp \
                 ModelManager/ModelManager.cpp \
                 ModelManager/ModelManagerDialog.cpp \
                 ModelManager/ModelDescriptorListWidget.cpp \
-    ViewManager/Delegate.cpp \
-    ViewManager/TreeView.cpp \
-    ConnectionManager/IAdapter.cpp \
-    ConnectionManager/ConnectionManagerSettingPageFactory.cpp \
-    ConnectionManager/IConnectionPage.cpp
-
+                ConnectionManager/IAdapter.cpp \
+                ConnectionManager/ConnectionManagerSettingPageFactory.cpp \
+                ConnectionManager/IConnectionPage.cpp \
+                ViewManager/ViewManager.cpp \
+                ViewManager/IViewPlugin.cpp
 
 HEADERS      += OpenSpeedShopPlugin.h \
                 Settings/SettingPageFactory.h \
@@ -66,11 +65,12 @@ HEADERS      += OpenSpeedShopPlugin.h \
                 ModelManager/ModelManager.h \
                 ModelManager/ModelManagerDialog.h \
                 ModelManager/ModelDescriptorListWidget.h \
-    ViewManager/Delegate.h \
-    ViewManager/TreeView.h \
-    ConnectionManager/IAdapter.h \
-    ConnectionManager/ConnectionManagerSettingPageFactory.h \
-    ConnectionManager/IConnectionPage.h
+                ConnectionManager/IAdapter.h \
+                ConnectionManager/ConnectionManagerSettingPageFactory.h \
+                ConnectionManager/IConnectionPage.h \
+                ViewManager/ViewManager.h \
+                ViewManager/IViewPlugin.h \
+    ViewManager/ViewManagerLibrary.h
 
 FORMS        += Settings/SettingPage.ui \
                 AboutDialog.ui \
@@ -85,7 +85,8 @@ RESOURCES    += Resources/OpenSpeedShop.qrc
 QT           += xml
 
 DEFINES      += OPENSPEEDSHOP_LIBRARY \
-                CONNECTIONMANAGER_LIBRARY
+                CONNECTIONMANAGER_LIBRARY \
+                VIEWMANAGER_LIBRARY
 
 #debug: DEFINES += DATAMODEL_DEBUG
 #debug: DEFINES += MODELMANAGER_DEBUG

@@ -31,9 +31,9 @@
 #include <QSortFilterProxyModel>
 
 namespace Plugins {
-namespace OpenSpeedShop {
+namespace TreeView {
 
-/*! \class Plugins::OpenSpeedShop::TreeView
+/*! \class Plugins::TreeView::TreeView
     \brief One in the set of standard views available for the main OpenSpeeShop plugin.
     \sa QTreeView QAbstractItemView
  */
@@ -133,5 +133,5 @@ void TreeView::setFilterColumn(int column)
 }
 
 
-} // namespace OpenSpeedShop
+} // namespace TreeView
 } // namespace Plugins
