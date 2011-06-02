@@ -1,6 +1,9 @@
 #include "ModelManager.h"
 
 #include <QApplication>
+#include <QFile>
+#include <QFileInfo>
+#include <QMimeData>
 #include <MainWindow/MainWindow.h>
 #include "ConnectionManager/ConnectionManager.h"
 #include "ConnectionManager/ServerAdapter.h"
@@ -76,6 +79,10 @@ void ModelManager::importDescriptors(const QString &filepath)
     QList<ModelDescriptor *> modelDescriptors = ModelDescriptor::fromXml(filePath, this);
 
     foreach(ModelDescriptor *modelDescriptor, modelDescriptors) {
+        if(m_DescriptorPool.keys().contains(modelDescriptor->id())) {
+            throw tr("Multiple model descriptors with the same unique identifier have been found. Check the descriptor source!");
+        }
+
         m_DescriptorPool.insert(modelDescriptor->id(), modelDescriptor);
         insertDescriptorIntoModel(modelDescriptor->id());
     }
@@ -386,7 +393,7 @@ QAbstractItemModel *ModelManager::model(const QUuid &descriptorUid, const QUuid 
     }
 
 #ifdef MODELMANAGER_DEBUG
-    qDebug() << __FILE__ << ":" << __LINE__ << "ModeUid:" << modelUid;
+    qDebug() << __FILE__ << ":" << __LINE__ << "ModelUid:" << modelUid;
 #endif
 
     return m_ModelPool.value(modelUid, NULL);

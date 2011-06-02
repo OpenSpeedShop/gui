@@ -1,5 +1,5 @@
 /*!
-   \file
+   \file TreeViewPlugin.cpp
    \author Dane Gardner <dane.gardner@gmail.com>
    \version
 
@@ -26,17 +26,28 @@
  */
 
 #include "TreeViewPlugin.h"
-#include <PluginManager/PluginManager.h>
-#include <OpenSpeedShop/ViewManager/ViewManager.h>
-#include "TreeView.h"
 
-using namespace Plugins::OpenSpeedShop;
+#include "TreeView.h"
 
 namespace Plugins {
 namespace TreeView {
 
-TreeViewPlugin::TreeViewPlugin(QObject *parent) :
-    QObject(parent)
+/*! \namespace Plugins::TreeView
+    \brief Contains the TreeViewPlugin, which helps demonstrate the
+           methodologies for creating a GUI plugin.
+ */
+
+/*! \class TreeViewPlugin
+    \version 0.1.dev
+    \brief This is an example of the methods for producing a GUI plugin.
+
+    \par Depends on Plugins:
+         OpenSpeedShop
+
+    \todo Document this more explicitly as a developer example.
+ */
+
+TreeViewPlugin::TreeViewPlugin(QObject *parent) : QObject(parent)
 {
     m_Name = "TreeView";
     m_Version = "0.1.dev";
@@ -52,12 +63,18 @@ bool TreeViewPlugin::initialize(QStringList &args, QString *err)
     Q_UNUSED(args)
     Q_UNUSED(err)
 
-    using namespace Core::PluginManager;
-    PluginManager *pluginManager = PluginManager::instance();
-    QList<ViewManager *> *managers = pluginManager->getObjects<ViewManager>();
-    if(managers->count()) {
-        ViewManager *viewManager = managers->at(0);
-        viewManager->registerView(this);
+    try {
+        using namespace Core::PluginManager;
+        using namespace Plugins::OpenSpeedShop;
+
+        PluginManager *pluginManager = PluginManager::instance();
+        QList<ViewManager *> *managers = pluginManager->getObjects<ViewManager>();
+        if(managers->count()) {
+            ViewManager *viewManager = managers->at(0);
+            viewManager->registerView(this);
+        }
+    } catch(...) {
+        return false;
     }
 
     return true;
@@ -65,7 +82,6 @@ bool TreeViewPlugin::initialize(QStringList &args, QString *err)
 
 void TreeViewPlugin::shutdown()
 {
-
 }
 
 QString TreeViewPlugin::name()
@@ -83,7 +99,12 @@ QList<Core::PluginManager::Dependency> TreeViewPlugin::dependencies()
     return m_Dependencies;
 }
 
-bool TreeViewPlugin::handles(QAbstractItemModel *model)
+QString TreeViewPlugin::viewName()
+{
+    return "Tree/Table View";
+}
+
+bool TreeViewPlugin::viewHandles(QAbstractItemModel *model)
 {
     Q_UNUSED(model)
 
@@ -91,15 +112,17 @@ bool TreeViewPlugin::handles(QAbstractItemModel *model)
     return true;
 }
 
-QAbstractItemView *TreeViewPlugin::view(QAbstractItemModel *model)
+QAbstractItemView *TreeViewPlugin::viewWidget(QAbstractItemModel *model)
 {
+    /* Check to see if we should even try to handle this model */
+    if(!viewHandles(model)) return NULL;
+
     TreeView *treeView = new TreeView();
     treeView->setModel(model);
     return treeView;
 }
 
-
 } // namespace TreeView
 } // namespace Plugins
 
-Q_EXPORT_PLUGIN(Plugins::TreeView::TreeView)
+Q_EXPORT_PLUGIN(Plugins::TreeView::TreeViewPlugin)

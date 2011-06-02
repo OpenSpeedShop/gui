@@ -7,6 +7,10 @@
 #include "ModelDescriptorWidget.h"
 #include "ModelDescriptorListWidget.h"
 
+#ifdef QT_DEBUG
+#  include <QDebug>
+#endif
+
 namespace Plugins {
 namespace OpenSpeedShop {
 

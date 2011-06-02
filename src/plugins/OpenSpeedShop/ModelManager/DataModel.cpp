@@ -50,6 +50,7 @@ namespace OpenSpeedShop {
 DataModel::DataModel(QObject *parent) :
     QAbstractItemModel(parent)
 {
+    m_Header = NULL;
     m_Uid = QUuid::createUuid();
 }
 
@@ -59,6 +60,7 @@ DataModel::DataModel(QObject *parent) :
 DataModel::DataModel(QString xml, QObject *parent) :
     QAbstractItemModel(parent)
 {
+    m_Header = NULL;
     m_Uid = QUuid::createUuid();
     loadData(xml);
 }
@@ -69,6 +71,7 @@ DataModel::DataModel(QString xml, QObject *parent) :
 DataModel::DataModel(QDomDocument document, QObject *parent) :
   QAbstractItemModel(parent)
 {
+    m_Header = NULL;
     m_Uid = QUuid::createUuid();
     buildModel(document);
 }

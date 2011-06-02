@@ -33,10 +33,10 @@ HEADERS +=  ActionManager/ActionManager.h \
             MainWindow/MainSettingPage.h \
             MainWindow/MainSettingPageFactory.h \
             MainWindow/NotificationWidget.h \
-    PluginManager/PluginManagerLibrary.h \
-    SettingManager/SettingManagerLibrary.h \
-    MainWindow/MainWindowLibrary.h \
-    ActionManager/ActionManagerLibrary.h
+            PluginManager/PluginManagerLibrary.h \
+            SettingManager/SettingManagerLibrary.h \
+            MainWindow/MainWindowLibrary.h \
+            ActionManager/ActionManagerLibrary.h
 
 SOURCES +=  ActionManager/ActionManager.cpp \
             PluginManager/PluginManager.cpp \
@@ -70,7 +70,7 @@ DEFINES          += MAINWINDOW_LIBRARY \
 
 #debug:DEFINES    += MAINWINDOW_DEBUG
 #debug:DEFINES    += ACTIONMANAGER_DEBUG
-debug:DEFINES    += PLUGINMANAGER_DEBUG
+#debug:DEFINES    += PLUGINMANAGER_DEBUG
 #debug:DEFINES    += SETTINGMANAGER_DEBUG
 
 target.path = /lib

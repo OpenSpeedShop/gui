@@ -12,6 +12,8 @@
 #include "ModelManager/ModelManagerDialog.h"
 #include "ModelManager/ModelDescriptorListWidget.h"
 
+#include "ViewManager/ViewManager.h"
+#include "ViewManager/IViewFilterable.h"
 
 #ifdef QT_DEBUG
 #  include <QDebug>
@@ -24,11 +26,12 @@ ExperimentWidget::ExperimentWidget(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::ExperimentWidget)
 {
+    m_CurrentView = NULL;
+    m_CurrentModel = NULL;
+
     ui->setupUi(this);
     ui->tabWidget->setCurrentIndex(0);
-
-//    m_CurrentView = new TreeView(this);
-    ui->grpView->layout()->addWidget(m_CurrentView);
+    ui->grpViewFilter->hide();
 
     IAdapter *serverAdapter = ConnectionManager::instance()->askAdapter();
     if(!serverAdapter) throw tr("Server not connected");
@@ -137,19 +140,19 @@ void ExperimentWidget::getModel(QUuid descriptorUid)
 {
     try {
 
-        IAdapter *serverAdapter = ConnectionManager::instance()->askAdapter();
-        if(!serverAdapter) throw tr("Server not connected");
-
-        QAbstractItemModel *dataModel = ModelManager::instance()->model(descriptorUid, m_ExperimentUid);
-        m_CurrentView->setModel(dataModel);
+        m_CurrentModel = ModelManager::instance()->model(descriptorUid, m_ExperimentUid);
 
         /* Reset the view filter for this model */
-        ui->grpViewFilter->setChecked(false);
         ui->txtViewFilter->setText(QString());
         ui->cmbViewFilterColumn->clear();
-        for(int i = 0; i < dataModel->columnCount(); i++) {
-            ui->cmbViewFilterColumn->addItem(dataModel->headerData(i, Qt::Horizontal, Qt::DisplayRole).toString());
+        for(int i = 0; i < m_CurrentModel->columnCount(); i++) {
+            ui->cmbViewFilterColumn->addItem(m_CurrentModel->headerData(i, Qt::Horizontal, Qt::DisplayRole).toString());
         }
+
+        /* Reset the view list */
+        ui->cmbViews->clear();
+        ui->cmbViews->addItems(ViewManager::instance()->viewNames(m_CurrentModel));
+        ui->cmbViews->setCurrentIndex(0);
 
     } catch(QString err) {
         using namespace Core::MainWindow;
@@ -157,6 +160,39 @@ void ExperimentWidget::getModel(QUuid descriptorUid)
     } catch(...) {
         using namespace Core::MainWindow;
         MainWindow::instance()->notify(tr("Failed to fetch experiement model."), NotificationWidget::Critical);
+    }
+}
+
+void ExperimentWidget::on_cmbViews_currentIndexChanged(int index)
+{
+    Q_UNUSED(index);
+
+    try {
+
+        if(m_CurrentView) {
+            ui->grpView->layout()->removeWidget(m_CurrentView);
+            m_CurrentView->deleteLater();
+        }
+
+        if(!ui->cmbViews->currentText().isEmpty()) {
+            m_CurrentView = ViewManager::instance()->viewWidget(ui->cmbViews->currentText(), m_CurrentModel);
+            ui->grpView->layout()->addWidget(m_CurrentView);
+
+            IViewFilterable *viewFilterable = qobject_cast<IViewFilterable *>(m_CurrentView);
+            if(viewFilterable) {
+                ui->grpViewFilter->show();
+            } else {
+                ui->grpViewFilter->hide();
+            }
+
+        }
+
+    } catch(QString err) {
+        using namespace Core::MainWindow;
+        MainWindow::instance()->notify(tr("Failed to fetch view widget: %1").arg(err), NotificationWidget::Critical);
+    } catch(...) {
+        using namespace Core::MainWindow;
+        MainWindow::instance()->notify(tr("Failed to fetch view widget."), NotificationWidget::Critical);
     }
 }
 
@@ -183,10 +219,10 @@ void ExperimentWidget::on_txtViewFilter_textChanged(const QString &text)
 
     try {
 
-//        TreeView *treeView = qobject_cast<TreeView *>(m_CurrentView);
-//        if(treeView) {
-//            treeView->setFilter(ui->txtViewFilter->text());
-//        }
+        IViewFilterable *viewFilterable = qobject_cast<IViewFilterable *>(m_CurrentView);
+        if(viewFilterable) {
+            viewFilterable->setViewFilter(ui->txtViewFilter->text());
+        }
 
     } catch(QString err) {
         using namespace Core::MainWindow;
@@ -201,10 +237,10 @@ void ExperimentWidget::on_cmbViewFilterColumn_currentIndexChanged(int index)
 {
     try {
 
-//        TreeView *treeView = qobject_cast<TreeView *>(m_CurrentView);
-//        if(treeView) {
-//            treeView->setFilterColumn(index);
-//        }
+        IViewFilterable *viewFilterable = qobject_cast<IViewFilterable *>(m_CurrentView);
+        if(viewFilterable) {
+            viewFilterable->setViewFilterColumn(index);
+        }
 
     } catch(QString err) {
         using namespace Core::MainWindow;
@@ -212,23 +248,6 @@ void ExperimentWidget::on_cmbViewFilterColumn_currentIndexChanged(int index)
     } catch(...) {
         using namespace Core::MainWindow;
         MainWindow::instance()->notify(tr("Failed to change filter column."), NotificationWidget::Critical);
-    }
-}
-
-void ExperimentWidget::on_grpViewFilter_toggled(bool on)
-{
-    Q_UNUSED(on)
-
-    try {
-
-        ui->txtViewFilter->setText(QString());
-
-    } catch(QString err) {
-        using namespace Core::MainWindow;
-        MainWindow::instance()->notify(tr("Failed to open filtering: %1").arg(err), NotificationWidget::Critical);
-    } catch(...) {
-        using namespace Core::MainWindow;
-        MainWindow::instance()->notify(tr("Failed to open filtering."), NotificationWidget::Critical);
     }
 }
 

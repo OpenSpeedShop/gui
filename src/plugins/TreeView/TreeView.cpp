@@ -60,6 +60,11 @@ TreeView::TreeView(QWidget *parent) :
     oldDelegate->deleteLater();
 }
 
+TreeView::~TreeView()
+{
+}
+
+
 /*! \fn TreeView::model()
     \brief Reimplemented in order to wrap the model in a proxy for easier filtering and sorting.
     \reimp QTreeView::model()
@@ -106,32 +111,31 @@ void TreeView::selectionChanged(const QItemSelection &selected, const QItemSelec
     QTreeView::selectionChanged(selected, deselected);
 }
 
-QString TreeView::filter() const
+QString TreeView::viewFilter() const
 {
     QSortFilterProxyModel *proxyModel = qobject_cast<QSortFilterProxyModel *>(QTreeView::model());
     return proxyModel->filterRegExp().pattern();
 }
 
-void TreeView::setFilter(const QString &regex)
+void TreeView::setViewFilter(const QString &regex)
 {
     QSortFilterProxyModel *proxyModel = qobject_cast<QSortFilterProxyModel *>(QTreeView::model());
     selectionModel()->clear();
     proxyModel->setFilterRegExp(regex);
 }
 
-int TreeView::filterColumn() const
+int TreeView::viewFilterColumn() const
 {
     QSortFilterProxyModel *proxyModel = qobject_cast<QSortFilterProxyModel *>(QTreeView::model());
     return proxyModel->filterKeyColumn();
 }
 
-void TreeView::setFilterColumn(int column)
+void TreeView::setViewFilterColumn(int column)
 {
     QSortFilterProxyModel *proxyModel = qobject_cast<QSortFilterProxyModel *>(QTreeView::model());
     selectionModel()->clear();
     proxyModel->setFilterKeyColumn(column);
 }
-
 
 } // namespace TreeView
 } // namespace Plugins

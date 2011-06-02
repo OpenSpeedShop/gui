@@ -27,8 +27,8 @@ OpenSpeedShop.subdir         = OpenSpeedShop
 DirectConnection.subdir      = DirectConnection
 DirectConnection.depends     = OpenSpeedShop
 
-TreeView.subdir              = TreeView
-TreeView.depends             = OpenSpeedShop
-
 Example.subdir               = Example
 Example.depends              = OpenSpeedShop
+
+TreeView.subdir              = TreeView
+TreeView.depends             = OpenSpeedShop

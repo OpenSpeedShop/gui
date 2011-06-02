@@ -28,19 +28,21 @@
 #ifndef IVIEWPLUGIN_H
 #define IVIEWPLUGIN_H
 
+#include <QtPlugin>
 #include <QString>
 #include <QAbstractItemModel>
 #include <QAbstractItemView>
+#include "ViewManagerLibrary.h"
 
 namespace Plugins {
 namespace OpenSpeedShop {
 
-class IViewPlugin
+class VIEWMANAGER_EXPORT IViewPlugin
 {
 public:
-    explicit IViewPlugin() {}
-    virtual bool handles(QAbstractItemModel *model) = 0;
-    virtual QAbstractItemView *view(QAbstractItemModel *model) = 0;
+    virtual QString viewName() = 0;
+    virtual bool viewHandles(QAbstractItemModel *model) = 0;
+    virtual QAbstractItemView *viewWidget(QAbstractItemModel *model) = 0;
 };
 
 } // namespace OpenSpeedShop

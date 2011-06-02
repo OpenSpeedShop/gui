@@ -25,27 +25,27 @@
 
  */
 
-#include "IViewPlugin.h"
+#ifndef IVIEWFILTERABLE_H
+#define IVIEWFILTERABLE_H
+
+#include <QtPlugin>
+#include "ViewManagerLibrary.h"
 
 namespace Plugins {
 namespace OpenSpeedShop {
 
-/*! \fn handles()
-    \brief Returns true if the view can handle the supplied model.
-    \param model Is a pointer to the model that the caller wishes to handle.
-    \returns true if the model can be handled; otherwise returns false.
-    \exceptions None.
-    \sa view()
- */
-
-/*! \fn view()
-    \brief Factory function to create a pointer to a new view referencing the supplied model.
-    \note The view is not memory managed by this plugin, and must be handled by the caller.
-    \param model Is a pointer to the model that the caller wishes the returned view to handle.
-    \returns NULL if the model cannot be handled by this view.
-    \sa handles()
-    \exceptions None.
- */
+class VIEWMANAGER_EXPORT IViewFilterable
+{
+public:
+    virtual QString viewFilter() const = 0;
+    virtual void setViewFilter(const QString &regex) = 0;
+    virtual int viewFilterColumn() const = 0;
+    virtual void setViewFilterColumn(int column = 0) = 0;
+};
 
 } // namespace OpenSpeedShop
 } // namespace Plugins
+
+Q_DECLARE_INTERFACE(Plugins::OpenSpeedShop::IViewFilterable, "org.openspeedshop.gui.IViewFilterable/0.1")
+
+#endif // IVIEWFILTERABLE_H

@@ -62,7 +62,6 @@ protected:
 protected slots:
     void descriptorNameChanged(ModelDescriptor *descriptor = NULL);
     void descriptorTypeChanged(ModelDescriptor *descriptor = NULL);
-
 };
 
 } // namespace OpenSpeedShop

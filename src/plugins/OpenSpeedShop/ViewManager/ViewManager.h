@@ -45,10 +45,12 @@ public:
     void shutdown();
 
     void registerView(IViewPlugin *viewPlugin);
+    QStringList viewNames(QAbstractItemModel *model = NULL);
+    QAbstractItemView *viewWidget(QString name, QAbstractItemModel *model);
 
 protected:
     ViewManager(QObject *parent = 0);
-    QList<IViewPlugin *> m_viewPlugins;
+    QMap<QString, IViewPlugin *> m_viewPlugins;
 };
 
 } // namespace OpenSpeedShop

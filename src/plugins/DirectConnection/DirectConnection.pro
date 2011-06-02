@@ -23,7 +23,6 @@ SOURCES           += DirectConnectionPlugin.cpp \
                      DirectConnection.cpp \
                      DirectConnectionPage.cpp
 
-
 HEADERS           += DirectConnectionPlugin.h \
                      DirectConnection.h \
                      DirectConnectionPage.h

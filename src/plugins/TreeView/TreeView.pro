@@ -16,20 +16,19 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 include(../plugins.pri)
+TARGET             = TreeView
 
-TARGET        = TreeView
+SOURCES           += TreeViewPlugin.cpp \
+                     TreeView.cpp \
+                     Delegate.cpp
+                     
+HEADERS           += TreeViewPlugin.h \
+                     TreeView.h \
+                     Delegate.h
 
-SOURCES      += TreeViewPlugin.cpp \
-                TreeView.cpp \
-                Delegate.cpp
-
-HEADERS      += TreeView.h \
-                Delegate.h \
-                TreeViewPlugin.h
-
-FORMS        +=
-RESOURCES    +=
-QT           +=
+FORMS             +=
+RESOURCES         +=
+QT                +=
 
 INCLUDEPATH       += $$quote($${SOURCE_PATH}/plugins/OpenSpeedShop)
 DEPENDPATH        += $$quote($${SOURCE_PATH}/plugins/OpenSpeedShop)

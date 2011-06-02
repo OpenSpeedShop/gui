@@ -25,27 +25,31 @@
 
  */
 
-#ifndef TREEVIEW_H
-#define TREEVIEW_H
+#ifndef TREEVIEWM_H
+#define TREEVIEWM_H
 
 #include <QTreeView>
+#include <OpenSpeedShop/ViewManager/IViewFilterable.h>
 
 namespace Plugins {
 namespace TreeView {
 
-class TreeView : public QTreeView
+class TreeView : public QTreeView, public Plugins::OpenSpeedShop::IViewFilterable
 {
     Q_OBJECT
+    Q_INTERFACES(Plugins::OpenSpeedShop::IViewFilterable)
+
 public:
     explicit TreeView(QWidget *parent = 0);
+    ~TreeView();
 
     QAbstractItemModel *model() const;
     void setModel(QAbstractItemModel *model);
 
-    QString filter() const;
-    void setFilter(const QString &regex);
-    int filterColumn() const;
-    void setFilterColumn(int column = 0);
+    QString viewFilter() const;
+    void setViewFilter(const QString &regex);
+    int viewFilterColumn() const;
+    void setViewFilterColumn(int column = 0);
 
 protected slots:
     void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
@@ -55,4 +59,4 @@ protected slots:
 } // namespace TreeView
 } // namespace Plugins
 
-#endif // TREEVIEW_H
+#endif // TREEVIEWM_H

@@ -1,5 +1,5 @@
 /*!
-   \file
+   \file TreeViewPlugin.h
    \author Dane Gardner <dane.gardner@gmail.com>
    \version
 
@@ -28,8 +28,9 @@
 #ifndef TREEVIEWPLUGIN_H
 #define TREEVIEWPLUGIN_H
 
-#include <QObject>
+#include <PluginManager/PluginManager.h>
 #include <PluginManager/IPlugin.h>
+#include <OpenSpeedShop/ViewManager/ViewManager.h>
 #include <OpenSpeedShop/ViewManager/IViewPlugin.h>
 
 namespace Plugins {
@@ -40,23 +41,26 @@ class TreeViewPlugin :
         public Core::PluginManager::IPlugin,
         public Plugins::OpenSpeedShop::IViewPlugin
 {
+
     Q_OBJECT
     Q_INTERFACES(Core::PluginManager::IPlugin)
     Q_INTERFACES(Plugins::OpenSpeedShop::IViewPlugin)
 
 public:
-    explicit TreeViewPlugin(QObject *parent = 0);
-    ~TreeViewPlugin();
+    TreeViewPlugin(QObject *parent = 0);
 
+    /* IPlugin Interface */
+    ~TreeViewPlugin();
     bool initialize(QStringList &args, QString *err);
     void shutdown();
-
     QString name();
     QString version();
     QList<Core::PluginManager::Dependency> dependencies();
 
-    bool handles(QAbstractItemModel *model);
-    QAbstractItemView *view(QAbstractItemModel *model);
+    /* IViewPlugin interface */
+    QString viewName();
+    bool viewHandles(QAbstractItemModel *model);
+    QAbstractItemView *viewWidget(QAbstractItemModel *model);
 
 protected:
     QString m_Name;

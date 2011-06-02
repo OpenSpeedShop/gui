@@ -27,14 +27,15 @@ signals:
 protected:
     QUuid m_ExperimentUid;
     QAbstractItemView *m_CurrentView;
+    QAbstractItemModel *m_CurrentModel;
 
     void loadModelDescriptors(QString experimentType = QString());
 
 protected slots:
+    void on_cmbViews_currentIndexChanged(int index);
     void on_btnAddModel_clicked();
     void on_txtViewFilter_textChanged(const QString &text);
     void on_cmbViewFilterColumn_currentIndexChanged(int index);
-    void on_grpViewFilter_toggled(bool on);
     void getModel(QUuid descriptorUid);
 
 private:

@@ -55,7 +55,32 @@ void ViewManager::shutdown()
 
 void ViewManager::registerView(IViewPlugin *viewPlugin)
 {
+    m_viewPlugins.insert(viewPlugin->viewName(), viewPlugin);
 }
+
+QStringList ViewManager::viewNames(QAbstractItemModel *model)
+{
+    QStringList nameList;
+    foreach(IViewPlugin *viewPlugin, m_viewPlugins.values()) {
+        if(model) {
+            if(viewPlugin->viewHandles(model)) {
+                nameList.append(viewPlugin->viewName());
+            }
+        } else {
+            nameList.append(viewPlugin->viewName());
+        }
+    }
+    return nameList;
+}
+
+QAbstractItemView *ViewManager::viewWidget(QString name, QAbstractItemModel *model)
+{
+    if(name.isEmpty()) return NULL;
+
+    IViewPlugin *viewPlugin = m_viewPlugins.value(name, NULL);
+    return viewPlugin->viewWidget(model);
+}
+
 
 
 } // namespace OpenSpeedShop

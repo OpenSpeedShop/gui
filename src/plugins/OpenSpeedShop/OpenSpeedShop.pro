@@ -42,7 +42,8 @@ SOURCES      += OpenSpeedShopPlugin.cpp \
                 ConnectionManager/ConnectionManagerSettingPageFactory.cpp \
                 ConnectionManager/IConnectionPage.cpp \
                 ViewManager/ViewManager.cpp \
-                ViewManager/IViewPlugin.cpp
+                ViewManager/IViewPlugin.cpp \
+    ViewManager/IViewFilterable.cpp
 
 HEADERS      += OpenSpeedShopPlugin.h \
                 Settings/SettingPageFactory.h \
@@ -70,7 +71,8 @@ HEADERS      += OpenSpeedShopPlugin.h \
                 ConnectionManager/IConnectionPage.h \
                 ViewManager/ViewManager.h \
                 ViewManager/IViewPlugin.h \
-    ViewManager/ViewManagerLibrary.h
+    ViewManager/ViewManagerLibrary.h \
+    ViewManager/IViewFilterable.h
 
 FORMS        += Settings/SettingPage.ui \
                 AboutDialog.ui \
