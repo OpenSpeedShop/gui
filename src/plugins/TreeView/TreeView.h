@@ -29,10 +29,14 @@
 #define TREEVIEWM_H
 
 #include <QTreeView>
+#include <QSortFilterProxyModel>
 #include <OpenSpeedShop/ViewManager/IViewFilterable.h>
+#include "Delegate.h"
 
 namespace Plugins {
 namespace TreeView {
+
+class Delegate;
 
 class TreeView : public QTreeView, public Plugins::OpenSpeedShop::IViewFilterable
 {
@@ -53,6 +57,10 @@ public:
 
 protected slots:
     void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
+
+protected:
+    Delegate m_ItemDelegate;
+    QSortFilterProxyModel m_ProxyModel;
 
 };
 

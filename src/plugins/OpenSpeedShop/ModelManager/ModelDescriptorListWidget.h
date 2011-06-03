@@ -51,6 +51,9 @@ protected slots:
     void itemSingleClicked(QModelIndex index);
     void itemDoubleClicked(QModelIndex index);
 
+private:
+    QSortFilterProxyModel m_SortFilterProxyModel;
+
 };
 
 

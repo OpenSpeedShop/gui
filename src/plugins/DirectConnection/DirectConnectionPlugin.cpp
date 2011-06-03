@@ -1,7 +1,7 @@
 /*!
-   \file 
+   \file
    \author Dane Gardner <dane.gardner@gmail.com>
-   \version 
+   \version
 
    \section LICENSE
    This file is part of the Open|SpeedShop Graphical User Interface
@@ -29,7 +29,6 @@
 
 #include <PluginManager/PluginManager.h>
 #include <ConnectionManager/ConnectionManager.h>
-#include "DirectConnection.h"
 
 using namespace Plugins::OpenSpeedShop;
 
@@ -37,7 +36,7 @@ namespace Plugins {
 namespace DirectConnection {
 
 /*! \namespace Plugins::DirectConnection
-    \brief 
+    \brief
  */
 
 /*! \class DirectConnectionPlugin
@@ -73,10 +72,11 @@ bool DirectConnectionPlugin::initialize(QStringList &args, QString *err)
     QList<ConnectionManager *> *managers = pluginManager->getObjects<ConnectionManager>();
     if(managers->count()) {
         ConnectionManager *connectionManager = managers->at(0);
-        connectionManager->registerConnection(new DirectConnection());
+        connectionManager->registerConnection(&m_DirectConnection);
+        return true;
     }
 
-    return true;
+    return false;
 }
 
 void DirectConnectionPlugin::shutdown()

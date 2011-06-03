@@ -30,6 +30,7 @@
 
 #include <QObject>
 #include <QTcpSocket>
+#include <QTimer>
 #include <QDataStream>
 #include <ConnectionManager/IConnection.h>
 
@@ -60,24 +61,23 @@ public:
     void send(QString command);
     QString receive();
 
+protected:
+    void writeSettings();
+    void readSettings();
+    void setState(States state);
+
 protected slots:
     void readReady();
     void error(QAbstractSocket::SocketError);
     void connected();
     void disconnected();
 
-protected:
-    void writeSettings();
-    void readSettings();
-    void setState(States state);
-
-    QTcpSocket *m_TcpSocket;
-    QTimer *m_TimeOut;
+private:
+    QTcpSocket m_TcpSocket;
     QString m_HostName;
     int m_Port;
     IConnection::States m_State;
     QString m_ErrorMessage;
-
     QByteArray m_Buffer;
     quint32 m_BufferSize;
 

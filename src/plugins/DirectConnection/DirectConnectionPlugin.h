@@ -1,7 +1,7 @@
 /*!
-   \file 
+   \file
    \author Dane Gardner <dane.gardner@gmail.com>
-   \version 
+   \version
 
    \section LICENSE
    This file is part of the Open|SpeedShop Graphical User Interface
@@ -30,11 +30,10 @@
 
 #include <QObject>
 #include <PluginManager/IPlugin.h>
+#include "DirectConnection.h"
 
 namespace Plugins {
 namespace DirectConnection {
-
-class DirectConnection;
 
 class DirectConnectionPlugin : public QObject, public Core::PluginManager::IPlugin
 {
@@ -52,17 +51,16 @@ public:
     QString version();
     QList<Core::PluginManager::Dependency> dependencies();
 
-signals:
-
-public slots:
-
 protected:
-    QString m_Name;
-    QString m_Version;
-    QList<Core::PluginManager::Dependency> m_Dependencies;
 
     void readSettings();
     void writeSettings();
+
+private:
+    QString m_Name;
+    QString m_Version;
+    QList<Core::PluginManager::Dependency> m_Dependencies;
+    DirectConnection m_DirectConnection;
 
 };
 

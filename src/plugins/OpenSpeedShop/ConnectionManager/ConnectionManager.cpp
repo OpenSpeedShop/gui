@@ -29,12 +29,11 @@
 
 #include <QApplication>
 #include <QMessageBox>
+#include <MainWindow/MainWindow.h>
 #include <SettingManager/SettingManager.h>
 
 #include "IConnection.h"
-#include "ServerAdapter.h"
 #include "ServerCommand.h"
-#include "ConnectionManagerSettingPageFactory.h"
 
 namespace Plugins {
 namespace OpenSpeedShop {
@@ -45,14 +44,15 @@ namespace OpenSpeedShop {
     \sa ConnectionManagerPlugin
  */
 
-ConnectionManager *m_ConnectionManagerInstance;
 ConnectionManager *ConnectionManager::instance()
 {
-    return m_ConnectionManagerInstance? m_ConnectionManagerInstance: m_ConnectionManagerInstance = new ConnectionManager();
+    static ConnectionManager instance;
+    return &instance;
 }
 
 ConnectionManager::ConnectionManager(QObject *parent) :
-    QObject(parent)
+    QObject(parent),
+    m_ServerConnect(this)
 {
     m_CurrentConnection = NULL;
     m_CurrentAdapter = NULL;
@@ -75,10 +75,23 @@ bool ConnectionManager::initialize()
 {
     /*** Register the settings page ***/
     Core::SettingManager::SettingManager *settingManager = Core::SettingManager::SettingManager::instance();
-    settingManager->registerPageFactory(new ConnectionManagerSettingPageFactory());
+    settingManager->registerPageFactory(&m_ConnectionManagerSettingPageFactory);
+
+
+    /*** Register our menu structure ***/
+    Core::MainWindow::MainWindow *mainWindow = Core::MainWindow::MainWindow::instance();
+    foreach(QAction *action, mainWindow->menuBar()->actions()) {
+        if(action->text() == tr("Tools")) {
+            m_ServerConnect.setText(tr("Connect to server"));
+            m_ServerConnect.setToolTip(tr("Connects to an Open|SpeedShop server"));
+            connect(&m_ServerConnect, SIGNAL(triggered()), this, SLOT(serverConnect()));
+            action->menu()->insertAction(action->menu()->actions().at(0), &m_ServerConnect);
+        }
+    }
+
 
     //DEBUG:
-    registerAdapter(new ServerAdapter(this));
+    registerAdapter(&m_ServerAdapter);
 
     readSettings();
 
@@ -97,11 +110,6 @@ void ConnectionManager::shutdown()
     }
 
     writeSettings();
-
-    /* self destruct */
-    //FIXME: There should be some handling for the case where instance() is called again after this
-    delete(m_ConnectionManagerInstance);
-    m_ConnectionManagerInstance = NULL;
 }
 
 /*! \fn ConnectionManager::readSettings()
@@ -169,7 +177,7 @@ void ConnectionManager::registerConnection(IConnection *connection)
 void ConnectionManager::setCurrentConnection(IConnection *connection)
 {
     if(connection && !m_Connections.contains(connection))
-        throw new QString("Cannot set current connection to a connection that is not registered");
+        throw tr("Cannot set current connection to a connection that is not registered");
 
     if(connection == m_CurrentConnection)
         return;
@@ -208,7 +216,7 @@ IAdapter *ConnectionManager::currentAdapter()
 void ConnectionManager::setCurrentAdapter(IAdapter *adapter)
 {
     if(adapter && !m_Adapters.contains(adapter))
-        throw new QString("Cannot set current adapter to an adapter that is not registered");
+        throw tr("Cannot set current adapter to an adapter that is not registered");
 
     if(adapter == m_CurrentAdapter)
         return;
@@ -221,7 +229,7 @@ IAdapter *ConnectionManager::askAdapter()
 {
     ConnectionManager *connectionManager = ConnectionManager::instance();
     if(!connectionManager->isConnected()) {
-        if(!connectionManager->askConnect()) {
+        if(!connectionManager->askServerConnect()) {
             return NULL;
         }
     }
@@ -237,16 +245,15 @@ void ConnectionManager::connectionStateChanged()
 {
     if(m_CurrentConnection->state() == IConnection::State_Connected) {
         /* Get the version string from the server, so we can load the right adapter */
-        ServerCommand *serverCommand = new ServerCommand("version", "Server", this);
-        sendCommand(serverCommand);
-        while(serverCommand->state() != ServerCommand::State_Response) QApplication::processEvents();
-        QDomElement responseElement = serverCommand->response().firstChildElement("Response");
+        ServerCommand serverCommand("version", "Server");
+        sendCommand(&serverCommand);
+        while(serverCommand.state() != ServerCommand::State_Response) QApplication::processEvents();
+        QDomElement responseElement = serverCommand.response().firstChildElement("Response");
         if(responseElement.isNull()) throw tr("Unable to get version from server");
         QDomElement serverResponseElement = responseElement.firstChildElement("ServerResponse");
         if(serverResponseElement.isNull()) throw tr("Unable to get version from server");
         if(!serverResponseElement.hasAttribute("version")) throw tr("Unable to get version from server");
         QString version = serverResponseElement.attribute("version");
-        delete serverCommand;
 
         /* Find compatible adapter based on the server version */
         foreach(IAdapter *adapter, m_Adapters) {
@@ -283,7 +290,7 @@ void ConnectionManager::connectionReadyRecieve()
     IConnection *connection = qobject_cast<IConnection *>(QObject::sender());
 
     if(!connection)
-        throw new QString("Caught signal from unexpected object");
+        throw tr("Caught signal from unexpected object");
 
     QDomDocument document("Response");
     document.setContent(connection->receive());
@@ -330,7 +337,7 @@ bool ConnectionManager::isConnected()
     return currentConnection()->state() == IConnection::State_Connected;
 }
 
-bool ConnectionManager::askConnect() {
+bool ConnectionManager::askServerConnect() {
     IConnection *connection = currentConnection();
     if(!connection) return false;
 
@@ -372,6 +379,22 @@ void ConnectionManager::disconnectFromServer()
         connection->disconnectFromServer();
     }
 }
+
+void ConnectionManager::serverConnect()
+{
+    try {
+
+        connectToServer();
+
+    } catch(QString err) {
+        using namespace Core::MainWindow;
+        MainWindow::instance()->notify(tr("Client error while attempting to connect to server: %1").arg(err), NotificationWidget::Critical);
+    } catch(...) {
+        using namespace Core::MainWindow;
+        MainWindow::instance()->notify(tr("Client error while attempting to connect to server."), NotificationWidget::Critical);
+    }
+}
+
 
 
 } // namespace OpenSpeedShop

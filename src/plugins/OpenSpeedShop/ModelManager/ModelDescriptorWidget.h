@@ -20,7 +20,6 @@ class ModelDescriptorWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit ModelDescriptorWidget(QWidget *parent = 0);
     explicit ModelDescriptorWidget(ModelDescriptor *modelDescriptor, QWidget *parent = 0);
     ~ModelDescriptorWidget();
 

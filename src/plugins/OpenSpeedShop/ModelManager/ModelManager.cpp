@@ -27,17 +27,30 @@ ModelManager *ModelManager::instance()
 }
 
 ModelManager::ModelManager(QObject *parent) :
-    QObject(parent)
+    QObject(parent),
+    m_ModelManagerDialog(this)
 {
 }
 
 void ModelManager::initialize()
 {
+    Core::MainWindow::MainWindow *mainWindow = Core::MainWindow::MainWindow::instance();
+
     try {
         importDescriptors();
     } catch(QString err) {
         using namespace Core::MainWindow;
         MainWindow::instance()->notify(err, NotificationWidget::Critical);
+    }
+
+    /*** Register our menu structure ***/
+    foreach(QAction *action, mainWindow->menuBar()->actions()) {
+        if(action->text() == tr("Tools")) {
+            m_ModelManagerDialog.setText(tr("Models Manager"));
+            m_ModelManagerDialog.setToolTip(tr("Displays the Open|SpeedShop model manager dialog"));
+            connect(&m_ModelManagerDialog, SIGNAL(triggered()), this, SLOT(modelManagerDialog()));
+            action->menu()->insertAction(action->menu()->actions().at(0), &m_ModelManagerDialog);
+        }
     }
 }
 
@@ -168,6 +181,21 @@ void ModelManager::descriptorTypeChanged(ModelDescriptor *descriptor)
     experimentTypeItem->appendRow(descriptorItem);
 }
 
+void ModelManager::modelManagerDialog()
+{
+    try {
+
+        ModelManagerDialog models;
+        models.exec();
+
+    } catch(QString err) {
+        using namespace Core::MainWindow;
+        MainWindow::instance()->notify(tr("Failed to open model manager dialog: %1").arg(err), NotificationWidget::Critical);
+    } catch(...) {
+        using namespace Core::MainWindow;
+        MainWindow::instance()->notify(tr("Failed to open model manager dialog."), NotificationWidget::Critical);
+    }
+}
 
 /*! \brief Fetches default descriptors from the server and adds them to the descriptor pool.
     Phase II */
@@ -286,7 +314,7 @@ QUuid ModelManager::fetchModel(const QUuid &descriptorUid, const QUuid &experime
 {
     ConnectionManager *connectionManager = ConnectionManager::instance();
     if(!connectionManager->isConnected()) {
-        if(!connectionManager->askConnect()) {
+        if(!connectionManager->askServerConnect()) {
             throw tr("Server not connected");
         }
     }

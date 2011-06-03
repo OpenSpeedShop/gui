@@ -97,9 +97,11 @@ protected:
     QUuid experimentUid(qint64 experimentId);
 
     void loadMetrics();
-    QDomDocument m_MetricsList;
 
+private:
+    QDomDocument m_MetricsList;
     QHash<QUuid, int> m_ExperimentIds;
+
 };
 
 } // namespace OpenSpeedShop

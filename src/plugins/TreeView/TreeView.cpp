@@ -26,9 +26,7 @@
  */
 
 #include "TreeView.h"
-#include "Delegate.h"
 
-#include <QSortFilterProxyModel>
 
 namespace Plugins {
 namespace TreeView {
@@ -45,18 +43,17 @@ namespace TreeView {
 TreeView::TreeView(QWidget *parent) :
     QTreeView(parent)
 {
-    QSortFilterProxyModel *proxyModel = new QSortFilterProxyModel(this);
-    proxyModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
-    proxyModel->setFilterRole(Qt::EditRole);
-    proxyModel->setSortCaseSensitivity(Qt::CaseInsensitive);
-    proxyModel->setSortRole(Qt::EditRole);
-    QTreeView::setModel(proxyModel);
+    m_ProxyModel.setFilterCaseSensitivity(Qt::CaseInsensitive);
+    m_ProxyModel.setFilterRole(Qt::EditRole);
+    m_ProxyModel.setSortCaseSensitivity(Qt::CaseInsensitive);
+    m_ProxyModel.setSortRole(Qt::EditRole);
+    QTreeView::setModel(&m_ProxyModel);
 
     setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
     setSortingEnabled(true);
 
     QAbstractItemDelegate *oldDelegate = itemDelegate();
-    setItemDelegate(new Delegate(this));
+    setItemDelegate(&m_ItemDelegate);
     oldDelegate->deleteLater();
 }
 

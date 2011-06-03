@@ -62,9 +62,6 @@ bool ExamplePlugin::initialize(QStringList &args, QString *err)
     Q_UNUSED(args)
     Q_UNUSED(err)
 
-    Plugins::OpenSpeedShop::ConnectionManager *connectionManager = Plugins::OpenSpeedShop::ConnectionManager::instance();
-    connectionManager->objectName();
-
     return true;
 }
 

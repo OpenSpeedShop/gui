@@ -31,11 +31,11 @@
 #include <QtCore>
 #include <MainWindow/MainWindow.h>
 #include <PluginManager/IPlugin.h>
+#include "OpenSpeedShopWidget.h"
+#include "Settings/SettingPageFactory.h"
 
 namespace Plugins {
 namespace OpenSpeedShop {
-
-class OpenSpeedShopWidget;
 
 class OpenSpeedShopPlugin : public QObject, public Core::PluginManager::IPlugin
 {
@@ -55,15 +55,16 @@ public:
 
 public slots:
     void aboutDialog();
-    void modelManagerDialog();
-    void serverConnect();
 
 protected:
     QString m_Name;
     QString m_Version;
     QList<Core::PluginManager::Dependency> m_Dependencies;
 
-    OpenSpeedShopWidget *_mainWidget;
+    OpenSpeedShopWidget m_MainWidget;
+    SettingPageFactory m_SettingPageFactory;
+
+    QAction m_AboutPage;
 
     void readSettings();
     void writeSettings();

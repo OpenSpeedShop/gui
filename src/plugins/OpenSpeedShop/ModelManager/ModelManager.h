@@ -3,9 +3,9 @@
 
 #include <QObject>
 #include <QDomDocument>
-
 #include <QStandardItemModel>
 #include <QUuid>
+#include <QAction>
 
 namespace Plugins {
 namespace OpenSpeedShop {
@@ -60,8 +60,13 @@ protected:
     QHash<QUuid, DataModel*> m_ModelPool;
 
 protected slots:
+    void modelManagerDialog();
     void descriptorNameChanged(ModelDescriptor *descriptor = NULL);
     void descriptorTypeChanged(ModelDescriptor *descriptor = NULL);
+
+private:
+    QAction m_ModelManagerDialog;
+
 };
 
 } // namespace OpenSpeedShop

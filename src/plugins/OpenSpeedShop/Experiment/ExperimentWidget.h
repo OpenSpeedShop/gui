@@ -25,10 +25,6 @@ signals:
     void windowTitleChanged();
 
 protected:
-    QUuid m_ExperimentUid;
-    QAbstractItemView *m_CurrentView;
-    QAbstractItemModel *m_CurrentModel;
-
     void loadModelDescriptors(QString experimentType = QString());
 
 protected slots:
@@ -40,6 +36,9 @@ protected slots:
 
 private:
     Ui::ExperimentWidget *ui;
+    QUuid m_ExperimentUid;
+    QAbstractItemView *m_CurrentView;
+    QAbstractItemModel *m_CurrentModel;
 
 };
 

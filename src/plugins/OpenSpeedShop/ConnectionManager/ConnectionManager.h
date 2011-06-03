@@ -34,6 +34,8 @@
 #include <MainWindow/MainWindow.h>
 #include <MainWindow/NotificationWidget.h>
 #include "ConnectionManagerLibrary.h"
+#include "ServerAdapter.h"
+#include "ConnectionManagerSettingPageFactory.h"
 #include "IAdapter.h"
 
 namespace Plugins {
@@ -62,7 +64,7 @@ public:
     void connectToServer();
     void disconnectFromServer();
     bool isConnected();
-    bool askConnect();
+    bool askServerConnect();
 
 
 signals:
@@ -92,6 +94,12 @@ protected:
 protected slots:
     void connectionReadyRecieve();
     void connectionStateChanged();
+    void serverConnect();
+
+private:
+    QAction m_ServerConnect;
+    ConnectionManagerSettingPageFactory m_ConnectionManagerSettingPageFactory;
+    ServerAdapter m_ServerAdapter;
 
     friend class ConnectionWidget;
 };

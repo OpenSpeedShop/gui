@@ -9,7 +9,7 @@ namespace OpenSpeedShop {
 ModelDescriptorListWidget::ModelDescriptorListWidget(QAbstractItemModel *descriptorsModel, QWidget *parent) :
     QTreeView(parent)
 {
-    QTreeView::setModel(new QSortFilterProxyModel(this));
+    QTreeView::setModel(&m_SortFilterProxyModel);
     setEditTriggers(QAbstractItemView::NoEditTriggers);
     setSortingEnabled(true);
 

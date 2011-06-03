@@ -55,12 +55,18 @@ DirectConnection::DirectConnection(QObject *parent) :
 
     readSettings();
 
-    m_TcpSocket = new QTcpSocket(this);
-    connect(m_TcpSocket, SIGNAL(readyRead()), this, SLOT(readReady()));
-    connect(m_TcpSocket, SIGNAL(connected()), this, SLOT(connected()));
-    connect(m_TcpSocket, SIGNAL(disconnected()), this, SLOT(disconnected()));
-    connect(m_TcpSocket, SIGNAL(error(QAbstractSocket::SocketError)),
-            this, SLOT(error(QAbstractSocket::SocketError)));
+    connect(&m_TcpSocket, SIGNAL(readyRead()),
+            this,         SLOT(readReady()));
+
+    connect(&m_TcpSocket, SIGNAL(connected()),
+            this,         SLOT(connected()));
+
+    connect(&m_TcpSocket, SIGNAL(disconnected()),
+            this,         SLOT(disconnected()));
+
+    connect(&m_TcpSocket, SIGNAL(error(QAbstractSocket::SocketError)),
+            this,         SLOT(error(QAbstractSocket::SocketError)));
+
 }
 
 QString DirectConnection::name() const
@@ -81,26 +87,26 @@ IConnectionPage *DirectConnection::page()
 void DirectConnection::connectToServer()
 {
     setState(State_Connecting);
-    m_TcpSocket->connectToHost(m_HostName, m_Port);
+    m_TcpSocket.connectToHost(m_HostName, m_Port);
 }
 
 void DirectConnection::disconnectFromServer()
 {
     setState(State_Disconnecting);
-    m_TcpSocket->disconnectFromHost();
+    m_TcpSocket.disconnectFromHost();
 }
 
 void DirectConnection::abort()
 {
     setState(State_Disconnected);
-    m_TcpSocket->abort();
+    m_TcpSocket.abort();
 }
 
 void DirectConnection::readReady()
 {
     // If the buffer is empty, get the next transmission size
     if(m_BufferSize <= 0) {
-        QByteArray buffer = m_TcpSocket->read(sizeof(m_BufferSize));
+        QByteArray buffer = m_TcpSocket.read(sizeof(m_BufferSize));
 
         bool okay;
         qint32 size = buffer.toHex().toUInt(&okay, 16);
@@ -113,7 +119,7 @@ void DirectConnection::readReady()
 
     // Read the socket's buffer into ours until we've got everything
     if((quint32)m_Buffer.count() < m_BufferSize) {
-        QByteArray data = m_TcpSocket->read(m_BufferSize - m_Buffer.count());
+        QByteArray data = m_TcpSocket.read(m_BufferSize - m_Buffer.count());
         m_Buffer.append(data);
 
 #ifdef DIRECTCONNECTION_DEBUG
@@ -258,7 +264,7 @@ void DirectConnection::send(QString command)
 {
     if(!command.endsWith('\n'))
         command.append('\n');
-    m_TcpSocket->write(command.toLatin1());
+    m_TcpSocket.write(command.toLatin1());
 }
 
 QString DirectConnection::receive()

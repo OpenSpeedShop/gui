@@ -26,7 +26,7 @@
  */
 
 #ifdef QT_DEBUG
-  #include <QtDebug>
+#  include <QtDebug>
 #endif
 
 #include "OpenSpeedShopPlugin.h"
@@ -35,12 +35,9 @@
 #include <SettingManager/SettingManager.h>
 #include <ConnectionManager/ConnectionManager.h>
 #include <ModelManager/ModelManager.h>
-#include <ModelManager/ModelManagerDialog.h>
 #include <ViewManager/ViewManager.h>
 
-#include "Settings/SettingPageFactory.h"
 #include "AboutDialog.h"
-#include "OpenSpeedShopWidget.h"
 
 namespace Plugins {
 namespace OpenSpeedShop {
@@ -60,7 +57,8 @@ namespace OpenSpeedShop {
  */
 
 
-OpenSpeedShopPlugin::OpenSpeedShopPlugin()
+OpenSpeedShopPlugin::OpenSpeedShopPlugin() :
+    m_AboutPage(this)
 {
     m_Name = "OpenSpeedShop";
     m_Version = "0.1.dev";
@@ -86,31 +84,19 @@ bool OpenSpeedShopPlugin::initialize(QStringList &args, QString *err)
     mainWindow->setWindowTitle(QString("Open|SpeedShop%1").arg(QChar(0x2122))); //Trademark
 
     /*** Set our main widget in the main window ***/
-    _mainWidget = new OpenSpeedShopWidget(mainWindow);
-    mainWindow->setCentralWidget(_mainWidget);
+    mainWindow->setCentralWidget(&m_MainWidget);
 
-    /*** Register the settings page ***/
+    /*** Register the settings page factory ***/
     Core::SettingManager::SettingManager *settingManager = Core::SettingManager::SettingManager::instance();
-    settingManager->registerPageFactory(new SettingPageFactory());
+    settingManager->registerPageFactory(&m_SettingPageFactory);
 
     /*** Register our menu structure ***/
     foreach(QAction *action, mainWindow->menuBar()->actions()) {
         if(action->text() == tr("Help")) {
-            QAction *about = new QAction(tr("About Open|SpeedShop"), this);
-            about->setToolTip(tr("Displays the Open|SpeedShop about dialog"));
-            connect(about, SIGNAL(triggered()), this, SLOT(aboutDialog()));
-            action->menu()->addAction(about);
-        }
-        if(action->text() == tr("Tools")) {
-            QAction *serverConnect = new QAction(tr("Connect to server"), this);
-            serverConnect->setToolTip(tr("Connects to an Open|SpeedShop server"));
-            connect(serverConnect, SIGNAL(triggered()), this, SLOT(serverConnect()));
-            action->menu()->insertAction(action->menu()->actions().at(0), serverConnect);
-
-            QAction *modelManagerDialog = new QAction(tr("Models Manager"), this);
-            modelManagerDialog->setToolTip(tr("Displays the Open|SpeedShop model manager dialog"));
-            connect(modelManagerDialog, SIGNAL(triggered()), this, SLOT(modelManagerDialog()));
-            action->menu()->insertAction(action->menu()->actions().at(0), modelManagerDialog);
+            m_AboutPage.setText(tr("About Open|SpeedShop"));
+            m_AboutPage.setToolTip(tr("Displays the Open|SpeedShop about dialog"));
+            connect(&m_AboutPage, SIGNAL(triggered()), this, SLOT(aboutDialog()));
+            action->menu()->addAction(&m_AboutPage);
         }
     }
 
@@ -155,33 +141,6 @@ void OpenSpeedShopPlugin::aboutDialog()
     }
 }
 
-void OpenSpeedShopPlugin::modelManagerDialog()
-{
-    try {
-        ModelManagerDialog models;
-        models.exec();
-    } catch(QString err) {
-        using namespace Core::MainWindow;
-        MainWindow::instance()->notify(tr("Failed to open model manager dialog: %1").arg(err), NotificationWidget::Critical);
-    } catch(...) {
-        using namespace Core::MainWindow;
-        MainWindow::instance()->notify(tr("Failed to open model manager dialog."), NotificationWidget::Critical);
-    }
-}
-
-void OpenSpeedShopPlugin::serverConnect()
-{
-    try {
-        ConnectionManager *connectionManager = ConnectionManager::instance();
-        connectionManager->connectToServer();
-    } catch(QString err) {
-        using namespace Core::MainWindow;
-        MainWindow::instance()->notify(tr("Client error while attempting to connect to server: %1").arg(err), NotificationWidget::Critical);
-    } catch(...) {
-        using namespace Core::MainWindow;
-        MainWindow::instance()->notify(tr("Client error while attempting to connect to server."), NotificationWidget::Critical);
-    }
-}
 
 QString OpenSpeedShopPlugin::name()
 {
