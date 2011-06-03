@@ -21,7 +21,7 @@ TARGET             = TreeView
 SOURCES           += TreeViewPlugin.cpp \
                      TreeView.cpp \
                      Delegate.cpp
-                     
+
 HEADERS           += TreeViewPlugin.h \
                      TreeView.h \
                      Delegate.h
@@ -32,6 +32,6 @@ QT                +=
 
 INCLUDEPATH       += $$quote($${SOURCE_PATH}/plugins/OpenSpeedShop)
 DEPENDPATH        += $$quote($${SOURCE_PATH}/plugins/OpenSpeedShop)
-LIBS              += -L$$quote(${BUILDDIR}/plugins/OpenSpeedShop/$${POSTFIX}) -lOpenSpeedShop
+LIBS              += -L$$quote($${BUILD_PATH}/plugins/OpenSpeedShop/$${POSTFIX}) -lOpenSpeedShop
 
 #debug: DEFINES += TREEVIEW_DEBUG

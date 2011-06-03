@@ -24,7 +24,7 @@ SOURCES += main.cpp
 HEADERS +=
 FORMS   +=
 
-LIBS    += -L$$quote(${BUILDDIR}/core/lib/$${POSTFIX}) -lCore
+LIBS    += -L$$quote($${BUILD_PATH}/core/lib/$${POSTFIX}) -lCore
 
 #debug:DEFINES    += MAIN_DEBUG
 
