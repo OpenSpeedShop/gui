@@ -1,7 +1,7 @@
 /*!
-   \file 
+   \file
    \author Dane Gardner <dane.gardner@gmail.com>
-   \version 
+   \version
 
    \section LICENSE
    This file is part of the Open|SpeedShop Graphical User Interface
@@ -25,49 +25,15 @@
 
  */
 
-#include "SettingPageFactory.h"
+#ifndef MODELMANAGERLIBRARY_H
+#define MODELMANAGERLIBRARY_H
 
-namespace Plugins {
-namespace OpenSpeedShop {
+#include <QtCore/QtGlobal>
 
-/*!
-   \class SettingPageFactory
-   \brief Handles the interaction between the SettingManager and the
-          Open|SpeedShop SettingPage.
+#if defined(MODELMANAGER_LIBRARY)
+#  define MODELMANAGER_EXPORT Q_DECL_EXPORT
+#else
+#  define MODELMANAGER_EXPORT Q_DECL_IMPORT
+#endif
 
-   This page factory produces the SettingPage for the Open|SpeedShop plugin,
-   and is registered with the SettingManager in the Core set of libraries.
-
-   \sa OpenSpeedShopPlugin, SettingPage, Core::SettingManager
- */
-
-SettingPageFactory::SettingPageFactory(QObject *parent) :
-    QObject(parent)
-{
-}
-
-SettingPageFactory::~SettingPageFactory()
-{
-}
-
-QIcon SettingPageFactory::icon()
-{
-    return QIcon(":/OpenSpeedShop/app.png");
-}
-
-QString SettingPageFactory::name()
-{
-    return tr("Open|SpeedShop");
-}
-
-int SettingPageFactory::priority()
-{
-    return 128;
-}
-
-Core::SettingManager::ISettingPage *SettingPageFactory::createPage()
-{
-    return new SettingPage();
-}
-
-}}
+#endif // MODELMANAGERLIBRARY_H

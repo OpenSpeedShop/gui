@@ -5,7 +5,6 @@
 #include <QListWidgetItem>
 #include <MainWindow/MainWindow.h>
 #include "ConnectionManager/ConnectionManager.h"
-#include "ConnectionManager/ServerAdapter.h"
 
 #ifdef QT_DEBUG
 #  include <QDebug>
@@ -44,11 +43,11 @@ void ModelDescriptorWidget::init()
         }
     }
 
-    IAdapter *serverAdapter = connectionManager->currentAdapter();
-    if(!serverAdapter) throw tr("Server not connected");
+    IAdapter *adapter = connectionManager->currentAdapter();
+    if(!adapter) throw tr("Server not connected");
 
     // Populate the combo box with possible values
-    QStringList experimentTypes = serverAdapter->waitExperimentTypes();
+    QStringList experimentTypes = adapter->waitExperimentTypes();
     if(!experimentTypes.isEmpty()) {
         experimentTypes.sort();
         ui->cmbExperimentType->addItems(experimentTypes);
@@ -74,14 +73,14 @@ void ModelDescriptorWidget::on_cmbExperimentType_currentIndexChanged(int index)
         }
     }
 
-    IAdapter *serverAdapter = connectionManager->currentAdapter();
-    if(!serverAdapter) throw tr("Server not connected");
+    IAdapter *adapter = connectionManager->currentAdapter();
+    if(!adapter) throw tr("Server not connected");
 
 
     QString experimentType = ui->cmbExperimentType->currentText();
 
     ui->lstModifiers->clear();
-    QMap<QString,QString> experimentTypeModifiers = serverAdapter->waitExperimentTypeModifiers(experimentType);
+    QMap<QString,QString> experimentTypeModifiers = adapter->waitExperimentTypeModifiers(experimentType);
     foreach(QString key, experimentTypeModifiers.keys()) {
         QListWidgetItem *item = new QListWidgetItem(key, ui->lstModifiers);
         item->setToolTip(QString("'%1' %2").arg(key).arg(experimentTypeModifiers[key]));
@@ -90,7 +89,7 @@ void ModelDescriptorWidget::on_cmbExperimentType_currentIndexChanged(int index)
     ui->lstModifiers->sortItems(Qt::AscendingOrder);
 
     ui->lstMetrics->clear();
-    QMap<QString,QString> experimentTypeMetrics = serverAdapter->waitExperimentTypeMetrics(experimentType);
+    QMap<QString,QString> experimentTypeMetrics = adapter->waitExperimentTypeMetrics(experimentType);
     foreach(QString key, experimentTypeMetrics.keys()) {
         QListWidgetItem *item = new QListWidgetItem(key, ui->lstModifiers);
         item->setToolTip(QString("'%1' %2").arg(key).arg(experimentTypeModifiers[key]));

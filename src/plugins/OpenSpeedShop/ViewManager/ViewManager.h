@@ -30,7 +30,7 @@
 
 #include <QObject>
 #include "ViewManagerLibrary.h"
-#include "IViewPlugin.h"
+#include "IViewFactory.h"
 
 namespace Plugins {
 namespace OpenSpeedShop {
@@ -41,16 +41,22 @@ class VIEWMANAGER_EXPORT ViewManager : public QObject
 public:
     static ViewManager *instance();
 
-    void initialize();
+    bool initialize(QStringList &args, QString *err);
     void shutdown();
 
-    void registerView(IViewPlugin *viewPlugin);
     QStringList viewNames(QAbstractItemModel *model = NULL);
     QAbstractItemView *viewWidget(QString name, QAbstractItemModel *model);
 
 protected:
+    void registerViewFactory(IViewFactory *viewFactory);
+    void deregisterViewFactory(IViewFactory *viewFactory);
     ViewManager(QObject *parent = 0);
-    QMap<QString, IViewPlugin *> m_viewPlugins;
+    QMap<QString, IViewFactory *> m_viewFactories;
+
+protected slots:
+    void pluginObjectRegistered(QObject *object);
+    void pluginObjectDeregistered(QObject *object);
+
 };
 
 } // namespace OpenSpeedShop

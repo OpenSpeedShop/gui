@@ -34,10 +34,10 @@
 #include <QProgressBar>
 
 #include <SettingManager/SettingManager.h>
+#include <SettingManager/ISettingPageFactory.h>
 #include <PluginManager/PluginManager.h>
 
 #include "MainWindowLibrary.h"
-#include "MainSettingPageFactory.h"
 #include "NotificationWidget.h"
 
 namespace Core {
@@ -47,12 +47,13 @@ namespace Ui {
     class MainWindow;
 }
 
-class MAINWINDOW_EXPORT MainWindow : public QMainWindow
+class MAINWINDOW_EXPORT MainWindow : public QMainWindow, public SettingManager::ISettingPageFactory
 {
     Q_OBJECT
+    Q_INTERFACES(Core::SettingManager::ISettingPageFactory)
 
 public:
-    static MainWindow* instance();
+    static MainWindow &instance();
 
     ~MainWindow();
     bool initialize();
@@ -68,6 +69,14 @@ public:
                 NotificationWidget::Icon icon = NotificationWidget::NoIcon,
                 NotificationWidget::StandardButtons buttons = NotificationWidget::NoButton,
                 const QObject *reciever = NULL, const char *member = NULL);
+
+    /* BEGIN ISettingPageFactory */
+    QIcon settingPageIcon();
+    QString settingPageName();
+    int settingPagePriority();
+    SettingManager::ISettingPage *createSettingPage();
+    /* END ISettingPageFactory */
+
 
 protected:
     explicit MainWindow(QWidget *parent = 0);

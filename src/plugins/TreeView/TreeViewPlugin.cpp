@@ -64,15 +64,10 @@ bool TreeViewPlugin::initialize(QStringList &args, QString *err)
     Q_UNUSED(err)
 
     try {
-        using namespace Core::PluginManager;
-        using namespace Plugins::OpenSpeedShop;
 
-        PluginManager *pluginManager = PluginManager::instance();
-        QList<ViewManager *> *managers = pluginManager->getObjects<ViewManager>();
-        if(managers->count()) {
-            ViewManager *viewManager = managers->at(0);
-            viewManager->registerView(this);
-        }
+        Core::PluginManager::PluginManager &pluginManager = Core::PluginManager::PluginManager::instance();
+        pluginManager.addObject(this);                         /* Register ourselves as an IViewFactory */
+
     } catch(...) {
         return false;
     }

@@ -1,7 +1,7 @@
 /*!
    \file ISettingPageFactory.h
    \author Dane Gardner <dane.gardner@gmail.com>
-   \version 
+   \version
 
    \section LICENSE
    This file is part of the Open|SpeedShop Graphical User Interface
@@ -40,11 +40,10 @@ namespace SettingManager {
 class SETTINGMANAGER_EXPORT ISettingPageFactory
 {
 public:
-    virtual ~ISettingPageFactory() {}
-    virtual QIcon icon() = 0;
-    virtual QString name() = 0;
-    virtual int priority() = 0;
-    virtual ISettingPage *createPage() = 0;
+    virtual QIcon settingPageIcon() = 0;
+    virtual QString settingPageName() = 0;
+    virtual int settingPagePriority() = 0;
+    virtual ISettingPage *createSettingPage() = 0;
 };
 
 }}

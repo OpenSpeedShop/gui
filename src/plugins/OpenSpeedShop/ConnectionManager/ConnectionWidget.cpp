@@ -107,23 +107,23 @@ void ConnectionWidget::on_cmbConnectionType_currentIndexChanged(int index)
 void ConnectionWidget::initialize()
 {
     // Get settings from SettingManager and populate form
-    Core::SettingManager::SettingManager *settingManager = Core::SettingManager::SettingManager::instance();
-    settingManager->beginGroup("Plugins/OpenSpeedShop/ConnectionManager");
+    Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
+    settingManager.beginGroup("Plugins/OpenSpeedShop/ConnectionManager");
 
-    QString connectionName = settingManager->value("ConnectionName", ui->cmbConnectionType->itemText(0)).toString();
+    QString connectionName = settingManager.value("ConnectionName", ui->cmbConnectionType->itemText(0)).toString();
     int index = ui->cmbConnectionType->findText(connectionName, Qt::MatchExactly);
     ui->cmbConnectionType->setCurrentIndex(index);
 
-    settingManager->endGroup();
+    settingManager.endGroup();
 }
 
 void ConnectionWidget::apply()
 {
     // Persist changed settings to SettingManager
-    Core::SettingManager::SettingManager *settingManager = Core::SettingManager::SettingManager::instance();
-    settingManager->beginGroup("Plugins/OpenSpeedShop/ConnectionManager");
-    settingManager->setValue("ConnectionName", ui->cmbConnectionType->currentText());
-    settingManager->endGroup();
+    Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
+    settingManager.beginGroup("Plugins/OpenSpeedShop/ConnectionManager");
+    settingManager.setValue("ConnectionName", ui->cmbConnectionType->currentText());
+    settingManager.endGroup();
 
     for(int i=0; i < ui->stackedWidget->count(); i++) {
         IConnectionPage *page = qobject_cast<IConnectionPage *>(ui->stackedWidget->widget(i));

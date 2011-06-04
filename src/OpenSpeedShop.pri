@@ -20,29 +20,16 @@ QT += core gui
 APPLICATION_TARGET = OpenSpeedShop
 
 
-SOURCE_PATH = $${SOURCEDIR}
+!isEmpty($${SOURCEDIR}): SOURCE_PATH = $${SOURCEDIR}
 isEmpty(SOURCE_PATH): SOURCE_PATH = $$quote($${PWD})
 
-BUILD_PATH = $${BUILDDIR}
+!isEmpty($${BUILDDIR}): BUILD_PATH = $${BUILDDIR}
 isEmpty(BUILD_PATH): BUILD_PATH = $$quote($${PWD})
 
 win32 {
-    release: POSTFIX = $$quote(release)
-    debug:   POSTFIX = $$quote(debug)
+  CONFIG(debug, debug|release): POSTFIX = $$quote(debug)
+  else: POSTFIX = $$quote(release)
 }
-
-
-message()
-message(PWD: $$PWD)
-message(OUT_PWD: $$OUT_PWD)
-message()
-
-#message(SOURCEDIR: $${SOURCEDIR})
-#message(SOURCE_PATH: $${SOURCE_PATH})
-#message(BUILDDIR: $$[BUILDDIR])
-#message(BUILD_PATH: $${BUILD_PATH})
-#message(POSTFIX: $${POSTFIX})
-
 
 INCLUDEPATH       += $$quote($${SOURCE_PATH}/core/lib) $$quote($${SOURCE_PATH}/plugins)
 DEPENDPATH        += $$quote($${SOURCE_PATH}/core/lib) $$quote($${SOURCE_PATH}/plugins)

@@ -1,7 +1,7 @@
 /*!
-   \file 
+   \file
    \author Dane Gardner <dane.gardner@gmail.com>
-   \version 
+   \version
 
    \section LICENSE
    This file is part of the Open|SpeedShop Graphical User Interface
@@ -32,28 +32,28 @@ namespace ActionManager {
 
 MenuItem::MenuItem(QObject *parent) :
     QObject(parent),
-    m_Action(new QAction(this)),
-    m_Priority(128)
+    m_Action(this)
 {
+    m_Priority = 128;
 }
 
 MenuItem::MenuItem(MenuItem *menuItem, QObject *parent) :
     QObject(parent),
-    m_Action(new QAction(this)),
-    m_Priority(menuItem->priority())
+    m_Action(this)
 {
-    action()->setText(menuItem->action()->text());
-    action()->setToolTip(menuItem->action()->toolTip());
-    action()->setWhatsThis(menuItem->action()->whatsThis());
-    action()->setIcon(menuItem->action()->icon());
-    action()->setCheckable(menuItem->action()->isCheckable());
-    action()->setSeparator(menuItem->action()->isSeparator());
+    m_Priority = menuItem->priority();
+
+    m_Action.setText(menuItem->action()->text());
+    m_Action.setToolTip(menuItem->action()->toolTip());
+    m_Action.setWhatsThis(menuItem->action()->whatsThis());
+    m_Action.setIcon(menuItem->action()->icon());
+    m_Action.setCheckable(menuItem->action()->isCheckable());
+    m_Action.setSeparator(menuItem->action()->isSeparator());
 }
 
 QAction *MenuItem::action()
 {
-//    return m_Action ? m_Action : m_Action = new QAction(this);
-    return m_Action;
+    return &m_Action;
 }
 
 int MenuItem::priority()

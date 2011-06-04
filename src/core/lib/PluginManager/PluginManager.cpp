@@ -33,6 +33,7 @@
 #include <QPluginLoader>
 #include <QGridLayout>
 #include "PluginManager.h"
+#include "PluginSettingPage.h"
 
 namespace Core {
 namespace PluginManager {
@@ -52,16 +53,15 @@ namespace PluginManager {
             the object pool.
  */
 
-PluginManager *m_Instance;
-
 /*!
    \fn PluginManager::instance()
    \brief Access to the singleton instance of this class
    \returns A pointer to the singleton instance of this class
  */
-PluginManager *PluginManager::instance()
+PluginManager &PluginManager::instance()
 {
-    return m_Instance ? m_Instance : m_Instance = new PluginManager();
+    static PluginManager m_Instance;
+    return m_Instance;
 }
 
 /*!
@@ -69,7 +69,9 @@ PluginManager *PluginManager::instance()
    \brief Constructor
    \internal
  */
-PluginManager::PluginManager() : QObject(0)
+PluginManager::PluginManager() :
+    QObject(0),
+    m_Objects()
 {
     m_Initialized = false;
 }
@@ -86,28 +88,29 @@ PluginManager::~PluginManager()
         delete m_Plugins.takeFirst();
 
     writeSettings();
-
-    if(m_Instance)
-        m_Instance = NULL;
 }
 
 bool PluginManager::initialize()
 {
-    readSettings();
+    try {
 
-    Core::SettingManager::SettingManager *settingManager =
-             Core::SettingManager::SettingManager::instance();
-    settingManager->registerPageFactory(new PluginSettingPageFactory());
+        readSettings();
 
+        Core::PluginManager::PluginManager &pluginManager = Core::PluginManager::PluginManager::instance();
+        pluginManager.addObject(this);                         /* Register ourselves as an ISettingPageFactory */
 
-    MainWindow::MainWindow *mainWindow = MainWindow::MainWindow::instance();
-    foreach(QAction *action, mainWindow->menuBar()->actions()) {
-        if(action->text() == tr("Help")) {
-            QAction *pluginDialog = new QAction("Plugins", this);
-            pluginDialog->setToolTip(tr("View loaded plugins"));
-            connect(pluginDialog, SIGNAL(triggered()), this, SLOT(pluginDialog()));
-            action->menu()->addAction(pluginDialog);
+        MainWindow::MainWindow &mainWindow = MainWindow::MainWindow::instance();
+        foreach(QAction *action, mainWindow.menuBar()->actions()) {
+            if(action->text() == tr("Help")) {
+                QAction *pluginDialog = new QAction("Plugins", this);
+                pluginDialog->setToolTip(tr("View loaded plugins"));
+                connect(pluginDialog, SIGNAL(triggered()), this, SLOT(pluginDialog()));
+                action->menu()->addAction(pluginDialog);
+            }
         }
+
+    } catch(...) {
+        return false;
     }
 
     return m_Initialized = true;
@@ -138,17 +141,15 @@ void PluginManager::shutdown()
  */
 void PluginManager::readSettings()
 {
-    SettingManager::SettingManager *settings =
-            SettingManager::SettingManager::instance();
+    SettingManager::SettingManager &settingManager = SettingManager::SettingManager::instance();
+    settingManager.beginGroup("PluginManager");
 
-    settings->beginGroup("PluginManager");
-
-    m_PluginPath = settings->value("PluginPath").toString();
+    m_PluginPath = settingManager.value("PluginPath").toString();
 
     //! \todo Check for environment variable
     //! \todo Maybe this should be a list of paths to check
 
-    settings->endGroup();
+    settingManager.endGroup();
 }
 
 /*!
@@ -158,14 +159,12 @@ void PluginManager::readSettings()
  */
 void PluginManager::writeSettings()
 {
-    SettingManager::SettingManager *settings =
-            SettingManager::SettingManager::instance();
+    SettingManager::SettingManager &settingManager = SettingManager::SettingManager::instance();
+    settingManager.beginGroup("PluginManager");
 
-    settings->beginGroup("PluginManager");
+    settingManager.setValue("PluginPath", m_PluginPath);
 
-    settings->setValue("PluginPath", m_PluginPath);
-
-    settings->endGroup();
+    settingManager.endGroup();
 }
 
 /*!
@@ -315,6 +314,12 @@ void PluginManager::addObject(QObject *object)
     emit objectAdded(object);
 }
 
+QObjectList PluginManager::allObjects() const
+{
+    return m_Objects;
+}
+
+
 /*!
    \fn PluginManager::delObject()
    \brief Removes a previously stored object from the manager.
@@ -347,7 +352,7 @@ void PluginManager::pluginDialog()
 {
     // Wrapped in a QDialog because this is also registered as a setting page
 
-    QDialog *dialog = new QDialog(MainWindow::MainWindow::instance());
+    QDialog *dialog = new QDialog(&MainWindow::MainWindow::instance());
     QLayout *layout = new QGridLayout(dialog);
     layout->addWidget(new PluginSettingPage(m_Plugins, dialog));
     dialog->setLayout(layout);
@@ -379,5 +384,27 @@ bool PluginManager::descending(PluginWrapper *left, PluginWrapper *right)
 {
     return left->priority() < right->priority();
 }
+
+/* BEGIN ISettingPageFactory */
+QIcon PluginManager::settingPageIcon()
+{
+    return QIcon(":/PluginManager/plugin.png");
+}
+
+QString PluginManager::settingPageName()
+{
+    return tr("Plugins");
+}
+
+int PluginManager::settingPagePriority()
+{
+    return 50;
+}
+
+Core::SettingManager::ISettingPage *PluginManager::createSettingPage()
+{
+    return new PluginSettingPage();
+}
+/* END ISettingPageFactory */
 
 }}

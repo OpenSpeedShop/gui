@@ -44,16 +44,15 @@ namespace ActionManager {
           singleton class
  */
 
-ActionManager *m_Instance;
-
 /*!
    \fn ActionManager::instance()
    \brief Access to the singleton instance of this class
    \returns A pointer to the singleton instance of this class
  */
-ActionManager *ActionManager::instance()
+ActionManager &ActionManager::instance()
 {
-    return m_Instance ? m_Instance : m_Instance = new ActionManager();
+    static ActionManager m_Instance;
+    return m_Instance;
 }
 
 /*!
@@ -73,8 +72,6 @@ ActionManager::ActionManager() : QObject(0)
  */
 ActionManager::~ActionManager()
 {
-    if(m_Instance)
-        m_Instance = NULL;
 }
 
 bool ActionManager::initialize()
@@ -94,7 +91,7 @@ void ActionManager::shutdown()
 
 void ActionManager::refreshMenuItems()
 {
-    QMenuBar *menuBar = MainWindow::MainWindow::instance()->menuBar();
+    QMenuBar *menuBar = MainWindow::MainWindow::instance().menuBar();
 
     QList<MenuItem *> menuItems(m_MenuItems);
     QList<MenuItem *> base;

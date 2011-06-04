@@ -1,7 +1,7 @@
 /*!
-   \file 
+   \file
    \author Dane Gardner <dane.gardner@gmail.com>
-   \version 
+   \version
 
    \section LICENSE
    This file is part of the Open|SpeedShop Graphical User Interface
@@ -25,35 +25,29 @@
 
  */
 
-#ifndef PLUGINSETTINGPAGEFACTORY_H
-#define PLUGINSETTINGPAGEFACTORY_H
+#ifndef IVIEWPLUGIN_H
+#define IVIEWPLUGIN_H
 
-#include <QObject>
-#include <SettingManager/ISettingPageFactory.h>
-#include "PluginSettingPage.h"
+#include <QtPlugin>
+#include <QString>
+#include <QAbstractItemModel>
+#include <QAbstractItemView>
+#include "ViewManagerLibrary.h"
 
-namespace Core {
-namespace PluginManager {
+namespace Plugins {
+namespace OpenSpeedShop {
 
-class PluginSettingPageFactory :
-        public QObject,
-        public SettingManager::ISettingPageFactory
+class VIEWMANAGER_EXPORT IViewFactory
 {
-    Q_OBJECT
-    Q_INTERFACES(Core::SettingManager::ISettingPageFactory)
-
 public:
-    PluginSettingPageFactory(QObject *parent = 0);
-    ~PluginSettingPageFactory();
-
-    /* ISettingPageFactory interface */
-    QIcon icon();
-    QString name();
-    int priority();
-    SettingManager::ISettingPage *createPage();
+    virtual QString viewName() = 0;
+    virtual bool viewHandles(QAbstractItemModel *model) = 0;
+    virtual QAbstractItemView *viewWidget(QAbstractItemModel *model) = 0;
 };
 
-} // namespace PluginManager
-} // namespace Core
+} // namespace OpenSpeedShop
+} // namespace Plugins
 
-#endif // PLUGINSETTINGPAGEFACTORY_H
+Q_DECLARE_INTERFACE(Plugins::OpenSpeedShop::IViewFactory, "org.openspeedshop.gui.IViewFactory/0.1")
+
+#endif // IVIEWPLUGIN_H

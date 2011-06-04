@@ -1,7 +1,7 @@
 /*!
-   \file 
+   \file
    \author Dane Gardner <dane.gardner@gmail.com>
-   \version 
+   \version
 
    \section LICENSE
    This file is part of the Open|SpeedShop Graphical User Interface
@@ -73,7 +73,7 @@ public slots:
 
 protected:
     QList<MenuItem *> m_MenuItems;
-    QAction *m_Action;
+    QAction m_Action;
     int m_Priority;
 };
 

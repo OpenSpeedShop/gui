@@ -29,6 +29,9 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
 
+#include <SettingManager/ISettingPage.h>
+#include "MainSettingPage.h"
+
 #ifdef MAINWINDOW_DEBUG
 #  include <QDebug>
 #endif
@@ -46,20 +49,18 @@ namespace MainWindow {
  */
 
 
-MainWindow *m_Instance;
-
 /*!
    \fn Core::MainWindow::instance()
    \brief Access to the singleton instance of this class
    \returns A pointer to the singleton instance of this class
  */
-MainWindow *MainWindow::instance()
+MainWindow &MainWindow::instance()
 {
 #ifdef MAINWINDOW_DEBUG
     qDebug() << __FILE__ << __LINE__ << "\tMainWindow::instance";
 #endif
-
-    return m_Instance ? m_Instance : m_Instance = new MainWindow();
+    static MainWindow m_Instance;
+    return m_Instance;
 }
 
 /*!
@@ -70,7 +71,7 @@ MainWindow *MainWindow::instance()
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     m_Initialized(false),
-  ui(new Ui::MainWindow)
+    ui(new Ui::MainWindow)
 {
 #ifdef MAINWINDOW_DEBUG
     qDebug() << __FILE__ << __LINE__ << "\tMainWindow::MainWindow";
@@ -93,9 +94,6 @@ MainWindow::~MainWindow()
 #endif
 
     delete ui;
-
-    if(m_Instance)
-        m_Instance = NULL;
 }
 
 bool MainWindow::initialize()
@@ -104,11 +102,14 @@ bool MainWindow::initialize()
     qDebug() << __FILE__ << __LINE__ << "\tMainWindow::initialize";
 #endif
 
-    readSettings();
+    try {
+        readSettings();
 
-    Core::SettingManager::SettingManager *settingManager =
-             Core::SettingManager::SettingManager::instance();
-    settingManager->registerPageFactory(new MainSettingPageFactory());
+        Core::PluginManager::PluginManager &pluginManager = Core::PluginManager::PluginManager::instance();
+        pluginManager.addObject(this);                         /* Register ourselves as an ISettingPageFactory */
+    } catch(...) {
+        return false;
+    }
 
     return m_Initialized = true;
 }
@@ -142,20 +143,18 @@ void MainWindow::readSettings()
     qDebug() << __FILE__ << __LINE__ << "\tMainWindow::readSettings";
 #endif
 
-    SettingManager::SettingManager *settingManager =
-            SettingManager::SettingManager::instance();
+    SettingManager::SettingManager &settingManager = SettingManager::SettingManager::instance();
+    settingManager.beginGroup("MainWindow");
 
-    settingManager->beginGroup("MainWindow");
-
-    m_StylesheetFilePath = settingManager->value("StylesheetFilePath", QString()).toString();
-    QString styleName = settingManager->value("Style", QApplication::style()->objectName()).toString();
+    m_StylesheetFilePath = settingManager.value("StylesheetFilePath", QString()).toString();
+    QString styleName = settingManager.value("Style", QApplication::style()->objectName()).toString();
     QStyle *style = QStyleFactory::create(styleName);
     QApplication::setStyle(style);
 
-    restoreGeometry(settingManager->value("Geometry").toByteArray());
-    restoreState(settingManager->value("State").toByteArray());
+    restoreGeometry(settingManager.value("Geometry").toByteArray());
+    restoreState(settingManager.value("State").toByteArray());
 
-    settingManager->endGroup();
+    settingManager.endGroup();
 }
 
 /*!
@@ -169,18 +168,17 @@ void MainWindow::writeSettings()
     qDebug() << __FILE__ << __LINE__ << "\tMainWindow::writeSettings";
 #endif
 
-    SettingManager::SettingManager *settingManager =
-            SettingManager::SettingManager::instance();
+    SettingManager::SettingManager &settingManager = SettingManager::SettingManager::instance();
 
-    settingManager->beginGroup("MainWindow");
+    settingManager.beginGroup("MainWindow");
 
-    settingManager->setValue("StylesheetFilePath", m_StylesheetFilePath);
-    settingManager->setValue("Style", QApplication::style()->objectName());
+    settingManager.setValue("StylesheetFilePath", m_StylesheetFilePath);
+    settingManager.setValue("Style", QApplication::style()->objectName());
 
-    settingManager->setValue("Geometry", saveGeometry());
-    settingManager->setValue("State", saveState());
+    settingManager.setValue("Geometry", saveGeometry());
+    settingManager.setValue("State", saveState());
 
-    settingManager->endGroup();
+    settingManager.endGroup();
 }
 
 void MainWindow::initActions()
@@ -242,6 +240,26 @@ NotificationWidget *MainWindow::notify(const QString &text, NotificationWidget::
     notificationWidget->setFocus();
 
     return notificationWidget;
+}
+
+QIcon MainWindow::settingPageIcon()
+{
+    return QIcon(":/MainWindow/app.png");
+}
+
+QString MainWindow::settingPageName()
+{
+    return tr("Core");
+}
+
+int MainWindow::settingPagePriority()
+{
+    return 10;
+}
+
+SettingManager::ISettingPage *MainWindow::createSettingPage()
+{
+    return new MainSettingPage();
 }
 
 

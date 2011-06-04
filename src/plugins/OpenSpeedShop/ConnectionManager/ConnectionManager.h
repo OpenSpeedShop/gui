@@ -34,8 +34,6 @@
 #include <MainWindow/MainWindow.h>
 #include <MainWindow/NotificationWidget.h>
 #include "ConnectionManagerLibrary.h"
-#include "ServerAdapter.h"
-#include "ConnectionManagerSettingPageFactory.h"
 #include "IAdapter.h"
 
 namespace Plugins {
@@ -44,18 +42,19 @@ namespace OpenSpeedShop {
 class IConnection;
 class ServerCommand;
 
-class CONNECTIONMANAGER_EXPORT ConnectionManager : public QObject
+class CONNECTIONMANAGER_EXPORT ConnectionManager :
+        public QObject,
+        public Core::SettingManager::ISettingPageFactory
 {
     Q_OBJECT
+    Q_INTERFACES(Core::SettingManager::ISettingPageFactory)
+
 public:
     static ConnectionManager *instance();
-    bool initialize();
+    bool initialize(QStringList &args, QString *err);
     void shutdown();
 
-    void registerConnection(IConnection *connection);
     IConnection *currentConnection();
-
-    void registerAdapter(IAdapter *adapter);
     IAdapter *currentAdapter();
     IAdapter *askAdapter();
 
@@ -66,6 +65,12 @@ public:
     bool isConnected();
     bool askServerConnect();
 
+    /* BEGIN ISettingPageFactory */
+    QIcon settingPageIcon();
+    QString settingPageName();
+    int settingPagePriority();
+    Core::SettingManager::ISettingPage *createSettingPage();
+    /* END ISettingPageFactory */
 
 signals:
     void connectionRegistered(IConnection *connection);
@@ -80,26 +85,28 @@ protected:
     void readSettings();
     void writeSettings();
 
+    void registerConnection(IConnection *connection);
     void setCurrentConnection(IConnection *connection);
-    void setCurrentAdapter(IAdapter *adapter);
-
     QList<IConnection *> m_Connections;
     IConnection *m_CurrentConnection;
+
+    void registerAdapter(IAdapter *adapter);
+    void setCurrentAdapter(IAdapter *adapter);
     QList<IAdapter *> m_Adapters;
     IAdapter *m_CurrentAdapter;
-    QList<ServerCommand *> m_ServerCommands;
 
+    QList<ServerCommand *> m_ServerCommands;
     Core::MainWindow::NotificationWidget *m_notifyConnecting;
 
 protected slots:
+    void pluginObjectRegistered(QObject *);
+    void pluginObjectDeregistered(QObject *);
     void connectionReadyRecieve();
     void connectionStateChanged();
     void serverConnect();
 
 private:
     QAction m_ServerConnect;
-    ConnectionManagerSettingPageFactory m_ConnectionManagerSettingPageFactory;
-    ServerAdapter m_ServerAdapter;
 
     friend class ConnectionWidget;
 };

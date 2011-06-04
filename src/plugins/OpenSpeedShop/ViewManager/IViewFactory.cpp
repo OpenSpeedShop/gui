@@ -25,40 +25,27 @@
 
  */
 
-#include "ConnectionManagerSettingPageFactory.h"
-#include "ConnectionWidget.h"
+#include "IViewFactory.h"
 
 namespace Plugins {
 namespace OpenSpeedShop {
 
-ConnectionManagerSettingPageFactory::ConnectionManagerSettingPageFactory(QObject *parent) :
-    QObject(parent)
-{
-}
+/*! \fn handles()
+    \brief Returns true if the view can handle the supplied model.
+    \param model Is a pointer to the model that the caller wishes to handle.
+    \returns true if the model can be handled; otherwise returns false.
+    \exceptions None.
+    \sa view()
+ */
 
-ConnectionManagerSettingPageFactory::~ConnectionManagerSettingPageFactory()
-{
-}
-
-QIcon ConnectionManagerSettingPageFactory::icon()
-{
-    return QIcon(":/OpenSpeedShop/app.png");
-}
-
-QString ConnectionManagerSettingPageFactory::name()
-{
-    return tr("Server Connections");
-}
-
-int ConnectionManagerSettingPageFactory::priority()
-{
-    return 128;
-}
-
-Core::SettingManager::ISettingPage *ConnectionManagerSettingPageFactory::createPage()
-{
-    return new ConnectionWidget();
-}
+/*! \fn view()
+    \brief Factory function to create a pointer to a new view referencing the supplied model.
+    \note The view is not memory managed by this plugin, and must be handled by the caller.
+    \param model Is a pointer to the model that the caller wishes the returned view to handle.
+    \returns NULL if the model cannot be handled by this view.
+    \sa handles()
+    \exceptions None.
+ */
 
 } // namespace OpenSpeedShop
 } // namespace Plugins

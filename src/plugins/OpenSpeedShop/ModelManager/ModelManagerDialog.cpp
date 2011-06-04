@@ -27,36 +27,34 @@ ModelManagerDialog::ModelManagerDialog(QWidget *parent) :
     ui->descriptorListParent->layout()->setMargin(0);
     connect(descriptorListWidget, SIGNAL(currentDescriptorChanged(QUuid)), this, SLOT(currentSelectionChanged(QUuid)));
 
-    Core::SettingManager::SettingManager *settingManager = Core::SettingManager::SettingManager::instance();
+    Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
+    settingManager.beginGroup("Plugins");
+    settingManager.beginGroup("OpenSpeedShop");
+    settingManager.beginGroup("ModelManagerDialog");
 
-    settingManager->beginGroup("Plugins");
-    settingManager->beginGroup("OpenSpeedShop");
-    settingManager->beginGroup("ModelManagerDialog");
+    restoreGeometry(settingManager.value("windowGeometry", saveGeometry()).toByteArray());
+    ui->splitter->restoreGeometry(settingManager.value("splitterGeometry", ui->splitter->saveGeometry()).toByteArray());
+    ui->splitter->restoreState(settingManager.value("splitterState", ui->splitter->saveState()).toByteArray());
 
-    restoreGeometry(settingManager->value("windowGeometry", saveGeometry()).toByteArray());
-    ui->splitter->restoreGeometry(settingManager->value("splitterGeometry", ui->splitter->saveGeometry()).toByteArray());
-    ui->splitter->restoreState(settingManager->value("splitterState", ui->splitter->saveState()).toByteArray());
-
-    settingManager->endGroup();
-    settingManager->endGroup();
-    settingManager->endGroup();
+    settingManager.endGroup();
+    settingManager.endGroup();
+    settingManager.endGroup();
 }
 
 ModelManagerDialog::~ModelManagerDialog()
 {
-    Core::SettingManager::SettingManager *settingManager = Core::SettingManager::SettingManager::instance();
+    Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
+    settingManager.beginGroup("Plugins");
+    settingManager.beginGroup("OpenSpeedShop");
+    settingManager.beginGroup("ModelManagerDialog");
 
-    settingManager->beginGroup("Plugins");
-    settingManager->beginGroup("OpenSpeedShop");
-    settingManager->beginGroup("ModelManagerDialog");
+    settingManager.setValue("windowGeometry", saveGeometry());
+    settingManager.setValue("splitterGeometry", ui->splitter->saveGeometry());
+    settingManager.setValue("splitterState", ui->splitter->saveState());
 
-    settingManager->setValue("windowGeometry", saveGeometry());
-    settingManager->setValue("splitterGeometry", ui->splitter->saveGeometry());
-    settingManager->setValue("splitterState", ui->splitter->saveState());
-
-    settingManager->endGroup();
-    settingManager->endGroup();
-    settingManager->endGroup();
+    settingManager.endGroup();
+    settingManager.endGroup();
+    settingManager.endGroup();
 
     delete ui;
 }
@@ -82,10 +80,10 @@ void ModelManagerDialog::currentSelectionChanged(const QUuid &current)
             ui->descriptorParent->layout()->setMargin(0);
         } catch(QString err) {
             using namespace Core::MainWindow;
-            MainWindow::instance()->notify(tr("Failed to open model descriptor: %1").arg(err), NotificationWidget::Critical);
+            MainWindow::instance().notify(tr("Failed to open model descriptor: %1").arg(err), NotificationWidget::Critical);
         } catch(...) {
             using namespace Core::MainWindow;
-            MainWindow::instance()->notify(tr("Failed to open model descriptor."), NotificationWidget::Critical);
+            MainWindow::instance().notify(tr("Failed to open model descriptor."), NotificationWidget::Critical);
         }
     }
 }

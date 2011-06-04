@@ -21,7 +21,7 @@ class ModelManager : public QObject
 public:
     static ModelManager *instance();
 
-    void initialize();
+    bool initialize(QStringList &args, QString *err);
     void shutdown();
 
     void fetchDescriptors();

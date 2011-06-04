@@ -33,10 +33,10 @@ ExperimentWidget::ExperimentWidget(QWidget *parent) :
     ui->tabWidget->setCurrentIndex(0);
     ui->grpViewFilter->hide();
 
-    IAdapter *serverAdapter = ConnectionManager::instance()->askAdapter();
-    if(!serverAdapter) throw tr("Server not connected");
+    IAdapter *adapter = ConnectionManager::instance()->askAdapter();
+    if(!adapter) throw tr("Server not connected");
 
-    QStringList experimentTypes = serverAdapter->waitExperimentTypes();
+    QStringList experimentTypes = adapter->waitExperimentTypes();
     if(!experimentTypes.isEmpty()) {
         ui->cmbExperimentTypes->addItems(experimentTypes);
     }
@@ -59,10 +59,10 @@ void ExperimentWidget::load()
     // Ensure that we're connected to a server
     // Start sending commands
 
-    IAdapter *serverAdapter = ConnectionManager::instance()->askAdapter();
-    if(!serverAdapter) throw tr("Server not connected");
+    IAdapter *adapter = ConnectionManager::instance()->askAdapter();
+    if(!adapter) throw tr("Server not connected");
 
-//    qDebug() << serverAdapter->waitVersion();
+//    qDebug() << adapter->waitVersion();
 
     //TODO: Create a real way for the user to interact with the remote filesystem
     bool okay;
@@ -78,38 +78,38 @@ void ExperimentWidget::load()
     setWindowFilePath(filePath);
     setWindowTitle(filePath);
     emit windowTitleChanged();
-    m_ExperimentUid = serverAdapter->waitRestore(filePath);
+    m_ExperimentUid = adapter->waitRestore(filePath);
 
-    ui->txtDatabasePath->setText(serverAdapter->waitExperimentDatabase(m_ExperimentUid));
-    ui->txtExecutablePath->setText(serverAdapter->waitExperimentExecutable(m_ExperimentUid));
-    ui->txtCommand->setText(serverAdapter->waitExperimentAppCommand(m_ExperimentUid));
+    ui->txtDatabasePath->setText(adapter->waitExperimentDatabase(m_ExperimentUid));
+    ui->txtExecutablePath->setText(adapter->waitExperimentExecutable(m_ExperimentUid));
+    ui->txtCommand->setText(adapter->waitExperimentAppCommand(m_ExperimentUid));
 
-    QString experimentType = serverAdapter->waitExperimentType(m_ExperimentUid);
+    QString experimentType = adapter->waitExperimentType(m_ExperimentUid);
     ui->cmbExperimentTypes->setCurrentIndex(ui->cmbExperimentTypes->findText(experimentType));
 
     loadModelDescriptors(experimentType);
 
-//    qDebug() << "parameters" << serverAdapter->waitExperimentParameterValues(expId);
+//    qDebug() << "parameters" << adapter->waitExperimentParameterValues(expId);
 
-//    qDebug() << "hosts" << serverAdapter->waitExperimentHosts(expId);
-//    qDebug() << "ranks" << serverAdapter->waitExperimentRanks(expId);
-//    qDebug() << "pids" << serverAdapter->waitExperimentPids(expId);
+//    qDebug() << "hosts" << adapter->waitExperimentHosts(expId);
+//    qDebug() << "ranks" << adapter->waitExperimentRanks(expId);
+//    qDebug() << "pids" << adapter->waitExperimentPids(expId);
 
-//    qDebug() << "sources" << serverAdapter->waitExperimentSourceFiles(expId);
-//    qDebug() << "objects" << serverAdapter->waitExperimentObjectFiles(expId);
-//    qDebug() << "threads" << serverAdapter->waitExperimentThreads(expId);
+//    qDebug() << "sources" << adapter->waitExperimentSourceFiles(expId);
+//    qDebug() << "objects" << adapter->waitExperimentObjectFiles(expId);
+//    qDebug() << "threads" << adapter->waitExperimentThreads(expId);
 
 //    qDebug() << "Processes:";
-//    QList<ServerAdapter::Process> processes = serverAdapter->experimentProcesses(expId);
-//    foreach(ServerAdapter::Process process, processes) {
+//    QList<IAdapter::Process> processes = adapter->experimentProcesses(expId);
+//    foreach(IAdapter::Process process, processes) {
 //        qDebug() << "\t" << process.host << process.processId << process.threadId << process.rank << process.executable;
 //    }
 
 
-//    QString experimentType = serverAdapter->waitExperimentTypes(expId);
+//    QString experimentType = adapter->waitExperimentTypes(expId);
 
-//    qDebug() << "Modifiers" << serverAdapter->waitExperimentTypeModifiers(experimentType);
-//    qDebug() << "Metrics" << serverAdapter->waitExperimentTypeMetrics(experimentType);
+//    qDebug() << "Modifiers" << adapter->waitExperimentTypeModifiers(experimentType);
+//    qDebug() << "Metrics" << adapter->waitExperimentTypeMetrics(experimentType);
 
 //    QStringList modifiers;
 //    modifiers << "CallTrees" << "FullStack";
@@ -117,14 +117,14 @@ void ExperimentWidget::load()
 //    metrics << "counts" << "io::exclusive_times"; // << "io::inclusive_times";
 
 
-//    serverAdapter->waitExit();
+//    adapter->waitExit();
 
 }
 
 void ExperimentWidget::loadModelDescriptors(QString experimentType)
 {
-    IAdapter *serverAdapter = ConnectionManager::instance()->askAdapter();
-    if(!serverAdapter) throw tr("Server not connected");
+    IAdapter *adapter = ConnectionManager::instance()->askAdapter();
+    if(!adapter) throw tr("Server not connected");
 
     //TODO: Remove any previous model descriptor lists.
 
@@ -156,10 +156,10 @@ void ExperimentWidget::getModel(QUuid descriptorUid)
 
     } catch(QString err) {
         using namespace Core::MainWindow;
-        MainWindow::instance()->notify(tr("Failed to fetch experiemnt model: %1").arg(err), NotificationWidget::Critical);
+        MainWindow::instance().notify(tr("Failed to fetch experiemnt model: %1").arg(err), NotificationWidget::Critical);
     } catch(...) {
         using namespace Core::MainWindow;
-        MainWindow::instance()->notify(tr("Failed to fetch experiement model."), NotificationWidget::Critical);
+        MainWindow::instance().notify(tr("Failed to fetch experiement model."), NotificationWidget::Critical);
     }
 }
 
@@ -189,10 +189,10 @@ void ExperimentWidget::on_cmbViews_currentIndexChanged(int index)
 
     } catch(QString err) {
         using namespace Core::MainWindow;
-        MainWindow::instance()->notify(tr("Failed to fetch view widget: %1").arg(err), NotificationWidget::Critical);
+        MainWindow::instance().notify(tr("Failed to fetch view widget: %1").arg(err), NotificationWidget::Critical);
     } catch(...) {
         using namespace Core::MainWindow;
-        MainWindow::instance()->notify(tr("Failed to fetch view widget."), NotificationWidget::Critical);
+        MainWindow::instance().notify(tr("Failed to fetch view widget."), NotificationWidget::Critical);
     }
 }
 
@@ -206,10 +206,10 @@ void ExperimentWidget::on_btnAddModel_clicked()
 
     } catch(QString err) {
         using namespace Core::MainWindow;
-        MainWindow::instance()->notify(tr("Failed to open model descriptor dialog: %1").arg(err), NotificationWidget::Critical);
+        MainWindow::instance().notify(tr("Failed to open model descriptor dialog: %1").arg(err), NotificationWidget::Critical);
     } catch(...) {
         using namespace Core::MainWindow;
-        MainWindow::instance()->notify(tr("Failed to open model descriptor dialog."), NotificationWidget::Critical);
+        MainWindow::instance().notify(tr("Failed to open model descriptor dialog."), NotificationWidget::Critical);
     }
 }
 
@@ -226,10 +226,10 @@ void ExperimentWidget::on_txtViewFilter_textChanged(const QString &text)
 
     } catch(QString err) {
         using namespace Core::MainWindow;
-        MainWindow::instance()->notify(tr("Failed to change filter text: %1").arg(err), NotificationWidget::Critical);
+        MainWindow::instance().notify(tr("Failed to change filter text: %1").arg(err), NotificationWidget::Critical);
     } catch(...) {
         using namespace Core::MainWindow;
-        MainWindow::instance()->notify(tr("Failed to change filter text."), NotificationWidget::Critical);
+        MainWindow::instance().notify(tr("Failed to change filter text."), NotificationWidget::Critical);
     }
 }
 
@@ -244,10 +244,10 @@ void ExperimentWidget::on_cmbViewFilterColumn_currentIndexChanged(int index)
 
     } catch(QString err) {
         using namespace Core::MainWindow;
-        MainWindow::instance()->notify(tr("Failed to change filter column: %1").arg(err), NotificationWidget::Critical);
+        MainWindow::instance().notify(tr("Failed to change filter column: %1").arg(err), NotificationWidget::Critical);
     } catch(...) {
         using namespace Core::MainWindow;
-        MainWindow::instance()->notify(tr("Failed to change filter column."), NotificationWidget::Critical);
+        MainWindow::instance().notify(tr("Failed to change filter column."), NotificationWidget::Critical);
     }
 }
 

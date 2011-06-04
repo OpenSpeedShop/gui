@@ -63,29 +63,27 @@ MainSettingPage::~MainSettingPage()
 
 void MainSettingPage::apply()
 {
-    SettingManager::SettingManager *settingManager =
-            SettingManager::SettingManager::instance();
+    SettingManager::SettingManager &settingManager = SettingManager::SettingManager::instance();
 
-    settingManager->beginGroup("MainWindow");
+    settingManager.beginGroup("MainWindow");
 
     m_OriginalStyle = QApplication::style()->objectName();
-    settingManager->setValue("Style", m_OriginalStyle);
+    settingManager.setValue("Style", m_OriginalStyle);
 
-    settingManager->endGroup();
+    settingManager.endGroup();
 }
 
 void MainSettingPage::reset()
 {
-    SettingManager::SettingManager *settingManager =
-            SettingManager::SettingManager::instance();
+    SettingManager::SettingManager &settingManager = SettingManager::SettingManager::instance();
 
-    settingManager->beginGroup("MainWindow");
+    settingManager.beginGroup("MainWindow");
 
-    QString style = settingManager->value("style", m_OriginalStyle).toString();
+    QString style = settingManager.value("style", m_OriginalStyle).toString();
     int index = ui->cmbStyle->findText(style, Qt::MatchFixedString);
     ui->cmbStyle->setCurrentIndex(index);
 
-    settingManager->endGroup();
+    settingManager.endGroup();
 }
 
 void MainSettingPage::on_cmbStyle_currentIndexChanged(QString style)

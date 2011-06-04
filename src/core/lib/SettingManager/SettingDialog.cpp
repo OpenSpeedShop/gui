@@ -1,7 +1,7 @@
 /*!
    \file SettingDialog.cpp
    \author Dane Gardner <dane.gardner@gmail.com>
-   \version 
+   \version
 
    \section LICENSE
    This file is part of the Open|SpeedShop Graphical User Interface
@@ -66,10 +66,10 @@ SettingDialog::SettingDialog(QList<ISettingPageFactory *> pages, QWidget *parent
         ISettingPageFactory *factory = m_Pages.at(i);
 
         QListWidgetItem *item = new QListWidgetItem(ui->listWidget);
-        item->setText(factory->name());
-        item->setIcon(factory->icon());
+        item->setText(factory->settingPageName());
+        item->setIcon(factory->settingPageIcon());
 
-        ISettingPage *page = factory->createPage();
+        ISettingPage *page = factory->createSettingPage();
         connect(btnOkay, SIGNAL(clicked()), page, SLOT(apply()));
         connect(btnApply, SIGNAL(clicked()), page, SLOT(apply()));
         connect(btnReset, SIGNAL(clicked()), page, SLOT(reset()));
@@ -89,35 +89,35 @@ SettingDialog::~SettingDialog()
 
 void SettingDialog::readSettings()
 {
-    SettingManager *settings = SettingManager::instance();
+    SettingManager &settingManager = SettingManager::instance();
 
-    settings->beginGroup("SettingManager");
-    settings->beginGroup("SettingDialog");
+    settingManager.beginGroup("SettingManager");
+    settingManager.beginGroup("SettingDialog");
 
-    resize( settings->value("WindowSize", size()).toSize() );
-    move( settings->value("WindowPosition", pos()).toPoint() );
+    resize( settingManager.value("WindowSize", size()).toSize() );
+    move( settingManager.value("WindowPosition", pos()).toPoint() );
 
-    settings->endGroup();
-    settings->endGroup();
+    settingManager.endGroup();
+    settingManager.endGroup();
 }
 
 void SettingDialog::writeSettings()
 {
-    SettingManager *settings = SettingManager::instance();
+    SettingManager &settingManager = SettingManager::instance();
 
-    settings->beginGroup("SettingManager");
-    settings->beginGroup("SettingDialog");
+    settingManager.beginGroup("SettingManager");
+    settingManager.beginGroup("SettingDialog");
 
-    settings->setValue("WindowSize", size());
-    settings->setValue("WindowPosition", pos());
+    settingManager.setValue("WindowSize", size());
+    settingManager.setValue("WindowPosition", pos());
 
-    settings->endGroup();
-    settings->endGroup();
+    settingManager.endGroup();
+    settingManager.endGroup();
 }
 
 bool SettingDialog::ascending(ISettingPageFactory *left, ISettingPageFactory *right)
 {
-    return left->priority() < right->priority();
+    return left->settingPagePriority() < right->settingPagePriority();
 }
 
 

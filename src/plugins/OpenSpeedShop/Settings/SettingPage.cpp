@@ -1,7 +1,7 @@
 /*!
-   \file 
+   \file
    \author Dane Gardner <dane.gardner@gmail.com>
-   \version 
+   \version
 
    \section LICENSE
    This file is part of the Open|SpeedShop Graphical User Interface
@@ -58,33 +58,29 @@ SettingPage::~SettingPage()
 void SettingPage::initialize()
 {
     // Get settings from SettingManager and populate form
-    Core::SettingManager::SettingManager *settingManager =
-            Core::SettingManager::SettingManager::instance();
-
-    settingManager->beginGroup("Plugin");
-    settingManager->beginGroup("OpenSpeedShop");
+    Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
+    settingManager.beginGroup("Plugin");
+    settingManager.beginGroup("OpenSpeedShop");
 
     ui->lblSetting1->setText( "Default Project Path" );
-    ui->txtSetting1->setText( settingManager->value("ProjectPath", "C:/Qt/projects/").toString() );
+    ui->txtSetting1->setText( settingManager.value("ProjectPath", "C:/Qt/projects/").toString() );
 
-    settingManager->endGroup();
-    settingManager->endGroup();
+    settingManager.endGroup();
+    settingManager.endGroup();
 
 }
 
 void SettingPage::apply()
 {
     // Persist changed settings to SettingManager
-    Core::SettingManager::SettingManager *settingManager =
-            Core::SettingManager::SettingManager::instance();
+    Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
+    settingManager.beginGroup("Plugin");
+    settingManager.beginGroup("OpenSpeedShop");
 
-    settingManager->beginGroup("Plugin");
-    settingManager->beginGroup("OpenSpeedShop");
+    settingManager.setValue( "ProjectPath", ui->txtSetting1->text() );
 
-    settingManager->setValue( "ProjectPath", ui->txtSetting1->text() );
-
-    settingManager->endGroup();
-    settingManager->endGroup();
+    settingManager.endGroup();
+    settingManager.endGroup();
 }
 
 void SettingPage::reset()

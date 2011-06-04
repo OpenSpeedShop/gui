@@ -6,7 +6,6 @@
 #include <QMimeData>
 #include <MainWindow/MainWindow.h>
 #include "ConnectionManager/ConnectionManager.h"
-#include "ConnectionManager/ServerAdapter.h"
 #include "DataModel.h"
 #include "ModelManagerDialog.h"
 #include "ModelDescriptor.h"
@@ -20,10 +19,10 @@
 namespace Plugins {
 namespace OpenSpeedShop {
 
-static ModelManager *m_ModelManagerInstance;
 ModelManager *ModelManager::instance()
 {
-    return m_ModelManagerInstance? m_ModelManagerInstance: m_ModelManagerInstance = new ModelManager();
+    static ModelManager m_Instance;
+    return &m_Instance;
 }
 
 ModelManager::ModelManager(QObject *parent) :
@@ -32,26 +31,33 @@ ModelManager::ModelManager(QObject *parent) :
 {
 }
 
-void ModelManager::initialize()
+bool ModelManager::initialize(QStringList &args, QString *err)
 {
-    Core::MainWindow::MainWindow *mainWindow = Core::MainWindow::MainWindow::instance();
+    using namespace Core;
 
     try {
+
         importDescriptors();
-    } catch(QString err) {
-        using namespace Core::MainWindow;
-        MainWindow::instance()->notify(err, NotificationWidget::Critical);
+
+        /*** Register our menu structure ***/
+        MainWindow::MainWindow &mainWindow = MainWindow::MainWindow::instance();
+        foreach(QAction *action, mainWindow.menuBar()->actions()) {
+            if(action->text() == tr("Tools")) {
+                m_ModelManagerDialog.setText(tr("Models Manager"));
+                m_ModelManagerDialog.setToolTip(tr("Displays the Open|SpeedShop model manager dialog"));
+                connect(&m_ModelManagerDialog, SIGNAL(triggered()), this, SLOT(modelManagerDialog()));
+                action->menu()->insertAction(action->menu()->actions().at(0), &m_ModelManagerDialog);
+            }
+        }
+
+        PluginManager::PluginManager &pluginManager = PluginManager::PluginManager::instance();
+        pluginManager.addObject(this);
+
+    } catch(...) {
+        return false;
     }
 
-    /*** Register our menu structure ***/
-    foreach(QAction *action, mainWindow->menuBar()->actions()) {
-        if(action->text() == tr("Tools")) {
-            m_ModelManagerDialog.setText(tr("Models Manager"));
-            m_ModelManagerDialog.setToolTip(tr("Displays the Open|SpeedShop model manager dialog"));
-            connect(&m_ModelManagerDialog, SIGNAL(triggered()), this, SLOT(modelManagerDialog()));
-            action->menu()->insertAction(action->menu()->actions().at(0), &m_ModelManagerDialog);
-        }
-    }
+    return true;
 }
 
 void ModelManager::shutdown()
@@ -61,13 +67,8 @@ void ModelManager::shutdown()
     } catch(QString err) {
         //TODO: This should probably be a popup, considering the MainWindow is shutting down.
         using namespace Core::MainWindow;
-        MainWindow::instance()->notify(err, NotificationWidget::Critical);
+        MainWindow::instance().notify(err, NotificationWidget::Critical);
     }
-
-    /* self destruct! */
-    //FIXME: There should be some handling for the case where instance() is called again after this
-    delete(m_ModelManagerInstance);
-    m_ModelManagerInstance = NULL;
 }
 
 /**********************************************************************************************************/
@@ -78,9 +79,9 @@ void ModelManager::importDescriptors(const QString &filepath)
     QString filePath(filepath);
     if(filePath.isEmpty()) {
         //TODO: Create a setting for this in the setting console
-        Core::SettingManager::SettingManager *settingManager = Core::SettingManager::SettingManager::instance();
+        Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
         filePath = QString("%1/ModelDescriptors.xml").arg(QApplication::instance()->applicationDirPath());
-        filePath = settingManager->value("Plugins/OpenSpeedShop/ModelManager/DescriptorsFilePath", filePath).toString();
+        filePath = settingManager.value("Plugins/OpenSpeedShop/ModelManager/DescriptorsFilePath", filePath).toString();
     }
 
     if(!QFile::exists(filePath)) {
@@ -190,10 +191,10 @@ void ModelManager::modelManagerDialog()
 
     } catch(QString err) {
         using namespace Core::MainWindow;
-        MainWindow::instance()->notify(tr("Failed to open model manager dialog: %1").arg(err), NotificationWidget::Critical);
+        MainWindow::instance().notify(tr("Failed to open model manager dialog: %1").arg(err), NotificationWidget::Critical);
     } catch(...) {
         using namespace Core::MainWindow;
-        MainWindow::instance()->notify(tr("Failed to open model manager dialog."), NotificationWidget::Critical);
+        MainWindow::instance().notify(tr("Failed to open model manager dialog."), NotificationWidget::Critical);
     }
 }
 
@@ -216,9 +217,9 @@ void ModelManager::exportDescriptors(const QString &filepath)
 {
     QString filePath(filepath);
     if(filePath.isEmpty()) {
-        Core::SettingManager::SettingManager *settingManager = Core::SettingManager::SettingManager::instance();
+        Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
         filePath = QString("%1/ModelDescriptors.xml").arg(QApplication::instance()->applicationDirPath());
-        filePath = settingManager->value("Plugins/OpenSpeedShop/ModelManager/DescriptorsFilePath", filePath).toString();
+        filePath = settingManager.value("Plugins/OpenSpeedShop/ModelManager/DescriptorsFilePath", filePath).toString();
     }
 
     ModelDescriptor::toXml(filePath, m_DescriptorPool.values());
@@ -319,8 +320,8 @@ QUuid ModelManager::fetchModel(const QUuid &descriptorUid, const QUuid &experime
         }
     }
 
-    IAdapter *serverAdapter = connectionManager->currentAdapter();
-    if(!serverAdapter) throw tr("Server not connected");
+    IAdapter *adapter = connectionManager->currentAdapter();
+    if(!adapter) throw tr("Server not connected");
 
 
 #ifdef MODELMANAGER_DEBUG
@@ -329,7 +330,7 @@ QUuid ModelManager::fetchModel(const QUuid &descriptorUid, const QUuid &experime
 
     // Fetch everything from the server, based on the descriptor
     ModelDescriptor *modelDescriptor = descriptor(descriptorUid);
-    QAbstractItemModel *model = serverAdapter->waitExperimentView(
+    QAbstractItemModel *model = adapter->waitExperimentView(
                 experimentUid,
                 modelDescriptor->modifiers(),
                 modelDescriptor->metrics(),

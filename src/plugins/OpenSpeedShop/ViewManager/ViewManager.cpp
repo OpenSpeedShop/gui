@@ -26,14 +26,15 @@
  */
 
 #include "ViewManager.h"
+#include <PluginManager/PluginManager.h>
 
 namespace Plugins {
 namespace OpenSpeedShop {
 
-ViewManager *m_ViewManagerInstance;
 ViewManager *ViewManager::instance()
 {
-    return m_ViewManagerInstance? m_ViewManagerInstance: m_ViewManagerInstance = new ViewManager();
+    static ViewManager m_Instance;
+    return &m_Instance;
 }
 
 ViewManager::ViewManager(QObject *parent) :
@@ -41,27 +42,59 @@ ViewManager::ViewManager(QObject *parent) :
 {
 }
 
-void ViewManager::initialize()
+bool ViewManager::initialize(QStringList &args, QString *err)
 {
+    try {
+
+        Core::PluginManager::PluginManager &pluginManager = Core::PluginManager::PluginManager::instance();
+        pluginManager.addObject(this);
+
+        /* Check the object pool for anything we should manage */
+        foreach(QObject *object, pluginManager.allObjects()) { pluginObjectRegistered(object); }
+        connect(&pluginManager, SIGNAL(objectAdded(QObject*)), this, SLOT(pluginObjectRegistered(QObject*)));
+        connect(&pluginManager, SIGNAL(objectRemoving(QObject*)), this, SLOT(pluginObjectDeregistered(QObject*)));
+
+    } catch(...) {
+        return false;
+    }
+
 }
 
 void ViewManager::shutdown()
 {
-    /* self destruct! */
-    //FIXME: There should be some handling for the case where instance() is called again after this
-    delete(m_ViewManagerInstance);
-    m_ViewManagerInstance = NULL;
 }
 
-void ViewManager::registerView(IViewPlugin *viewPlugin)
+void ViewManager::pluginObjectRegistered(QObject *object)
 {
-    m_viewPlugins.insert(viewPlugin->viewName(), viewPlugin);
+    IViewFactory *viewFactory = qobject_cast<IViewFactory *>(object);
+    if(viewFactory) registerViewFactory(viewFactory);
+}
+
+void ViewManager::pluginObjectDeregistered(QObject *object)
+{
+    IViewFactory *viewFactory = qobject_cast<IViewFactory *>(object);
+    if(viewFactory) deregisterViewFactory(viewFactory);
+}
+
+
+void ViewManager::registerViewFactory(IViewFactory *viewFactory)
+{
+    if(!m_viewFactories.contains(viewFactory->viewName())) {
+        m_viewFactories.insert(viewFactory->viewName(), viewFactory);
+    }
+}
+
+void ViewManager::deregisterViewFactory(IViewFactory *viewFactory)
+{
+    if(m_viewFactories.contains(viewFactory->viewName())) {
+        m_viewFactories.remove(viewFactory->viewName());
+    }
 }
 
 QStringList ViewManager::viewNames(QAbstractItemModel *model)
 {
     QStringList nameList;
-    foreach(IViewPlugin *viewPlugin, m_viewPlugins.values()) {
+    foreach(IViewFactory *viewPlugin, m_viewFactories.values()) {
         if(model) {
             if(viewPlugin->viewHandles(model)) {
                 nameList.append(viewPlugin->viewName());
@@ -77,7 +110,7 @@ QAbstractItemView *ViewManager::viewWidget(QString name, QAbstractItemModel *mod
 {
     if(name.isEmpty()) return NULL;
 
-    IViewPlugin *viewPlugin = m_viewPlugins.value(name, NULL);
+    IViewFactory *viewPlugin = m_viewFactories.value(name, NULL);
     return viewPlugin->viewWidget(model);
 }
 

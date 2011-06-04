@@ -20,7 +20,8 @@ TEMPLATE = subdirs
 SUBDIRS  = Example \
            OpenSpeedShop \
            DirectConnection \
-           TreeView
+           TreeView \
+           ServerAdapter
 
 OpenSpeedShop.subdir         = OpenSpeedShop
 
@@ -32,3 +33,6 @@ Example.depends              = OpenSpeedShop
 
 TreeView.subdir              = TreeView
 TreeView.depends             = OpenSpeedShop
+
+ServerAdapter.subdir         = ServerAdapter
+ServerAdapter.depends        = OpenSpeedShop

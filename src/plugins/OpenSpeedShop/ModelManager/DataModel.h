@@ -32,11 +32,12 @@
 #include <QUuid>
 #include <QtXml/QDomDocument>
 #include <QtXml/QDomElement>
+#include "ModelManagerLibrary.h"
 
 namespace Plugins {
 namespace OpenSpeedShop {
 
-class DataModel : public QAbstractItemModel
+class MODELMANAGER_EXPORT DataModel : public QAbstractItemModel
 {
     Q_OBJECT
 public:

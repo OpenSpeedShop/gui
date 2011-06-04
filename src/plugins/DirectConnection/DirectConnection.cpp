@@ -224,29 +224,27 @@ void DirectConnection::disconnected()
 
 void DirectConnection::writeSettings()
 {
-    Core::SettingManager::SettingManager *settingManager = Core::SettingManager::SettingManager::instance();
+    Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
+    settingManager.beginGroup("Plugins/ConnectionManager");
 
-    settingManager->beginGroup("Plugins/ConnectionManager");
+    settingManager.setValue("DirectConnection/HostName", m_HostName);
+    settingManager.setValue("DirectConnection/Port", m_Port);
 
-    settingManager->setValue("DirectConnection/HostName", m_HostName);
-    settingManager->setValue("DirectConnection/Port", m_Port);
-
-    settingManager->endGroup();
+    settingManager.endGroup();
 }
 
 void DirectConnection::readSettings()
 {
-    Core::SettingManager::SettingManager *settingManager = Core::SettingManager::SettingManager::instance();
+    Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
+    settingManager.beginGroup("Plugins/ConnectionManager");
 
-    settingManager->beginGroup("Plugins/ConnectionManager");
-
-    m_HostName = settingManager->value("DirectConnection/Hostname", "localhost").toString();
+    m_HostName = settingManager.value("DirectConnection/Hostname", "localhost").toString();
 
     bool okay;
-    m_Port = settingManager->value("DirectConnection/Port").toInt(&okay);
+    m_Port = settingManager.value("DirectConnection/Port").toInt(&okay);
     if(!okay) m_Port = 2048;
 
-    settingManager->endGroup();
+    settingManager.endGroup();
 }
 
 IConnection::States DirectConnection::state()

@@ -38,6 +38,7 @@
 #include <ViewManager/ViewManager.h>
 
 #include "AboutDialog.h"
+#include "Settings/SettingPage.h"
 
 namespace Plugins {
 namespace OpenSpeedShop {
@@ -75,45 +76,49 @@ OpenSpeedShopPlugin::~OpenSpeedShopPlugin()
 
 bool OpenSpeedShopPlugin::initialize(QStringList &args, QString *err)
 {
-    readSettings();
+    using namespace Core;
 
-    /*** We're a main plugin, so we need to make changes to the mainWindow,
-         like the application icon and the title ***/
-    Core::MainWindow::MainWindow *mainWindow = Core::MainWindow::MainWindow::instance();
-    mainWindow->setWindowIcon(QIcon(":/OpenSpeedShop/app.png"));
-    mainWindow->setWindowTitle(QString("Open|SpeedShop%1").arg(QChar(0x2122))); //Trademark
+    try {
 
-    /*** Set our main widget in the main window ***/
-    mainWindow->setCentralWidget(&m_MainWidget);
+        readSettings();
 
-    /*** Register the settings page factory ***/
-    Core::SettingManager::SettingManager *settingManager = Core::SettingManager::SettingManager::instance();
-    settingManager->registerPageFactory(&m_SettingPageFactory);
+        /*** We're a main plugin, so we need to make changes to the mainWindow,
+             like the application icon and the title ***/
+        MainWindow::MainWindow &mainWindow = MainWindow::MainWindow::instance();
+        mainWindow.setWindowIcon(QIcon(":/OpenSpeedShop/app.png"));
+        mainWindow.setWindowTitle(QString("Open|SpeedShop%1").arg(QChar(0x2122))); //Trademark
 
-    /*** Register our menu structure ***/
-    foreach(QAction *action, mainWindow->menuBar()->actions()) {
-        if(action->text() == tr("Help")) {
-            m_AboutPage.setText(tr("About Open|SpeedShop"));
-            m_AboutPage.setToolTip(tr("Displays the Open|SpeedShop about dialog"));
-            connect(&m_AboutPage, SIGNAL(triggered()), this, SLOT(aboutDialog()));
-            action->menu()->addAction(&m_AboutPage);
+        /*** Set our main widget in the main window ***/
+        mainWindow.setCentralWidget(&m_MainWidget);
+
+        /*** Register our menu structure ***/
+        foreach(QAction *action, mainWindow.menuBar()->actions()) {
+            if(action->text() == tr("Help")) {
+                m_AboutPage.setText(tr("About Open|SpeedShop"));
+                m_AboutPage.setToolTip(tr("Displays the Open|SpeedShop about dialog"));
+                connect(&m_AboutPage, SIGNAL(triggered()), this, SLOT(aboutDialog()));
+                action->menu()->addAction(&m_AboutPage);
+            }
         }
+
+        /*** Register any objects with the plugin manager ***/
+        PluginManager::PluginManager &pluginManager = PluginManager::PluginManager::instance();
+        pluginManager.addObject(this);                         /* Register ourselves as an ISettingPageFactory */
+
+        ConnectionManager *connectionManager = ConnectionManager::instance();
+        if(!connectionManager->initialize(args, err)) { throw; }
+
+        ModelManager *modelManager = ModelManager::instance();
+        if(!modelManager->initialize(args, err)) { throw; }
+
+        ViewManager *viewManager = ViewManager::instance();
+        if(!viewManager->initialize(args, err)) { throw; }
+
+    } catch(...) {
+        if(err->isEmpty()) err->append("\n");
+        err->append(tr("Could not initialize Open|SpeedShop plugin"));
+        return false;
     }
-
-    /*** Register any managers with the plugin manager ***/
-    Core::PluginManager::PluginManager *pluginManager = Core::PluginManager::PluginManager::instance();
-
-    ConnectionManager *connectionManager = ConnectionManager::instance();
-    connectionManager->initialize();
-    pluginManager->addObject(connectionManager);
-
-    ModelManager *modelManager = ModelManager::instance();
-    modelManager->initialize();
-    pluginManager->addObject(modelManager);
-
-    ViewManager *viewManager = ViewManager::instance();
-    viewManager->initialize();
-    pluginManager->addObject(viewManager);
 
     return true;
 }
@@ -134,10 +139,10 @@ void OpenSpeedShopPlugin::aboutDialog()
         about.exec();
     } catch(QString err) {
         using namespace Core::MainWindow;
-        MainWindow::instance()->notify(tr("Failed to open about dialog: %1").arg(err), NotificationWidget::Critical);
+        MainWindow::instance().notify(tr("Failed to open about dialog: %1").arg(err), NotificationWidget::Critical);
     } catch(...) {
         using namespace Core::MainWindow;
-        MainWindow::instance()->notify(tr("Failed to open about dialog."), NotificationWidget::Critical);
+        MainWindow::instance().notify(tr("Failed to open about dialog."), NotificationWidget::Critical);
     }
 }
 
@@ -159,32 +164,48 @@ QList<Core::PluginManager::Dependency> OpenSpeedShopPlugin::dependencies()
 
 void OpenSpeedShopPlugin::readSettings()
 {
-    Core::SettingManager::SettingManager *settingManager =
-            Core::SettingManager::SettingManager::instance();
-
-    settingManager->beginGroup("Plugins");
-    settingManager->beginGroup("OpenSpeedShop");
+    Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
+    settingManager.beginGroup("Plugins/OpenSpeedShop");
 
 
-    settingManager->endGroup();
-    settingManager->endGroup();
+    settingManager.endGroup();
 }
 
 void OpenSpeedShopPlugin::writeSettings()
 {
-    Core::SettingManager::SettingManager *settingManager =
-            Core::SettingManager::SettingManager::instance();
-
-    settingManager->beginGroup("Plugins");
-    settingManager->beginGroup("OpenSpeedShop");
+    Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
+    settingManager.beginGroup("Plugins/OpenSpeedShop");
 
 
-    settingManager->endGroup();
-    settingManager->endGroup();
+    settingManager.endGroup();
 }
 
 
-Q_EXPORT_PLUGIN(Plugins::OpenSpeedShop::OpenSpeedShopPlugin)
+/* BEGIN ISettingPageFactory */
+QIcon OpenSpeedShopPlugin::settingPageIcon()
+{
+    return QIcon(":/OpenSpeedShop/app.png");
+}
 
-}}
+QString OpenSpeedShopPlugin::settingPageName()
+{
+    return tr("Open|SpeedShop");
+}
+
+int OpenSpeedShopPlugin::settingPagePriority()
+{
+    return 128;
+}
+
+Core::SettingManager::ISettingPage *OpenSpeedShopPlugin::createSettingPage()
+{
+    return new SettingPage();
+}
+/* END ISettingPageFactory */
+
+
+} // namespace OpenSpeedShop
+} // namespace Plugins
+
+Q_EXPORT_PLUGIN(Plugins::OpenSpeedShop::OpenSpeedShopPlugin)
 

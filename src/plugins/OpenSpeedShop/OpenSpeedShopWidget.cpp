@@ -11,8 +11,8 @@ OpenSpeedShopWidget::OpenSpeedShopWidget(QWidget *parent) :
     ui->setupUi(this);
     connect(this, SIGNAL(tabCloseRequested(int)), this, SLOT(closeExperiment(int)));
 
-    Core::MainWindow::MainWindow *mainWindow = Core::MainWindow::MainWindow::instance();
-    foreach(QAction *action, mainWindow->menuBar()->actions()) {
+    Core::MainWindow::MainWindow &mainWindow = Core::MainWindow::MainWindow::instance();
+    foreach(QAction *action, mainWindow.menuBar()->actions()) {
         if(action->text() == tr("File")) {
             QAction *createExperiment = new QAction(tr("New Experiment"), this);
             createExperiment->setToolTip(tr("Create a new Open|SpeedShop experiment"));
@@ -52,10 +52,10 @@ void OpenSpeedShopWidget::createExperiment()
 
     } catch(QString err) {
         using namespace Core::MainWindow;
-        MainWindow::instance()->notify(tr("Failed to create experiment: %1").arg(err), NotificationWidget::Critical);
+        MainWindow::instance().notify(tr("Failed to create experiment: %1").arg(err), NotificationWidget::Critical);
     } catch(...) {
         using namespace Core::MainWindow;
-        MainWindow::instance()->notify(tr("Failed to create experiment."), NotificationWidget::Critical);
+        MainWindow::instance().notify(tr("Failed to create experiment."), NotificationWidget::Critical);
     }
 }
 
@@ -72,10 +72,10 @@ void OpenSpeedShopWidget::loadExperiment()
 
     } catch(QString err) {
         using namespace Core::MainWindow;
-        MainWindow::instance()->notify(tr("Failed to load experiment: %1").arg(err), NotificationWidget::Critical);
+        MainWindow::instance().notify(tr("Failed to load experiment: %1").arg(err), NotificationWidget::Critical);
     } catch(...) {
         using namespace Core::MainWindow;
-        MainWindow::instance()->notify(tr("Failed to load experiment."), NotificationWidget::Critical);
+        MainWindow::instance().notify(tr("Failed to load experiment."), NotificationWidget::Critical);
     }
 }
 
@@ -94,10 +94,10 @@ void OpenSpeedShopWidget::closeExperiment(int index)
 
     } catch(QString err) {
         using namespace Core::MainWindow;
-        MainWindow::instance()->notify(tr("Failed to load experiment: %1").arg(err), NotificationWidget::Critical);
+        MainWindow::instance().notify(tr("Failed to load experiment: %1").arg(err), NotificationWidget::Critical);
     } catch(...) {
         using namespace Core::MainWindow;
-        MainWindow::instance()->notify(tr("Failed to load experiment."), NotificationWidget::Critical);
+        MainWindow::instance().notify(tr("Failed to load experiment."), NotificationWidget::Critical);
     }
 }
 
@@ -138,10 +138,10 @@ void OpenSpeedShopWidget::tabTitleChanged()
 
     } catch(QString err) {
         using namespace Core::MainWindow;
-        MainWindow::instance()->notify(tr("Failed to change tab name: %1").arg(err), NotificationWidget::Critical);
+        MainWindow::instance().notify(tr("Failed to change tab name: %1").arg(err), NotificationWidget::Critical);
     } catch(...) {
         using namespace Core::MainWindow;
-        MainWindow::instance()->notify(tr("Failed to change tab name."), NotificationWidget::Critical);
+        MainWindow::instance().notify(tr("Failed to change tab name."), NotificationWidget::Critical);
     }
 }
 

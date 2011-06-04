@@ -30,18 +30,22 @@
 
 #include <QObject>
 #include <QList>
+#include <SettingManager/ISettingPageFactory.h>
 #include <SettingManager/SettingManager.h>
-#include "PluginSettingPageFactory.h"
 #include "PluginWrapper.h"
 
 namespace Core {
 namespace PluginManager {
 
-class PLUGINMANAGER_EXPORT PluginManager : public QObject
+class PLUGINMANAGER_EXPORT PluginManager :
+        public QObject,
+        public SettingManager::ISettingPageFactory
 {
     Q_OBJECT
+    Q_INTERFACES(Core::SettingManager::ISettingPageFactory)
+
 public:
-    static PluginManager *instance();
+    static PluginManager &instance();
     ~PluginManager();
 
     bool initialize();
@@ -50,6 +54,7 @@ public:
 
     void loadPlugins();
 
+    QObjectList allObjects() const;
     void addObject(QObject *object);
     bool delObject(QObject *object);
 
@@ -62,6 +67,14 @@ public:
         }
         return list;
     }
+
+    /* BEGIN ISettingPageFactory */
+    QIcon settingPageIcon();
+    QString settingPageName();
+    int settingPagePriority();
+    SettingManager::ISettingPage *createSettingPage();
+    /* END ISettingPageFactory */
+
 
 signals:
     void pluginLoaded(IPlugin *);
@@ -86,7 +99,7 @@ protected:
     void initializePlugins();
 
     QList<PluginWrapper *> m_Plugins;
-    QList<QObject *> m_Objects;
+    QObjectList m_Objects;
 
     QString m_PluginPath;
 

@@ -133,55 +133,45 @@ int main(int argc, char *argv[])
     qDebug() << __FILE__ << __LINE__ << "\tInstantiating the singleton classes";
 #endif
 
-    Core::SettingManager::SettingManager *settingManager =
-            Core::SettingManager::SettingManager::instance();
-    Core::MainWindow::MainWindow *mainWindow =
-            Core::MainWindow::MainWindow::instance();
-    Core::PluginManager::PluginManager *pluginManager =
-            Core::PluginManager::PluginManager::instance();
+    using namespace Core;
+    SettingManager::SettingManager &settingManager = SettingManager::SettingManager::instance();
+    MainWindow::MainWindow &mainWindow = MainWindow::MainWindow::instance();
+    PluginManager::PluginManager &pluginManager = PluginManager::PluginManager::instance();
 
 #ifdef MAIN_DEBUG
     qDebug() << __FILE__ << __LINE__ << "\tInitializing the singleton classes";
 #endif
 
-    if(!settingManager->initialized())
-        settingManager->initialize();
-    if(!mainWindow->initialized())
-        mainWindow->initialize();
-    if(!pluginManager->initialized())
-        pluginManager->initialize();
+    if(!settingManager.initialized())
+        settingManager.initialize();
+    if(!mainWindow.initialized())
+        mainWindow.initialize();
+    if(!pluginManager.initialized())
+        pluginManager.initialize();
 
 #ifdef MAIN_DEBUG
     qDebug() << __FILE__ << __LINE__ << "\tLoading plugins";
 #endif
 
-    pluginManager->loadPlugins();
+    pluginManager.loadPlugins();
 
 #ifdef MAIN_DEBUG
     qDebug() << __FILE__ << __LINE__ << "\tShowing the MainWindow";
 #endif
 
-    mainWindow->show();
+    mainWindow.show();
     retval = a.exec();
 
 #ifdef MAIN_DEBUG
     qDebug() << __FILE__ << __LINE__ << "\tShutting down singleton classes";
 #endif
 
-    if(pluginManager->initialized())
-        pluginManager->shutdown();
-    if(mainWindow->initialized())
-        mainWindow->shutdown();
-    if(settingManager->initialized())
-        settingManager->shutdown();
-
-#ifdef MAIN_DEBUG
-    qDebug() << __FILE__ << __LINE__ << "\tDeleting singleton classes";
-#endif
-
-    delete mainWindow;
-    delete pluginManager;
-    delete settingManager;
+    if(pluginManager.initialized())
+        pluginManager.shutdown();
+    if(mainWindow.initialized())
+        mainWindow.shutdown();
+    if(settingManager.initialized())
+        settingManager.shutdown();
 
 #ifdef MAIN_DEBUG
     qDebug() << __FILE__ << __LINE__ << "\tDone";

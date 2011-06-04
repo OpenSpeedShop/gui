@@ -29,9 +29,7 @@ HEADERS +=  ActionManager/ActionManager.h \
             ActionManager/MenuItem.h \
             MainWindow/MainWindow.h \
             PluginManager/PluginSettingPage.h \
-            PluginManager/PluginSettingPageFactory.h \
             MainWindow/MainSettingPage.h \
-            MainWindow/MainSettingPageFactory.h \
             MainWindow/NotificationWidget.h \
             PluginManager/PluginManagerLibrary.h \
             SettingManager/SettingManagerLibrary.h \
@@ -49,9 +47,7 @@ SOURCES +=  ActionManager/ActionManager.cpp \
             ActionManager/MenuItem.cpp \
             MainWindow/MainWindow.cpp \
             PluginManager/PluginSettingPage.cpp \
-            PluginManager/PluginSettingPageFactory.cpp \
             MainWindow/MainSettingPage.cpp \
-            MainWindow/MainSettingPageFactory.cpp \
             MainWindow/NotificationWidget.cpp
 
 FORMS   +=  SettingManager/SettingDialog.ui \

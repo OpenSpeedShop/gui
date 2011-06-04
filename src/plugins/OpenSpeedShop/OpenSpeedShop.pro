@@ -20,7 +20,6 @@ include(../plugins.pri)
 TARGET        = OpenSpeedShop
 
 SOURCES      += OpenSpeedShopPlugin.cpp \
-                Settings/SettingPageFactory.cpp \
                 Settings/SettingPage.cpp \
                 AboutDialog.cpp \
                 Experiment/ExperimentWidget.cpp \
@@ -30,7 +29,6 @@ SOURCES      += OpenSpeedShopPlugin.cpp \
                 ConnectionManager/ConnectionWidget.cpp \
                 ConnectionManager/ConnectionManager.cpp \
                 ModelManager/DataModel.cpp \
-                ConnectionManager/ServerAdapter.cpp \
                 RemoteFileSystem/RemoteFileEngine.cpp \
                 RemoteFileSystem/RemoteFileEngineHandler.cpp \
                 ModelManager/ModelDescriptor.cpp \
@@ -39,14 +37,12 @@ SOURCES      += OpenSpeedShopPlugin.cpp \
                 ModelManager/ModelManagerDialog.cpp \
                 ModelManager/ModelDescriptorListWidget.cpp \
                 ConnectionManager/IAdapter.cpp \
-                ConnectionManager/ConnectionManagerSettingPageFactory.cpp \
                 ConnectionManager/IConnectionPage.cpp \
                 ViewManager/ViewManager.cpp \
-                ViewManager/IViewPlugin.cpp \
-    ViewManager/IViewFilterable.cpp
+                ViewManager/IViewFilterable.cpp \
+    ViewManager/IViewFactory.cpp
 
 HEADERS      += OpenSpeedShopPlugin.h \
-                Settings/SettingPageFactory.h \
                 Settings/SettingPage.h \
                 AboutDialog.h \
                 Experiment/ExperimentWidget.h \
@@ -58,7 +54,6 @@ HEADERS      += OpenSpeedShopPlugin.h \
                 ModelManager/DataModel.h \
                 ConnectionManager/ConnectionManagerLibrary.h \
                 OpenSpeedShopLibrary.h \
-                ConnectionManager/ServerAdapter.h \
                 RemoteFileSystem/RemoteFileEngine.h \
                 RemoteFileSystem/RemoteFileEngineHandler.h \
                 ModelManager/ModelDescriptor.h \
@@ -67,12 +62,12 @@ HEADERS      += OpenSpeedShopPlugin.h \
                 ModelManager/ModelManagerDialog.h \
                 ModelManager/ModelDescriptorListWidget.h \
                 ConnectionManager/IAdapter.h \
-                ConnectionManager/ConnectionManagerSettingPageFactory.h \
                 ConnectionManager/IConnectionPage.h \
                 ViewManager/ViewManager.h \
-                ViewManager/IViewPlugin.h \
-    ViewManager/ViewManagerLibrary.h \
-    ViewManager/IViewFilterable.h
+                ViewManager/ViewManagerLibrary.h \
+                ViewManager/IViewFilterable.h \
+    ModelManager/ModelManagerLibrary.h \
+    ViewManager/IViewFactory.h
 
 FORMS        += Settings/SettingPage.ui \
                 AboutDialog.ui \
@@ -88,11 +83,11 @@ QT           += xml
 
 DEFINES      += OPENSPEEDSHOP_LIBRARY \
                 CONNECTIONMANAGER_LIBRARY \
-                VIEWMANAGER_LIBRARY
+                VIEWMANAGER_LIBRARY \
+                MODELMANAGER_LIBRARY
 
 #debug: DEFINES += DATAMODEL_DEBUG
 #debug: DEFINES += MODELMANAGER_DEBUG
-#debug: DEFINES += SERVERADAPTER_DEBUG
 
 # List of experiment types and their possible modifiers/metrics
 # In the future, this should be pulled from the server

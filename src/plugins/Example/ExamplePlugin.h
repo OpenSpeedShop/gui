@@ -30,8 +30,6 @@
 
 #include <QtCore>
 #include <PluginManager/IPlugin.h>
-#include <ConnectionManager/IConnection.h>
-#include <ConnectionManager/ConnectionManager.h>
 
 namespace Plugins {
 namespace Example {
@@ -58,7 +56,6 @@ protected:
 
 };
 
-
-
-}}
+} // namespace Example
+} // namespace Plugins
 #endif // EXAMPLEPLUGIN_H

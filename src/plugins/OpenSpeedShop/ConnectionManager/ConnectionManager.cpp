@@ -34,6 +34,7 @@
 
 #include "IConnection.h"
 #include "ServerCommand.h"
+#include "ConnectionWidget.h"
 
 namespace Plugins {
 namespace OpenSpeedShop {
@@ -71,29 +72,38 @@ ConnectionManager::~ConnectionManager()
 /*! \fn ConnectionManager::initialize()
     \brief Called when the GUI plugins are initializing
  */
-bool ConnectionManager::initialize()
+bool ConnectionManager::initialize(QStringList &args, QString *err)
 {
-    /*** Register the settings page ***/
-    Core::SettingManager::SettingManager *settingManager = Core::SettingManager::SettingManager::instance();
-    settingManager->registerPageFactory(&m_ConnectionManagerSettingPageFactory);
+    using namespace Core;
 
+    try {
 
-    /*** Register our menu structure ***/
-    Core::MainWindow::MainWindow *mainWindow = Core::MainWindow::MainWindow::instance();
-    foreach(QAction *action, mainWindow->menuBar()->actions()) {
-        if(action->text() == tr("Tools")) {
-            m_ServerConnect.setText(tr("Connect to server"));
-            m_ServerConnect.setToolTip(tr("Connects to an Open|SpeedShop server"));
-            connect(&m_ServerConnect, SIGNAL(triggered()), this, SLOT(serverConnect()));
-            action->menu()->insertAction(action->menu()->actions().at(0), &m_ServerConnect);
+        /*** Register our menu structure ***/
+        MainWindow::MainWindow &mainWindow = MainWindow::MainWindow::instance();
+        foreach(QAction *action, mainWindow.menuBar()->actions()) {
+            if(action->text() == tr("Tools")) {
+                m_ServerConnect.setText(tr("Connect to server"));
+                m_ServerConnect.setToolTip(tr("Connects to an Open|SpeedShop server"));
+                connect(&m_ServerConnect, SIGNAL(triggered()), this, SLOT(serverConnect()));
+                action->menu()->insertAction(action->menu()->actions().at(0), &m_ServerConnect);
+            }
         }
+
+        readSettings();
+
+        PluginManager::PluginManager &pluginManager = PluginManager::PluginManager::instance();
+        pluginManager.addObject(this);
+
+        /* Check the object pool for anything we should manage */
+        foreach(QObject *object, pluginManager.allObjects()) { pluginObjectRegistered(object); }
+        connect(&pluginManager, SIGNAL(objectAdded(QObject*)), this, SLOT(pluginObjectRegistered(QObject*)));
+        connect(&pluginManager, SIGNAL(objectRemoving(QObject*)), this, SLOT(pluginObjectDeregistered(QObject*)));
+
+    } catch(...) {
+        if(err->isEmpty()) err->append("\n");
+        err->append(tr("Could not initialize ConnectionManager"));
+        return false;
     }
-
-
-    //DEBUG:
-    registerAdapter(&m_ServerAdapter);
-
-    readSettings();
 
     return true;
 }
@@ -117,10 +127,10 @@ void ConnectionManager::shutdown()
  */
 void ConnectionManager::readSettings()
 {
-    Core::SettingManager::SettingManager *settingManager = Core::SettingManager::SettingManager::instance();
-    settingManager->beginGroup("Plugins/OpenSpeedShop/ConnectionManager");
-    QString connectionName = settingManager->value("ConnectionName", QString()).toString();
-    settingManager->endGroup();
+    Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
+    settingManager.beginGroup("Plugins/OpenSpeedShop/ConnectionManager");
+    QString connectionName = settingManager.value("ConnectionName", QString()).toString();
+    settingManager.endGroup();
 
     foreach(IConnection *connection, m_Connections) {
         if(connection->name().compare(connectionName, Qt::CaseInsensitive) == 0) {
@@ -140,11 +150,28 @@ void ConnectionManager::readSettings()
  */
 void ConnectionManager::writeSettings()
 {
-    Core::SettingManager::SettingManager *settingManager = Core::SettingManager::SettingManager::instance();
-    settingManager->beginGroup("Plugins/OpenSpeedShop/ConnectionManager");
+    Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
+    settingManager.beginGroup("Plugins/OpenSpeedShop/ConnectionManager");
 
-    settingManager->endGroup();
+    settingManager.endGroup();
 }
+
+
+void ConnectionManager::pluginObjectRegistered(QObject *object)
+{
+    IConnection *connection = qobject_cast<IConnection *>(object);
+    if(connection) registerConnection(connection);
+
+    IAdapter *adapter = qobject_cast<IAdapter *>(object);
+    if(adapter) registerAdapter(adapter);
+}
+
+void ConnectionManager::pluginObjectDeregistered(QObject *object)
+{
+    throw tr("Plugin object deregistration in the ConnectionManager has not been implemented");
+}
+
+
 
 /*! \fn ConnectionManager::registerConnection()
     \brief Registers a potential connection type, and allows it to be displayed to the user as an option
@@ -156,10 +183,10 @@ void ConnectionManager::registerConnection(IConnection *connection)
     m_Connections.append(connection);
     emit connectionRegistered(connection);
 
-    Core::SettingManager::SettingManager *settingManager = Core::SettingManager::SettingManager::instance();
-    settingManager->beginGroup("Plugins/OpenSpeedShop/ConnectionManager");
-    QString connectionName = settingManager->value("ConnectionName", QString()).toString();
-    settingManager->endGroup();
+    Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
+    settingManager.beginGroup("Plugins/OpenSpeedShop/ConnectionManager");
+    QString connectionName = settingManager.value("ConnectionName", QString()).toString();
+    settingManager.endGroup();
 
     if(connection->name().compare(connectionName, Qt::CaseInsensitive) == 0) {
         setCurrentConnection(connection);
@@ -200,6 +227,7 @@ IConnection *ConnectionManager::currentConnection()
 {
     return m_CurrentConnection;
 }
+
 
 void ConnectionManager::registerAdapter(IAdapter *adapter)
 {
@@ -365,7 +393,7 @@ void ConnectionManager::connectToServer()
     }
 
     using namespace Core::MainWindow;
-    m_notifyConnecting = MainWindow::instance()->notify("Connecting to server", NotificationWidget::Loading);
+    m_notifyConnecting = MainWindow::instance().notify("Connecting to server", NotificationWidget::Loading);
 }
 
 void ConnectionManager::disconnectFromServer()
@@ -388,13 +416,34 @@ void ConnectionManager::serverConnect()
 
     } catch(QString err) {
         using namespace Core::MainWindow;
-        MainWindow::instance()->notify(tr("Client error while attempting to connect to server: %1").arg(err), NotificationWidget::Critical);
+        MainWindow::instance().notify(tr("Client error while attempting to connect to server: %1").arg(err), NotificationWidget::Critical);
     } catch(...) {
         using namespace Core::MainWindow;
-        MainWindow::instance()->notify(tr("Client error while attempting to connect to server."), NotificationWidget::Critical);
+        MainWindow::instance().notify(tr("Client error while attempting to connect to server."), NotificationWidget::Critical);
     }
 }
 
+/* BEGIN ISettingPageFactory */
+QIcon ConnectionManager::settingPageIcon()
+{
+    return QIcon(":/OpenSpeedShop/app.png");
+}
+
+QString ConnectionManager::settingPageName()
+{
+    return tr("Server Connections");
+}
+
+int ConnectionManager::settingPagePriority()
+{
+    return 128;
+}
+
+Core::SettingManager::ISettingPage *ConnectionManager::createSettingPage()
+{
+    return new ConnectionWidget();
+}
+/* END ISettingPageFactory */
 
 
 } // namespace OpenSpeedShop

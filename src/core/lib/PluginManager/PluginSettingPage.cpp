@@ -57,7 +57,7 @@ PluginSettingPage::PluginSettingPage(QWidget *parent) :
 
     readSettings();
 
-    buildTree( PluginManager::PluginManager::instance()->m_Plugins );
+    buildTree( PluginManager::PluginManager::instance().m_Plugins );
     reset();
 }
 
@@ -82,65 +82,59 @@ void PluginSettingPage::changeEvent(QEvent *e)
 
 void PluginSettingPage::apply()
 {
-    SettingManager::SettingManager *settingManager =
-            SettingManager::SettingManager::instance();
+    SettingManager::SettingManager &settingManager = SettingManager::SettingManager::instance();
 
-    settingManager->beginGroup("PluginManager");
+    settingManager.beginGroup("PluginManager");
 
     // Store user settable settings
-    PluginManager::instance()->m_PluginPath = ui->txtPluginPath->text();
+    PluginManager::instance().m_PluginPath = ui->txtPluginPath->text();
 
     /* We could let the PluginManager manage this setting (it's stored upon
        close)... but then if we did, if there was a crash, the setting would
        never be stored. So we shall for now, until there is a reason not to.*/
-    settingManager->setValue("PluginPath", ui->txtPluginPath->text());
+    settingManager.setValue("PluginPath", ui->txtPluginPath->text());
 
-    settingManager->endGroup();
+    settingManager.endGroup();
 }
 
 void PluginSettingPage::reset()
 {
-    SettingManager::SettingManager *settingManager =
-            SettingManager::SettingManager::instance();
-
-    settingManager->beginGroup("PluginManager");
+    SettingManager::SettingManager &settingManager = SettingManager::SettingManager::instance();
+    settingManager.beginGroup("PluginManager");
 
     // Restore user settable settings
-    ui->txtPluginPath->setText(PluginManager::instance()->m_PluginPath);
+    ui->txtPluginPath->setText(PluginManager::instance().m_PluginPath);
 
-    settingManager->endGroup();
+    settingManager.endGroup();
 }
 
 void PluginSettingPage::readSettings()
 {
-    SettingManager::SettingManager *settingManager =
-            SettingManager::SettingManager::instance();
-
-    settingManager->beginGroup("PluginManager");
-    settingManager->beginGroup("SettingPage");
+    SettingManager::SettingManager &settingManager = SettingManager::SettingManager::instance();
+    settingManager.beginGroup("PluginManager");
+    settingManager.beginGroup("SettingPage");
 
     //! todo Restore tree state
-    resize( settingManager->value("WindowSize", size()).toSize() );
-    move( settingManager->value("WindowPosition", pos()).toPoint() );
+    resize( settingManager.value("WindowSize", size()).toSize() );
+    move( settingManager.value("WindowPosition", pos()).toPoint() );
 
-    settingManager->endGroup();
-    settingManager->endGroup();
+    settingManager.endGroup();
+    settingManager.endGroup();
 }
 
 void PluginSettingPage::writeSettings()
 {
-    SettingManager::SettingManager *settingManager =
-            SettingManager::SettingManager::instance();
+    SettingManager::SettingManager &settingManager = SettingManager::SettingManager::instance();
 
-    settingManager->beginGroup("PluginManager");
-    settingManager->beginGroup("SettingPage");
+    settingManager.beginGroup("PluginManager");
+    settingManager.beginGroup("SettingPage");
 
     //! \todo Store tree state
-    settingManager->setValue("WindowSize", size());
-    settingManager->setValue("WindowPosition", pos());
+    settingManager.setValue("WindowSize", size());
+    settingManager.setValue("WindowPosition", pos());
 
-    settingManager->endGroup();
-    settingManager->endGroup();
+    settingManager.endGroup();
+    settingManager.endGroup();
 }
 
 void PluginSettingPage::buildTree(QList<PluginWrapper *> plugins)

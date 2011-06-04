@@ -44,16 +44,15 @@ namespace SettingManager {
          robust backing the settings in this project.
  */
 
-SettingManager *m_Instance;
-
 /*!
    \fn SettingManager::instance()
    \brief Access to the singleton instance of this class
    \returns A pointer to the singleton instance of this class
  */
-SettingManager *SettingManager::instance()
+SettingManager &SettingManager::instance()
 {
-    return m_Instance ? m_Instance : m_Instance = new SettingManager();
+    static SettingManager m_Instance;
+    return m_Instance;
 }
 
 /*!
@@ -61,7 +60,8 @@ SettingManager *SettingManager::instance()
    \brief Constructor
    \internal
  */
-SettingManager::SettingManager() : QObject(0)
+SettingManager::SettingManager(QObject *parent) :
+    QObject(parent)
 {
     m_Initialized = false;
 }
@@ -77,21 +77,30 @@ SettingManager::~SettingManager()
 
     while(!m_Pages.isEmpty())
         delete m_Pages.takeFirst();
-
-    if(m_Instance)
-        m_Instance = NULL;
 }
 
 bool SettingManager::initialize()
 {
-    MainWindow::MainWindow *mainWindow = MainWindow::MainWindow::instance();
-    foreach(QAction *action, mainWindow->menuBar()->actions()) {
-        if(action->text() == tr("Tools")) {
-            QAction *settingDialog = new QAction(tr("Settings"), this);
-            settingDialog->setToolTip(tr("Change application and plugin settings"));
-            connect(settingDialog, SIGNAL(triggered()), this, SLOT(settingDialog()));
-            action->menu()->addAction(settingDialog);
+    try {
+
+        MainWindow::MainWindow &mainWindow = MainWindow::MainWindow::instance();
+        foreach(QAction *action, mainWindow.menuBar()->actions()) {
+            if(action->text() == tr("Tools")) {
+                QAction *settingDialog = new QAction(tr("Settings"), this);
+                settingDialog->setToolTip(tr("Change application and plugin settings"));
+                connect(settingDialog, SIGNAL(triggered()), this, SLOT(settingDialog()));
+                action->menu()->addAction(settingDialog);
+            }
         }
+
+        /* Check the object pool for anything we should manage */
+        Core::PluginManager::PluginManager &pluginManager = Core::PluginManager::PluginManager::instance();
+        foreach(QObject *object, pluginManager.allObjects()) { pluginObjectRegistered(object); }
+        connect(&pluginManager, SIGNAL(objectAdded(QObject*)), this, SLOT(pluginObjectRegistered(QObject*)));
+        connect(&pluginManager, SIGNAL(objectRemoving(QObject*)), this, SLOT(pluginObjectDeregistered(QObject*)));
+
+    } catch(...) {
+        return false;
     }
 
     return m_Initialized = true;
@@ -181,15 +190,33 @@ QString SettingManager::group() const
     return m_Settings.group();
 }
 
+void SettingManager::pluginObjectRegistered(QObject *object)
+{
+    ISettingPageFactory *settingPageFactory = qobject_cast<ISettingPageFactory *>(object);
+    if(settingPageFactory) registerPageFactory(settingPageFactory);
+}
+
+void SettingManager::pluginObjectDeregistered(QObject *object)
+{
+    ISettingPageFactory *settingPageFactory = qobject_cast<ISettingPageFactory *>(object);
+    if(settingPageFactory) deregisterPageFactory(settingPageFactory);
+}
 
 void SettingManager::registerPageFactory(ISettingPageFactory *page)
 {
     m_Pages.append(page);
 }
 
+void SettingManager::deregisterPageFactory(ISettingPageFactory *page)
+{
+    if(m_Pages.contains(page)) {
+        m_Pages.append(page);
+    }
+}
+
 void SettingManager::settingDialog()
 {
-    SettingDialog dialog(m_Pages, MainWindow::MainWindow::instance());
+    SettingDialog dialog(m_Pages, &MainWindow::MainWindow::instance());
     dialog.exec();
 }
 

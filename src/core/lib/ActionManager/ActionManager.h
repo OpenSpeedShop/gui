@@ -41,7 +41,7 @@ class ACTIONMANAGER_EXPORT ActionManager : public QObject
 {
     Q_OBJECT
 public:
-    static ActionManager *instance();
+    static ActionManager &instance();
     ~ActionManager();
 
     void registerMenuItem(MenuItem *menuItem);

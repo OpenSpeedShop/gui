@@ -11,7 +11,7 @@ namespace OpenSpeedShop {
 
 class IConnection;
 
-class ServerCommand : public QObject
+class CONNECTIONMANAGER_EXPORT ServerCommand : public QObject
 {
     Q_OBJECT
 public:

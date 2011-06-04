@@ -58,22 +58,22 @@ DirectConnectionPage::~DirectConnectionPage()
 
 void DirectConnectionPage::apply()
 {
-    Core::SettingManager::SettingManager *settingManager = Core::SettingManager::SettingManager::instance();
-    settingManager->beginGroup("Plugins/ConnectionManager/DirectConnection");
-    settingManager->setValue("HostName", ui->txtHostname->text());
-    settingManager->setValue("Port", ui->txtPort->value());
-    settingManager->endGroup();
+    Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
+    settingManager.beginGroup("Plugins/ConnectionManager/DirectConnection");
+    settingManager.setValue("HostName", ui->txtHostname->text());
+    settingManager.setValue("Port", ui->txtPort->value());
+    settingManager.endGroup();
 
     m_ParentConnection->readSettings();
 }
 
 void DirectConnectionPage::reset()
 {
-    Core::SettingManager::SettingManager *settingManager = Core::SettingManager::SettingManager::instance();
-    settingManager->beginGroup("Plugins/ConnectionManager/DirectConnection");
-    ui->txtHostname->setText(settingManager->value("HostName", m_ParentConnection->m_HostName).toString());
-    ui->txtPort->setValue(settingManager->value("Port", m_ParentConnection->m_Port).toInt());
-    settingManager->endGroup();
+    Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
+    settingManager.beginGroup("Plugins/ConnectionManager/DirectConnection");
+    ui->txtHostname->setText(settingManager.value("HostName", m_ParentConnection->m_HostName).toString());
+    ui->txtPort->setValue(settingManager.value("Port", m_ParentConnection->m_Port).toInt());
+    settingManager.endGroup();
 }
 
 } // namespace DirectConnection

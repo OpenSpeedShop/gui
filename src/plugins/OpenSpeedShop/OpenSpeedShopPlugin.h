@@ -31,16 +31,20 @@
 #include <QtCore>
 #include <MainWindow/MainWindow.h>
 #include <PluginManager/IPlugin.h>
+#include <SettingManager/ISettingPageFactory.h>
 #include "OpenSpeedShopWidget.h"
-#include "Settings/SettingPageFactory.h"
 
 namespace Plugins {
 namespace OpenSpeedShop {
 
-class OpenSpeedShopPlugin : public QObject, public Core::PluginManager::IPlugin
+class OpenSpeedShopPlugin :
+        public QObject,
+        public Core::PluginManager::IPlugin,
+        public Core::SettingManager::ISettingPageFactory
 {
-Q_OBJECT
-Q_INTERFACES(Core::PluginManager::IPlugin)
+    Q_OBJECT
+    Q_INTERFACES(Core::PluginManager::IPlugin)
+    Q_INTERFACES(Core::SettingManager::ISettingPageFactory)
 
 public:
     OpenSpeedShopPlugin();
@@ -53,6 +57,13 @@ public:
     QString version();
     QList<Core::PluginManager::Dependency> dependencies();
 
+    /* BEGIN ISettingPageFactory */
+    QIcon settingPageIcon();
+    QString settingPageName();
+    int settingPagePriority();
+    Core::SettingManager::ISettingPage *createSettingPage();
+    /* END ISettingPageFactory */
+
 public slots:
     void aboutDialog();
 
@@ -62,7 +73,6 @@ protected:
     QList<Core::PluginManager::Dependency> m_Dependencies;
 
     OpenSpeedShopWidget m_MainWidget;
-    SettingPageFactory m_SettingPageFactory;
 
     QAction m_AboutPage;
 

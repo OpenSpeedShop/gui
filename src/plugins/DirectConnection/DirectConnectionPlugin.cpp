@@ -68,15 +68,14 @@ bool DirectConnectionPlugin::initialize(QStringList &args, QString *err)
     Q_UNUSED(args)
     Q_UNUSED(err)
 
-    Core::PluginManager::PluginManager *pluginManager = Core::PluginManager::PluginManager::instance();
-    QList<ConnectionManager *> *managers = pluginManager->getObjects<ConnectionManager>();
-    if(managers->count()) {
-        ConnectionManager *connectionManager = managers->at(0);
-        connectionManager->registerConnection(&m_DirectConnection);
-        return true;
+    try {
+        Core::PluginManager::PluginManager &pluginManager = Core::PluginManager::PluginManager::instance();
+        pluginManager.addObject(&m_DirectConnection);
+    } catch(...) {
+        return false;
     }
 
-    return false;
+    return true;
 }
 
 void DirectConnectionPlugin::shutdown()

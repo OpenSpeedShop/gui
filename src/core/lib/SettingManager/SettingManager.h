@@ -46,7 +46,7 @@ class SETTINGMANAGER_EXPORT SettingManager : public QObject
 {
     Q_OBJECT
 public:
-    static SettingManager *instance();
+    static SettingManager &instance();
     ~SettingManager();
 
     bool initialize();
@@ -63,7 +63,6 @@ public:
     void endGroup();
     QString group() const;
 
-    void registerPageFactory(ISettingPageFactory *page);
 
 signals:
 
@@ -71,12 +70,18 @@ public slots:
     void settingDialog();
 
 protected:
-    SettingManager();
+    explicit SettingManager(QObject *parent = NULL);
+    void registerPageFactory(ISettingPageFactory *page);
+    void deregisterPageFactory(ISettingPageFactory *page);
 
     bool m_Initialized;
 
     QSettings m_Settings;
     QList<ISettingPageFactory *> m_Pages;
+
+protected slots:
+    void pluginObjectRegistered(QObject *object);
+    void pluginObjectDeregistered(QObject *object);
 
 };
 

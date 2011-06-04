@@ -84,8 +84,7 @@ QList<Core::PluginManager::Dependency> ExamplePlugin::dependencies()
     return m_Dependencies;
 }
 
+} // namespace Example
+} // namespace Plugins
 
 Q_EXPORT_PLUGIN(Plugins::Example::ExamplePlugin)
-
-}}
-
