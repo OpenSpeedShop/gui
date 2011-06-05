@@ -124,6 +124,15 @@ int main(int argc, char *argv[])
 
     QApplication a(argc, argv);
 
+    /* Set up any library paths, if we can */
+    QDir pluginPath(QApplication::applicationDirPath());
+    if(pluginPath.cd("../lib")) {
+        a.addLibraryPath(pluginPath.absolutePath());
+        if(pluginPath.cd("plugins")) {
+            a.addLibraryPath(pluginPath.absolutePath());
+        }
+    }
+
     QCoreApplication::setOrganizationName("OpenSpeedShop");
     QCoreApplication::setOrganizationDomain("openspeedshop.org");
     QCoreApplication::setApplicationName("OpenSpeedShop GUI");

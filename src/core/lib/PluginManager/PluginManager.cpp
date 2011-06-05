@@ -35,6 +35,8 @@
 #include "PluginManager.h"
 #include "PluginSettingPage.h"
 
+#include <QApplication>
+
 namespace Core {
 namespace PluginManager {
 
@@ -144,6 +146,13 @@ void PluginManager::readSettings()
     settingManager.beginGroup("PluginManager");
 
     m_PluginPath = settingManager.value("PluginPath").toString();
+
+    if(!QFile::exists(m_PluginPath)) {
+        QDir pluginPath(QApplication::applicationDirPath());
+        if(pluginPath.cd("../lib/plugins")) {
+            m_PluginPath = pluginPath.absolutePath();
+        }
+    }
 
     //! \todo Check for environment variable
     //! \todo Maybe this should be a list of paths to check
