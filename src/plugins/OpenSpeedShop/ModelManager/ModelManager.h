@@ -19,7 +19,7 @@ class ModelManager : public QObject
 {
     Q_OBJECT
 public:
-    static ModelManager *instance();
+    static ModelManager &instance();
 
     bool initialize(QStringList &args, QString *err);
     void shutdown();

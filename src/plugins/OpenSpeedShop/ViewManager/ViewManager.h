@@ -39,7 +39,7 @@ class VIEWMANAGER_EXPORT ViewManager : public QObject
 {
     Q_OBJECT
 public:
-    static ViewManager *instance();
+    static ViewManager &instance();
 
     bool initialize(QStringList &args, QString *err);
     void shutdown();

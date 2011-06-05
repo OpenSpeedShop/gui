@@ -105,14 +105,14 @@ bool OpenSpeedShopPlugin::initialize(QStringList &args, QString *err)
         PluginManager::PluginManager &pluginManager = PluginManager::PluginManager::instance();
         pluginManager.addObject(this);                         /* Register ourselves as an ISettingPageFactory */
 
-        ConnectionManager *connectionManager = ConnectionManager::instance();
-        if(!connectionManager->initialize(args, err)) { throw; }
+        ConnectionManager &connectionManager = ConnectionManager::instance();
+        if(!connectionManager.initialize(args, err)) { throw; }
 
-        ModelManager *modelManager = ModelManager::instance();
-        if(!modelManager->initialize(args, err)) { throw; }
+        ModelManager &modelManager = ModelManager::instance();
+        if(!modelManager.initialize(args, err)) { throw; }
 
-        ViewManager *viewManager = ViewManager::instance();
-        if(!viewManager->initialize(args, err)) { throw; }
+        ViewManager &viewManager = ViewManager::instance();
+        if(!viewManager.initialize(args, err)) { throw; }
 
     } catch(...) {
         if(err->isEmpty()) err->append("\n");
@@ -125,9 +125,9 @@ bool OpenSpeedShopPlugin::initialize(QStringList &args, QString *err)
 
 void OpenSpeedShopPlugin::shutdown()
 {
-    ConnectionManager::instance()->shutdown();
-    ModelManager::instance()->shutdown();
-    ViewManager::instance()->shutdown();
+    ConnectionManager::instance().shutdown();
+    ModelManager::instance().shutdown();
+    ViewManager::instance().shutdown();
 
     writeSettings();
 }

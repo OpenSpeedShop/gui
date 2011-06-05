@@ -45,10 +45,10 @@ namespace OpenSpeedShop {
     \sa ConnectionManagerPlugin
  */
 
-ConnectionManager *ConnectionManager::instance()
+ConnectionManager &ConnectionManager::instance()
 {
     static ConnectionManager instance;
-    return &instance;
+    return instance;
 }
 
 ConnectionManager::ConnectionManager(QObject *parent) :
@@ -203,7 +203,7 @@ void ConnectionManager::registerConnection(IConnection *connection)
  */
 void ConnectionManager::setCurrentConnection(IConnection *connection)
 {
-    if(connection && !m_Connections.contains(connection))
+    if(!m_Connections.contains(connection))
         throw tr("Cannot set current connection to a connection that is not registered");
 
     if(connection == m_CurrentConnection)
@@ -255,14 +255,14 @@ void ConnectionManager::setCurrentAdapter(IAdapter *adapter)
 
 IAdapter *ConnectionManager::askAdapter()
 {
-    ConnectionManager *connectionManager = ConnectionManager::instance();
-    if(!connectionManager->isConnected()) {
-        if(!connectionManager->askServerConnect()) {
+    ConnectionManager &connectionManager = ConnectionManager::instance();
+    if(!connectionManager.isConnected()) {
+        if(!connectionManager.askServerConnect()) {
             return NULL;
         }
     }
 
-    return connectionManager->currentAdapter();
+    return connectionManager.currentAdapter();
 }
 
 

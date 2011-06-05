@@ -36,14 +36,14 @@ void ModelDescriptorWidget::init()
     ui->txtRowCount->setValue(m_ModelDescriptor->rowCount());
 
     // We need a server connection to populate the combo box
-    ConnectionManager *connectionManager = ConnectionManager::instance();
-    if(!connectionManager->isConnected()) {
-        if(!connectionManager->askServerConnect()) {
+    ConnectionManager &connectionManager = ConnectionManager::instance();
+    if(!connectionManager.isConnected()) {
+        if(!connectionManager.askServerConnect()) {
             throw tr("Server not connected");
         }
     }
 
-    IAdapter *adapter = connectionManager->currentAdapter();
+    IAdapter *adapter = connectionManager.currentAdapter();
     if(!adapter) throw tr("Server not connected");
 
     // Populate the combo box with possible values
@@ -66,14 +66,14 @@ void ModelDescriptorWidget::on_cmbExperimentType_currentIndexChanged(int index)
     Q_UNUSED(index)
 
     // We need a valid server connection in order
-    ConnectionManager *connectionManager = ConnectionManager::instance();
-    if(!connectionManager->isConnected()) {
-        if(!connectionManager->askServerConnect()) {
+    ConnectionManager &connectionManager = ConnectionManager::instance();
+    if(!connectionManager.isConnected()) {
+        if(!connectionManager.askServerConnect()) {
             throw tr("Server not connected");
         }
     }
 
-    IAdapter *adapter = connectionManager->currentAdapter();
+    IAdapter *adapter = connectionManager.currentAdapter();
     if(!adapter) throw tr("Server not connected");
 
 

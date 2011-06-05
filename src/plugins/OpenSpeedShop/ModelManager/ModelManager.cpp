@@ -19,10 +19,10 @@
 namespace Plugins {
 namespace OpenSpeedShop {
 
-ModelManager *ModelManager::instance()
+ModelManager &ModelManager::instance()
 {
     static ModelManager m_Instance;
-    return &m_Instance;
+    return m_Instance;
 }
 
 ModelManager::ModelManager(QObject *parent) :
@@ -313,14 +313,14 @@ QAbstractItemModel *ModelManager::descriptorModel()
 /*! \brief Fetches the model's data from the server, using the descriptor specified. */
 QUuid ModelManager::fetchModel(const QUuid &descriptorUid, const QUuid &experimentUid)
 {
-    ConnectionManager *connectionManager = ConnectionManager::instance();
-    if(!connectionManager->isConnected()) {
-        if(!connectionManager->askServerConnect()) {
+    ConnectionManager &connectionManager = ConnectionManager::instance();
+    if(!connectionManager.isConnected()) {
+        if(!connectionManager.askServerConnect()) {
             throw tr("Server not connected");
         }
     }
 
-    IAdapter *adapter = connectionManager->currentAdapter();
+    IAdapter *adapter = connectionManager.currentAdapter();
     if(!adapter) throw tr("Server not connected");
 
 

@@ -50,7 +50,7 @@ class CONNECTIONMANAGER_EXPORT ConnectionManager :
     Q_INTERFACES(Core::SettingManager::ISettingPageFactory)
 
 public:
-    static ConnectionManager *instance();
+    static ConnectionManager &instance();
     bool initialize(QStringList &args, QString *err);
     void shutdown();
 

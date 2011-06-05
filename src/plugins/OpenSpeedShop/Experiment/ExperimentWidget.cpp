@@ -33,7 +33,7 @@ ExperimentWidget::ExperimentWidget(QWidget *parent) :
     ui->tabWidget->setCurrentIndex(0);
     ui->grpViewFilter->hide();
 
-    IAdapter *adapter = ConnectionManager::instance()->askAdapter();
+    IAdapter *adapter = ConnectionManager::instance().askAdapter();
     if(!adapter) throw tr("Server not connected");
 
     QStringList experimentTypes = adapter->waitExperimentTypes();
@@ -59,7 +59,7 @@ void ExperimentWidget::load()
     // Ensure that we're connected to a server
     // Start sending commands
 
-    IAdapter *adapter = ConnectionManager::instance()->askAdapter();
+    IAdapter *adapter = ConnectionManager::instance().askAdapter();
     if(!adapter) throw tr("Server not connected");
 
 //    qDebug() << adapter->waitVersion();
@@ -123,13 +123,13 @@ void ExperimentWidget::load()
 
 void ExperimentWidget::loadModelDescriptors(QString experimentType)
 {
-    IAdapter *adapter = ConnectionManager::instance()->askAdapter();
+    IAdapter *adapter = ConnectionManager::instance().askAdapter();
     if(!adapter) throw tr("Server not connected");
 
     //TODO: Remove any previous model descriptor lists.
 
     /* Create and initialize the model descriptor list. */
-    ModelDescriptorListWidget *listWidget = ModelManager::instance()->createDescriptorListWidget(ui->modelListViewParent);
+    ModelDescriptorListWidget *listWidget = ModelManager::instance().createDescriptorListWidget(ui->modelListViewParent);
     listWidget->setHeaderHidden(true);
     listWidget->setExperimentType(experimentType);
     ui->modelListViewParent->layout()->addWidget(listWidget);
@@ -140,7 +140,7 @@ void ExperimentWidget::getModel(QUuid descriptorUid)
 {
     try {
 
-        m_CurrentModel = ModelManager::instance()->model(descriptorUid, m_ExperimentUid);
+        m_CurrentModel = ModelManager::instance().model(descriptorUid, m_ExperimentUid);
 
         /* Reset the view filter for this model */
         ui->txtViewFilter->setText(QString());
@@ -151,7 +151,7 @@ void ExperimentWidget::getModel(QUuid descriptorUid)
 
         /* Reset the view list */
         ui->cmbViews->clear();
-        ui->cmbViews->addItems(ViewManager::instance()->viewNames(m_CurrentModel));
+        ui->cmbViews->addItems(ViewManager::instance().viewNames(m_CurrentModel));
         ui->cmbViews->setCurrentIndex(0);
 
     } catch(QString err) {
@@ -175,7 +175,7 @@ void ExperimentWidget::on_cmbViews_currentIndexChanged(int index)
         }
 
         if(!ui->cmbViews->currentText().isEmpty()) {
-            m_CurrentView = ViewManager::instance()->viewWidget(ui->cmbViews->currentText(), m_CurrentModel);
+            m_CurrentView = ViewManager::instance().viewWidget(ui->cmbViews->currentText(), m_CurrentModel);
             ui->grpView->layout()->addWidget(m_CurrentView);
 
             IViewFilterable *viewFilterable = qobject_cast<IViewFilterable *>(m_CurrentView);

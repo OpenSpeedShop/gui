@@ -31,10 +31,10 @@
 namespace Plugins {
 namespace OpenSpeedShop {
 
-ViewManager *ViewManager::instance()
+ViewManager &ViewManager::instance()
 {
     static ViewManager m_Instance;
-    return &m_Instance;
+    return m_Instance;
 }
 
 ViewManager::ViewManager(QObject *parent) :
@@ -55,9 +55,12 @@ bool ViewManager::initialize(QStringList &args, QString *err)
         connect(&pluginManager, SIGNAL(objectRemoving(QObject*)), this, SLOT(pluginObjectDeregistered(QObject*)));
 
     } catch(...) {
+        if(err->isEmpty()) { err->append(QChar::LineSeparator); }
+        err->append(tr("Could not initialize ViewManager"));
         return false;
     }
 
+    return true;
 }
 
 void ViewManager::shutdown()

@@ -48,10 +48,9 @@ ConnectionWidget::ConnectionWidget(QWidget *parent) :
     ui->setupUi(this);
 
     // Grab any connections that already exist and register for notification of any new ones that are registered
-    ConnectionManager *connectionManager = ConnectionManager::instance();
-    foreach(IConnection *connection, connectionManager->m_Connections)
-        connectionRegistered(connection);
-    connect(connectionManager, SIGNAL(connectionRegistered(IConnection*)), this, SLOT(connectionRegistered(IConnection*)));
+    ConnectionManager &connectionManager = ConnectionManager::instance();
+    foreach(IConnection *connection, connectionManager.m_Connections) { connectionRegistered(connection); }
+    connect(&connectionManager, SIGNAL(connectionRegistered(IConnection*)), this, SLOT(connectionRegistered(IConnection*)));
 
     initialize();
 }
@@ -100,7 +99,7 @@ void ConnectionWidget::on_cmbConnectionType_currentIndexChanged(int index)
     // Set up the new connection
     ui->stackedWidget->setCurrentIndex(index);
     IConnection *newConnection = ui->cmbConnectionType->itemData(index).value<IConnection *>();
-    ConnectionManager::instance()->setCurrentConnection(newConnection);
+    ConnectionManager::instance().setCurrentConnection(newConnection);
     oldIndex = index;
 }
 
@@ -133,7 +132,7 @@ void ConnectionWidget::apply()
     }
 
     // Ask the conncetion manager to refresh it's settings
-    ConnectionManager::instance()->readSettings();
+    ConnectionManager::instance().readSettings();
 }
 
 void ConnectionWidget::reset()

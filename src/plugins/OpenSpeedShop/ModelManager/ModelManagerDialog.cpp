@@ -22,7 +22,7 @@ ModelManagerDialog::ModelManagerDialog(QWidget *parent) :
 
     // Create and add the descriptor list widget to the dialog
     ModelDescriptorListWidget *descriptorListWidget =
-            ModelManager::instance()->createDescriptorListWidget(ui->descriptorListParent);
+            ModelManager::instance().createDescriptorListWidget(ui->descriptorListParent);
     ui->descriptorListParent->layout()->addWidget(descriptorListWidget);
     ui->descriptorListParent->layout()->setMargin(0);
     connect(descriptorListWidget, SIGNAL(currentDescriptorChanged(QUuid)), this, SLOT(currentSelectionChanged(QUuid)));
@@ -71,7 +71,7 @@ void ModelManagerDialog::currentSelectionChanged(const QUuid &current)
 
     if(!current.isNull()) {
         try {
-            QWidget *descriptor = ModelManager::instance()->createDescriptorWidget(current, this);
+            QWidget *descriptor = ModelManager::instance().createDescriptorWidget(current, this);
             if(!descriptor) {
                 return;
             }
@@ -90,7 +90,7 @@ void ModelManagerDialog::currentSelectionChanged(const QUuid &current)
 
 void ModelManagerDialog::on_btnCreate_clicked()
 {
-    QUuid descriptorId = ModelManager::instance()->createDescriptor();
+    QUuid descriptorId = ModelManager::instance().createDescriptor();
 
     //TODO: Select the new item in the view, which sets the editor to display it
     ModelDescriptorListWidget *descriptorListWidget = ui->descriptorListParent->findChild<ModelDescriptorListWidget *>();
