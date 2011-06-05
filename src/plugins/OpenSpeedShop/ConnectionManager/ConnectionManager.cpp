@@ -321,6 +321,7 @@ void ConnectionManager::connectionReadyRecieve()
     foreach(ServerCommand *serverCommand, m_ServerCommands) {
         if(serverCommand->m_id == commandID) {
             serverCommand->setResponse(document);
+            m_ServerCommands.removeOne(serverCommand);
             return;
         }
     }
