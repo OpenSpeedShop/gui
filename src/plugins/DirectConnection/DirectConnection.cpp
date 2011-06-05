@@ -55,18 +55,16 @@ DirectConnection::DirectConnection(QObject *parent) :
 
     readSettings();
 
-    connect(&m_TcpSocket, SIGNAL(readyRead()),
-            this,         SLOT(readReady()));
+    connect(&m_TcpSocket, SIGNAL(readyRead()), this, SLOT(readReady()));
+    connect(&m_TcpSocket, SIGNAL(connected()), this, SLOT(connected()));
+    connect(&m_TcpSocket, SIGNAL(disconnected()), this, SLOT(disconnected()));
+    connect(&m_TcpSocket, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(error(QAbstractSocket::SocketError)));
+}
 
-    connect(&m_TcpSocket, SIGNAL(connected()),
-            this,         SLOT(connected()));
-
-    connect(&m_TcpSocket, SIGNAL(disconnected()),
-            this,         SLOT(disconnected()));
-
-    connect(&m_TcpSocket, SIGNAL(error(QAbstractSocket::SocketError)),
-            this,         SLOT(error(QAbstractSocket::SocketError)));
-
+DirectConnection::~DirectConnection()
+{
+    disconnect(&m_TcpSocket);
+    m_TcpSocket.close();
 }
 
 QString DirectConnection::name() const
@@ -74,14 +72,9 @@ QString DirectConnection::name() const
     return tr("Direct Connection");
 }
 
-
-DirectConnection::~DirectConnection()
-{
-}
-
 IConnectionPage *DirectConnection::page()
 {
-    return new DirectConnectionPage(this);
+    return new DirectConnectionPage(this, NULL);
 }
 
 void DirectConnection::connectToServer()

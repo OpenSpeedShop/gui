@@ -84,8 +84,7 @@ PluginManager::PluginManager() :
 PluginManager::~PluginManager()
 {
     qSort(m_Plugins.begin(), m_Plugins.end(), descending);
-    while(!m_Plugins.isEmpty())
-        delete m_Plugins.takeFirst();
+    qDeleteAll(m_Plugins);
 
     writeSettings();
 }

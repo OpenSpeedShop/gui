@@ -74,9 +74,6 @@ SettingManager::SettingManager(QObject *parent) :
 SettingManager::~SettingManager()
 {
     m_Settings.sync();
-
-    while(!m_Pages.isEmpty())
-        delete m_Pages.takeFirst();
 }
 
 bool SettingManager::initialize()

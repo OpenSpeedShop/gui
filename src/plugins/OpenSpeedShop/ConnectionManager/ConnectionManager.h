@@ -96,7 +96,7 @@ protected:
     IAdapter *m_CurrentAdapter;
 
     QList<ServerCommand *> m_ServerCommands;
-    Core::MainWindow::NotificationWidget *m_notifyConnecting;
+    Core::MainWindow::NotificationWidget *m_NotifyConnecting;
 
 protected slots:
     void pluginObjectRegistered(QObject *);

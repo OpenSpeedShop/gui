@@ -81,14 +81,11 @@ DataModel::DataModel(QDomDocument document, QObject *parent) :
  */
 DataModel::~DataModel()
 {
-    if(m_Header)
-        delete m_Header;
-
-    while(!m_Rows.isEmpty()) {
-        Cell *cell = m_Rows.first();
-        m_Rows.removeOne(cell);
-        delete cell;
+    if(m_Header) {
+        delete(m_Header);
     }
+
+    qDeleteAll(m_Rows);
 }
 
 QUuid DataModel::uid() const

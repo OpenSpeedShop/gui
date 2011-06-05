@@ -57,16 +57,11 @@ ConnectionManager::ConnectionManager(QObject *parent) :
 {
     m_CurrentConnection = NULL;
     m_CurrentAdapter = NULL;
-    m_notifyConnecting = NULL;
+    m_NotifyConnecting = NULL;
 }
 
 ConnectionManager::~ConnectionManager()
 {
-    // We're responsible for disposing of the connections and adapters
-    while(!m_Connections.isEmpty())
-        delete(m_Connections.takeFirst());
-    while(!m_Adapters.isEmpty())
-        delete(m_Adapters.takeFirst());
 }
 
 /*! \fn ConnectionManager::initialize()
@@ -179,7 +174,6 @@ void ConnectionManager::pluginObjectDeregistered(QObject *object)
  */
 void ConnectionManager::registerConnection(IConnection *connection)
 {
-    connection->setParent(this);
     m_Connections.append(connection);
     emit connectionRegistered(connection);
 
@@ -231,7 +225,6 @@ IConnection *ConnectionManager::currentConnection()
 
 void ConnectionManager::registerAdapter(IAdapter *adapter)
 {
-    adapter->setParent(this);
     m_Adapters.append(adapter);
     emit adapterRegistered(adapter);
 }
@@ -290,10 +283,10 @@ void ConnectionManager::connectionStateChanged()
             }
         }
 
-        if(m_notifyConnecting) {
-            m_notifyConnecting->close();
-            m_notifyConnecting->deleteLater();
-            m_notifyConnecting = NULL;
+        if(m_NotifyConnecting) {
+            m_NotifyConnecting->close();
+            m_NotifyConnecting->deleteLater();
+            m_NotifyConnecting = NULL;
         }
     } else {
         /* Reset the adapter */
@@ -393,7 +386,7 @@ void ConnectionManager::connectToServer()
     }
 
     using namespace Core::MainWindow;
-    m_notifyConnecting = MainWindow::instance().notify("Connecting to server", NotificationWidget::Loading);
+    m_NotifyConnecting = MainWindow::instance().notify("Connecting to server", NotificationWidget::Loading);
 }
 
 void ConnectionManager::disconnectFromServer()

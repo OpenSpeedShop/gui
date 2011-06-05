@@ -259,7 +259,7 @@ void ModelManager::removeDescriptor(const QUuid &descriptorUid)
 
     m_DescriptorPool.remove(descriptorUid);
 
-    delete descriptor;
+    descriptor->deleteLater();
 }
 
 /*! \brief Creates and returns a widget to be used to interact with a single model descriptor.
