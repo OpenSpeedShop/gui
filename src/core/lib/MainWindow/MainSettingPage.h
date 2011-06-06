@@ -40,7 +40,7 @@ namespace MainWindow {
 
 namespace Ui { class MainSettingPage; }
 
-class MainSettingPage : public QWidget, public SettingManager::ISettingPage
+class MainSettingPage : public SettingManager::ISettingPage
 {
     Q_OBJECT
     Q_INTERFACES(Core::SettingManager::ISettingPage)

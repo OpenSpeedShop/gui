@@ -45,7 +45,7 @@ namespace MainWindow {
    \brief Constructor
  */
 MainSettingPage::MainSettingPage(QWidget *parent) :
-    QWidget(parent),
+    SettingManager::ISettingPage(parent),
     ui(new Ui::MainSettingPage)
 {
     ui->setupUi(this);

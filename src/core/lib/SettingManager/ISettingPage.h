@@ -35,8 +35,12 @@
 namespace Core {
 namespace SettingManager {
 
-class SETTINGMANAGER_EXPORT ISettingPage
+class SETTINGMANAGER_EXPORT ISettingPage : public QWidget
 {
+public:
+    explicit ISettingPage(QWidget *parent) : QWidget(parent) {}
+    virtual ~ISettingPage() {}
+
 public slots:
     virtual void apply() = 0;
     virtual void reset() = 0;

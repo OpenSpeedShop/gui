@@ -71,8 +71,8 @@ MainWindow &MainWindow::instance()
  */
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    m_Initialized(false),
-    ui(new Ui::MainWindow)
+    ui(new Ui::MainWindow),
+    m_Initialized(false)
 {
 #ifdef MAINWINDOW_DEBUG
     qDebug() << __FILE__ << __LINE__ << "\tMainWindow::MainWindow";
