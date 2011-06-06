@@ -1,7 +1,7 @@
 /*!
    \file PluginWrapper.h
    \author Dane Gardner <dane.gardner@gmail.com>
-   \version 
+   \version
 
    \section LICENSE
    This file is part of the Open|SpeedShop Graphical User Interface
@@ -73,5 +73,6 @@ protected:
 };
 
 
-}}
+} // namespace PluginManager
+} // namespace Core
 #endif // PLUGINWRAPPER_H

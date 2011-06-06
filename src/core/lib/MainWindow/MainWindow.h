@@ -55,7 +55,6 @@ class MAINWINDOW_EXPORT MainWindow : public QMainWindow, public SettingManager::
 public:
     static MainWindow &instance();
 
-    ~MainWindow();
     bool initialize();
     bool initialized();
     void shutdown();
@@ -80,16 +79,17 @@ public:
 
 protected:
     explicit MainWindow(QWidget *parent = 0);
+    ~MainWindow();
 
     void readSettings();
     void writeSettings();
     void initActions();
 
-    bool m_Initialized;
-    QString m_StylesheetFilePath;
 
 private:
     Ui::MainWindow *ui;
+    bool m_Initialized;
+    QString m_StylesheetFilePath;
 
     friend class MainSettingPage;
 };

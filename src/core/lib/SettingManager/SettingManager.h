@@ -85,5 +85,6 @@ protected slots:
 
 };
 
-}}
+} // namespace SettingManager
+} // namespace Core
 #endif // SETTINGMANAGER_H

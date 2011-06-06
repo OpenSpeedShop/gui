@@ -46,7 +46,8 @@ public:
     virtual ISettingPage *createSettingPage() = 0;
 };
 
-}}
+} // namespace SettingManager
+} // namespace Core
 
 Q_DECLARE_INTERFACE(Core::SettingManager::ISettingPageFactory, "org.openspeedshop.gui.ISettingPageFactory/0.1")
 

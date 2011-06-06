@@ -1,7 +1,7 @@
 /*!
-   \file 
+   \file
    \author Dane Gardner <dane.gardner@gmail.com>
-   \version 
+   \version
 
    \section LICENSE
    This file is part of the Open|SpeedShop Graphical User Interface
@@ -30,5 +30,20 @@
 namespace Core {
 namespace SettingManager {
 
+/*! \interface Core::SettingManager::ISettingPage
+    \brief Interface for setting pages.
+    This allows a setting page to be registered with the SettingManager and displayed to the user in the settings dialog.
+    Pure virtual class.
+ */
 
-}}
+/*! \fn ISettingPage::apply()
+    \brief Apply the changed settings.
+ */
+
+/*! \fn ISettingPage::reset()
+    \brief Reset changed settings to their original state.
+ */
+
+
+} // namespace SettingManager
+} // namespace Core

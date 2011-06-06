@@ -47,7 +47,7 @@ namespace ActionManager {
 /*!
    \fn ActionManager::instance()
    \brief Access to the singleton instance of this class
-   \returns A pointer to the singleton instance of this class
+   \returns A reference to the singleton instance of this class
  */
 ActionManager &ActionManager::instance()
 {
@@ -58,7 +58,6 @@ ActionManager &ActionManager::instance()
 /*!
    \fn ActionManager::ActionManager()
    \brief Constructor
-   \internal
  */
 ActionManager::ActionManager() : QObject(0)
 {
@@ -68,27 +67,45 @@ ActionManager::ActionManager() : QObject(0)
 /*!
    \fn ActionManager::~ActionManager()
    \brief Destructor
-   \internal
  */
 ActionManager::~ActionManager()
 {
 }
 
+/*!
+   \fn ActionManager::initialize()
+   \brief Initializes this class after it has been constructed.
+   This design pattern allows the class to perform any operations after a class that this object is dependent upon has been
+   constructed.
+   \returns true if successful.
+ */
 bool ActionManager::initialize()
 {
     return m_Initialized = true;
 }
 
+/*!
+   \fn ActionManager::initialized()
+   \returns A boolean value indicating whether this instance has been initialized or not.
+ */
 bool ActionManager::initialized()
 {
     return m_Initialized;
 }
 
+/*!
+   \fn ActionManager::shutdown()
+   \brief Notifies the instance that it should perform any clean-up operations before destruction.
+   This method is called manually, before the application is closed.  It will occur before destruction of the instance.
+ */
 void ActionManager::shutdown()
 {
-
 }
 
+/*!
+   \fn ActionManager::refreshMenuItems()
+   \brief This has not been implemented fully.
+ */
 void ActionManager::refreshMenuItems()
 {
     QMenuBar *menuBar = MainWindow::MainWindow::instance().menuBar();
@@ -135,6 +152,10 @@ void ActionManager::refreshMenuItems()
     }
 }
 
+/*!
+   \fn ActionManager::refreshMenuItems()
+   \brief This has not been implemented fully.
+ */
 void ActionManager::registerMenuItem(MenuItem *menuItem)
 {
     m_MenuItems.append(menuItem);

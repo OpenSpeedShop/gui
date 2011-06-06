@@ -46,10 +46,11 @@ struct Dependency {
     }
 };
 
+
 class PLUGINMANAGER_EXPORT IPlugin
 {
 public:
-    IPlugin();
+    IPlugin() {}
     virtual ~IPlugin() {}
 
     virtual bool initialize(QStringList &args, QString *err) = 0;

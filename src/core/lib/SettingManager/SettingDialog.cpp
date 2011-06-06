@@ -120,5 +120,5 @@ bool SettingDialog::ascending(ISettingPageFactory *left, ISettingPageFactory *ri
     return left->settingPagePriority() < right->settingPagePriority();
 }
 
-
-}}
+} // namespace SettingManager
+} // namespace Core

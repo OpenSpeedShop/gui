@@ -217,8 +217,5 @@ void SettingManager::settingDialog()
     dialog.exec();
 }
 
-
-
-}}
-
-
+} // namespace SettingManager
+} // namespace Core

@@ -36,7 +36,7 @@ namespace Plugins {
 namespace DirectConnection {
 
 /*! \namespace Plugins::DirectConnection
-    \brief
+    \brief Contains the DirectConnectionPlugin
  */
 
 /*! \class DirectConnectionPlugin

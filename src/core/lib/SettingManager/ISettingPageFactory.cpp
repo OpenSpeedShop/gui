@@ -1,7 +1,7 @@
 /*!
    \file ISettingPageFactory.cpp
    \author Dane Gardner <dane.gardner@gmail.com>
-   \version 
+   \version
 
    \section LICENSE
    This file is part of the Open|SpeedShop Graphical User Interface
@@ -30,5 +30,30 @@
 namespace Core {
 namespace SettingManager {
 
+/*! \interface Core::SettingManager::ISettingPageFactory
+    \brief Interface for setting page factories.
+    This allows a setting page to be registered with the SettingManager and displayed to the user in the settings dialog.
+    Pure virtual class.
+ */
 
-}}
+/*! \fn ISettingPageFactory::settingPageIcon()
+    \brief Returns the desired icon for the setting page.
+ */
+
+/*! \fn ISettingPageFactory::settingPageName()
+    \brief Returns the desired name of the setting page.
+ */
+
+/*! \fn ISettingPageFactory::settingPagePriority()
+    \brief Returns the priority level of the setting page.
+    The priority determines the display order for the setting page.  The lower the number, the closer to the upper-left
+    corner it will be displayed.  The higher the number, the closer to the lower-right (or farther from the upper-left,
+    depending on how one looks at it) the page information will be displayed.
+ */
+
+/*! \fn ISettingPageFactory::createSettingPage()
+    \brief The widget that will be displayed within a frame in the settings dialog area.
+ */
+
+} // namespace SettingManager
+} // namespace Core

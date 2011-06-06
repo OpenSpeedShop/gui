@@ -41,24 +41,44 @@ namespace Core {
 namespace PluginManager {
 
 /*!
-   \class PluginManager
-   \brief The PluginManager class is part of the core framework libraries, and
-          manages the loading of and interaction between dynamic extensions
-          and plugins.  This includes managing an "object pool."
+   \class Core::PluginManager::PluginManager
+   \brief Part of the core framework libraries, and manages the loading of and interaction between dynamic extensions and
+          plugins.  This includes managing an "object pool."
 
           singleton class
  */
 
-/*!
-   \fn PluginManager::getObjects() const
-   \returns A QList populated with the given object type that has been stored in
-            the object pool.
- */
+/*! \fn PluginManager::getObjects() const
+    \brief Returns a QList populated with the given object type that has been stored in the object pool. */
+
+/*! \fn PluginManager::pluginLoaded()
+    \brief Emitted when a plugin has been loaded successfully.
+    Before it has been initialized. */
+
+/*! \fn PluginManager::pluginInitialized()
+    \brief Emitted when a plugin has been successfully intialized.
+    This is not emitted for plugins that fail to initialize. */
+
+/*! \fn PluginManager::pluginShutdown()
+    \brief Emitted when a plugin has been shut down. */
+
+/*! \fn PluginManager::objectAdding()
+    \brief Emitted immediately before the object is added to the object pool. */
+
+/*! \fn PluginManager::objectAdded()
+    \brief Emitted immediately after the object is added to the object pool. */
+
+/*! \fn PluginManager::objectRemoving()
+    \brief Emitted immediately before the object is removed from the object pool. */
+
+/*! \fn PluginManager::objectRemoved()
+    \brief Emitted immediately after the object is removed from the object pool. */
+
 
 /*!
    \fn PluginManager::instance()
-   \brief Access to the singleton instance of this class
-   \returns A pointer to the singleton instance of this class
+   \brief Access to the singleton instance of this class.
+   \returns A reference to the singleton instance of this class.
  */
 PluginManager &PluginManager::instance()
 {
@@ -69,7 +89,6 @@ PluginManager &PluginManager::instance()
 /*!
    \fn PluginManager::PluginManager()
    \brief Constructor
-   \internal
  */
 PluginManager::PluginManager() :
     QObject(0),
@@ -81,7 +100,6 @@ PluginManager::PluginManager() :
 /*!
    \fn PluginManager::PluginManager()
    \brief Destructor
-   \internal
  */
 PluginManager::~PluginManager()
 {
@@ -91,6 +109,14 @@ PluginManager::~PluginManager()
     writeSettings();
 }
 
+/*!
+   \fn PluginManager::initialize()
+   \brief Initializes this class after it has been constructed.
+   This pattern allows the class to perform any operations after a class (that this object is dependent upon) has been
+   constructed.
+   \returns true if successful
+   \sa initialized(), shutdown()
+ */
 bool PluginManager::initialize()
 {
     try {
@@ -117,11 +143,22 @@ bool PluginManager::initialize()
     return m_Initialized = true;
 }
 
+/*!
+   \fn PluginManager::initialized()
+   \brief Returns a boolean value indicating whether this instance has been initialized or not.
+   \sa initialize()
+ */
 bool PluginManager::initialized()
 {
     return m_Initialized;
 }
 
+/*!
+   \fn PluginManager::shutdown()
+   \brief Notifies the instance that it should perform any clean-up operations before destruction.
+   This class is called manually, before the application is closed.  It will occur before destruction of the instance.
+   \sa initialize()
+ */
 void PluginManager::shutdown()
 {
     qSort(m_Plugins.begin(), m_Plugins.end(), ascending);
@@ -138,7 +175,6 @@ void PluginManager::shutdown()
 /*!
    \fn PluginManager::readSettings()
    \brief Load settings from the SettingManager.
-   \internal
  */
 void PluginManager::readSettings()
 {
@@ -147,6 +183,9 @@ void PluginManager::readSettings()
 
     m_PluginPath = settingManager.value("PluginPath").toString();
 
+    //! \todo Check for environment variable
+    //! \todo Maybe this should be a list of paths to check
+
     if(!QFile::exists(m_PluginPath)) {
         QDir pluginPath(QApplication::applicationDirPath());
         if(pluginPath.cd("../lib/plugins")) {
@@ -154,16 +193,12 @@ void PluginManager::readSettings()
         }
     }
 
-    //! \todo Check for environment variable
-    //! \todo Maybe this should be a list of paths to check
-
     settingManager.endGroup();
 }
 
 /*!
    \fn PluginManager::writeSettings()
    \brief Stores settings in the SettingManager for later retrieval.
-   \internal
  */
 void PluginManager::writeSettings()
 {
@@ -361,7 +396,7 @@ void PluginManager::pluginDialog()
     // Wrapped in a QDialog because this is also registered as a setting page
 
     QDialog *dialog = new QDialog(&MainWindow::MainWindow::instance());
-    QLayout *layout = new QGridLayout(dialog);
+    QGridLayout *layout = new QGridLayout(dialog);
     layout->addWidget(new PluginSettingPage(m_Plugins, dialog));
     dialog->setLayout(layout);
     dialog->resize(640, 480);
@@ -394,25 +429,46 @@ bool PluginManager::descending(PluginWrapper *left, PluginWrapper *right)
 }
 
 /* BEGIN ISettingPageFactory */
+/*!
+   \fn MainWPluginManagerindow::settingPageIcon()
+   \brief Reimplemented from ISettingPageFactory.
+   \sa Core::SettingManager::ISettingPageFactory::settingPageIcon()
+ */
 QIcon PluginManager::settingPageIcon()
 {
     return QIcon(":/PluginManager/plugin.png");
 }
 
+/*!
+   \fn PluginManager::settingPageName()
+   \brief Reimplemented from ISettingPageFactory.
+   \sa Core::SettingManager::ISettingPageFactory::settingPageName()
+ */
 QString PluginManager::settingPageName()
 {
     return tr("Plugins");
 }
 
+/*!
+   \fn PluginManager::settingPagePriority()
+   \brief Reimplemented from ISettingPageFactory.
+   \sa Core::SettingManager::ISettingPageFactory::settingPagePriority()
+ */
 int PluginManager::settingPagePriority()
 {
     return 50;
 }
 
+/*!
+   \fn PluginManager::createSettingPage()
+   \brief Reimplemented from ISettingPageFactory.
+   \sa Core::SettingManager::ISettingPageFactory::createSettingPage()
+ */
 Core::SettingManager::ISettingPage *PluginManager::createSettingPage()
 {
     return new PluginSettingPage();
 }
 /* END ISettingPageFactory */
 
-}}
+} // namespace PluginManager
+} // namespace Core

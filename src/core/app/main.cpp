@@ -1,7 +1,7 @@
 /*!
    \file main.cpp
    \author Dane Gardner <dane.gardner@gmail.com>
-   \version
+   \version 0.1.dev
 
    \section LICENSE
    This file is part of the Open|SpeedShop Graphical User Interface
@@ -27,7 +27,7 @@
 
 /*! \mainpage Open|SpeedShop GUI
     \author Dane Gardner <dane.gardner@gmail.com>
-    \version v0.1 (dev)
+    \version 0.1.dev
 
     \section intro Introduction
     \par
@@ -106,6 +106,8 @@
 
 
 #include <QtGui/QApplication>
+#include <QtCore/QDir>
+
 #include <SettingManager/SettingManager.h>
 #include <PluginManager/PluginManager.h>
 #include <MainWindow/MainWindow.h>
@@ -113,6 +115,8 @@
 #ifdef MAIN_DEBUG
 #  include <QDebug>
 #endif
+
+
 
 int main(int argc, char *argv[])
 {

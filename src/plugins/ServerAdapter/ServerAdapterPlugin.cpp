@@ -34,18 +34,17 @@ namespace Plugins {
 namespace ServerAdapter {
 
 /*! \namespace Plugins::ServerAdapter
-    \brief Contains the ServerAdapterPlugin, which helps demonstrate the
-           methodologies for creating a GUI plugin.
+    \brief Contains the ServerAdapterPlugin.
  */
 
 /*! \class ServerAdapterPlugin
     \version 0.1.dev
-    \brief This is an example of the methods for producing a GUI plugin.
+    \brief
 
     \par Depends on Plugins:
          OpenSpeedShop
 
-    \todo Document this more explicitly as a developer example.
+    \todo Document this more explicitly.
  */
 
 ServerAdapterPlugin::ServerAdapterPlugin()

@@ -41,7 +41,9 @@ namespace Ui {
     class PluginSettingPage;
 }
 
-class PluginSettingPage : public SettingManager::ISettingPage
+class PluginSettingPage :
+        public QWidget,
+        public SettingManager::ISettingPage
 {
     Q_OBJECT
     Q_INTERFACES(Core::SettingManager::ISettingPage)
@@ -69,5 +71,6 @@ private:
 
 };
 
-}}
+} // namespace PluginManager
+} // namespace Core
 #endif // PLUGINSETTINGPAGE_H

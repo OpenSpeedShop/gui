@@ -90,25 +90,24 @@ public slots:
 
 protected:
     PluginManager();
-
-    bool m_Initialized;
-
     void readSettings();
     void writeSettings();
 
     void initializePlugins();
 
-    QList<PluginWrapper *> m_Plugins;
-    QObjectList m_Objects;
-
-    QString m_PluginPath;
-
     PluginWrapper *findPlugin(QString name);
     static bool ascending(PluginWrapper *left, PluginWrapper *right);
     static bool descending(PluginWrapper *left, PluginWrapper *right);
 
+private:
+    bool m_Initialized;
+    QList<PluginWrapper *> m_Plugins;
+    QObjectList m_Objects;
+    QString m_PluginPath;
+
     friend class PluginSettingPage;
 };
 
-}}
+} // namespace PluginManager
+} // namespace Core
 #endif // PLUGINMANAGER_H

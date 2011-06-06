@@ -1,7 +1,7 @@
 /*!
    \file SettingDialog.h
    \author Dane Gardner <dane.gardner@gmail.com>
-   \version 
+   \version
 
    \section LICENSE
    This file is part of the Open|SpeedShop Graphical User Interface
@@ -60,5 +60,6 @@ private:
 
 };
 
-}}
+} // namespace SettingManager
+} // namespace Core
 #endif // SETTINGDIALOG_H

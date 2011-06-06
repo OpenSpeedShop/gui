@@ -32,7 +32,7 @@ namespace Core {
 namespace PluginManager {
 
 PluginSettingPage::PluginSettingPage(QList<PluginWrapper *> plugins, QWidget *parent) :
-    SettingManager::ISettingPage(parent),
+    QWidget(parent),
     ui(new Ui::PluginSettingPage)
 {
     ui->setupUi(this);
@@ -50,7 +50,7 @@ PluginSettingPage::PluginSettingPage(QList<PluginWrapper *> plugins, QWidget *pa
 }
 
 PluginSettingPage::PluginSettingPage(QWidget *parent) :
-    SettingManager::ISettingPage(parent),
+    QWidget(parent),
     ui(new Ui::PluginSettingPage)
 {
     ui->setupUi(this);
@@ -181,4 +181,5 @@ void PluginSettingPage::buildTree(QList<PluginWrapper *> plugins)
     }
 }
 
-}}
+} // namespace PluginManager
+} // namespace Core

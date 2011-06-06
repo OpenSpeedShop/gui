@@ -30,6 +30,19 @@
 namespace Core {
 namespace ActionManager {
 
+/*!
+   \class Core::ActionManager::MenuItem
+   \brief This class wraps Qt4 menu and action items within the to more easily facilitate menu systems within the
+          GUI framework.
+   Not fully implemented.
+ */
+
+
+/*!
+   \fn MenuItem::MenuItem()
+   \brief Constructor.
+   Not fully implemented.
+ */
 MenuItem::MenuItem(QObject *parent) :
     QObject(parent),
     m_Action(this)
@@ -37,6 +50,11 @@ MenuItem::MenuItem(QObject *parent) :
     m_Priority = 128;
 }
 
+/*!
+   \fn MenuItem::MenuItem()
+   \brief Constructor
+   Not fully implemented.
+ */
 MenuItem::MenuItem(MenuItem *menuItem, QObject *parent) :
     QObject(parent),
     m_Action(this)
@@ -51,21 +69,44 @@ MenuItem::MenuItem(MenuItem *menuItem, QObject *parent) :
     m_Action.setSeparator(menuItem->action()->isSeparator());
 }
 
+/*!
+   \fn MenuItem::~MenuItem()
+   \brief Destructor.
+   Not fully implemented.
+ */
 QAction *MenuItem::action()
 {
     return &m_Action;
 }
 
+/*!
+   \fn MenuItem::priority()
+   \brief Access to the priority property.
+   Not fully implemented.
+   \returns An integer representing the priority of this object.
+ */
 int MenuItem::priority()
 {
     return m_Priority;
 }
 
+/*!
+   \fn MenuItem::setPriority()
+   \brief Access to the priority property. Sets the priority property to the given integer value.
+   Not fully implemented.
+ */
 void MenuItem::setPriority(int priority)
 {
     m_Priority = priority;
 }
 
+/*!
+   \fn MenuItem::type()
+   \brief Access to the type property.
+   Not fully implemented.
+   \returns The type of object that this represents.
+   \sa MenuItem::Types
+ */
 MenuItem::Types MenuItem::type()
 {
     if(action()->actionGroup())
@@ -77,11 +118,21 @@ MenuItem::Types MenuItem::type()
     return Type_Action;
 }
 
+/*!
+   \fn MenuItem::menuItems()
+   \brief Gets a list of child menu items
+   Not fully implemented.
+ */
 QList<MenuItem *> MenuItem::menuItems()
 {
     return m_MenuItems;
 }
 
+/*!
+   \fn MenuItem::addMenuItem()
+   \brief Adds a menu item to the child list
+   Not fully implemented.
+ */
 void MenuItem::addMenuItem(MenuItem *menuItem)
 {
     for(int i=0; i < m_MenuItems.count(); i++) {
@@ -93,11 +144,21 @@ void MenuItem::addMenuItem(MenuItem *menuItem)
     m_MenuItems.append(menuItem);
 }
 
+/*!
+   \fn MenuItem::merge()
+   \brief Merges another menu with this object, and returns a new menu set.
+   Not fully implemented.
+ */
 MenuItem *MenuItem::merge(MenuItem* menuItem)
 {
     return merge(this, menuItem);
 }
 
+/*!
+   \fn MenuItem::merge()
+   \brief Merges two menu objects, and returns a new menu set.
+   Not fully implemented.
+ */
 MenuItem *MenuItem::merge(MenuItem* left, MenuItem *right)
 {
     MenuItem *retval = new MenuItem();
@@ -143,6 +204,10 @@ MenuItem *MenuItem::merge(MenuItem* left, MenuItem *right)
     return retval;
 }
 
+/*!
+   \fn MenuItem::generate()
+   Not fully implemented.
+ */
 QAction *MenuItem::generate()
 {
     QAction *retval = NULL;

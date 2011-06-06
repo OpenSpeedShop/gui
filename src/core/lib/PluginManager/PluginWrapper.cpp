@@ -96,4 +96,5 @@ void PluginWrapper::setPriority(int priority)
     m_Priority = priority;
 }
 
-}}
+} // namespace PluginManager
+} // namespace Core

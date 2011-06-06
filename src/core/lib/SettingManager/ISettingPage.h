@@ -1,7 +1,7 @@
 /*!
-   \file 
+   \file
    \author Dane Gardner <dane.gardner@gmail.com>
-   \version 
+   \version
 
    \section LICENSE
    This file is part of the Open|SpeedShop Graphical User Interface
@@ -35,18 +35,15 @@
 namespace Core {
 namespace SettingManager {
 
-class SETTINGMANAGER_EXPORT ISettingPage : public QWidget
+class SETTINGMANAGER_EXPORT ISettingPage
 {
-    Q_OBJECT
-public:
-    ISettingPage(QWidget *parent = 0) : QWidget(parent) {}
-    virtual ~ISettingPage() {}
 public slots:
     virtual void apply() = 0;
     virtual void reset() = 0;
 };
 
-}}
+} // namespace SettingManager
+} // namespace Core
 
 Q_DECLARE_INTERFACE(Core::SettingManager::ISettingPage, "org.openspeedshop.gui.ISettingPage/0.1")
 

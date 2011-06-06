@@ -41,18 +41,20 @@ namespace MainWindow {
 
 /*!
    \class Core::MainWindow::MainWindow
-   \brief The MainWindow class is part of the core framework libraries. It is
-          the actual viewport that the user sees. All plugins manipulate this
-          view to expose data to the user.
+   \brief The MainWindow class is part of the core framework libraries.
+   It is the actual viewport that the user sees. All plugins manipulate this view to expose data to the user.
 
-          singleton class
+   Singleton class.
+
+   \interface Core::SettingManager::ISettingPageFactory
+
  */
 
 
 /*!
-   \fn Core::MainWindow::instance()
+   \fn MainWindow::instance()
    \brief Access to the singleton instance of this class
-   \returns A pointer to the singleton instance of this class
+   \returns A reference to the singleton instance of this class
  */
 MainWindow &MainWindow::instance()
 {
@@ -64,9 +66,8 @@ MainWindow &MainWindow::instance()
 }
 
 /*!
-   \fn Core::MainWindow::MainWindow()
-   \brief Constructor
-   \internal
+   \fn MainWindow::MainWindow()
+   \brief Constructor.
  */
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -83,9 +84,8 @@ MainWindow::MainWindow(QWidget *parent) :
 }
 
 /*!
-   \fn Core::MainWindow::~MainWindow()
-   \brief Destructor
-   \internal
+   \fn MainWindow::~MainWindow()
+   \brief Destructor.
  */
 MainWindow::~MainWindow()
 {
@@ -96,6 +96,14 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+/*!
+   \fn MainWindow::initialize()
+   \brief Initializes this class after it has been constructed.
+   This design pattern allows the class to perform any operations after a class (that this object is dependent upon) has been
+   constructed.
+   \returns true if successful
+   \sa initialized(), shutdown()
+ */
 bool MainWindow::initialize()
 {
 #ifdef MAINWINDOW_DEBUG
@@ -114,6 +122,11 @@ bool MainWindow::initialize()
     return m_Initialized = true;
 }
 
+/*!
+   \fn MainWindow::initialized()
+   \brief Returns a boolean value indicating whether this instance has been initialized or not.
+   \sa initialize()
+ */
 bool MainWindow::initialized()
 {
 #ifdef MAINWINDOW_DEBUG
@@ -123,6 +136,12 @@ bool MainWindow::initialized()
     return m_Initialized;
 }
 
+/*!
+   \fn MainWindow::shutdown()
+   \brief Notifies the instance that it should perform any clean-up operations before destruction.
+   This class is called manually, before the application is closed.  It will occur before destruction of the instance.
+   \sa initialize()
+ */
 void MainWindow::shutdown()
 {
 #ifdef MAINWINDOW_DEBUG
@@ -133,9 +152,8 @@ void MainWindow::shutdown()
 }
 
 /*!
-   \fn Core::MainWindow::readSettings()
+   \fn MainWindow::readSettings()
    \brief Load settings from the SettingManager.
-   \internal
  */
 void MainWindow::readSettings()
 {
@@ -158,9 +176,8 @@ void MainWindow::readSettings()
 }
 
 /*!
-   \fn Core::MainWindow::writeSettings()
+   \fn MainWindow::writeSettings()
    \brief Stores settings in the SettingManager for later retrieval.
-   \internal
  */
 void MainWindow::writeSettings()
 {
@@ -181,6 +198,10 @@ void MainWindow::writeSettings()
     settingManager.endGroup();
 }
 
+/*!
+   \fn MainWindow::initActions()
+   \returns
+ */
 void MainWindow::initActions()
 {
 #ifdef MAINWINDOW_DEBUG
@@ -188,6 +209,10 @@ void MainWindow::initActions()
 #endif
 }
 
+/*!
+   \fn MainWindow::addProgressBar()
+   \returns
+ */
 QProgressBar *MainWindow::addProgressBar()
 {
 #ifdef MAINWINDOW_DEBUG
@@ -203,6 +228,10 @@ QProgressBar *MainWindow::addProgressBar()
     return retval;
 }
 
+/*!
+   \fn MainWindow::removeProgressBar()
+   \returns
+ */
 void MainWindow::removeProgressBar(QProgressBar *progressBar)
 {
 #ifdef MAINWINDOW_DEBUG
@@ -213,6 +242,10 @@ void MainWindow::removeProgressBar(QProgressBar *progressBar)
     ui->statusbar->removeWidget(progressBar);
 }
 
+/*!
+   \fn MainWindow::setCentralWidget()
+   \returns
+ */
 void MainWindow::setCentralWidget(QWidget *widget)
 {
 #ifdef MAINWINDOW_DEBUG
@@ -228,8 +261,14 @@ void MainWindow::setCentralWidget(QWidget *widget)
     ui->centralLayout->addWidget(widget);
 }
 
-NotificationWidget *MainWindow::notify(const QString &text, NotificationWidget::Icon icon, NotificationWidget::StandardButtons buttons,
-            const QObject *reciever, const char *member)
+/*!
+   \fn MainWindow::notify()
+   \returns
+ */
+NotificationWidget *MainWindow::notify(const QString &text,
+                                       NotificationWidget::Icon icon,
+                                       NotificationWidget::StandardButtons buttons,
+                                       const QObject *reciever, const char *member)
 {
 #ifdef MAINWINDOW_DEBUG
     qDebug() << __FILE__ << __LINE__ << "\tMainWindow::notify";
@@ -242,21 +281,41 @@ NotificationWidget *MainWindow::notify(const QString &text, NotificationWidget::
     return notificationWidget;
 }
 
+/*!
+   \fn MainWindow::settingPageIcon()
+   \brief Reimplemented from ISettingPageFactory.
+   \sa Core::SettingManager::ISettingPageFactory::settingPageIcon()
+ */
 QIcon MainWindow::settingPageIcon()
 {
     return QIcon(":/MainWindow/app.png");
 }
 
+/*!
+   \fn MainWindow::settingPageName()
+   \brief Reimplemented from ISettingPageFactory.
+   \reimp Core::SettingManager::ISettingPageFactory::settingPageName()
+ */
 QString MainWindow::settingPageName()
 {
     return tr("Core");
 }
 
+/*!
+   \fn MainWindow::settingPagePriority()
+   \brief Reimplemented from ISettingPageFactory.
+   \reimp Core::SettingManager::ISettingPageFactory::settingPagePriority()
+ */
 int MainWindow::settingPagePriority()
 {
     return 10;
 }
 
+/*!
+   \fn MainWindow::createSettingPage()
+   \brief Reimplemented from ISettingPageFactory.
+   \reimp Core::SettingManager::ISettingPageFactory::createSettingPage()
+ */
 SettingManager::ISettingPage *MainWindow::createSettingPage()
 {
     return new MainSettingPage();

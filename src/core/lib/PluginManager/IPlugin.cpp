@@ -30,20 +30,20 @@
 namespace Core {
 namespace PluginManager {
 
-/*!
-  \struct Dependency
-  \brief Object that describes a dependent object
+/*! \struct Dependency
+    \brief Object that describes a dependent object
+    \param name A QString that contains the name of the dependent plugin.
+    \param version A QString that contains a Regular Expression pattern that matches desired versions of the dependent plugin.
  */
 
-/*!
-  \fn Dependency::Dependency()
-  \param name A QString that contains the name of the dependent plugin.
-  \param version A QString that contains a Regular Expression pattern that
-         matches desired versions of the dependent plugin.
+/*! \fn Dependency::Dependency()
+    \param name A QString that contains the name of the dependent plugin.
+    \param version A QString that contains a Regular Expression pattern that matches desired versions of the dependent plugin.
  */
 
+
 /*!
-   \class IPlugin
+   \interface Core::PluginManager::IPlugin
    \brief To be overriden as an interface for plugins
 
    pure virtual class
@@ -51,22 +51,17 @@ namespace PluginManager {
 
 /*!
    \fn IPlugin::IPlugin()
-   \brief Constructor
+   \brief A plugin must have a default constructor.
  */
-IPlugin::IPlugin()
-{
-
-}
 
 /*!
    \fn IPlugin::~IPlugin()
-   \brief Destructor
+   \brief A plugin must have a destructor.
  */
 
 /*!
    \fn IPlugin::initialize()
-   \brief This method is called after the plugin has been instantiated and
-          after the plugin's dependencies have been initialized.
+   \brief This method is called after the plugin has been instantiated and after the plugin's dependencies have been initialized.
    \param args QStringList containing required arguments
    \param err Returned errors in human-readable form
    \returns true if successful; false otherwise

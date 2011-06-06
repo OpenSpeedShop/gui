@@ -33,18 +33,17 @@ namespace Plugins {
 namespace TreeView {
 
 /*! \namespace Plugins::TreeView
-    \brief Contains the TreeViewPlugin, which helps demonstrate the
-           methodologies for creating a GUI plugin.
+    \brief Contains the TreeViewPlugin.
  */
 
 /*! \class TreeViewPlugin
     \version 0.1.dev
-    \brief This is an example of the methods for producing a GUI plugin.
+    \brief
 
     \par Depends on Plugins:
          OpenSpeedShop
 
-    \todo Document this more explicitly as a developer example.
+    \todo Document this more explicitly.
  */
 
 TreeViewPlugin::TreeViewPlugin(QObject *parent) : QObject(parent)

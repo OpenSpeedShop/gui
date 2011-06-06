@@ -33,8 +33,19 @@
 namespace Core {
 namespace MainWindow {
 
+/*!
+   \fn Core::MainWindow::MainSettingPage
+   \brief This is the main page for the GUI framework.
+   Any general user-settable settings for the framework should be handled here.
+ */
+
+
+/*!
+   \fn MainSettingPage::MainSettingPage()
+   \brief Constructor
+ */
 MainSettingPage::MainSettingPage(QWidget *parent) :
-    SettingManager::ISettingPage(parent),
+    QWidget(parent),
     ui(new Ui::MainSettingPage)
 {
     ui->setupUi(this);
@@ -52,6 +63,10 @@ MainSettingPage::MainSettingPage(QWidget *parent) :
     reset();
 }
 
+/*!
+   \fn MainSettingPage::~MainSettinPage()
+   \brief Destructor
+ */
 MainSettingPage::~MainSettingPage()
 {
     // Reset the style if necessary
@@ -61,6 +76,10 @@ MainSettingPage::~MainSettingPage()
     delete ui;
 }
 
+/*!
+   \fn MainSettingPage::apply()
+   \reimp SettingManager::ISettingPage::apply()
+ */
 void MainSettingPage::apply()
 {
     SettingManager::SettingManager &settingManager = SettingManager::SettingManager::instance();
@@ -73,6 +92,10 @@ void MainSettingPage::apply()
     settingManager.endGroup();
 }
 
+/*!
+   \fn MainSettingPage::reset()
+   \reimp SettingManager::ISettingPage::reset()
+ */
 void MainSettingPage::reset()
 {
     SettingManager::SettingManager &settingManager = SettingManager::SettingManager::instance();
@@ -86,6 +109,10 @@ void MainSettingPage::reset()
     settingManager.endGroup();
 }
 
+/*!
+   \fn MainSettingPage::on_cmbStyle_currentIndexChanged()
+   \brief Slot that handles changes in the style combo box.
+ */
 void MainSettingPage::on_cmbStyle_currentIndexChanged(QString style)
 {
     // Ensure we're actually changing the style
