@@ -3,7 +3,7 @@
 OPENSS_SRC="/home/dane/src/openspeedshop-2.0.1"
 OPENSS_LIB="/opt/oss/lib64"
 
-SOURCES="main Socket SocketServer OpenSpeedShopCLI"
+SOURCES="main Socket SocketServer OpenSpeedShopCLI FileSystem"
 OPENSS_INCLUDES="framework cli queries message"
 
 for INCLUDE in ${OPENSS_INCLUDES}; do INCLUDES="${INCLUDES} -I${OPENSS_SRC}/libopenss-${INCLUDE}"; done

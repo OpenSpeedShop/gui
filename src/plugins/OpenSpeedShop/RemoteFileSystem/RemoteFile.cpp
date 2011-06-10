@@ -25,48 +25,27 @@
 
  */
 
-#ifndef CONNECTIONWIDGET_H
-#define CONNECTIONWIDGET_H
+#include "RemoteFile.h"
 
-#include <QWidget>
-#include <SettingManager/ISettingPage.h>
-#include <SettingManager/SettingManager.h>
-
-#include <QProgressBar>
-#include <QMessageBox>
-
-
-namespace Plugins {
-namespace OpenSpeedShop {
-
-class IConnection;
-namespace Ui { class ConnectionWidget; }
-
-class ConnectionWidget : public Core::SettingManager::ISettingPage
+RemoteFile::RemoteFile(QObject *parent) :
+    QObject(parent)
 {
-    Q_OBJECT
-    Q_INTERFACES(Core::SettingManager::ISettingPage)
+}
 
-public:
-    explicit ConnectionWidget(QWidget *parent = 0);
-    ~ConnectionWidget();
-public slots:
-    void apply();
-    void reset();
+void RemoteFile::copy(const RemoteFile &other)
+{
+    m_Name = other.m_Name;
+    m_Path = other.m_Path;
+    m_Type = other.m_Type;
+    m_Permissions = other.m_Permissions;
+    m_HardLinks = other.m_HardLinks;
+    m_UserId = other.m_UserId;
+    m_GroupId = other.m_GroupId;
+    m_Size = other.m_Size;
+    m_AccessTime = other.m_AccessTime;
+    m_ModifiedTime = other.m_ModifiedTime;
+    m_ChangedTime = other.m_ChangedTime;
+    m_Fetched = other.m_Fetched;
+    m_Valid = other.m_Valid;
+}
 
-protected:
-    void initialize();
-    void startTimeOut(int msec = 3500);
-    void stopTimeOut();
-
-protected slots:
-    void connectionRegistered(IConnection *);
-    void on_cmbConnectionType_currentIndexChanged(int index);
-
-private:
-    Ui::ConnectionWidget *ui;
-};
-
-} // namespace OpenSpeedShop
-} // namespace Plugins
-#endif // CONNECTIONWIDGET_H

@@ -25,6 +25,8 @@ public:
     QString waitVersion();
     void waitExit();
 
+    QString waitDirStat(QString path);
+
     QStringList waitOssHelp();
     QStringList waitExperimentTypes();
     QUuid waitRestore(QString filepath);

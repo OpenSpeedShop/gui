@@ -25,48 +25,32 @@
 
  */
 
-#ifndef CONNECTIONWIDGET_H
-#define CONNECTIONWIDGET_H
+#ifndef REMOTEFILECACHE_H
+#define REMOTEFILECACHE_H
 
-#include <QWidget>
-#include <SettingManager/ISettingPage.h>
-#include <SettingManager/SettingManager.h>
-
-#include <QProgressBar>
-#include <QMessageBox>
-
+#include <QObject>
+#include <QMap>
+#include <QDateTime>
+#include "RemoteFile.h"
 
 namespace Plugins {
 namespace OpenSpeedShop {
 
-class IConnection;
-namespace Ui { class ConnectionWidget; }
-
-class ConnectionWidget : public Core::SettingManager::ISettingPage
+class RemoteFileCache : public QObject
 {
     Q_OBJECT
-    Q_INTERFACES(Core::SettingManager::ISettingPage)
-
 public:
-    explicit ConnectionWidget(QWidget *parent = 0);
-    ~ConnectionWidget();
-public slots:
-    void apply();
-    void reset();
+    explicit RemoteFileCache(QObject *parent = 0);
 
-protected:
-    void initialize();
-    void startTimeOut(int msec = 3500);
-    void stopTimeOut();
-
-protected slots:
-    void connectionRegistered(IConnection *);
-    void on_cmbConnectionType_currentIndexChanged(int index);
+    QMap<QString, RemoteFile> &listing(const QString &path);
+    RemoteFile file(const QString &file, const QString &path);
 
 private:
-    Ui::ConnectionWidget *ui;
+    QMap<QString, RemoteFile> m_Paths;
+
 };
 
 } // namespace OpenSpeedShop
 } // namespace Plugins
-#endif // CONNECTIONWIDGET_H
+
+#endif // REMOTEFILECACHE_H

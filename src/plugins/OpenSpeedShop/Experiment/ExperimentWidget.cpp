@@ -15,6 +15,9 @@
 #include "ViewManager/ViewManager.h"
 #include "ViewManager/IViewFilterable.h"
 
+#include "RemoteFileSystem/RemoteFileDialog.h"
+
+
 #ifdef QT_DEBUG
 #  include <QDebug>
 #endif
@@ -55,14 +58,21 @@ void ExperimentWidget::load()
 {
     ui->tabProperties->setEnabled(false);
 
-    // Grab the current server adapter
-    // Ensure that we're connected to a server
-    // Start sending commands
+#ifdef QT_DEBUG
+//    QString fileName = QFileDialog::getOpenFileName(this,
+//                                                    tr("Open Open|SpeedShop experiment"),
+//                                                    "openss::///",
+//                                                    tr("Open|SpeedShop Files (*.openss)"));
+//    qDebug() << __FILE__ << __LINE__ << "FileName:" << fileName;
+
+    RemoteFileDialog dlg(this);
+    dlg.exec();
+
+#endif
+
 
     IAdapter *adapter = ConnectionManager::instance().askAdapter();
     if(!adapter) throw tr("Server not connected");
-
-//    qDebug() << adapter->waitVersion();
 
     //TODO: Create a real way for the user to interact with the remote filesystem
     bool okay;
@@ -104,20 +114,6 @@ void ExperimentWidget::load()
 //    foreach(IAdapter::Process process, processes) {
 //        qDebug() << "\t" << process.host << process.processId << process.threadId << process.rank << process.executable;
 //    }
-
-
-//    QString experimentType = adapter->waitExperimentTypes(expId);
-
-//    qDebug() << "Modifiers" << adapter->waitExperimentTypeModifiers(experimentType);
-//    qDebug() << "Metrics" << adapter->waitExperimentTypeMetrics(experimentType);
-
-//    QStringList modifiers;
-//    modifiers << "CallTrees" << "FullStack";
-//    QStringList metrics;
-//    metrics << "counts" << "io::exclusive_times"; // << "io::inclusive_times";
-
-
-//    adapter->waitExit();
 
 }
 

@@ -63,10 +63,7 @@ MainSettingPage::MainSettingPage(QWidget *parent) :
     reset();
 }
 
-/*!
-   \fn MainSettingPage::~MainSettinPage()
-   \brief Destructor
- */
+/*! \reimp */
 MainSettingPage::~MainSettingPage()
 {
     // Reset the style if necessary
@@ -76,10 +73,7 @@ MainSettingPage::~MainSettingPage()
     delete ui;
 }
 
-/*!
-   \fn MainSettingPage::apply()
-   \reimp SettingManager::ISettingPage::apply()
- */
+/*! \reimp */
 void MainSettingPage::apply()
 {
     SettingManager::SettingManager &settingManager = SettingManager::SettingManager::instance();
@@ -92,10 +86,7 @@ void MainSettingPage::apply()
     settingManager.endGroup();
 }
 
-/*!
-   \fn MainSettingPage::reset()
-   \reimp SettingManager::ISettingPage::reset()
- */
+/*! \reimp */
 void MainSettingPage::reset()
 {
     SettingManager::SettingManager &settingManager = SettingManager::SettingManager::instance();

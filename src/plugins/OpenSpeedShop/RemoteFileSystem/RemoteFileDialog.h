@@ -25,48 +25,28 @@
 
  */
 
-#ifndef CONNECTIONWIDGET_H
-#define CONNECTIONWIDGET_H
+#ifndef REMOTEFILEDIALOG_H
+#define REMOTEFILEDIALOG_H
 
-#include <QWidget>
-#include <SettingManager/ISettingPage.h>
-#include <SettingManager/SettingManager.h>
+#include <QDialog>
+#include <QFileSystemModel>
 
-#include <QProgressBar>
-#include <QMessageBox>
+namespace Ui {
+    class RemoteFileDialog;
+}
 
-
-namespace Plugins {
-namespace OpenSpeedShop {
-
-class IConnection;
-namespace Ui { class ConnectionWidget; }
-
-class ConnectionWidget : public Core::SettingManager::ISettingPage
+class RemoteFileDialog : public QDialog
 {
     Q_OBJECT
-    Q_INTERFACES(Core::SettingManager::ISettingPage)
 
 public:
-    explicit ConnectionWidget(QWidget *parent = 0);
-    ~ConnectionWidget();
-public slots:
-    void apply();
-    void reset();
-
-protected:
-    void initialize();
-    void startTimeOut(int msec = 3500);
-    void stopTimeOut();
-
-protected slots:
-    void connectionRegistered(IConnection *);
-    void on_cmbConnectionType_currentIndexChanged(int index);
+    explicit RemoteFileDialog(QWidget *parent = 0);
+    ~RemoteFileDialog();
 
 private:
-    Ui::ConnectionWidget *ui;
+    Ui::RemoteFileDialog *ui;
+    QFileSystemModel m_Model;
+
 };
 
-} // namespace OpenSpeedShop
-} // namespace Plugins
-#endif // CONNECTIONWIDGET_H
+#endif // REMOTEFILEDIALOG_H

@@ -62,6 +62,8 @@ public:
     virtual QString waitVersion() = 0;
     virtual void waitExit() = 0;
 
+    virtual QString waitDirStat(QString path) = 0;
+
     virtual QStringList waitOssHelp() = 0;
     virtual QStringList waitExperimentTypes() = 0;
     virtual QUuid waitRestore(QString filepath) = 0;

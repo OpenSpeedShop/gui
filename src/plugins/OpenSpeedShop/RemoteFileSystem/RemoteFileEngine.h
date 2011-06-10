@@ -2,6 +2,13 @@
 #define REMOTEFILEENGINE_H
 
 #include <QAbstractFileEngine>
+#include <QDateTime>
+#include <QString>
+#include <QStringList>
+#include <QDir>
+
+#include "RemoteFile.h"
+#include "RemoteFileCache.h"
 
 namespace Plugins {
 namespace OpenSpeedShop {
@@ -13,23 +20,29 @@ public:
     RemoteFileEngine(const QString &fileName);
 
     /* if it's a file */
-//    virtual void setFileName(const QString &file);
-//    virtual bool rename(const QString &newName);
-//    virtual bool remove();
+    QString fileName(FileName file) const;
+    void setFileName(const QString &file);
+    bool rename(const QString &newName);
+    bool remove();
 
     /* if it's a directory */
-//    virtual bool mkdir(const QString &dirName, bool createParentDirectories) const;
-//    virtual bool rmdir(const QString &dirName, bool recurseParentDirectories) const;
-//    virtual QStringList entryList(QDir::Filters filters, const QStringList &filterNames) const;
+    bool mkdir(const QString &dirName, bool createParentDirectories) const;
+    bool rmdir(const QString &dirName, bool recurseParentDirectories) const;
+    QStringList entryList(QDir::Filters filters, const QStringList &filterNames);
 
     /* all filesystem objects */
-//    virtual bool caseSensitive() const;
-//    virtual bool isRelativePath() const;
-//    virtual FileFlags fileFlags(FileFlags type) const;
-//    virtual uint ownerId(FileOwner owner) const;
-//    virtual QString owner(FileOwner owner) const;
-//    virtual QDateTime fileTime(FileTime time) const;
+    bool caseSensitive() const;
+    bool isRelativePath() const;
+    bool isSequential() const;
+    QAbstractFileEngine::FileFlags fileFlags(QAbstractFileEngine::FileFlags type);
+    uint ownerId(QAbstractFileEngine::FileOwner owner);
+    QString owner(QAbstractFileEngine::FileOwner owner);
+    QDateTime fileTime(QAbstractFileEngine::FileTime time);
 
+
+private:
+    QString m_FileName;
+    RemoteFileCache m_RemoteFileCache;
 
 };
 

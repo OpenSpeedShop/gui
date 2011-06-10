@@ -1,7 +1,7 @@
 /*!
-   \file 
+   \file
    \author Dane Gardner <dane.gardner@gmail.com>
-   \version 
+   \version
 
    \section LICENSE
    This file is part of the Open|SpeedShop Graphical User Interface
@@ -29,7 +29,6 @@
 #define ABOUTDIALOG_H
 
 #include <QDialog>
-#include <QTimer>
 
 namespace Plugins {
 namespace OpenSpeedShop {

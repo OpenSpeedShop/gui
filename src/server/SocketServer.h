@@ -10,6 +10,7 @@
 #include "rapidxml-1.13/rapidxml_print.hpp"
 
 #include "OpenSpeedShopCLI.h"
+#include "FileSystem.h"
 #include "Socket.h"
 
 class SocketServer {
@@ -20,6 +21,7 @@ public:
 
 protected:
   OpenSpeedShopCLI _cli;
+  FileSystem _fileSystem;
   Socket _socket;
 
 };

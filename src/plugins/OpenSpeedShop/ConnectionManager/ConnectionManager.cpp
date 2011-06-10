@@ -295,8 +295,8 @@ void ConnectionManager::connectionStateChanged()
         /* Invalidate any commands that were part of that adapter */
         foreach(ServerCommand *serverCommand, m_ServerCommands) {
             serverCommand->setState(ServerCommand::State_Invalid);
+            m_ServerCommands.removeOne(serverCommand);
         }
-        m_ServerCommands.clear();
     }
 }
 

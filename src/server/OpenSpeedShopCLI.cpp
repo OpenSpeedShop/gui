@@ -1,8 +1,11 @@
 #include "OpenSpeedShopCLI.h"
 
-std::string &OpenSpeedShopCLI::trim(std::string &s) {
-  s.erase(s.begin(), std::find_if(s.begin(), s.end(), std::not1(std::ptr_fun<int, int>(std::isspace))));
-  s.erase(std::find_if(s.rbegin(), s.rend(), std::not1(std::ptr_fun<int, int>(std::isspace))).base(), s.end());
+using namespace std;
+using namespace rapidxml;
+
+string &OpenSpeedShopCLI::trim(string &s) {
+  s.erase(s.begin(), find_if(s.begin(), s.end(), not1(ptr_fun<int, int>(isspace))));
+  s.erase(find_if(s.rbegin(), s.rend(), not1(ptr_fun<int, int>(isspace))).base(), s.end());
   return s;
 }
 
@@ -16,22 +19,22 @@ OpenSpeedShopCLI::~OpenSpeedShopCLI()
   terminateOSS(m_windowID);
 }
 
-std::list<rapidxml::xml_node<> *> OpenSpeedShopCLI::processCommandResults(
-    std::list<CommandResult *> commandResultList,
-    rapidxml::memory_pool<> *memoryPool,
-    const std::string &parentName)
+list<xml_node<> *> OpenSpeedShopCLI::processCommandResults(
+    list<CommandResult *> commandResultList,
+    memory_pool<> *memoryPool,
+    const string &parentName)
 {
-  std::list<rapidxml::xml_node<> *> commandResults;
+  list<xml_node<> *> commandResults;
 
-  std::list<CommandResult *>::iterator commandResultListIterator;
+  list<CommandResult *>::iterator commandResultListIterator;
   for(commandResultListIterator = commandResultList.begin();
     commandResultListIterator != commandResultList.end();
     commandResultListIterator++) {
 
     CommandResult *commandResult = *commandResultListIterator;
-    rapidxml::xml_node<> *commandResultNode;
+    xml_node<> *commandResultNode;
     
-    std::string nodeName(typeid(*commandResult).name());
+    string nodeName(typeid(*commandResult).name());
     int start = nodeName.find("CommandResult_") + 14;
     nodeName = nodeName.substr(start);
 
@@ -53,8 +56,8 @@ std::list<rapidxml::xml_node<> *> OpenSpeedShopCLI::processCommandResults(
       //TODO: Add any more ignore-case conditions
       
       if(!ignore && _headerNodes.size() > 0 && _headerNodes.size() >= commandResults.size()) {
-        rapidxml::xml_node<> *headerNode = _headerNodes.at(commandResults.size());
-        rapidxml::xml_attribute<> *headerTypeAttribute = headerNode->first_attribute("columnType");
+        xml_node<> *headerNode = _headerNodes.at(commandResults.size());
+        xml_attribute<> *headerTypeAttribute = headerNode->first_attribute("columnType");
 
         if(!headerTypeAttribute) {
           // If the header type doesn't exist create it
@@ -63,7 +66,7 @@ std::list<rapidxml::xml_node<> *> OpenSpeedShopCLI::processCommandResults(
 
         } else {
           // If the header type does exist, compare it, and see what we've got
-          std::string headerType(headerTypeAttribute->value());
+          string headerType(headerTypeAttribute->value());
 
           // Set the header type to "Mixed" if we don't match the other types
           if(headerType.compare("Mixed") != 0 && headerType.compare(nodeName) != 0) {
@@ -79,30 +82,30 @@ std::list<rapidxml::xml_node<> *> OpenSpeedShopCLI::processCommandResults(
       nodeNameString = memoryPool->allocate_string(nodeName.c_str());
     }
 
-    commandResultNode = memoryPool->allocate_node(rapidxml::node_element, nodeNameString);
+    commandResultNode = memoryPool->allocate_node(node_element, nodeNameString);
 
     if(typeid(*commandResult) == typeid(CommandResult_Columns)) {
       // Get a list of the column nodes
-      std::list<CommandResult *> columns;
+      list<CommandResult *> columns;
       ((CommandResult_Columns *)commandResult)->Value(columns);
-      std::list<rapidxml::xml_node<> *> childNodes = processCommandResults(columns, memoryPool, std::string(commandResultNode->name()));
+      list<xml_node<> *> childNodes = processCommandResults(columns, memoryPool, string(commandResultNode->name()));
 
       // Add them to this node as children
       bool killThisRow = true;
-      std::list<rapidxml::xml_node<> *>::iterator childNodesListIterator;
+      list<xml_node<> *>::iterator childNodesListIterator;
       for(childNodesListIterator = childNodes.begin();
           childNodesListIterator != childNodes.end();
           childNodesListIterator++) {
-        rapidxml::xml_node<> *child = *childNodesListIterator;
+        xml_node<> *child = *childNodesListIterator;
 
         //MAGIC: We need to test if this is a disparate CallStackEntry row
-        std::string childName(child->name());
+        string childName(child->name());
         if(childName.compare("String") != 0 && childName.compare("CallStackEntry") != 0) {
           // Anything but a String or CallStackEntry cancels the kill
           killThisRow = false;
         } else if(childName.compare("String") == 0) {
           // A string with a non-empty value will also cancel the kill
-          std::string childValue(child->first_attribute("value")->value());
+          string childValue(child->first_attribute("value")->value());
           if(!childValue.empty()) {
             killThisRow = false;
           }
@@ -116,12 +119,12 @@ std::list<rapidxml::xml_node<> *> OpenSpeedShopCLI::processCommandResults(
 
     } else if(typeid(*commandResult) == typeid(CommandResult_Headers)) {
       // Get a list of header nodes
-      std::list<CommandResult *> headers;
+      list<CommandResult *> headers;
       ((CommandResult_Headers *)commandResult)->Value(headers);
-      std::list<rapidxml::xml_node<> *> childNodes = processCommandResults(headers, memoryPool, std::string(commandResultNode->name()));
+      list<xml_node<> *> childNodes = processCommandResults(headers, memoryPool, string(commandResultNode->name()));
 
       // Add them to this node as children
-      std::list<rapidxml::xml_node<> *>::iterator childNodesListIterator;
+      list<xml_node<> *>::iterator childNodesListIterator;
       for(childNodesListIterator = childNodes.begin();
           childNodesListIterator != childNodes.end();
           childNodesListIterator++) {
@@ -140,7 +143,7 @@ std::list<rapidxml::xml_node<> *> OpenSpeedShopCLI::processCommandResults(
       /* NOTE: This may be the wrong way of going about it
        * See plugins/panels/StatsPanel/StatsPanel.cxx:11927 for more
        * information if we run into problems doing it this way. */
-      std::set<Statement> statements = function->getDefinitions();
+      set<Statement> statements = function->getDefinitions();
 
       if(!statements.empty()) {
         Statement statement = *statements.begin();  // There should only be one!
@@ -148,7 +151,7 @@ std::list<rapidxml::xml_node<> *> OpenSpeedShopCLI::processCommandResults(
         attributeValue = memoryPool->allocate_string(statement.getPath().c_str());
         commandResultNode->append_attribute(memoryPool->allocate_attribute("path", attributeValue));
 
-        std::ostringstream stringStream;
+        ostringstream stringStream;
         stringStream << statement.getLine();
         attributeValue = memoryPool->allocate_string(stringStream.str().c_str());
         commandResultNode->append_attribute(memoryPool->allocate_attribute("line", attributeValue));
@@ -160,7 +163,7 @@ std::list<rapidxml::xml_node<> *> OpenSpeedShopCLI::processCommandResults(
       char *attributeValue = memoryPool->allocate_string(statement->getPath().c_str());
       commandResultNode->append_attribute(memoryPool->allocate_attribute("path", attributeValue));
 
-      std::ostringstream stringStream;
+      ostringstream stringStream;
       stringStream << statement->getLine();
       attributeValue = memoryPool->allocate_string(stringStream.str().c_str());
       commandResultNode->append_attribute(memoryPool->allocate_attribute("line", attributeValue));
@@ -168,9 +171,9 @@ std::list<rapidxml::xml_node<> *> OpenSpeedShopCLI::processCommandResults(
     } else if(typeid(*commandResult) == typeid(CommandResult_CallStackEntry)) {
       // Get a list of the call stack entries
       CommandResult_CallStackEntry *callStackEntry = (CommandResult_CallStackEntry *)commandResult;
-      std::vector<CommandResult *> *callStackEntryVector = callStackEntry->Value();
-      std::list<CommandResult *> callStackEntryList(callStackEntryVector->rbegin(), callStackEntryVector->rend());
-      std::list<rapidxml::xml_node<> *> childNodes = processCommandResults(callStackEntryList, memoryPool);
+      vector<CommandResult *> *callStackEntryVector = callStackEntry->Value();
+      list<CommandResult *> callStackEntryList(callStackEntryVector->rbegin(), callStackEntryVector->rend());
+      list<xml_node<> *> childNodes = processCommandResults(callStackEntryList, memoryPool);
 
       /* //NOTE: It looks like the CallStackEntries aren't created as expected.  We get both a row-based hierarchy, and a 
                  "building" stack object.  We're looking for only the "full-stack" entry, and then removing the previous 
@@ -179,7 +182,7 @@ std::list<rapidxml::xml_node<> *> OpenSpeedShopCLI::processCommandResults(
        */
 
       // Add them to this node as children
-      std::list<rapidxml::xml_node<> *>::iterator childNodesListIterator;
+      list<xml_node<> *>::iterator childNodesListIterator;
       for(childNodesListIterator = childNodes.begin();
           childNodesListIterator != childNodes.end();
           childNodesListIterator++) {
@@ -187,7 +190,7 @@ std::list<rapidxml::xml_node<> *> OpenSpeedShopCLI::processCommandResults(
       }
       
     } else {
-      std::string value = commandResult->Form();
+      string value = commandResult->Form();
       char *attributeValue = memoryPool->allocate_string(trim(value).c_str());
       commandResultNode->append_attribute(memoryPool->allocate_attribute("value", attributeValue));
 
@@ -203,7 +206,7 @@ InputLineObject *OpenSpeedShopCLI::getInputLineObject(int windowID, const char *
 {
   static int sequence = 0;
 
-  InputLineObject *inputLineObject = new InputLineObject(windowID, std::string(command));
+  InputLineObject *inputLineObject = new InputLineObject(windowID, string(command));
   inputLineObject->SetSeq(++sequence);
   inputLineObject->SetStatus(ILO_IN_PARSER);
 
@@ -254,30 +257,28 @@ InputLineObject *OpenSpeedShopCLI::getInputLineObject(int windowID, const char *
 }
 
 
-rapidxml::xml_node<> *OpenSpeedShopCLI::execute(std::string command, rapidxml::memory_pool<> *memoryPool)
+xml_node<> *OpenSpeedShopCLI::execute(string command, memory_pool<> *memoryPool)
 {
-  rapidxml::xml_node<> *cliResponseNode = memoryPool->allocate_node(rapidxml::node_element, "OpenSpeedShopCLI");
+  xml_node<> *cliResponseNode =  memoryPool->allocate_node(node_element, memoryPool->allocate_string("OpenSpeedShopCLI"));
 
   try {
     InputLineObject *inputLineObject = getInputLineObject(m_windowID, command.c_str());
 
     /* It appears that there is always only one CommandObject returned, even though
      * it is in a list.  We'll process it properly, just in case: bits are cheap */
-    std::list<CommandObject *> commandObjectList = inputLineObject->CmdObj_List();
-    std::list<CommandObject *>::iterator commandObjectListIterator;
+    list<CommandObject *> commandObjectList = inputLineObject->CmdObj_List();
+    list<CommandObject *>::iterator commandObjectListIterator;
     for(commandObjectListIterator = commandObjectList.begin();
       commandObjectListIterator != commandObjectList.end();
       commandObjectListIterator++) {
 
-      rapidxml::xml_node<> *commandObjectNode =
-              memoryPool->allocate_node(rapidxml::node_element, memoryPool->allocate_string("CommandObject"));
+      xml_node<> *commandObjectNode = memoryPool->allocate_node(node_element, memoryPool->allocate_string("CommandObject"));
 
-      std::list<rapidxml::xml_node<> *> childNodes =
-              processCommandResults((*commandObjectListIterator)->Result_List(), memoryPool);
+      list<xml_node<> *> childNodes = processCommandResults((*commandObjectListIterator)->Result_List(), memoryPool);
 
       _headerNodes.clear();   // Wipe the header cache
 
-      std::list<rapidxml::xml_node<> *>::iterator childNodesListIterator;
+      list<xml_node<> *>::iterator childNodesListIterator;
       for(childNodesListIterator = childNodes.begin();
           childNodesListIterator != childNodes.end();
           childNodesListIterator++) {
@@ -292,14 +293,14 @@ rapidxml::xml_node<> *OpenSpeedShopCLI::execute(std::string command, rapidxml::m
       Current_ILO = inputLineObject = NULL;
     }
 
-  } catch (std::exception &error) {
+  } catch (exception &error) {
     char *errorWhat = memoryPool->allocate_string(error.what());
-    cliResponseNode->append_node(memoryPool->allocate_node(rapidxml::node_element, "Exception", errorWhat));
-  } catch (std::string error) {
+    cliResponseNode->append_node(memoryPool->allocate_node(node_element, "Exception", errorWhat));
+  } catch (string error) {
     char *errorWhat = memoryPool->allocate_string(error.c_str());
-    cliResponseNode->append_node(memoryPool->allocate_node(rapidxml::node_element, "Exception", errorWhat));
+    cliResponseNode->append_node(memoryPool->allocate_node(node_element, "Exception", errorWhat));
   } catch(...) {
-    cliResponseNode->append_node(memoryPool->allocate_node(rapidxml::node_element, "Exception", "Unknown"));
+    cliResponseNode->append_node(memoryPool->allocate_node(node_element, "Exception", "Unknown"));
   }
 
   return cliResponseNode;

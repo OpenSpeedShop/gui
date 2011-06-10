@@ -207,6 +207,15 @@ void ServerAdapter::waitExit()
 
 /*** END SocketServer commands ***********************************************/
 
+QString ServerAdapter::waitDirStat(QString path)
+{
+    //DEBUG:  This is for debugging only
+    ServerCommand *serverCommand = rawCommand(path, "FileSystem");
+    waitCommand(serverCommand);
+    QString response = serverCommand->response().toString();
+    serverCommand->deleteLater();
+    return response;
+}
 
 /*** BEGIN OpenSpeedShopCLI commands *****************************************/
 

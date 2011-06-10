@@ -33,8 +33,8 @@ namespace OpenSpeedShop {
 
 ViewManager &ViewManager::instance()
 {
-    static ViewManager m_Instance;
-    return m_Instance;
+    static ViewManager instance;
+    return instance;
 }
 
 ViewManager::ViewManager(QObject *parent) :

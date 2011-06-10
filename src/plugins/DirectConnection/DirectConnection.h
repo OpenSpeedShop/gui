@@ -30,7 +30,6 @@
 
 #include <QObject>
 #include <QTcpSocket>
-#include <QTimer>
 #include <QDataStream>
 #include <ConnectionManager/IConnection.h>
 
