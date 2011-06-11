@@ -707,7 +707,12 @@ void ServerAdapter::loadMetrics()
 {
     m_MetricsList = QDomDocument("Modifiers");
 
+    //FIXME: This should not be hard coded here
+#ifdef WIN32
     QFile file(QString("%1/ExperimentTypes.xml").arg(QApplication::instance()->applicationDirPath()));
+#else
+    QFile file(QString("%1/../etc/ExperimentTypes.xml").arg(QApplication::instance()->applicationDirPath()));
+#endif
 
     if (!file.open(QIODevice::ReadOnly)) {
         throw tr("Could not open metrics description file");

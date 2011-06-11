@@ -80,7 +80,14 @@ void ModelManager::importDescriptors(const QString &filepath)
     if(filePath.isEmpty()) {
         //TODO: Create a setting for this in the setting console
         Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
+
+        //FIXME: This should not be hard coded here
+#ifdef WIN32
         filePath = QString("%1/ModelDescriptors.xml").arg(QApplication::instance()->applicationDirPath());
+#else
+        filePath = QString("%1/../etc/ModelDescriptors.xml").arg(QApplication::instance()->applicationDirPath());
+#endif
+
         filePath = settingManager.value("Plugins/OpenSpeedShop/ModelManager/DescriptorsFilePath", filePath).toString();
     }
 
@@ -218,7 +225,14 @@ void ModelManager::exportDescriptors(const QString &filepath)
     QString filePath(filepath);
     if(filePath.isEmpty()) {
         Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
+
+        //FIXME: This should not be hard coded here
+#ifdef WIN32
         filePath = QString("%1/ModelDescriptors.xml").arg(QApplication::instance()->applicationDirPath());
+#else
+        filePath = QString("%1/../etc/ModelDescriptors.xml").arg(QApplication::instance()->applicationDirPath());
+#endif
+
         filePath = settingManager.value("Plugins/OpenSpeedShop/ModelManager/DescriptorsFilePath", filePath).toString();
     }
 
