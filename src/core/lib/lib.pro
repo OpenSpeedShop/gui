@@ -69,6 +69,8 @@ DEFINES          += MAINWINDOW_LIBRARY \
 #debug:DEFINES    += PLUGINMANAGER_DEBUG
 #debug:DEFINES    += SETTINGMANAGER_DEBUG
 
-target.path = /lib
+win32:target.path = /
+else:target.path = /lib
+
 INSTALLS += target
 

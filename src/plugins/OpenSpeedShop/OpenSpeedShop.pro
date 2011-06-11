@@ -69,11 +69,11 @@ HEADERS      += OpenSpeedShopPlugin.h \
                 ViewManager/ViewManager.h \
                 ViewManager/ViewManagerLibrary.h \
                 ViewManager/IViewFilterable.h \
-    ModelManager/ModelManagerLibrary.h \
-    ViewManager/IViewFactory.h \
-    RemoteFileSystem/RemoteFileCache.h \
-    RemoteFileSystem/RemoteFile.h \
-    RemoteFileSystem/RemoteFileDialog.h
+                ModelManager/ModelManagerLibrary.h \
+                ViewManager/IViewFactory.h \
+                RemoteFileSystem/RemoteFileCache.h \
+                RemoteFileSystem/RemoteFile.h \
+                RemoteFileSystem/RemoteFileDialog.h
 
 FORMS        += Settings/SettingPage.ui \
                 AboutDialog.ui \
@@ -82,7 +82,7 @@ FORMS        += Settings/SettingPage.ui \
                 ConnectionManager/ConnectionWidget.ui \
                 ModelManager/ModelDescriptorWidget.ui \
                 ModelManager/ModelManagerDialog.ui \
-    RemoteFileSystem/RemoteFileDialog.ui
+                RemoteFileSystem/RemoteFileDialog.ui
 
 RESOURCES    += Resources/OpenSpeedShop.qrc
 
@@ -99,15 +99,18 @@ DEFINES      += OPENSPEEDSHOP_LIBRARY \
 # List of experiment types and their possible modifiers/metrics
 # In the future, this should be pulled from the server
 OTHER_FILES += ConnectionManager/ExperimentTypes.xml
-experimentTypes.path = /bin
+win32:experimentTypes.path = /
+else:experimentTypes.path = /etc
 experimentTypes.files = ConnectionManager/ExperimentTypes.xml
 INSTALLS += experimentTypes
 
 # Default data for the model descriptors
 # In the future, this should be pulled from the server
 OTHER_FILES += ModelManager/ModelDescriptors.xml
-modelDescriptors.path = /bin
+win32:modelDescriptors.path = /
+else:modelDescriptors.path = /etc
 modelDescriptors.files = ModelManager/ModelDescriptors.xml
 INSTALLS += modelDescriptors
 
-QMAKE_POST_LINK   += ar rcs libOpenSpeedShop.a *.o
+# This allows us to statically link other plugins to this one
+!win32:QMAKE_POST_LINK   += ar rcs libOpenSpeedShop.a *.o

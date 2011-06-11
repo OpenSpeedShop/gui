@@ -28,5 +28,7 @@ LIBS    += -L$$quote($${BUILD_PATH}/core/lib/$${POSTFIX}) -lCore
 
 #debug:DEFINES    += MAIN_DEBUG
 
-target.path = /bin
+win32:target.path = /
+else:target.path = /bin
+
 INSTALLS += target

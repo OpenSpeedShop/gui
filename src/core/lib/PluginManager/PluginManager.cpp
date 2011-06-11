@@ -188,9 +188,15 @@ void PluginManager::readSettings()
 
     if(!QFile::exists(m_PluginPath)) {
         QDir pluginPath(QApplication::applicationDirPath());
+
+#ifdef WIN32
+        m_PluginPath = pluginPath.absolutePath();
+#else
         if(pluginPath.cd("../lib/plugins")) {
             m_PluginPath = pluginPath.absolutePath();
         }
+#endif
+
     }
 
     settingManager.endGroup();
