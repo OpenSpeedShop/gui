@@ -29,7 +29,7 @@
 #define DIRECTCONNECTIONPAGE_H
 
 #include <QWidget>
-#include <ConnectionManager/IConnectionPage.h>
+#include <OpenSpeedShop/ConnectionManager/IConnectionPage.h>
 
 namespace Plugins {
 namespace DirectConnection {

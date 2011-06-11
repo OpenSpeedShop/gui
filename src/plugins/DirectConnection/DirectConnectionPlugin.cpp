@@ -28,7 +28,7 @@
 #include "DirectConnectionPlugin.h"
 
 #include <PluginManager/PluginManager.h>
-#include <ConnectionManager/ConnectionManager.h>
+#include <OpenSpeedShop/ConnectionManager/ConnectionManager.h>
 
 using namespace Plugins::OpenSpeedShop;
 

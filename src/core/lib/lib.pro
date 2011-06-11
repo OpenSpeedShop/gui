@@ -71,3 +71,4 @@ DEFINES          += MAINWINDOW_LIBRARY \
 
 target.path = /lib
 INSTALLS += target
+

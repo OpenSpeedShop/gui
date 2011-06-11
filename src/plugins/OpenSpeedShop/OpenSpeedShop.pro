@@ -109,3 +109,5 @@ OTHER_FILES += ModelManager/ModelDescriptors.xml
 modelDescriptors.path = /bin
 modelDescriptors.files = ModelManager/ModelDescriptors.xml
 INSTALLS += modelDescriptors
+
+QMAKE_POST_LINK   += ar rcs libOpenSpeedShop.a *.o

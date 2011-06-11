@@ -27,7 +27,7 @@ HEADERS            += ServerAdapterPlugin.h \
 
 QT                 += xml
 
-LIBS               += -L$$quote($${BUILD_PATH}/plugins/OpenSpeedShop/$${POSTFIX}) -lOpenSpeedShop
+LIBS              += -Wl,-Bstatic -L$$quote($${BUILD_PATH}/plugins/OpenSpeedShop/$${POSTFIX}) -lOpenSpeedShop -Wl,-Bdynamic
 
 
 #debug: DEFINES += SERVERADAPTER_DEBUG

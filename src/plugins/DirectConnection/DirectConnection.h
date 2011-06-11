@@ -31,7 +31,7 @@
 #include <QObject>
 #include <QTcpSocket>
 #include <QDataStream>
-#include <ConnectionManager/IConnection.h>
+#include <OpenSpeedShop/ConnectionManager/IConnection.h>
 
 using namespace Plugins::OpenSpeedShop;
 

@@ -21,6 +21,5 @@ TARGET             = Example
 SOURCES           += ExamplePlugin.cpp
 HEADERS           += ExamplePlugin.h
 
-INCLUDEPATH       += $$quote($${SOURCE_PATH}/plugins/OpenSpeedShop)
-DEPENDPATH        += $$quote($${SOURCE_PATH}/plugins/OpenSpeedShop)
-LIBS              += -L$$quote($${BUILD_PATH}/plugins/OpenSpeedShop/$${POSTFIX}) -lOpenSpeedShop
+LIBS              += -Wl,-Bstatic -L$$quote($${BUILD_PATH}/plugins/OpenSpeedShop/$${POSTFIX}) -lOpenSpeedShop -Wl,-Bdynamic
+

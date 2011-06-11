@@ -33,8 +33,6 @@ RESOURCES         +=
 
 QT                += network xml
 
-INCLUDEPATH       += $$quote($${SOURCE_PATH}/plugins/OpenSpeedShop)
-DEPENDPATH        += $$quote($${SOURCE_PATH}/plugins/OpenSpeedShop)
-LIBS              += -L$$quote($${BUILD_PATH}/plugins/OpenSpeedShop/$${POSTFIX}) -lOpenSpeedShop
+LIBS              += -Wl,-Bstatic -L$$quote($${BUILD_PATH}/plugins/OpenSpeedShop/$${POSTFIX}) -lOpenSpeedShop -Wl,-Bdynamic
 
 #debug: DEFINES += DIRECTCONNECTION_DEBUG
