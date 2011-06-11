@@ -33,6 +33,9 @@ ModelManager::ModelManager(QObject *parent) :
 
 bool ModelManager::initialize(QStringList &args, QString *err)
 {
+    Q_UNUSED(args)
+    Q_UNUSED(err)
+
     using namespace Core;
 
     try {
@@ -302,6 +305,8 @@ ModelDescriptorListWidget *ModelManager::createDescriptorListWidget(QWidget *par
     Used during copy-and-paste and drag-and-drop operations. */
 QMimeData ModelManager::descriptorMimeData(const QUuid &descriptorUid)
 {
+    Q_UNUSED(descriptorUid)
+
     //TODO:
     throw tr("Function not yet implemented.");
 }
@@ -373,6 +378,8 @@ QUuid ModelManager::fetchModel(const QUuid &descriptorUid, const QUuid &experime
     Phase II */
 QUuid ModelManager::importModel(const QString &filepath)
 {
+    Q_UNUSED(filepath)
+
     //TODO: Phase II.
     throw tr("Function not yet implemented.");
 }
@@ -381,6 +388,9 @@ QUuid ModelManager::importModel(const QString &filepath)
     Phase II */
 void ModelManager::ModelManager::exportModel(const QUuid &modelUid, const QString &filepath)
 {
+    Q_UNUSED(modelUid)
+    Q_UNUSED(filepath)
+
     //TODO: Phase II.
     throw tr("Function not yet implemented.");
 }
@@ -415,6 +425,9 @@ void ModelManager::unloadModel(const QUuid &descriptorUid, const QUuid &experime
     Used during copy-and-paste and drag-and-drop operations. */
 QMimeData ModelManager::modelMimeData(const QUuid &descriptorUid, const QUuid &experimentUid)
 {
+    Q_UNUSED(descriptorUid)
+    Q_UNUSED(experimentUid)
+
     //TODO:
     throw tr("Function not yet implemented.");
 }

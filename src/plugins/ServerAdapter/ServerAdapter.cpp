@@ -38,7 +38,9 @@ ServerCommand *ServerAdapter::rawCommand(QString command, QString type)
 {
     ConnectionManager &connectionManager = ConnectionManager::instance();
     ServerCommand *serverCommand = new ServerCommand(command, type, this);
-    connectionManager.sendCommand(serverCommand);
+    if(!connectionManager.sendCommand(serverCommand)) {
+        //! \todo Deal with a returned false value
+    }
     return serverCommand;
 }
 
@@ -66,6 +68,9 @@ ServerCommand *ServerAdapter::rawOpenSpeedShopCommand(QString command)
  */
 QDomElement ServerAdapter::waitCommand(ServerCommand *serverCommand)
 {
+    /*! \todo We need to notify the user of the wait state after the first second or so (spinning visual display).
+        \todo We need to ask the user if they'd like to continue waiting after 30 seconds or so. */
+
     while(serverCommand->state() != ServerCommand::State_Response) {
         QApplication::processEvents();
         if(serverCommand->state() == ServerCommand::State_Invalid) {

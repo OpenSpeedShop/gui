@@ -40,10 +40,10 @@ SOURCES      += OpenSpeedShopPlugin.cpp \
                 ConnectionManager/IConnectionPage.cpp \
                 ViewManager/ViewManager.cpp \
                 ViewManager/IViewFilterable.cpp \
-    ViewManager/IViewFactory.cpp \
-    RemoteFileSystem/RemoteFileCache.cpp \
-    RemoteFileSystem/RemoteFile.cpp \
-    RemoteFileSystem/RemoteFileDialog.cpp
+                ViewManager/IViewFactory.cpp \
+                RemoteFileSystem/RemoteFileCache.cpp \
+                RemoteFileSystem/RemoteFile.cpp \
+                RemoteFileSystem/RemoteFileDialog.cpp
 
 HEADERS      += OpenSpeedShopPlugin.h \
                 Settings/SettingPage.h \
@@ -95,6 +95,8 @@ DEFINES      += OPENSPEEDSHOP_LIBRARY \
 
 #debug: DEFINES += DATAMODEL_DEBUG
 #debug: DEFINES += MODELMANAGER_DEBUG
+#debug: DEFINES += CONNECTIONMANAGER_DEBUG
+
 
 # List of experiment types and their possible modifiers/metrics
 # In the future, this should be pulled from the server
@@ -111,6 +113,3 @@ win32:modelDescriptors.path = /
 else:modelDescriptors.path = /etc
 modelDescriptors.files = ModelManager/ModelDescriptors.xml
 INSTALLS += modelDescriptors
-
-# This allows us to statically link other plugins to this one
-!win32:QMAKE_POST_LINK   += ar rcs libOpenSpeedShop.a *.o

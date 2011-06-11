@@ -44,6 +44,8 @@ ViewManager::ViewManager(QObject *parent) :
 
 bool ViewManager::initialize(QStringList &args, QString *err)
 {
+    Q_UNUSED(args)
+
     try {
 
         Core::PluginManager::PluginManager &pluginManager = Core::PluginManager::PluginManager::instance();

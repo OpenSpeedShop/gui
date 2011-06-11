@@ -53,6 +53,7 @@ void RemoteFileEngine::setFileName(const QString &file)
 /*! \reimp */
 bool RemoteFileEngine::rename(const QString &newName)
 {
+    Q_UNUSED(newName)
     return false;
 }
 
@@ -65,18 +66,25 @@ bool RemoteFileEngine::remove()
 /*! \reimp */
 bool RemoteFileEngine::mkdir(const QString &dirName, bool createParentDirectories) const
 {
+    Q_UNUSED(dirName)
+    Q_UNUSED(createParentDirectories)
     return false;
 }
 
 /*! \reimp */
 bool RemoteFileEngine::rmdir(const QString &dirName, bool recurseParentDirectories) const
 {
+    Q_UNUSED(dirName)
+    Q_UNUSED(recurseParentDirectories)
     return false;
 }
 
 /*! \reimp */
 QStringList RemoteFileEngine::entryList(QDir::Filters filters, const QStringList &filterNames)
 {
+    Q_UNUSED(filters)
+    Q_UNUSED(filterNames)
+
     QString fileName = this->fileName(QAbstractFileEngine::BaseName);
     QString pathName = this->fileName(QAbstractFileEngine::PathName);
     RemoteFile remoteFile = m_RemoteFileCache.file(fileName, pathName);

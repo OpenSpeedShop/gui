@@ -36,6 +36,10 @@
 #include "ServerCommand.h"
 #include "ConnectionWidget.h"
 
+#ifdef CONNECTIONMANAGER_DEBUG
+#  include <QDebug>
+#endif
+
 namespace Plugins {
 namespace OpenSpeedShop {
 
@@ -48,6 +52,7 @@ namespace OpenSpeedShop {
 ConnectionManager &ConnectionManager::instance()
 {
     static ConnectionManager instance;
+
     return instance;
 }
 
@@ -69,6 +74,8 @@ ConnectionManager::~ConnectionManager()
  */
 bool ConnectionManager::initialize(QStringList &args, QString *err)
 {
+    Q_UNUSED(args)
+
     using namespace Core;
 
     try {
@@ -163,6 +170,7 @@ void ConnectionManager::pluginObjectRegistered(QObject *object)
 
 void ConnectionManager::pluginObjectDeregistered(QObject *object)
 {
+    Q_UNUSED(object)
     throw tr("Plugin object deregistration in the ConnectionManager has not been implemented");
 }
 

@@ -39,48 +39,47 @@ class RemoteFile : public QObject
 
 public:
     RemoteFile(QObject *parent = 0);
-    RemoteFile(const RemoteFile &other) { copy(other); }
+    RemoteFile(const RemoteFile &other) : QObject(other.parent()) { copy(other); }
 
     QMap<QString, RemoteFile> &files() { return m_Files; }
 
-    QDateTime &fetched() { return m_Fetched; } const
-    void setFetched(const QDateTime &fetched) { m_Fetched = fetched; } const
+    const QDateTime &fetched() { return m_Fetched; }
+    void setFetched(const QDateTime &fetched) { m_Fetched = fetched; }
 
-    bool &isValid() { return m_Valid; } const
+    const bool &isValid() { return m_Valid; }
     void setValid(bool valid = true) { m_Valid = valid; }
 
-
-    QString &name() { return m_Name; } const
+    const QString &name() { return m_Name; }
     void setName(const QString &name) { m_Name = name; }
 
-    QString &path() { return m_Path; } const
+    const QString &path() { return m_Path; }
     void setPath(const QString &path) { m_Path = path; }
 
-    QString &type() { return m_Type; } const
+    const QString &type() { return m_Type; }
     void setType(const QString &type) { m_Type = type; }
 
-    quint16 &permissions() { return m_Permissions; } const
+    const quint16 &permissions() { return m_Permissions; }
     void setPermissions(const quint16 &permissions) { m_Permissions = permissions; }
 
-    quint16 &hardLinks() { return m_HardLinks; } const
+    const quint16 &hardLinks() { return m_HardLinks; }
     void setHardLinks(const quint16 &hardLinks) { m_HardLinks = hardLinks; }
 
-    quint32 &userId() { return m_UserId; } const
+    const quint32 &userId() { return m_UserId; }
     void setUserId(const quint32 &userId) { m_UserId = userId; }
 
-    quint32 &groupId() { return m_GroupId; } const
+    const quint32 &groupId() { return m_GroupId; }
     void setGroupId(const quint32 &groupId) { m_GroupId = groupId; }
 
-    quint64 &size() { return m_Size; } const
+    const quint64 &size() { return m_Size; }
     void setSize(const quint64 &size) { m_Size = size; }
 
-    QDateTime &accessTime() { return m_AccessTime; } const
+    const QDateTime &accessTime() { return m_AccessTime; }
     void setAccessTime(const QDateTime &accessTime) { m_AccessTime = accessTime; }
 
-    QDateTime &modifiedTime() { return m_ModifiedTime; } const
+    const QDateTime &modifiedTime() { return m_ModifiedTime; }
     void setModifiedTime(const QDateTime &modifiedTime) { m_ModifiedTime = modifiedTime; }
 
-    QDateTime &createdTime() { return m_ChangedTime; } const
+    const QDateTime &createdTime() { return m_ChangedTime; }
     void setCreatedTime(const QDateTime &changedTime) { m_ChangedTime = changedTime; }
 
     RemoteFile &operator =(const RemoteFile &other) { copy(other); return *this; }

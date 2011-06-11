@@ -174,6 +174,7 @@ QList<ModelDescriptor *> ModelDescriptor::fromXml(const QString &filePath, QObje
 
 QList<ModelDescriptor *> ModelDescriptor::fromXml(QDomDocument modelDescriptorDocument, QObject *parent)
 {
+    Q_UNUSED(parent)
     QDomElement rootElement = modelDescriptorDocument.firstChildElement("ModelDescriptors");
     if(rootElement.isNull()) {
         throw tr("Document did not contain 'ModelDescriptors' element as its root");

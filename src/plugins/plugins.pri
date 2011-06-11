@@ -7,6 +7,6 @@ CONFIG       += depend_includepath
 LIBS         += -L$$quote($${BUILD_PATH}/core/lib/$${POSTFIX}) -lCore
 
 win32:target.path   = /
-else:target.path   = /lib/plugins
+else:target.path   = /lib
 
 INSTALLS     += target

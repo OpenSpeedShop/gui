@@ -30,8 +30,6 @@ FORMS             +=
 RESOURCES         +=
 QT                +=
 
-# Statically link to the OpenSpeedShop plugin
-win32:LIBS        += -L$$quote($${BUILD_PATH}/plugins/OpenSpeedShop/$${POSTFIX}) -lOpenSpeedShop
-else:LIBS         += -Wl,-Bstatic -L$$quote($${BUILD_PATH}/plugins/OpenSpeedShop/$${POSTFIX}) -lOpenSpeedShop -Wl,-Bdynamic
+LIBS        += -L$$quote($${BUILD_PATH}/plugins/OpenSpeedShop/$${POSTFIX}) -lOpenSpeedShop
 
 #debug: DEFINES += TREEVIEW_DEBUG

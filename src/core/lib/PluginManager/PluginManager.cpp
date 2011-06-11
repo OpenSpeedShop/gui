@@ -192,7 +192,7 @@ void PluginManager::readSettings()
 #ifdef WIN32
         m_PluginPath = pluginPath.absolutePath();
 #else
-        if(pluginPath.cd("../lib/plugins")) {
+        if(pluginPath.cd("../lib")) {
             m_PluginPath = pluginPath.absolutePath();
         }
 #endif
