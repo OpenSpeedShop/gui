@@ -1,6 +1,7 @@
 #ifndef SERVERADAPTER_H
 #define SERVERADAPTER_H
 
+#include <QMap>
 #include <QDomDocument>
 #include <OpenSpeedShop/ConnectionManager/IAdapter.h>
 

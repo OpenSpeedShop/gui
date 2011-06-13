@@ -29,7 +29,11 @@
 #define REMOTEFILEDIALOG_H
 
 #include <QDialog>
-#include <QFileSystemModel>
+#include <QModelIndex>
+
+namespace Plugins {
+namespace OpenSpeedShop {
+
 
 namespace Ui {
     class RemoteFileDialog;
@@ -43,10 +47,24 @@ public:
     explicit RemoteFileDialog(QWidget *parent = 0);
     ~RemoteFileDialog();
 
+    QString path() const;
+    void setPath(const QString &path);
+    QString selectedFilePath() const;
+
+protected slots:
+    void on_txtPath_editingFinished();
+    void on_treeWidget_activated(QModelIndex);
+    void on_treeWidget_itemSelectionChanged();
+    void on_btnPathUp_clicked();
+
 private:
     Ui::RemoteFileDialog *ui;
-    QFileSystemModel m_Model;
+    QString m_SelectedFilePath;
 
 };
+
+
+} // namespace OpenSpeedShop
+} // namespace Plugins
 
 #endif // REMOTEFILEDIALOG_H

@@ -3,6 +3,9 @@
 
 #include <QDomDocument>
 #include <QInputDialog>
+#include <QFileDialog>
+#include <QDesktopServices>
+#include <QUrl>
 
 #include <MainWindow/MainWindow.h>
 #include <ConnectionManager/ConnectionManager.h>
@@ -58,32 +61,13 @@ void ExperimentWidget::load()
 {
     ui->tabProperties->setEnabled(false);
 
-#ifdef QT_DEBUG
-//    QString fileName = QFileDialog::getOpenFileName(this,
-//                                                    tr("Open Open|SpeedShop experiment"),
-//                                                    "openss::///",
-//                                                    tr("Open|SpeedShop Files (*.openss)"));
-//    qDebug() << __FILE__ << __LINE__ << "FileName:" << fileName;
-
-    RemoteFileDialog dlg(this);
-    dlg.exec();
-
-#endif
-
-
     IAdapter *adapter = ConnectionManager::instance().askAdapter();
     if(!adapter) throw tr("Server not connected");
 
-    //TODO: Create a real way for the user to interact with the remote filesystem
-    bool okay;
-    QString filePath = QInputDialog::getText(this,
-                                             tr("Load experiment"),
-                                             tr("Filepath"),
-                                             QLineEdit::Normal,
-//                                             "/home/dane/smg2000-pcsamp.openss",
-                                             "/home/dane/smg2000-io.openss",
-                                             &okay);
-    if(!okay || filePath.isEmpty()) throw tr("Could not load experiemnt; invalid filepath.");
+    QString filePath;
+    RemoteFileDialog dlg(this);
+    if(dlg.exec()) { filePath = dlg.selectedFilePath(); }
+    if(filePath.isEmpty()) throw tr("Could not load experiemnt; invalid filepath.");
 
     setWindowFilePath(filePath);
     setWindowTitle(filePath);

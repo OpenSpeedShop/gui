@@ -34,6 +34,8 @@
 #include <SettingManager/ISettingPageFactory.h>
 #include "OpenSpeedShopWidget.h"
 
+#include "RemoteFileSystem/RemoteFileEngineHandler.h"
+
 namespace Plugins {
 namespace OpenSpeedShop {
 

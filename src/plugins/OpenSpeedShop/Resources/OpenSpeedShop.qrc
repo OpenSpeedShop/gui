@@ -14,5 +14,8 @@
         <file alias="disconnect.svg">media-playback-stop-8.svg</file>
         <file alias="removeModelDescriptor.png">remove.png</file>
         <file alias="createModelDescriptor.png">add.png</file>
+        <file alias="pathUp.svg">go-up-5.svg</file>
+        <file alias="file.png">file.png</file>
+        <file alias="folder.svg">folder.svg</file>
     </qresource>
 </RCC>

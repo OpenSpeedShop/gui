@@ -29,8 +29,6 @@ SOURCES      += OpenSpeedShopPlugin.cpp \
                 ConnectionManager/ConnectionWidget.cpp \
                 ConnectionManager/ConnectionManager.cpp \
                 ModelManager/DataModel.cpp \
-                RemoteFileSystem/RemoteFileEngine.cpp \
-                RemoteFileSystem/RemoteFileEngineHandler.cpp \
                 ModelManager/ModelDescriptor.cpp \
                 ModelManager/ModelDescriptorWidget.cpp \
                 ModelManager/ModelManager.cpp \
@@ -41,8 +39,6 @@ SOURCES      += OpenSpeedShopPlugin.cpp \
                 ViewManager/ViewManager.cpp \
                 ViewManager/IViewFilterable.cpp \
                 ViewManager/IViewFactory.cpp \
-                RemoteFileSystem/RemoteFileCache.cpp \
-                RemoteFileSystem/RemoteFile.cpp \
                 RemoteFileSystem/RemoteFileDialog.cpp
 
 HEADERS      += OpenSpeedShopPlugin.h \
@@ -57,8 +53,6 @@ HEADERS      += OpenSpeedShopPlugin.h \
                 ModelManager/DataModel.h \
                 ConnectionManager/ConnectionManagerLibrary.h \
                 OpenSpeedShopLibrary.h \
-                RemoteFileSystem/RemoteFileEngine.h \
-                RemoteFileSystem/RemoteFileEngineHandler.h \
                 ModelManager/ModelDescriptor.h \
                 ModelManager/ModelDescriptorWidget.h \
                 ModelManager/ModelManager.h \
@@ -71,8 +65,6 @@ HEADERS      += OpenSpeedShopPlugin.h \
                 ViewManager/IViewFilterable.h \
                 ModelManager/ModelManagerLibrary.h \
                 ViewManager/IViewFactory.h \
-                RemoteFileSystem/RemoteFileCache.h \
-                RemoteFileSystem/RemoteFile.h \
                 RemoteFileSystem/RemoteFileDialog.h
 
 FORMS        += Settings/SettingPage.ui \

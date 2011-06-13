@@ -1,6 +1,7 @@
 #include "ServerAdapter.h"
 
 #include <QFile>
+#include <QMap>
 #include <QApplication>
 #include <OpenSpeedShop/ConnectionManager/ConnectionManager.h>
 #include <OpenSpeedShop/ConnectionManager/ServerCommand.h>
@@ -743,7 +744,7 @@ QMap<QString,QString> ServerAdapter::waitExperimentTypeModifiers(QString experim
         if(!element.attribute("value").compare(experimentType, Qt::CaseInsensitive)) {
             element = element.firstChildElement("Modifier");
             while(!element.isNull()) {
-                modifiers[element.attribute("value")] = element.attribute("summary");
+                modifiers.insert(element.attribute("value"), element.attribute("summary"));
                 element = element.nextSiblingElement(element.tagName());
             }
             return modifiers;
@@ -757,6 +758,7 @@ QMap<QString,QString> ServerAdapter::waitExperimentTypeModifiers(QString experim
 
     return modifiers;
 }
+
 QMap<QString,QString> ServerAdapter::waitExperimentTypeMetrics(QString experimentType)
 {
     QMap<QString,QString> metrics;
@@ -772,7 +774,7 @@ QMap<QString,QString> ServerAdapter::waitExperimentTypeMetrics(QString experimen
         if(!element.attribute("value").compare(experimentType, Qt::CaseInsensitive)) {
             element = element.firstChildElement("Metric");
             while(!element.isNull()) {
-                metrics[element.attribute("value")] = element.attribute("summary");
+                metrics.insert(element.attribute("value"), element.attribute("summary"));
                 element = element.nextSiblingElement(element.tagName());
             }
             return metrics;
