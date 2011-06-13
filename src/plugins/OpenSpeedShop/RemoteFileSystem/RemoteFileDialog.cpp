@@ -120,6 +120,8 @@ void RemoteFileDialog::on_txtPath_editingFinished()
 
         } else if(!type.compare("directory", Qt::CaseInsensitive)) {
             fileItem->setIcon(0, QIcon(":/OpenSpeedShop/folder.svg"));
+        } else if(!type.compare("symlink", Qt::CaseInsensitive)) {
+            fileItem->setIcon(0, QIcon(":/OpenSpeedShop/symlink.svg"));
         } else {
             fileItem->setIcon(0, QIcon());
         }

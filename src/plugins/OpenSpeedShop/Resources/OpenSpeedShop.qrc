@@ -17,5 +17,6 @@
         <file alias="pathUp.svg">go-up-5.svg</file>
         <file alias="file.png">file.png</file>
         <file alias="folder.svg">folder.svg</file>
+        <file alias="symlink.svg">emblem-symbolic-link.svg</file>
     </qresource>
 </RCC>
