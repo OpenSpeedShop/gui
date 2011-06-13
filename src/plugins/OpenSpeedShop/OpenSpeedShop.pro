@@ -98,14 +98,6 @@ DEFINES      += OPENSPEEDSHOP_LIBRARY \
 #debug: DEFINES += CONNECTIONMANAGER_DEBUG
 
 
-# List of experiment types and their possible modifiers/metrics
-# In the future, this should be pulled from the server
-OTHER_FILES += ConnectionManager/ExperimentTypes.xml
-win32:experimentTypes.path = /
-else:experimentTypes.path = /etc
-experimentTypes.files = ConnectionManager/ExperimentTypes.xml
-INSTALLS += experimentTypes
-
 # Default data for the model descriptors
 # In the future, this should be pulled from the server
 OTHER_FILES += ModelManager/ModelDescriptors.xml

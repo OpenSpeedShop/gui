@@ -91,7 +91,7 @@ void ModelDescriptorWidget::on_cmbExperimentType_currentIndexChanged(int index)
     ui->lstMetrics->clear();
     QMap<QString,QString> experimentTypeMetrics = adapter->waitExperimentTypeMetrics(experimentType);
     foreach(QString key, experimentTypeMetrics.keys()) {
-        QListWidgetItem *item = new QListWidgetItem(key, ui->lstModifiers);
+        QListWidgetItem *item = new QListWidgetItem(key, ui->lstMetrics);
         item->setToolTip(QString("'%1' %2").arg(key).arg(experimentTypeModifiers[key]));
         ui->lstMetrics->addItem(item);
     }

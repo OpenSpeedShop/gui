@@ -30,3 +30,12 @@ QT                 += xml
 LIBS         += -L$$quote($${BUILD_PATH}/plugins/OpenSpeedShop/$${POSTFIX}) -lOpenSpeedShop
 
 #debug: DEFINES += SERVERADAPTER_DEBUG
+
+
+# List of experiment types and their possible modifiers/metrics
+# In the future, this should be pulled from the server
+OTHER_FILES += ConnectionManager/ExperimentTypes.xml
+win32:experimentTypes.path = /
+else:experimentTypes.path = /etc
+experimentTypes.files = ConnectionManager/ExperimentTypes.xml
+INSTALLS += experimentTypes
