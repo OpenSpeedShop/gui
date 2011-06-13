@@ -407,6 +407,16 @@ QVariant DataModel::displayRole(Cell *cell) const
             value.append(")");
         }
         return QVariant(value);
+
+    } else if(!cellType.compare("Statement", Qt::CaseInsensitive)) {
+        QString value;
+        if(cell->data.contains("path")) {
+            value.append(cell->data["path"].toString());
+            if(cell->data.contains("line")) {
+                value.append(":" + cell->data["line"].toString());
+            }
+        }
+        return QVariant(value);
     }
 
     if(!cell->data.contains("value")) {
