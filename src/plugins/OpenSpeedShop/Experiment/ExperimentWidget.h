@@ -34,6 +34,8 @@ protected slots:
     void on_cmbViewFilterColumn_currentIndexChanged(int index);
     void getModel(QUuid descriptorUid);
 
+    void refreshProcessTree();
+
 private:
     Ui::ExperimentWidget *ui;
     QUuid m_ExperimentUid;

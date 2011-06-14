@@ -64,41 +64,80 @@ void ExperimentWidget::load()
     IAdapter *adapter = ConnectionManager::instance().askAdapter();
     if(!adapter) throw tr("Server not connected");
 
-    QString filePath;
+    Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
+    settingManager.beginGroup("Plugins/OpenSpeedShop/Experiment");
+    QString filePath = settingManager.value("defaultPath", QString(QLatin1Char('/'))).toString();
+    settingManager.endGroup();
+
     RemoteFileDialog dlg(this);
-    if(dlg.exec()) { filePath = dlg.selectedFilePath(); }
-    if(filePath.isEmpty()) throw tr("Could not load experiemnt; invalid filepath.");
+    dlg.setPath(filePath);
+    if(!dlg.exec()) {
+        throw tr("Could not load experiment: canceled by user.");
+    }
+
+    filePath = dlg.selectedFilePath();
+    if(filePath.isEmpty()) {        //TODO: Additional file path checking
+        throw tr("Could not load experiemnt: invalid filepath.");
+    }
+
+    settingManager.beginGroup("Plugins/OpenSpeedShop/Experiment");
+    settingManager.setValue("defaultPath", dlg.path());
+    settingManager.endGroup();
 
     setWindowFilePath(filePath);
     setWindowTitle(filePath);
     emit windowTitleChanged();
+
+    /* Have the server restore the database file */
     m_ExperimentUid = adapter->waitRestore(filePath);
 
+    /* Set the properties to those of this experiment */
     ui->txtDatabasePath->setText(adapter->waitExperimentDatabase(m_ExperimentUid));
     ui->txtExecutablePath->setText(adapter->waitExperimentExecutable(m_ExperimentUid));
     ui->txtCommand->setText(adapter->waitExperimentAppCommand(m_ExperimentUid));
 
+    /* Set the experiment type combo box to match this experiment */
     QString experimentType = adapter->waitExperimentType(m_ExperimentUid);
     ui->cmbExperimentTypes->setCurrentIndex(ui->cmbExperimentTypes->findText(experimentType));
 
+    /* Load up the model descriptors for this experiment type */
     loadModelDescriptors(experimentType);
 
-//    qDebug() << "parameters" << adapter->waitExperimentParameterValues(expId);
+    /* Load the processes into the process tree */
+    refreshProcessTree();
 
-//    qDebug() << "hosts" << adapter->waitExperimentHosts(expId);
-//    qDebug() << "ranks" << adapter->waitExperimentRanks(expId);
-//    qDebug() << "pids" << adapter->waitExperimentPids(expId);
+//    qDebug() << "parameters" << adapter->waitExperimentParameterValues(expId);
 
 //    qDebug() << "sources" << adapter->waitExperimentSourceFiles(expId);
 //    qDebug() << "objects" << adapter->waitExperimentObjectFiles(expId);
 //    qDebug() << "threads" << adapter->waitExperimentThreads(expId);
 
-//    qDebug() << "Processes:";
-//    QList<IAdapter::Process> processes = adapter->experimentProcesses(expId);
-//    foreach(IAdapter::Process process, processes) {
-//        qDebug() << "\t" << process.host << process.processId << process.threadId << process.rank << process.executable;
-//    }
+}
 
+void ExperimentWidget::refreshProcessTree()
+{
+    IAdapter *adapter = ConnectionManager::instance().askAdapter();
+    if(!adapter) throw tr("Server not connected");
+
+    ui->trvProcesses->clear();
+    QStringList headers;
+    headers << tr("Host") << tr("Rank") << tr("Process ID") << tr("Thread ID") << tr("Executable");
+    ui->trvProcesses->setHeaderLabels(headers);
+
+    QList<IAdapter::Process> processes = adapter->waitExperimentProcesses(m_ExperimentUid);
+    foreach(IAdapter::Process process, processes) {
+        QTreeWidgetItem *item = new QTreeWidgetItem(ui->trvProcesses);
+        item->setData(0, Qt::DisplayRole, process.host);
+        item->setData(1, Qt::DisplayRole, process.rank);
+        item->setData(2, Qt::DisplayRole, process.processId);
+        item->setData(3, Qt::DisplayRole, process.threadId);
+        item->setData(4, Qt::DisplayRole, process.executable);
+        ui->trvProcesses->addTopLevelItem(item);
+    }
+
+    for(int i=0; i < ui->trvProcesses->columnCount(); i++) {
+        ui->trvProcesses->resizeColumnToContents(i);
+    }
 }
 
 void ExperimentWidget::loadModelDescriptors(QString experimentType)
