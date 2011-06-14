@@ -19,7 +19,7 @@
 #include "ViewManager/IViewFilterable.h"
 
 #include "RemoteFileSystem/RemoteFileDialog.h"
-
+#include "SourceView.h"
 
 #ifdef QT_DEBUG
 #  include <QDebug>
@@ -36,6 +36,12 @@ ExperimentWidget::ExperimentWidget(QWidget *parent) :
     m_CurrentModel = NULL;
 
     ui->setupUi(this);
+
+    ui->txtSource->deleteLater();
+    ui->txtSource = new SourceView(this);
+    ui->txtSource->setReadOnly(true);
+    ui->splitSource->addWidget(ui->txtSource);
+
     ui->tabWidget->setCurrentIndex(0);
     ui->grpViewFilter->hide();
 
@@ -114,10 +120,6 @@ void ExperimentWidget::load()
 //    qDebug() << "sources" << adapter->waitExperimentSourceFiles(expId);
 //    qDebug() << "objects" << adapter->waitExperimentObjectFiles(expId);
 //    qDebug() << "threads" << adapter->waitExperimentThreads(expId);
-
-    QString text = adapter->waitCatFile("/home/dane/src/facter/INSTALL");
-    qDebug() << "catFile" << text;
-    ui->txtSource->setText(text);
 }
 
 void ExperimentWidget::refreshSourcePaths()
@@ -334,6 +336,35 @@ void ExperimentWidget::on_cmbViewFilterColumn_currentIndexChanged(int index)
     }
 }
 
+void ExperimentWidget::on_lstSource_currentRowChanged(int row)
+{
+    ui->txtSource->clear();
+
+    try {
+
+        QString filePath = ui->txtSourcePath->text();
+        if(!filePath.endsWith(QLatin1Char('/'))) {
+            filePath.append(QLatin1Char('/'));
+        }
+
+        filePath.append(ui->lstSource->item(row)->text());
+
+        if(!m_SourceFileCache.contains(filePath)) {
+            IAdapter *adapter = ConnectionManager::instance().askAdapter();
+            if(!adapter) throw tr("Server not connected");
+            m_SourceFileCache.insert(filePath, adapter->waitCatFile(filePath));
+        }
+
+        ui->txtSource->setPlainText(m_SourceFileCache.value(filePath));
+
+    } catch(QString err) {
+        using namespace Core::MainWindow;
+        MainWindow::instance().notify(tr("Failed open source file: %1").arg(err), NotificationWidget::Critical);
+    } catch(...) {
+        using namespace Core::MainWindow;
+        MainWindow::instance().notify(tr("Failed open source file."), NotificationWidget::Critical);
+    }
+}
 
 } // namespace OpenSpeedShop
 } // namespace Plugins

@@ -33,6 +33,15 @@
        <string>Properties</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_7" rowstretch="1,0,0,0,0,0">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
        <item row="0" column="0">
         <widget class="QGroupBox" name="grpExperimentProperties">
          <property name="title">
@@ -332,6 +341,15 @@
        <string>Views</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_6" columnstretch="1,10,0">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
        <item row="0" column="0" rowspan="3">
         <widget class="QGroupBox" name="grpModelList">
          <property name="title">
@@ -555,6 +573,15 @@
        <string>Processes</string>
       </attribute>
       <layout class="QHBoxLayout" name="horizontalLayout_7">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
        <item>
         <widget class="QTreeWidget" name="trvProcesses">
          <property name="rootIsDecorated">
@@ -600,6 +627,15 @@
        <string>Source</string>
       </attribute>
       <layout class="QHBoxLayout" name="horizontalLayout_8">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
        <item>
         <widget class="QSplitter" name="splitSource">
          <property name="orientation">
@@ -622,7 +658,7 @@
            </item>
           </layout>
          </widget>
-         <widget class="QTextEdit" name="txtSource"/>
+         <widget class="QPlainTextEdit" name="txtSource"/>
         </widget>
        </item>
       </layout>

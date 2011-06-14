@@ -71,43 +71,52 @@ QString RemoteFileDialog::selectedFilePath() const
 
 void RemoteFileDialog::on_txtPath_editingFinished()
 {
-    /* Connect to the server, and get the listing */
-    IAdapter *adapter = ConnectionManager::instance().askAdapter();
-    if(!adapter) throw tr("Server not connected");
+    try {
 
-    QString path = this->path();
-    if(!path.endsWith(QLatin1Char('/'))) {
-        path.append(QLatin1Char('/'));
-    }
+        ui->treeWidget->clear();
 
-    QStringList listing = adapter->waitDirStat(path);
-
-    ui->treeWidget->clear();
-    foreach(QString fileName, listing) {
-        QTreeWidgetItem *fileItem = new QTreeWidgetItem(ui->treeWidget);
-        fileItem->setText(0, fileName);
-
-        if(fileName.endsWith(QLatin1Char('/'))) {
-            fileItem->setIcon(0, QIcon(":/OpenSpeedShop/folder.svg"));
-            fileItem->setData(0, Qt::UserRole, "Directory");
-
-        } else {
-            fileItem->setIcon(0, QIcon(":/OpenSpeedShop/file.png"));
-            fileItem->setData(0, Qt::UserRole, "File");
-
-            //HACK: We're just doing this for now, later we'll have to implement true filtering (server-side would be nice).
-            if(!fileName.endsWith(".openss")) {
-                fileItem->setDisabled(true);
-            }
+        QString path = this->path();
+        if(!path.endsWith(QLatin1Char('/'))) {
+            path.append(QLatin1Char('/'));
         }
 
-        fileItem->setData(0, Qt::UserRole+1, path);
-        fileItem->setData(0, Qt::UserRole+2, path + fileName);
+        /* Connect to the server, and get the listing */
+        IAdapter *adapter = ConnectionManager::instance().askAdapter();
+        if(!adapter) throw tr("Server not connected");
+        QStringList listing = adapter->waitDirStat(path);
 
-        ui->treeWidget->addTopLevelItem(fileItem);
+        foreach(QString fileName, listing) {
+            QTreeWidgetItem *fileItem = new QTreeWidgetItem(ui->treeWidget);
+            fileItem->setText(0, fileName);
+
+            if(fileName.endsWith(QLatin1Char('/'))) {
+                fileItem->setIcon(0, QIcon(":/OpenSpeedShop/folder.svg"));
+                fileItem->setData(0, Qt::UserRole, "Directory");
+
+            } else {
+                fileItem->setIcon(0, QIcon(":/OpenSpeedShop/file.png"));
+                fileItem->setData(0, Qt::UserRole, "File");
+
+                //HACK: We're just doing this for now, later we'll have to implement true filtering (server-side would be nice).
+                if(!fileName.endsWith(".openss")) {
+                    fileItem->setDisabled(true);
+                }
+            }
+
+            fileItem->setData(0, Qt::UserRole+1, path);
+            fileItem->setData(0, Qt::UserRole+2, path + fileName);
+
+            ui->treeWidget->addTopLevelItem(fileItem);
+        }
+
+        ui->treeWidget->sortItems(0, Qt::AscendingOrder);
+
+    } catch(QString err) {
+        //TODO: Handle exception    tr("Failed open path: %1").arg(err)
+    } catch(...) {
+        //TODO: Handle exception    tr("Failed open path.")
     }
 
-    ui->treeWidget->sortItems(0, Qt::AscendingOrder);
 }
 
 void RemoteFileDialog::on_treeWidget_activated(QModelIndex index)

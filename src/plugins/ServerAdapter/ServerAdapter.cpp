@@ -10,7 +10,6 @@
 #ifdef SERVERADAPTER_DEBUG
 #  include <QDebug>
 #endif
-#include <QDebug>
 
 using namespace Plugins::OpenSpeedShop;
 

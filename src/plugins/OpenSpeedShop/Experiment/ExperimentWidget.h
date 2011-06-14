@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QUuid>
 #include <QAbstractItemView>
+#include <QTextDocument>
 
 namespace Plugins {
 namespace OpenSpeedShop {
@@ -32,8 +33,9 @@ protected slots:
     void on_btnAddModel_clicked();
     void on_txtViewFilter_textChanged(const QString &text);
     void on_cmbViewFilterColumn_currentIndexChanged(int index);
-    void getModel(QUuid descriptorUid);
+    void on_lstSource_currentRowChanged(int row);
 
+    void getModel(QUuid descriptorUid);
     void refreshProcessTree();
     void refreshSourcePaths();
 
@@ -42,6 +44,7 @@ private:
     QUuid m_ExperimentUid;
     QAbstractItemView *m_CurrentView;
     QAbstractItemModel *m_CurrentModel;
+    QMap<QString, QString> m_SourceFileCache;
 
 };
 
