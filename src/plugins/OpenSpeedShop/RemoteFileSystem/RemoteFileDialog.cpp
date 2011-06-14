@@ -69,75 +69,42 @@ QString RemoteFileDialog::selectedFilePath() const
     return m_SelectedFilePath;
 }
 
-
 void RemoteFileDialog::on_txtPath_editingFinished()
 {
     /* Connect to the server, and get the listing */
     IAdapter *adapter = ConnectionManager::instance().askAdapter();
     if(!adapter) throw tr("Server not connected");
 
-    QDomDocument document("Listing");
-    document.setContent(adapter->waitDirStat(ui->txtPath->text()));
-
-    QDomElement responseElement = document.firstChildElement("Response");
-    if(responseElement.isNull()) throw tr("'Response' element doesn't exist, as expected.");
-
-    QDomElement fileSystemElement = responseElement.firstChildElement("FileSystem");
-    if(fileSystemElement.isNull()) throw tr("'FileSystem' element doesn't exist, as expected.");
-
-    QDomElement directoryElement = fileSystemElement.firstChildElement("Dir");
-    if(directoryElement.isNull()) {
-
-        // Deal with other responses, like errors
-        QDomElement exceptionElement = fileSystemElement.firstChildElement("Exception");
-        if(!exceptionElement.isNull()) {
-            throw tr("Exception returned from server: '%1'").arg(exceptionElement.text());
-        }
-
-        throw tr("'Dir' element doesn't exist, as expected. No error was given from the server.");
+    QString path = this->path();
+    if(!path.endsWith(QLatin1Char('/'))) {
+        path.append(QLatin1Char('/'));
     }
 
-    ui->treeWidget->clear();
-    QDomElement fileElement = directoryElement.firstChildElement("File");
-    while(!fileElement.isNull()) {
-        QString fileName = fileElement.attribute("name");
-        if(fileName.startsWith(QLatin1Char('.'))) {
-            fileElement = fileElement.nextSiblingElement(fileElement.tagName());
-            continue;
-        }
+    QStringList listing = adapter->waitDirStat(path);
 
+    ui->treeWidget->clear();
+    foreach(QString fileName, listing) {
         QTreeWidgetItem *fileItem = new QTreeWidgetItem(ui->treeWidget);
         fileItem->setText(0, fileName);
 
-        QString type(fileElement.attribute("type"));
-        if(!type.compare("file", Qt::CaseInsensitive)) {
-            fileItem->setIcon(0, QIcon(":/OpenSpeedShop/file.png"));
+        if(fileName.endsWith(QLatin1Char('/'))) {
+            fileItem->setIcon(0, QIcon(":/OpenSpeedShop/folder.svg"));
+            fileItem->setData(0, Qt::UserRole, "Directory");
 
-            //HACK:
+        } else {
+            fileItem->setIcon(0, QIcon(":/OpenSpeedShop/file.png"));
+            fileItem->setData(0, Qt::UserRole, "File");
+
+            //HACK: We're just doing this for now, later we'll have to implement true filtering (server-side would be nice).
             if(!fileName.endsWith(".openss")) {
                 fileItem->setDisabled(true);
             }
-
-        } else if(!type.compare("directory", Qt::CaseInsensitive)) {
-            fileItem->setIcon(0, QIcon(":/OpenSpeedShop/folder.svg"));
-        } else if(!type.compare("symlink", Qt::CaseInsensitive)) {
-            fileItem->setIcon(0, QIcon(":/OpenSpeedShop/symlink.svg"));
-        } else {
-            fileItem->setIcon(0, QIcon());
         }
-        fileItem->setData(0, Qt::UserRole, type);
 
-        QString path = fileElement.attribute("path");
-        if(!path.endsWith(QLatin1Char('/'))) {
-            path.append(QLatin1Char('/'));
-        }
-        fileItem->setData(0, Qt::UserRole+1, fileElement.attribute("path"));
-
+        fileItem->setData(0, Qt::UserRole+1, path);
         fileItem->setData(0, Qt::UserRole+2, path + fileName);
 
         ui->treeWidget->addTopLevelItem(fileItem);
-
-        fileElement = fileElement.nextSiblingElement(fileElement.tagName());
     }
 
     ui->treeWidget->sortItems(0, Qt::AscendingOrder);

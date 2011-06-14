@@ -62,8 +62,20 @@ SocketServer::SocketServer()
 
           // Deal with FileSystem requests
           } else if(commandType == "FileSystem") {
+            int index = commandText.find_first_of(' ');
+            string fileSystemCommand = commandText.substr(0, index);
+            string fileSystemArguments = commandText.substr(index+1, commandText.length()-index-1);
+            
+            cerr << __FILE__ << ":" << __LINE__ << "\tfileSystemCommand: \"" << fileSystemCommand << "\"; fileSystemArguments: \"" << fileSystemArguments << "\"" << endl;
+          
             xml_node<> *fileSystemResponse = responseDocument.allocate_node(node_element, "FileSystem");
-            fileSystemResponse->append_node( _fileSystem.dirStat(commandText, &responseDocument) );
+
+            if(fileSystemCommand == "dirStat") {
+              fileSystemResponse->append_node( _fileSystem.dirStat(fileSystemArguments, &responseDocument) );
+            } else if(fileSystemCommand == "catFile") {
+              fileSystemResponse->append_node( _fileSystem.catFile(fileSystemArguments, &responseDocument) );
+            }
+            
             responseNode->append_node(fileSystemResponse);
 
           // Deal with an OpenSpeedShopCLI command

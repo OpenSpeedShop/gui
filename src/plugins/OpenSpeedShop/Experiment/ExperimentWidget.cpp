@@ -106,12 +106,76 @@ void ExperimentWidget::load()
     /* Load the processes into the process tree */
     refreshProcessTree();
 
+    /* Load the source paths into the source path list */
+    refreshSourcePaths();
+
 //    qDebug() << "parameters" << adapter->waitExperimentParameterValues(expId);
 
 //    qDebug() << "sources" << adapter->waitExperimentSourceFiles(expId);
 //    qDebug() << "objects" << adapter->waitExperimentObjectFiles(expId);
 //    qDebug() << "threads" << adapter->waitExperimentThreads(expId);
 
+    QString text = adapter->waitCatFile("/home/dane/src/facter/INSTALL");
+    qDebug() << "catFile" << text;
+    ui->txtSource->setText(text);
+}
+
+void ExperimentWidget::refreshSourcePaths()
+{
+    IAdapter *adapter = ConnectionManager::instance().askAdapter();
+    if(!adapter) throw tr("Server not connected");
+
+    QStringList sources = adapter->waitExperimentSourceFiles(m_ExperimentUid);
+    QList<QStringList> sourcePaths;
+    foreach(QString source, sources) {
+        QStringList path = source.split(QLatin1Char('/'), QString::SkipEmptyParts);
+        if(!path.isEmpty()) {
+            sourcePaths.append(path);
+        }
+    }
+
+    /* Remove the common path names at the beginning */
+    if(!sourcePaths.isEmpty()) {
+        QStringList commonPath;
+        bool keepGoing = true;
+        while(keepGoing) {
+            QString dir;
+            foreach(QStringList path, sourcePaths) {
+                if(path.isEmpty()) {
+                    keepGoing = false;
+                    break;
+                }
+
+                /* The first path is the one to compare with the others */
+                if(path == sourcePaths.first()) {
+                    dir = path.first();
+                    continue;
+                }
+
+                /* If the first directory is different, quit iterating */
+                if(dir != path.first()) {
+                    keepGoing = false;
+                    break;
+                }
+
+                /* If all of the first directories in the paths are equal, pop it onto the common path */
+                if(path == sourcePaths.last()) {
+                    commonPath.append(path.first());
+                    for(int i=0; i<sourcePaths.count(); i++) {
+                        sourcePaths[i].removeFirst();
+                    }
+                }
+            }
+        }
+
+        /* Make it available to the user in the list */
+        ui->txtSourcePath->setText(QLatin1Char('/') + commonPath.join(QLatin1String("/")));
+        foreach(QStringList path, sourcePaths) {
+            QListWidgetItem *item = new QListWidgetItem(ui->lstSource);
+            item->setText(path.join(QLatin1String("/")));
+            ui->lstSource->addItem(item);
+        }
+    }
 }
 
 void ExperimentWidget::refreshProcessTree()

@@ -17,6 +17,7 @@ public:
   
   xml_node<> *dirStat(const string &path, memory_pool<> *memoryPool);
   xml_node<> *fileStat(const string &path, const string &file, memory_pool<> *memoryPool);
+  xml_node<> *catFile(const string &path, memory_pool<> *memoryPool);
 
 protected:
   int dirList(const string &path, vector<string> &list);

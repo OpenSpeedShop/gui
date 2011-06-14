@@ -35,6 +35,7 @@ protected slots:
     void getModel(QUuid descriptorUid);
 
     void refreshProcessTree();
+    void refreshSourcePaths();
 
 private:
     Ui::ExperimentWidget *ui;

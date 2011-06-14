@@ -1,6 +1,7 @@
 #include "FileSystem.h"
 
 #include <sstream>
+#include <fstream>
 #include <sys/types.h>
 #include <errno.h>
 #include <sys/stat.h>
@@ -12,82 +13,28 @@ using namespace rapidxml;
 xml_node<> *FileSystem::fileStat(const string &path, const string &file, memory_pool<> *memoryPool)
 {
   xml_node<> *fileNode = memoryPool->allocate_node(node_element, memoryPool->allocate_string("File"));
+  string fileName = file;
 
+  /* Build the file path */
   string filePath(path);
   if(filePath[filePath.size()-1] != '/') {
     filePath.append("/");
   }
-  filePath.append(file);
-  
-  char *attributeValue = memoryPool->allocate_string(file.c_str());
-  fileNode->append_attribute(memoryPool->allocate_attribute("name", attributeValue));
-  attributeValue = memoryPool->allocate_string(path.c_str());
-  fileNode->append_attribute(memoryPool->allocate_attribute("path", attributeValue));
+  filePath.append(fileName);
 
+  /* Attempt to stat the file */  
   struct stat statBuff;
   if (stat(filePath.c_str(), &statBuff) < 0) {
-    cerr << __FILE__ << __LINE__ << "Couldn't stat file: " << filePath << endl;
-    return fileNode;
+    cerr << __FILE__ << ":" << __LINE__ << "\tCouldn't stat file: " << filePath << endl;
+  } else {
+    /* If it's a directory, append a slash as an indicator */
+    if ((statBuff.st_mode & S_IFMT) == S_IFDIR) {
+      fileName.append("/");
+    }
   }
 
-  if ((statBuff.st_mode & S_IFMT) == S_IFREG) attributeValue = memoryPool->allocate_string("file");
-  else if ((statBuff.st_mode & S_IFMT) == S_IFDIR) attributeValue = memoryPool->allocate_string("directory");
-  else if ((statBuff.st_mode & S_IFMT) == S_IFLNK) attributeValue = memoryPool->allocate_string("symbolic");
-  else  attributeValue = memoryPool->allocate_string("other");
-  fileNode->append_attribute(memoryPool->allocate_attribute("type", attributeValue));
-
-  
-//  char buffer[64];
-//  stringstream stringStream;
-//  string str;
-//
-//  int permissions = 0;
-//  if(statBuff.st_mode & S_IRUSR) permissions |= 0x400;
-//  if(statBuff.st_mode & S_IWUSR) permissions |= 0x200;
-//  if(statBuff.st_mode & S_IXUSR) permissions |= 0x100;
-//  if(statBuff.st_mode & S_IRGRP) permissions |= 0x040;
-//  if(statBuff.st_mode & S_IWGRP) permissions |= 0x020;
-//  if(statBuff.st_mode & S_IXGRP) permissions |= 0x010;
-//  if(statBuff.st_mode & S_IROTH) permissions |= 0x004;
-//  if(statBuff.st_mode & S_IWOTH) permissions |= 0x002;
-//  if(statBuff.st_mode & S_IXOTH) permissions |= 0x001;
-//  stringStream << permissions;
-//  stringStream >> str;
-//  attributeValue = memoryPool->allocate_string(str.c_str());
-//  fileNode->append_attribute(memoryPool->allocate_attribute("permissions", attributeValue));
-  
-//  stringStream << statBuff.st_nlink;
-//  stringStream >> str;
-//  fileNode->append_attribute(memoryPool->allocate_attribute("links", memoryPool->allocate_string(str.c_str())));
-//
-//  stringStream << statBuff.st_uid;
-//  stringStream >> str;
-//  fileNode->append_attribute(memoryPool->allocate_attribute("userId", memoryPool->allocate_string(str.c_str())));
-//
-//  stringStream << statBuff.st_gid;
-//  stringStream >> str;
-//  fileNode->append_attribute(memoryPool->allocate_attribute("groupId", memoryPool->allocate_string(str.c_str())));
-//
-//  stringStream << statBuff.st_size;
-//  stringStream >> str;
-//  fileNode->append_attribute(memoryPool->allocate_attribute("size", memoryPool->allocate_string(str.c_str())));
-//
-//  stringStream << statBuff.st_atime;
-//  stringStream >> str;
-//  fileNode->append_attribute(memoryPool->allocate_attribute("accessTime", memoryPool->allocate_string(str.c_str())));
-//
-//  stringStream << statBuff.st_mtime;
-//  stringStream >> str;
-//  fileNode->append_attribute(memoryPool->allocate_attribute("modifiedTime", memoryPool->allocate_string(str.c_str())));
-//
-//  stringStream << statBuff.st_ctime? statBuff.st_ctime: statBuff.st_mtime;
-//  stringStream >> str;
-//  fileNode->append_attribute(memoryPool->allocate_attribute("createdTime", memoryPool->allocate_string(str.c_str())));
-
-//  statBuff.st_dev      device
-//  statBuff.st_ino      inode
-//  statBuff.st_rdev     deviceType
-//  statBuff.st_blksize  blockSize
+  char *attributeValue = memoryPool->allocate_string(fileName.c_str());
+  fileNode->append_attribute(memoryPool->allocate_attribute("name", attributeValue));
 
   return fileNode;
 }
@@ -99,7 +46,7 @@ int FileSystem::dirList(const string &dirPath, vector<string> &list)
 
   directory = opendir(dirPath.c_str());
   if(!directory) {
-    cerr << "Couldn't open directory: " << dirPath << endl;
+    cerr << __FILE__ << ":" << __LINE__ << "\tCouldn't open directory: " << dirPath << endl;
     return errno;
   }
 
@@ -138,3 +85,25 @@ xml_node<> *FileSystem::dirStat(const string &path, memory_pool<> *memoryPool)
   return dirNode;
 }
 
+xml_node<> *FileSystem::catFile(const string &path, memory_pool<> *memoryPool)
+{
+  xml_node<> *fileContentNode = memoryPool->allocate_node(node_element, "FileContent");
+  fileContentNode->append_attribute(memoryPool->allocate_attribute("path", memoryPool->allocate_string(path.c_str())));
+
+  stringstream fileContent;
+
+  //TODO: Detect and deal with very large files!
+  
+  ifstream file;
+  file.open(path.c_str(), ifstream::in);
+  for(;;) {
+    char c = (char)file.get();
+    if(!file.good()) break;
+    fileContent << c;
+  }
+  file.close();
+
+  fileContentNode->value(memoryPool->allocate_string(fileContent.str().c_str()));
+  
+  return fileContentNode;
+}

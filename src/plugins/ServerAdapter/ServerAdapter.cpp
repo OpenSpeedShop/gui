@@ -10,6 +10,7 @@
 #ifdef SERVERADAPTER_DEBUG
 #  include <QDebug>
 #endif
+#include <QDebug>
 
 using namespace Plugins::OpenSpeedShop;
 
@@ -213,14 +214,73 @@ void ServerAdapter::waitExit()
 
 /*** END SocketServer commands ***********************************************/
 
-QString ServerAdapter::waitDirStat(QString path)
+QStringList ServerAdapter::waitDirStat(QString path)
 {
+    QStringList listing;
+
     //DEBUG:  This is for debugging only
-    ServerCommand *serverCommand = rawCommand(path, "FileSystem");
-    waitCommand(serverCommand);
-    QString response = serverCommand->response().toString();
+    ServerCommand *serverCommand = rawCommand(QString("dirStat %1").arg(path), "FileSystem");
+    QDomElement responseElement = waitCommand(serverCommand);
+
+    QDomElement fileSystemElement = responseElement.firstChildElement("FileSystem");
+    if(fileSystemElement.isNull()) throw tr("'FileSystem' element doesn't exist, as expected.");
+
+    QDomElement directoryElement = fileSystemElement.firstChildElement("Dir");
+    if(directoryElement.isNull()) {
+
+        // Deal with other responses, like errors
+        QDomElement exceptionElement = fileSystemElement.firstChildElement("Exception");
+        if(!exceptionElement.isNull()) {
+            throw tr("Exception returned from server: '%1'").arg(exceptionElement.text());
+        }
+
+        throw tr("'Dir' element doesn't exist, as expected. No error was given from the server.");
+    }
+
+    QDomElement fileElement = directoryElement.firstChildElement("File");
+    while(!fileElement.isNull()) {
+        QString fileName = fileElement.attribute("name");
+
+        // Ignore hidden files
+        if(fileName.startsWith(QLatin1Char('.'))) {
+            fileElement = fileElement.nextSiblingElement(fileElement.tagName());
+            continue;
+        }
+
+        listing.append(fileName);
+        fileElement = fileElement.nextSiblingElement(fileElement.tagName());
+    }
+
     serverCommand->deleteLater();
-    return response;
+    return listing;
+}
+
+QString ServerAdapter::waitCatFile(QString filePath)
+{
+    QString fileContents;
+
+    ServerCommand *serverCommand = rawCommand(QString("catFile %1").arg(filePath), "FileSystem");
+    QDomElement responseElement = waitCommand(serverCommand);
+
+    QDomElement fileSystemElement = responseElement.firstChildElement("FileSystem");
+    if(fileSystemElement.isNull()) throw tr("'FileSystem' element doesn't exist, as expected.");
+
+    QDomElement fileContentsElement = fileSystemElement.firstChildElement("FileContent");
+    if(fileContentsElement.isNull()) {
+
+        // Deal with other responses, like errors
+        QDomElement exceptionElement = fileSystemElement.firstChildElement("Exception");
+        if(!exceptionElement.isNull()) {
+            throw tr("Exception returned from server: '%1'").arg(exceptionElement.text());
+        }
+
+        throw tr("'FileContent' element doesn't exist, as expected. No error was given from the server.");
+    }
+
+    fileContents = fileContentsElement.firstChild().toText().nodeValue();
+
+    serverCommand->deleteLater();
+    return fileContents;
 }
 
 /*** BEGIN OpenSpeedShopCLI commands *****************************************/
