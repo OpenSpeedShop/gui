@@ -95,7 +95,6 @@ void SyntaxHighlighter::highlightBlock(const QString &text)
         index = text.indexOf(m_DataTypes, index + length);
     }
 
-
     static QRegExp mpiMethod("\\bMPI_\\w+\\b");
     index = text.indexOf(mpiMethod);
     while (index >= 0) {
@@ -103,7 +102,6 @@ void SyntaxHighlighter::highlightBlock(const QString &text)
         setFormat(index, length, Qt::red);
         index = text.indexOf(mpiMethod, index + length);
     }
-
 
     static QRegExp preprocessor("#\\s*\\w+\\b");
     index = text.indexOf(preprocessor);
@@ -113,7 +111,7 @@ void SyntaxHighlighter::highlightBlock(const QString &text)
         index = text.indexOf(preprocessor, index + length);
     }
 
-    static QRegExp quote("(\".*\")|('.')|(<.*>)");
+    static QRegExp quote("(\".*\")|('.')|(<\\s*[\\w\\.]+\\s*>)");
     index = text.indexOf(quote);
     while (index >= 0) {
         int length = quote.matchedLength();
