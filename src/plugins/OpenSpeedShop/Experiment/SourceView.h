@@ -29,6 +29,7 @@
 #define SOURCEVIEW_H
 
 #include <QPlainTextEdit>
+#include "SyntaxHighlighter.h"
 
 namespace Plugins {
 namespace OpenSpeedShop {
@@ -39,6 +40,7 @@ class SourceView : public QPlainTextEdit
 public:
     explicit SourceView(QWidget *parent = 0);
 
+    void setCurrentLineNumber(int lineNumber);
 
 protected:
     void resizeEvent(QResizeEvent *event);
@@ -52,6 +54,7 @@ private slots:
 
 private:
     QWidget *m_SideBarArea;
+    SyntaxHighlighter m_SyntaxHighlighter;
 
     friend class SideBarArea;
 };

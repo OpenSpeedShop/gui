@@ -19,7 +19,6 @@
 #include "ViewManager/IViewFilterable.h"
 
 #include "RemoteFileSystem/RemoteFileDialog.h"
-#include "SourceView.h"
 
 #ifdef QT_DEBUG
 #  include <QDebug>
@@ -37,27 +36,59 @@ ExperimentWidget::ExperimentWidget(QWidget *parent) :
 
     ui->setupUi(this);
 
+    ui->txtSource->close();
     ui->txtSource->deleteLater();
-    ui->txtSource = new SourceView(this);
-    ui->txtSource->setReadOnly(true);
-    ui->splitSource->addWidget(ui->txtSource);
+    ui->txtSource = &m_SourceView;
+    m_SourceView.setReadOnly(true);
+    ui->splitSource->insertWidget(1,&m_SourceView);
 
     ui->tabWidget->setCurrentIndex(0);
     ui->grpViewFilter->hide();
 
+    // readSettings has to be called after we set up the presentation entirely
+    readSettings();
+
     IAdapter *adapter = ConnectionManager::instance().askAdapter();
     if(!adapter) throw tr("Server not connected");
-
     QStringList experimentTypes = adapter->waitExperimentTypes();
     if(!experimentTypes.isEmpty()) {
         ui->cmbExperimentTypes->addItems(experimentTypes);
     }
+
 }
 
 ExperimentWidget::~ExperimentWidget()
 {
     delete ui;
 }
+
+void ExperimentWidget::closeEvent(QCloseEvent *event)
+{
+    //TODO: Ask the user if they really, really.
+    writeSettings();
+}
+
+
+void ExperimentWidget::readSettings()
+{
+    Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
+    settingManager.beginGroup("Plugins/OpenSpeedShop/Experiment");
+
+    ui->splitSource->restoreState(settingManager.value("splitSource/state", ui->splitSource->saveState()).toByteArray());
+
+    settingManager.endGroup();
+}
+
+void ExperimentWidget::writeSettings()
+{
+    Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
+    settingManager.beginGroup("Plugins/OpenSpeedShop/Experiment");
+
+    settingManager.setValue("splitSource/state", ui->splitSource->saveState());
+
+    settingManager.endGroup();
+}
+
 
 void ExperimentWidget::create()
 {
@@ -72,7 +103,7 @@ void ExperimentWidget::load()
 
     Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
     settingManager.beginGroup("Plugins/OpenSpeedShop/Experiment");
-    QString filePath = settingManager.value("defaultPath", QString(QLatin1Char('/'))).toString();
+    QString filePath = settingManager.value("defaultExperimentPath", QString(QLatin1Char('/'))).toString();
     settingManager.endGroup();
 
     RemoteFileDialog dlg(this);
@@ -87,7 +118,7 @@ void ExperimentWidget::load()
     }
 
     settingManager.beginGroup("Plugins/OpenSpeedShop/Experiment");
-    settingManager.setValue("defaultPath", dlg.path());
+    settingManager.setValue("defaultExperimentPath", dlg.path());
     settingManager.endGroup();
 
     setWindowFilePath(filePath);
@@ -115,11 +146,8 @@ void ExperimentWidget::load()
     /* Load the source paths into the source path list */
     refreshSourcePaths();
 
-//    qDebug() << "parameters" << adapter->waitExperimentParameterValues(expId);
-
-//    qDebug() << "sources" << adapter->waitExperimentSourceFiles(expId);
-//    qDebug() << "objects" << adapter->waitExperimentObjectFiles(expId);
-//    qDebug() << "threads" << adapter->waitExperimentThreads(expId);
+//    qDebug() << "parameters" << adapter->waitExperimentParameterValues(m_ExperimentUid);
+//    qDebug() << "objects" << adapter->waitExperimentObjectFiles(m_ExperimentUid);
 }
 
 void ExperimentWidget::refreshSourcePaths()
@@ -256,12 +284,15 @@ void ExperimentWidget::on_cmbViews_currentIndexChanged(int index)
 
         if(m_CurrentView) {
             ui->grpView->layout()->removeWidget(m_CurrentView);
+            disconnect(m_CurrentView, SIGNAL(activated(QModelIndex)), this, SLOT(viewItemActivated(QModelIndex)));
             m_CurrentView->deleteLater();
         }
 
         if(!ui->cmbViews->currentText().isEmpty()) {
             m_CurrentView = ViewManager::instance().viewWidget(ui->cmbViews->currentText(), m_CurrentModel);
             ui->grpView->layout()->addWidget(m_CurrentView);
+
+            connect(m_CurrentView, SIGNAL(activated(QModelIndex)), this, SLOT(viewItemActivated(QModelIndex)));
 
             IViewFilterable *viewFilterable = qobject_cast<IViewFilterable *>(m_CurrentView);
             if(viewFilterable) {
@@ -338,7 +369,7 @@ void ExperimentWidget::on_cmbViewFilterColumn_currentIndexChanged(int index)
 
 void ExperimentWidget::on_lstSource_currentRowChanged(int row)
 {
-    ui->txtSource->clear();
+    m_SourceView.clear();
 
     try {
 
@@ -347,7 +378,12 @@ void ExperimentWidget::on_lstSource_currentRowChanged(int row)
             filePath.append(QLatin1Char('/'));
         }
 
-        filePath.append(ui->lstSource->item(row)->text());
+        QListWidgetItem *item = ui->lstSource->item(row);
+        if(item == NULL) {
+            return;
+        }
+
+        filePath.append(item->text());
 
         if(!m_SourceFileCache.contains(filePath)) {
             IAdapter *adapter = ConnectionManager::instance().askAdapter();
@@ -355,7 +391,7 @@ void ExperimentWidget::on_lstSource_currentRowChanged(int row)
             m_SourceFileCache.insert(filePath, adapter->waitCatFile(filePath));
         }
 
-        ui->txtSource->setPlainText(m_SourceFileCache.value(filePath));
+        m_SourceView.setPlainText(m_SourceFileCache.value(filePath));
 
     } catch(QString err) {
         using namespace Core::MainWindow;
@@ -365,6 +401,84 @@ void ExperimentWidget::on_lstSource_currentRowChanged(int row)
         MainWindow::instance().notify(tr("Failed open source file."), NotificationWidget::Critical);
     }
 }
+
+void ExperimentWidget::on_btnSourcePath_clicked()
+{
+    try {
+
+        Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
+        settingManager.beginGroup("Plugins/OpenSpeedShop/Experiment");
+        QString filePath = settingManager.value("defaultSourcePath", QString(QLatin1Char('/'))).toString();
+        settingManager.endGroup();
+
+        if(filePath.isEmpty()) {
+            filePath = QString(QLatin1Char('/'));
+        }
+
+        RemoteFileDialog dlg(this);
+        dlg.setPath(filePath);
+        if(!dlg.exec()) {
+            return;
+        }
+
+        filePath = dlg.path();
+        ui->txtSourcePath->setText(filePath);
+
+        settingManager.beginGroup("Plugins/OpenSpeedShop/Experiment");
+        settingManager.setValue("defaultSourcePath", dlg.path());
+        settingManager.endGroup();
+
+        /* Update the source view */
+        on_lstSource_currentRowChanged(ui->lstSource->currentRow());
+
+    } catch(QString err) {
+        using namespace Core::MainWindow;
+        MainWindow::instance().notify(tr("Failed open source file: %1").arg(err), NotificationWidget::Critical);
+    } catch(...) {
+        using namespace Core::MainWindow;
+        MainWindow::instance().notify(tr("Failed open source file."), NotificationWidget::Critical);
+    }
+}
+
+void ExperimentWidget::viewItemActivated(QModelIndex index)
+{
+    QString type = index.data(Qt::UserRole + 1).toString();
+    if(type == "Function" || type == "Statement") {
+        QString text = index.data(Qt::DisplayRole).toString();
+
+        QRegExp statementPattern;
+        if(type == "Function") {
+            statementPattern.setPattern("^.*\\((.*):([0-9]+)\\)$");
+        } else if("Statement") {
+            statementPattern.setPattern("^(.*):([0-9]+)$");
+        }
+
+        if(statementPattern.exactMatch(text)) {
+            QStringList filePathDirs = statementPattern.cap(1).split(QLatin1Char('/'), QString::SkipEmptyParts);
+
+            QString filePath(filePathDirs.takeLast());
+            QList<QListWidgetItem *> items;
+            while(items.count() != 1 && filePathDirs.count() > 0) {
+                items = ui->lstSource->findItems(filePath, Qt::MatchEndsWith|Qt::MatchCaseSensitive);
+                filePath.prepend(filePathDirs.takeLast() + QLatin1Char('/'));
+            }
+
+            if(items.count() == 1) {
+                ui->lstSource->setCurrentItem(items.first());
+
+                bool okay;
+                int lineNumber = statementPattern.cap(2).toInt(&okay);
+                if(okay) {
+                    m_SourceView.setCurrentLineNumber(lineNumber);
+                }
+
+                ui->tabWidget->setCurrentWidget(ui->tabSource);
+            }
+        }
+    }
+}
+
+
 
 } // namespace OpenSpeedShop
 } // namespace Plugins

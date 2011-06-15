@@ -34,17 +34,32 @@ namespace Plugins {
 namespace OpenSpeedShop {
 
 SourceView::SourceView(QWidget *parent) :
-    QPlainTextEdit(parent)
+    QPlainTextEdit(parent),
+    m_SyntaxHighlighter(this->document())
 {
     m_SideBarArea = new SideBarArea(this);
-
     connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(updateSideBarAreaWidth(int)));
     connect(this, SIGNAL(updateRequest(QRect,int)), this, SLOT(updateSideBarArea(QRect,int)));
     connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(highlightCurrentLine()));
 
+    QFont font("Monospace");
+    font.setStyleHint(QFont::TypeWriter);
+    setFont(font);
+
     updateSideBarAreaWidth(0);
     highlightCurrentLine();
 }
+
+void SourceView::setCurrentLineNumber(int lineNumber)
+{
+    const QTextBlock &block = document()->findBlockByNumber(--lineNumber);
+    QTextCursor cursor(block);
+    cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, 0);
+    setTextCursor(cursor);
+    centerCursor();
+    setFocus();
+}
+
 
 int SourceView::sideBarAreaWidth()
 {

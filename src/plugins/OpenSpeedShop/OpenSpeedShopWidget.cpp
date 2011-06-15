@@ -50,6 +50,8 @@ void OpenSpeedShopWidget::createExperiment()
         int index = addTab(experimentWidget, experimentWidget->windowTitle());
         setCurrentIndex(index);
 
+        connect(experimentWidget, SIGNAL(windowTitleChanged()), this, SLOT(tabTitleChanged()));
+
     } catch(QString err) {
         using namespace Core::MainWindow;
         MainWindow::instance().notify(tr("Failed to create experiment: %1").arg(err), NotificationWidget::Critical);

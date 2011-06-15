@@ -5,6 +5,7 @@
 #include <QUuid>
 #include <QAbstractItemView>
 #include <QTextDocument>
+#include "SourceView.h"
 
 namespace Plugins {
 namespace OpenSpeedShop {
@@ -18,6 +19,9 @@ class ExperimentWidget : public QWidget
 public:
     explicit ExperimentWidget(QWidget *parent = 0);
     ~ExperimentWidget();
+
+    void readSettings();
+    void writeSettings();
 
     void create();
     void load();
@@ -34,10 +38,15 @@ protected slots:
     void on_txtViewFilter_textChanged(const QString &text);
     void on_cmbViewFilterColumn_currentIndexChanged(int index);
     void on_lstSource_currentRowChanged(int row);
+    void on_btnSourcePath_clicked();
+
+    void viewItemActivated(QModelIndex);
 
     void getModel(QUuid descriptorUid);
     void refreshProcessTree();
     void refreshSourcePaths();
+
+    void closeEvent(QCloseEvent *);
 
 private:
     Ui::ExperimentWidget *ui;
@@ -45,6 +54,8 @@ private:
     QAbstractItemView *m_CurrentView;
     QAbstractItemModel *m_CurrentModel;
     QMap<QString, QString> m_SourceFileCache;
+    SourceView m_SourceView;
+
 
 };
 

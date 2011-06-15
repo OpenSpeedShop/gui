@@ -40,7 +40,8 @@ SOURCES      += OpenSpeedShopPlugin.cpp \
                 ViewManager/IViewFilterable.cpp \
                 ViewManager/IViewFactory.cpp \
                 RemoteFileSystem/RemoteFileDialog.cpp \
-                Experiment/SourceView.cpp
+                Experiment/SourceView.cpp \
+    Experiment/SyntaxHighlighter.cpp
 
 HEADERS      += OpenSpeedShopPlugin.h \
                 Settings/SettingPage.h \
@@ -67,7 +68,8 @@ HEADERS      += OpenSpeedShopPlugin.h \
                 ModelManager/ModelManagerLibrary.h \
                 ViewManager/IViewFactory.h \
                 RemoteFileSystem/RemoteFileDialog.h \
-                Experiment/SourceView.h
+                Experiment/SourceView.h \
+    Experiment/SyntaxHighlighter.h
 
 FORMS        += Settings/SettingPage.ui \
                 AboutDialog.ui \

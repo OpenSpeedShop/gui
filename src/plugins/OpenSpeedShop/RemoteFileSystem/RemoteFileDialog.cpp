@@ -42,6 +42,8 @@ RemoteFileDialog::RemoteFileDialog(QWidget *parent) :
 {
     ui->setupUi(this);
     setPath("/");
+
+    ui->buttonBox->setFocus();
 }
 
 RemoteFileDialog::~RemoteFileDialog()
