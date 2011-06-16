@@ -20,8 +20,6 @@ public:
     explicit ExperimentWidget(QWidget *parent = 0);
     ~ExperimentWidget();
 
-    void readSettings();
-    void writeSettings();
 
     void create();
     void load();
@@ -31,6 +29,8 @@ signals:
 
 protected:
     void loadModelDescriptors(QString experimentType = QString());
+    void readSettings();
+    void writeSettings();
 
 protected slots:
     void on_cmbViews_currentIndexChanged(int index);

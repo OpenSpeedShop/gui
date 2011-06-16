@@ -54,7 +54,6 @@ ExperimentWidget::ExperimentWidget(QWidget *parent) :
     if(!experimentTypes.isEmpty()) {
         ui->cmbExperimentTypes->addItems(experimentTypes);
     }
-
 }
 
 ExperimentWidget::~ExperimentWidget()
@@ -75,6 +74,12 @@ void ExperimentWidget::readSettings()
     settingManager.beginGroup("Plugins/OpenSpeedShop/Experiment");
 
     ui->splitSource->restoreState(settingManager.value("splitSource/state", ui->splitSource->saveState()).toByteArray());
+
+    bool okay;
+
+    /* Sample rate is set by the user in the main OpenSpeedShop plugin setting page */
+    ui->txtSampleRate->setValue(settingManager.value("defaultSampleRate", ui->txtSampleRate->value()).toInt(&okay));
+    if(!okay) { ui->txtSampleRate->setValue(60); }
 
     settingManager.endGroup();
 }
@@ -103,8 +108,10 @@ void ExperimentWidget::load()
 
     Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
     settingManager.beginGroup("Plugins/OpenSpeedShop/Experiment");
-    QString filePath = settingManager.value("defaultExperimentPath", QString(QLatin1Char('/'))).toString();
+    QString filePath = settingManager.value("defaultExperimentPath", QLatin1String("/")).toString();
     settingManager.endGroup();
+
+    bool defaultPath = (filePath == QLatin1String("/"));
 
     RemoteFileDialog dlg(this);
     dlg.setPath(filePath);
@@ -117,9 +124,12 @@ void ExperimentWidget::load()
         throw tr("Could not load experiemnt: invalid filepath.");
     }
 
-    settingManager.beginGroup("Plugins/OpenSpeedShop/Experiment");
-    settingManager.setValue("defaultExperimentPath", dlg.path());
-    settingManager.endGroup();
+    /* User convenience.  If the path wasn't set in the settings, we'll set it for the user the first time. */
+    if(defaultPath) {
+        settingManager.beginGroup("Plugins/OpenSpeedShop/Experiment");
+        settingManager.setValue("defaultExperimentPath", dlg.path());
+        settingManager.endGroup();
+    }
 
     setWindowFilePath(filePath);
     setWindowTitle(filePath);
@@ -265,7 +275,10 @@ void ExperimentWidget::getModel(QUuid descriptorUid)
         /* Reset the view list */
         ui->cmbViews->clear();
         ui->cmbViews->addItems(ViewManager::instance().viewNames(m_CurrentModel));
-        ui->cmbViews->setCurrentIndex(0);
+        ui->cmbViews->setCurrentIndex(ui->cmbViews->count()-1);
+
+        /* Let the source view know about the change */
+        m_SourceView.setModel(m_CurrentModel);
 
     } catch(QString err) {
         using namespace Core::MainWindow;
@@ -383,7 +396,8 @@ void ExperimentWidget::on_lstSource_currentRowChanged(int row)
             return;
         }
 
-        filePath.append(item->text());
+        QString fileName = item->text();
+        filePath.append(fileName);
 
         if(!m_SourceFileCache.contains(filePath)) {
             IAdapter *adapter = ConnectionManager::instance().askAdapter();
@@ -392,6 +406,7 @@ void ExperimentWidget::on_lstSource_currentRowChanged(int row)
         }
 
         m_SourceView.setPlainText(m_SourceFileCache.value(filePath));
+        m_SourceView.setFilePath(fileName);
 
     } catch(QString err) {
         using namespace Core::MainWindow;
@@ -408,8 +423,10 @@ void ExperimentWidget::on_btnSourcePath_clicked()
 
         Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
         settingManager.beginGroup("Plugins/OpenSpeedShop/Experiment");
-        QString filePath = settingManager.value("defaultSourcePath", QString(QLatin1Char('/'))).toString();
+        QString filePath = settingManager.value("defaultSourcePath", QLatin1String("/")).toString();
         settingManager.endGroup();
+
+        bool defaultPath = (filePath == QLatin1String("/"));
 
         if(filePath.isEmpty()) {
             filePath = QString(QLatin1Char('/'));
@@ -424,9 +441,12 @@ void ExperimentWidget::on_btnSourcePath_clicked()
         filePath = dlg.path();
         ui->txtSourcePath->setText(filePath);
 
-        settingManager.beginGroup("Plugins/OpenSpeedShop/Experiment");
-        settingManager.setValue("defaultSourcePath", dlg.path());
-        settingManager.endGroup();
+        /* User convenience.  If the path wasn't set in the settings, we'll set it for the user the first time. */
+        if(defaultPath) {
+            settingManager.beginGroup("Plugins/OpenSpeedShop/Experiment");
+            settingManager.setValue("defaultSourcePath", dlg.path());
+            settingManager.endGroup();
+        }
 
         /* Update the source view */
         on_lstSource_currentRowChanged(ui->lstSource->currentRow());
@@ -449,7 +469,7 @@ void ExperimentWidget::viewItemActivated(QModelIndex index)
         QRegExp statementPattern;
         if(type == "Function") {
             statementPattern.setPattern("^.*\\((.*):([0-9]+)\\)$");
-        } else if("Statement") {
+        } else if(type == "Statement") {
             statementPattern.setPattern("^(.*):([0-9]+)$");
         }
 

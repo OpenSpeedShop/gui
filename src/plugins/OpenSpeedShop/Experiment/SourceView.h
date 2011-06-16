@@ -29,6 +29,7 @@
 #define SOURCEVIEW_H
 
 #include <QPlainTextEdit>
+#include <QAbstractItemModel>
 #include "SyntaxHighlighter.h"
 
 namespace Plugins {
@@ -42,10 +43,16 @@ public:
 
     void setCurrentLineNumber(int lineNumber);
 
+    void setModel(QAbstractItemModel *model);
+    void setFilePath(const QString &filePath);
+
 protected:
     void resizeEvent(QResizeEvent *event);
     void sideBarAreaPaintEvent(QPaintEvent *event);
     int sideBarAreaWidth();
+    void refreshStatements();
+
+    bool event(QEvent *event);
 
 private slots:
     void updateSideBarAreaWidth(int newBlockCount);
@@ -55,6 +62,10 @@ private slots:
 private:
     QWidget *m_SideBarArea;
     SyntaxHighlighter m_SyntaxHighlighter;
+
+    QMap<int, QModelIndex> m_Statements;
+    QAbstractItemModel *m_Model;
+    QString m_FilePath;
 
     friend class SideBarArea;
 };

@@ -127,6 +127,24 @@ void SyntaxHighlighter::highlightBlock(const QString &text)
         index = text.indexOf(oneLineComment, index + length);
     }
 
+//    if(currentBlockState() != 1) {
+//        /* Multi-line preprocessor */
+//        static QRegExp startIf("^\\s*#\\s*if\\s*0\\s*$");
+//        static QRegExp endIf("^\\s*#\\s*endif\\s*$");
+
+//        if(startIf.exactMatch(text)) {
+//            setCurrentBlockState(2);
+//        }
+
+//        if(currentBlockState() == 2) {
+//            setFormat(0, text.length(), Qt::darkGray);
+//        }
+
+//        if(endIf.exactMatch(text)) {
+//            setCurrentBlockState(0);
+//        }
+//    }
+
     /* Multi-line comments */
     static QRegExp startExpression("/\\*");
     static QRegExp endExpression("\\*/");
@@ -151,27 +169,6 @@ void SyntaxHighlighter::highlightBlock(const QString &text)
        startIndex = text.indexOf(startExpression, startIndex + commentLength);
     }
 
-//    /* Multi-line preprocessor */
-//    static QRegExp startIf("^\\s*#\\s*if\\s*0\\s*$");
-//    static QRegExp endIf("^\\s*#\\s*endif\\s*$");
-//
-//    startIndex = 0;
-//    if(previousBlockState() != 1 && previousBlockState() != 2) {
-//        startIndex = text.indexOf(startIf);
-//    }
-//
-//    while(startIndex >= 0) {
-//       int endIndex = text.indexOf(endIf, startIndex);
-//       int commentLength;
-//       if(endIndex == -1) {
-//           setCurrentBlockState(2);
-//           commentLength = text.length() - startIndex;
-//       } else {
-//           commentLength = endIndex - startIndex + endIf.matchedLength();
-//       }
-//       setFormat(startIndex, commentLength, Qt::darkGray);
-//       startIndex = text.indexOf(startIf, startIndex + commentLength);
-//    }
 
 }
 

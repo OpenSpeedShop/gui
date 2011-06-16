@@ -59,27 +59,32 @@ void SettingPage::initialize()
 {
     // Get settings from SettingManager and populate form
     Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
-    settingManager.beginGroup("Plugin");
-    settingManager.beginGroup("OpenSpeedShop");
+    settingManager.beginGroup("Plugins/OpenSpeedShop");
 
-    ui->lblSetting1->setText( "Default Project Path" );
-    ui->txtSetting1->setText( settingManager.value("ProjectPath", "C:/Qt/projects/").toString() );
+    ui->txtDatabasePath->setText(settingManager.value("Experiment/defaultExperimentPath", QString(QLatin1Char('/'))).toString());
+    ui->txtSourcePath->setText(settingManager.value("Experiment/defaultSourcePath", QString(QLatin1Char('/'))).toString());
+
+    bool okay;
+    ui->txtExperimentSampleRate->setValue(settingManager.value("Experiment/defaultSampleRate", 60).toInt(&okay));
+    if(!okay) { ui->txtExperimentSampleRate->setValue(60); }
+
+    ui->txtModelRowCount->setValue(settingManager.value("ModelManager/defaultRowCount", 1000).toInt(&okay));
+    if(!okay) { ui->txtModelRowCount->setValue(1000); }
 
     settingManager.endGroup();
-    settingManager.endGroup();
-
 }
 
 void SettingPage::apply()
 {
     // Persist changed settings to SettingManager
     Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
-    settingManager.beginGroup("Plugin");
-    settingManager.beginGroup("OpenSpeedShop");
+    settingManager.beginGroup("Plugins/OpenSpeedShop");
 
-    settingManager.setValue( "ProjectPath", ui->txtSetting1->text() );
+    settingManager.setValue("Experiment/defaultExperimentPath", ui->txtDatabasePath->text());
+    settingManager.setValue("Experiment/defaultSourcePath", ui->txtSourcePath->text());
+    settingManager.setValue("Experiment/defaultSampleRate", ui->txtExperimentSampleRate->value());
+    settingManager.setValue("ModelManager/defaultRowCount", ui->txtModelRowCount->value());
 
-    settingManager.endGroup();
     settingManager.endGroup();
 }
 

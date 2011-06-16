@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   height="48"
+   id="svg1800"
+   inkscape:output_extension="org.inkscape.output.svg.inkscape"
+   inkscape:version="0.48.1 "
+   sodipodi:docname="emblem-marker.svg"
+   sodipodi:version="0.32"
+   version="1.0"
+   width="48">
+  <metadata
+     id="metadata3">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:title />
+        <dc:description />
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>unsorted</rdf:li>
+          </rdf:Bag>
+        </dc:subject>
+        <dc:publisher>
+          <cc:Agent
+             rdf:about="http://www.openclipart.org/">
+            <dc:title>Open Clip Art Library, Source: Tango harm-on-icons, Source: Tango harm-on-icons, Source: Tango harm-on-icons, Source: Tango harm-on-icons, Source: Tango harm-on-icons</dc:title>
+          </cc:Agent>
+        </dc:publisher>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title />
+          </cc:Agent>
+        </dc:creator>
+        <dc:rights>
+          <cc:Agent>
+            <dc:title />
+          </cc:Agent>
+        </dc:rights>
+        <dc:date />
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by/3.0/" />
+        <dc:language>en</dc:language>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     bordercolor="#666666"
+     borderopacity="1.0"
+     gridtolerance="10.0"
+     guidetolerance="10.0"
+     id="base"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:window-height="743"
+     inkscape:window-width="1214"
+     objecttolerance="10.0"
+     pagecolor="#ffffff"
+     showgrid="false"
+     inkscape:zoom="6.5208333"
+     inkscape:cx="24"
+     inkscape:cy="24"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg1800" />
+  <defs
+     id="defs3">
+    <inkscape:perspective
+       id="perspective17"
+       inkscape:persp3d-origin="300 : 400 : 1"
+       inkscape:vp_x="-50 : 600 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="700 : 600 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <linearGradient
+       id="linearGradient3101">
+      <stop
+         id="stop3103"
+         offset="0"
+         style="stop-color:#000000;stop-opacity:1" />
+      <stop
+         id="stop3105"
+         offset="1"
+         style="stop-color:#000000;stop-opacity:0" />
+    </linearGradient>
+    <radialGradient
+       cx="17.3125"
+       cy="25.53125"
+       fx="17.3125"
+       fy="25.53125"
+       gradientTransform="matrix(1,0,0,0.351613,0,16.55413)"
+       gradientUnits="userSpaceOnUse"
+       id="radialGradient3107"
+       r="9.6875"
+       xlink:href="#linearGradient3101" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3101"
+       id="radialGradient2998"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(2.182912,0,0,0.76754024,-13.50372,21.786089)"
+       cx="17.3125"
+       cy="25.53125"
+       fx="17.3125"
+       fy="25.53125"
+       r="9.6875" />
+  </defs>
+  <path
+     inkscape:connector-curvature="0"
+     style="opacity:0.40909089;fill:url(#radialGradient2998)"
+     id="path3099"
+     d="m 45.434904,41.382352 c 0,4.106538 -9.467815,7.435544 -21.14696,7.435544 -11.679145,0 -21.14696,-3.329006 -21.14696,-7.435544 0,-4.106538 9.467815,-7.435544 21.14696,-7.435544 11.679145,0 21.14696,3.329006 21.14696,7.435544 z" />
+  <path
+     inkscape:connector-curvature="0"
+     style="fill:#ff8000;fill-opacity:1;fill-rule:nonzero;stroke:#c46000;stroke-width:0.96217852999999998;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1"
+     id="path1650"
+     d="m 45.088191,21.403809 c 0,11.482035 -9.308034,20.790064 -20.790078,20.790064 -11.482043,0 -20.7900777,-9.308029 -20.7900776,-20.790064 C 3.5080353,9.9217735 12.81607,0.61374486 24.298113,0.61374486 c 11.482044,0 20.790078,9.30802864 20.790078,20.79006414 l 0,0 z" />
+  <path
+     inkscape:connector-curvature="0"
+     style="fill:none;stroke:#fcae4f;stroke-width:0.93106729000000021;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1"
+     id="path3392"
+     d="m 44.555332,21.312495 c 0,11.110775 -9.007065,20.117839 -20.117844,20.117839 -11.110779,0 -20.1178443,-9.007064 -20.1178442,-20.117839 -10e-8,-11.110776 9.0070652,-20.1178391 20.1178442,-20.1178391 11.110779,0 20.117844,9.0070631 20.117844,20.1178391 l 0,0 z" />
+  <path
+     inkscape:connector-curvature="0"
+     style="fill:#fffeff;fill-opacity:0.21390375"
+     id="path3068"
+     d="m 43.676426,20.47678 c 0,10.830616 -6.052169,-4.306199 -18.674738,0.386388 C 12.279172,25.592912 4.4350535,31.307396 4.4350535,20.47678 4.4350535,9.6461627 13.22512,0.85609769 24.05574,0.85609769 c 10.830619,0 19.620686,8.79006501 19.620686,19.62068231 z" />
+</svg>

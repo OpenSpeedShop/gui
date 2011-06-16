@@ -29,6 +29,8 @@
 
 #include <QPainter>
 #include <QTextBlock>
+#include <QIcon>
+#include <QToolTip>
 
 namespace Plugins {
 namespace OpenSpeedShop {
@@ -38,6 +40,7 @@ SourceView::SourceView(QWidget *parent) :
     m_SyntaxHighlighter(this->document())
 {
     m_SideBarArea = new SideBarArea(this);
+
     connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(updateSideBarAreaWidth(int)));
     connect(this, SIGNAL(updateRequest(QRect,int)), this, SLOT(updateSideBarArea(QRect,int)));
     connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(highlightCurrentLine()));
@@ -60,19 +63,14 @@ void SourceView::setCurrentLineNumber(int lineNumber)
     setFocus();
 }
 
-
 int SourceView::sideBarAreaWidth()
 {
-    int digits = 2;
-    int max = qMax(1, blockCount());
-    while (max >= 10) {
-        max /= 10;
-        ++digits;
-    }
+    int digits = QString::number(qMax(1, blockCount())).length();
+    int digitWidth = fontMetrics().width(QLatin1Char('9')) * digits;
 
-    int space = 3 + fontMetrics().width(QLatin1Char('9')) * digits;
+    int diameter = fontMetrics().height();
 
-    return space;
+    return digitWidth + diameter + 3;
 }
 
 void SourceView::updateSideBarAreaWidth(int /* newBlockCount */)
@@ -129,6 +127,13 @@ void SourceView::sideBarAreaPaintEvent(QPaintEvent *event)
             QString number = QString::number(blockNumber + 1);
             painter.setPen(Qt::darkGray);
             painter.drawText(0, top, m_SideBarArea->width(), fontMetrics().height(), Qt::AlignRight, number);
+
+            if(m_Statements.contains(blockNumber + 1)) {
+                int diameter = fontMetrics().height();
+                QIcon icon(":/OpenSpeedShop/sourceMarker.svg");
+                QPixmap pixmap = icon.pixmap(QSize(diameter, diameter));
+                painter.drawPixmap(0,top, pixmap.height(), pixmap.width(), pixmap);
+            }
         }
 
         block = block.next();
@@ -137,6 +142,104 @@ void SourceView::sideBarAreaPaintEvent(QPaintEvent *event)
         ++blockNumber;
     }
 }
+
+void SourceView::setModel(QAbstractItemModel *model)
+{
+    m_Model = model;
+    refreshStatements();
+}
+
+void SourceView::refreshStatements()
+{
+    m_Statements.clear();
+    if(m_FilePath.isEmpty() || !m_Model) {
+        return;
+    }
+
+    int statementColumn = -1;
+    QString statementType;
+    for(int i=0; i < m_Model->columnCount(); ++i) {
+        QString columnType = m_Model->headerData(i, Qt::Horizontal, Qt::ToolTipRole).toString();
+        if(columnType == "Statement" || columnType == "Function") {
+            statementType = columnType;
+            statementColumn = i;
+            break;
+        }
+    }
+
+    if(statementColumn >= 0) {
+        QRegExp statementPattern;
+        if(statementType == "Function") {
+            statementPattern.setPattern("^.*\\((.*):([0-9]+)\\)$");
+        } else if(statementType == "Statement") {
+            statementPattern.setPattern("^(.*):([0-9]+)$");
+        }
+
+        for(int i=0; i < m_Model->rowCount(); ++i) {
+            QModelIndex index = m_Model->index(i, statementColumn);
+            QString statementText = index.data(Qt::DisplayRole).toString();
+
+
+            if(statementPattern.exactMatch(statementText)) {
+                QString filePath = statementPattern.cap(1);
+
+                bool okay;
+                int lineNumber = statementPattern.cap(2).toInt(&okay);
+                if(!okay) { lineNumber = 0; }
+
+                if(filePath.endsWith(m_FilePath)) {
+                    m_Statements.insert(lineNumber, index);
+                }
+            }
+
+        }
+    }
+}
+
+void SourceView::setFilePath(const QString &filePath)
+{
+    m_FilePath = filePath;
+    refreshStatements();
+}
+
+bool SourceView::event(QEvent *event)
+{
+    if(event->type() == QEvent::ToolTip) {
+        QHelpEvent *helpEvent = static_cast<QHelpEvent *>(event);
+
+        QPoint position = helpEvent->pos();
+        if(position.x() > sideBarAreaWidth()) {
+            QToolTip::hideText();
+            event->ignore();
+            return true;
+        }
+
+        QTextCursor cursor = cursorForPosition(position);
+        int lineNumber = cursor.blockNumber() + 1;
+        if(!m_Statements.contains(lineNumber)) {
+            QToolTip::hideText();
+            event->ignore();
+            return true;
+        }
+
+        QModelIndex rowIndex = m_Statements.value(lineNumber);
+        const QAbstractItemModel *model = rowIndex.model();
+
+        QStringList toolTip;
+        for(int i=0; i < model->columnCount(); ++i) {
+            QModelIndex index = model->index(rowIndex.row(), i, rowIndex.parent());
+            QString header = model->headerData(i, Qt::Horizontal, Qt::DisplayRole).toString();
+            QString value = index.data(Qt::DisplayRole).toString();
+            toolTip.append(header + QLatin1String(":  ") + value);
+        }
+
+        QToolTip::showText(helpEvent->globalPos(), toolTip.join(QLatin1String("\n")));
+        return true;
+    }
+
+    return QPlainTextEdit::event(event);
+}
+
 
 } // namespace OpenSpeedShop
 } // namespace Plugins

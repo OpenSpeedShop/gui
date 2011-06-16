@@ -28,32 +28,24 @@ ModelManagerDialog::ModelManagerDialog(QWidget *parent) :
     connect(descriptorListWidget, SIGNAL(currentDescriptorChanged(QUuid)), this, SLOT(currentSelectionChanged(QUuid)));
 
     Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
-    settingManager.beginGroup("Plugins");
-    settingManager.beginGroup("OpenSpeedShop");
-    settingManager.beginGroup("ModelManagerDialog");
+    settingManager.beginGroup("Plugins/OpenSpeedShop");
 
-    restoreGeometry(settingManager.value("windowGeometry", saveGeometry()).toByteArray());
-    ui->splitter->restoreGeometry(settingManager.value("splitterGeometry", ui->splitter->saveGeometry()).toByteArray());
-    ui->splitter->restoreState(settingManager.value("splitterState", ui->splitter->saveState()).toByteArray());
+    restoreGeometry(settingManager.value("ModelManagerDialog/windowGeometry", saveGeometry()).toByteArray());
+    ui->splitter->restoreGeometry(settingManager.value("ModelManagerDialog/splitterGeometry", ui->splitter->saveGeometry()).toByteArray());
+    ui->splitter->restoreState(settingManager.value("ModelManagerDialog/splitterState", ui->splitter->saveState()).toByteArray());
 
-    settingManager.endGroup();
-    settingManager.endGroup();
     settingManager.endGroup();
 }
 
 ModelManagerDialog::~ModelManagerDialog()
 {
     Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
-    settingManager.beginGroup("Plugins");
-    settingManager.beginGroup("OpenSpeedShop");
-    settingManager.beginGroup("ModelManagerDialog");
+    settingManager.beginGroup("Plugins/OpenSpeedShop");
 
-    settingManager.setValue("windowGeometry", saveGeometry());
-    settingManager.setValue("splitterGeometry", ui->splitter->saveGeometry());
-    settingManager.setValue("splitterState", ui->splitter->saveState());
+    settingManager.setValue("ModelManagerDialog/windowGeometry", saveGeometry());
+    settingManager.setValue("ModelManagerDialog/splitterGeometry", ui->splitter->saveGeometry());
+    settingManager.setValue("ModelManagerDialog/splitterState", ui->splitter->saveState());
 
-    settingManager.endGroup();
-    settingManager.endGroup();
     settingManager.endGroup();
 
     delete ui;

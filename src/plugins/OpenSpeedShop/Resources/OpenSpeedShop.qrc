@@ -18,5 +18,6 @@
         <file alias="file.png">file.png</file>
         <file alias="folder.svg">folder.svg</file>
         <file alias="symlink.svg">emblem-symbolic-link.svg</file>
+        <file alias="sourceMarker.svg">emblem-marker.svg</file>
     </qresource>
 </RCC>

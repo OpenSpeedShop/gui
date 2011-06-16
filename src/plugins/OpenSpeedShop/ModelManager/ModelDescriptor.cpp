@@ -1,6 +1,7 @@
 #include "ModelDescriptor.h"
 
 #include <QFileInfo>
+#include <SettingManager/SettingManager.h>
 
 namespace Plugins {
 namespace OpenSpeedShop {
@@ -10,9 +11,20 @@ ModelDescriptor::ModelDescriptor(QObject *parent) :
     m_Id(QUuid::createUuid())
 {
     m_Name = tr("New Model");
-    m_RowCount = 1000;
     m_Empty = true;
     m_Default = false;
+
+
+    Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
+    settingManager.beginGroup("Plugins/OpenSpeedShop/ModelManager");
+
+    bool okay;
+    /* Row count is set by the user in the main OpenSpeedShop plugin setting page */
+    m_RowCount = settingManager.value("defaultSampleRate", 1000).toInt(&okay);
+    if(!okay) { m_RowCount = 1000; }
+
+    settingManager.endGroup();
+
 }
 
 QUuid ModelDescriptor::id() const
