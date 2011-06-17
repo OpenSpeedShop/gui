@@ -10,3 +10,4 @@ win32:target.path   = /
 else:target.path   = /lib
 
 INSTALLS     += target
+

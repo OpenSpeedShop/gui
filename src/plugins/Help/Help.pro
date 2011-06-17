@@ -15,28 +15,24 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
-TEMPLATE = subdirs
+include(../plugins.pri)
 
-SUBDIRS  = Example \
-           Help \
-           OpenSpeedShop \
-           DirectConnection \
-           TreeView \
-           ServerAdapter
+TARGET            = Help
 
-Help.subdir                  = Help
+SOURCES          += HelpPlugin.cpp \
+                    HelpWidget.cpp \
+                    HelpBrowser.cpp
 
-OpenSpeedShop.subdir         = OpenSpeedShop
-OpenSpeedShop.depends        = Help
+HEADERS          += HelpPlugin.h \
+                    HelpWidget.h \
+                    HelpBrowser.h
 
-DirectConnection.subdir      = DirectConnection
-DirectConnection.depends     = OpenSpeedShop
+FORMS            +=
 
-Example.subdir               = Example
-Example.depends              = OpenSpeedShop
+RESOURCES        +=
 
-TreeView.subdir              = TreeView
-TreeView.depends             = OpenSpeedShop
+QT               +=
 
-ServerAdapter.subdir         = ServerAdapter
-ServerAdapter.depends        = OpenSpeedShop
+CONFIG	         += help
+
+#debug: DEFINES   += HELP_DEBUG
