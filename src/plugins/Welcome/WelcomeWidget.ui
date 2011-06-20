@@ -1,0 +1,405 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Plugins::Welcome::WelcomeWidget</class>
+ <widget class="QWidget" name="Plugins::Welcome::WelcomeWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1081</width>
+    <height>583</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QGroupBox { font: bold 18px; color: #015367; }</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
+    <widget class="QGroupBox" name="grpActions">
+     <property name="title">
+      <string>Actions</string>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <item>
+       <widget class="QCommandLinkButton" name="commandLinkButton_3">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="text">
+         <string>Create Open|SpeedShop Experiment</string>
+        </property>
+        <property name="description">
+         <string>Create a new Open|SpeedShop experiment using an executable</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCommandLinkButton" name="commandLinkButton">
+        <property name="text">
+         <string>Load Open|SpeedShop Experiment</string>
+        </property>
+        <property name="description">
+         <string>Load an existing Open|SpeedShop database</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="verticalSpacer_8">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>40</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="0" column="1" rowspan="2">
+    <widget class="QTabWidget" name="tabWidget">
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <property name="documentMode">
+      <bool>true</bool>
+     </property>
+     <widget class="QWidget" name="tabGettingStarted">
+      <attribute name="title">
+       <string>Getting Started</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_2">
+       <item row="0" column="0">
+        <widget class="QGroupBox" name="grpTutorials">
+         <property name="styleSheet">
+          <string notr="true"/>
+         </property>
+         <property name="title">
+          <string>Tutorials</string>
+         </property>
+         <property name="flat">
+          <bool>true</bool>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QCommandLinkButton" name="commandLinkButton_4">
+            <property name="text">
+             <string>Getting Started with Open|SpeedShop</string>
+            </property>
+            <property name="icon">
+             <iconset resource="Resources/Resources.qrc">
+              <normaloff>:/Welcome/video.svg</normaloff>:/Welcome/video.svg</iconset>
+            </property>
+            <property name="description">
+             <string>A video showing the basics of the Open|SpeedShop GUI</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCommandLinkButton" name="commandLinkButton_6">
+            <property name="text">
+             <string>Performance Analysis using Open|SpeedShop</string>
+            </property>
+            <property name="icon">
+             <iconset resource="Resources/Resources.qrc">
+              <normaloff>:/Welcome/video.svg</normaloff>:/Welcome/video.svg</iconset>
+            </property>
+            <property name="description">
+             <string>A video showing basic performance analysis using the Open|SpeedShop GUI</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCommandLinkButton" name="commandLinkButton_5">
+            <property name="text">
+             <string>Advanced Performance Analysis using Open|SpeedShop</string>
+            </property>
+            <property name="icon">
+             <iconset resource="Resources/Resources.qrc">
+              <normaloff>:/Welcome/text.svg</normaloff>:/Welcome/text.svg</iconset>
+            </property>
+            <property name="description">
+             <string>Help documentation on advanced performance analysis techniques using the Open|SpeedShop GUI and CLI</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="verticalSpacer_3">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="0" column="1" rowspan="2">
+        <widget class="QGroupBox" name="grpTip">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="title">
+          <string>Tips &amp;&amp; Tricks</string>
+         </property>
+         <property name="flat">
+          <bool>true</bool>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_4">
+          <item>
+           <widget class="QLabel" name="lblTip">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout">
+            <item>
+             <spacer name="horizontalSpacer">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QToolButton" name="btnTipPrevious">
+              <property name="text">
+               <string>Previous</string>
+              </property>
+              <property name="icon">
+               <iconset resource="Resources/Resources.qrc">
+                <normaloff>:/Welcome/previous.svg</normaloff>:/Welcome/previous.svg</iconset>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QToolButton" name="btnTipNext">
+              <property name="text">
+               <string>Next</string>
+              </property>
+              <property name="icon">
+               <iconset resource="Resources/Resources.qrc">
+                <normaloff>:/Welcome/next.svg</normaloff>:/Welcome/next.svg</iconset>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="2" column="0" colspan="3">
+        <widget class="QGroupBox" name="grpExamples">
+         <property name="title">
+          <string>Examples</string>
+         </property>
+         <property name="flat">
+          <bool>true</bool>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_5">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QCommandLinkButton" name="commandLinkButton_7">
+            <property name="text">
+             <string>SMG2000 - Semicoarsening Multigrid Solver</string>
+            </property>
+            <property name="icon">
+             <iconset resource="Resources/Resources.qrc">
+              <normaloff>:/Welcome/text.svg</normaloff>:/Welcome/text.svg</iconset>
+            </property>
+            <property name="description">
+             <string>A detailed walk-through describing how to use the Open|SpeedShop performance tool to analyze the provided test application SMG 2000</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="verticalSpacer">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tabNews">
+      <attribute name="title">
+       <string>Latest News</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_4"/>
+     </widget>
+     <widget class="QWidget" name="tabSupport">
+      <attribute name="title">
+       <string>Support</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_3">
+       <item row="1" column="1">
+        <widget class="QGroupBox" name="grpSupport">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="title">
+          <string>Support</string>
+         </property>
+         <property name="flat">
+          <bool>true</bool>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_3">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QCommandLinkButton" name="commandLinkButton_8">
+            <property name="text">
+             <string>Get Open|SpeedShop GUI Support</string>
+            </property>
+            <property name="icon">
+             <iconset resource="Resources/Resources.qrc">
+              <normaloff>:/Welcome/link.svg</normaloff>:/Welcome/link.svg</iconset>
+            </property>
+            <property name="description">
+             <string>Go to our website for more information on getting support for the GUI</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCommandLinkButton" name="commandLinkButton_2">
+            <property name="text">
+             <string>Get Open|SpeedShop Support</string>
+            </property>
+            <property name="icon">
+             <iconset resource="Resources/Resources.qrc">
+              <normaloff>:/Welcome/link.svg</normaloff>:/Welcome/link.svg</iconset>
+            </property>
+            <property name="description">
+             <string>Go to our website for more information on getting support for the Open|SpeedShop performance tool</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="1" column="2" rowspan="2">
+        <spacer name="horizontalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="2" column="1">
+        <spacer name="verticalSpacer_5">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QGroupBox" name="grpRecent">
+     <property name="title">
+      <string>Recent </string>
+     </property>
+     <property name="flat">
+      <bool>true</bool>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_6">
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <item>
+       <widget class="QListWidget" name="lstRecent">
+        <property name="styleSheet">
+         <string notr="true">QFrame { border: none; }
+QAbstractScrollArea { background-color: rgba(0,0,0,0%); }</string>
+        </property>
+        <property name="editTriggers">
+         <set>QAbstractItemView::NoEditTriggers</set>
+        </property>
+        <property name="showDropIndicator" stdset="0">
+         <bool>false</bool>
+        </property>
+        <property name="spacing">
+         <number>10</number>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="Resources/Resources.qrc"/>
+ </resources>
+ <connections/>
+</ui>

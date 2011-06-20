@@ -64,7 +64,7 @@
            </property>
            <property name="icon">
             <iconset resource="../Resources/OpenSpeedShop.qrc">
-             <normaloff>:/OpenSpeedShop/createModelDescriptor.png</normaloff>:/OpenSpeedShop/createModelDescriptor.png</iconset>
+             <normaloff>:/OpenSpeedShop/createModelDescriptor.svg</normaloff>:/OpenSpeedShop/createModelDescriptor.svg</iconset>
            </property>
            <property name="autoRaise">
             <bool>true</bool>
@@ -81,7 +81,7 @@
            </property>
            <property name="icon">
             <iconset resource="../Resources/OpenSpeedShop.qrc">
-             <normaloff>:/OpenSpeedShop/removeModelDescriptor.png</normaloff>:/OpenSpeedShop/removeModelDescriptor.png</iconset>
+             <normaloff>:/OpenSpeedShop/removeModelDescriptor.svg</normaloff>:/OpenSpeedShop/removeModelDescriptor.svg</iconset>
            </property>
            <property name="autoRaise">
             <bool>true</bool>

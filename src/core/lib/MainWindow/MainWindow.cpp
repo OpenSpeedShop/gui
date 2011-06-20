@@ -113,6 +113,10 @@ bool MainWindow::initialize()
     try {
         readSettings();
 
+        /* Move the toolbar from the top to the left */
+        ui->toolbar->setVisible(true);
+        addToolBar(Qt::LeftToolBarArea, ui->toolbar);
+
         Core::PluginManager::PluginManager &pluginManager = Core::PluginManager::PluginManager::instance();
         pluginManager.addObject(this);                         /* Register ourselves as an ISettingPageFactory */
     } catch(...) {
@@ -243,23 +247,82 @@ void MainWindow::removeProgressBar(QProgressBar *progressBar)
 }
 
 /*!
-   \fn MainWindow::setCentralWidget()
+   \fn MainWindow::addCentralWidget()
+   This function takes ownership of the supplied widget.
    \returns
  */
-void MainWindow::setCentralWidget(QWidget *widget)
+void MainWindow::addCentralWidget(QWidget *widget, int priority, QString title, QIcon icon)
 {
 #ifdef MAINWINDOW_DEBUG
-    qDebug() << __FILE__ << __LINE__ << "\tMainWindow::setCentralWidget";
+    qDebug() << __FILE__ << __LINE__ << "\tMainWindow::addCentralWidget";
 #endif
 
-    QWidget *oldWidget = ui->placehoderWidget;
-    ui->centralLayout->removeWidget(oldWidget);
-    delete oldWidget;
+    int index = ui->stackedWidget->addWidget(widget);
 
-    widget->setParent(this);
-    ui->placehoderWidget = widget;
-    ui->centralLayout->addWidget(widget);
+    if(title.isEmpty()) {
+        title = widget->windowTitle();
+    }
+
+    if(icon.isNull()) {
+        icon = widget->windowIcon();
+    }
+
+    QAction *selectWidget = new QAction(icon, title, this);
+    selectWidget->setData(index);
+    selectWidget->setPriority((QAction::Priority)priority);
+    selectWidget->setCheckable(true);
+    connect(selectWidget, SIGNAL(triggered()), this, SLOT(setCurrentCentralWidget()));
+
+    bool wasInserted = false;
+    foreach(QAction *before, ui->toolbar->actions()) {
+        int beforePriority = (int)before->priority();
+        if(beforePriority > priority) {
+            ui->toolbar->insertAction(before, selectWidget);
+            wasInserted = true;
+            break;
+        }
+    }
+    if(!wasInserted) {
+        ui->toolbar->addAction(selectWidget);
+    }
+
+    if(ui->toolbar->actions().count() > 0) {
+        ui->toolbar->actions().first()->trigger();
+    }
 }
+
+/*!
+   \fn MainWindow::removeCentralWidget()
+   \returns
+ */
+void MainWindow::removeCentralWidget(QWidget *widget)
+{
+#ifdef MAINWINDOW_DEBUG
+    qDebug() << __FILE__ << __LINE__ << "\tMainWindow::removeCentralWidget";
+#endif
+
+    ui->stackedWidget->removeWidget(widget);
+
+    //TODO: remove the widget with icon from the sidebar
+
+}
+
+void MainWindow::setCurrentCentralWidget()
+{
+    QObject *object = QObject::sender();
+    QAction *action = qobject_cast<QAction *>(object);
+    if(action) {
+        foreach(QAction *action, ui->toolbar->actions()) {
+            action->setChecked(false);
+        }
+
+        int index = action->data().toInt();
+        ui->stackedWidget->setCurrentIndex(index);
+        action->setChecked(true);
+    }
+}
+
+
 
 /*!
    \fn MainWindow::notify()

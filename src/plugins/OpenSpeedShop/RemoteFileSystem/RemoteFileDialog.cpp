@@ -96,7 +96,7 @@ void RemoteFileDialog::on_txtPath_editingFinished()
                 fileItem->setData(0, Qt::UserRole, "Directory");
 
             } else {
-                fileItem->setIcon(0, QIcon(":/OpenSpeedShop/file.png"));
+                fileItem->setIcon(0, QIcon(":/OpenSpeedShop/file.svg"));
                 fileItem->setData(0, Qt::UserRole, "File");
 
                 //HACK: We're just doing this for now, later we'll have to implement true filtering (server-side would be nice).

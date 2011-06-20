@@ -17,26 +17,20 @@
 
 include(../plugins.pri)
 
-TARGET            = Help
+TARGET            = Welcome
 
-SOURCES          += HelpPlugin.cpp \
-                    HelpWidget.cpp \
-                    HelpBrowser.cpp \
-    Settings/SettingPage.cpp
+SOURCES          += WelcomePlugin.cpp \
+    WelcomeWidget.cpp
 
-HEADERS          += HelpPlugin.h \
-                    HelpWidget.h \
-                    HelpBrowser.h \
-    Settings/SettingPage.h
-
-FORMS            += \
-    Settings/SettingPage.ui
-
-RESOURCES        += \
-    Resources/HelpResources.qrc
+HEADERS          += WelcomePlugin.h \ 
+    WelcomeWidget.h
 
 QT               +=
 
-CONFIG	         += help
+#debug: DEFINES   += WELCOME_DEBUG
 
-#debug: DEFINES   += HELP_DEBUG
+FORMS += \
+    WelcomeWidget.ui
+
+RESOURCES += \
+    Resources/Resources.qrc

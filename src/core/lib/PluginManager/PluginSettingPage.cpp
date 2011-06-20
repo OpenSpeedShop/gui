@@ -157,23 +157,23 @@ void PluginSettingPage::buildTree(QList<PluginWrapper *> plugins)
         switch(plugin->state()) {
             case PluginWrapper::State_Loaded:
                 item->setToolTip(0, tr("Plugin loaded"));
-                item->setIcon(0, QIcon(":/PluginManager/check.png"));
+                item->setIcon(0, QIcon(":/PluginManager/check.svg"));
                 break;
             case PluginWrapper::State_Initialized:
                 item->setToolTip(0, tr("Plugin initialized"));
-                item->setIcon(0, QIcon(":/PluginManager/check.png"));
+                item->setIcon(0, QIcon(":/PluginManager/check.svg"));
                 break;
             case PluginWrapper::State_Error:
                 item->setToolTip(0, tr("Plugin failed"));
-                item->setIcon(0, QIcon(":/PluginManager/fail.png"));
+                item->setIcon(0, QIcon(":/PluginManager/fail.svg"));
                 break;
             case PluginWrapper::State_Shutdown:
                 item->setToolTip(0, tr("Plugin shutdown"));
-                item->setIcon(0, QIcon(":/PluginManager/fail.png"));
+                item->setIcon(0, QIcon(":/PluginManager/fail.svg"));
                 break;
             default:
                 item->setToolTip(0, tr("Unknown status"));
-                item->setIcon(0, QIcon(":/PluginManager/fail.png"));
+                item->setIcon(0, QIcon(":/PluginManager/fail.svg"));
                 break;
         }
 

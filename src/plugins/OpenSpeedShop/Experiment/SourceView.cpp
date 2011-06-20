@@ -53,9 +53,9 @@ SourceView::SourceView(QWidget *parent) :
     highlightCurrentLine();
 }
 
-void SourceView::setCurrentLineNumber(int lineNumber)
+void SourceView::setCurrentLineNumber(const int &lineNumber)
 {
-    const QTextBlock &block = document()->findBlockByNumber(--lineNumber);
+    const QTextBlock &block = document()->findBlockByNumber(lineNumber-1);
     QTextCursor cursor(block);
     cursor.movePosition(QTextCursor::Right, QTextCursor::MoveAnchor, 0);
     setTextCursor(cursor);
@@ -73,20 +73,23 @@ int SourceView::sideBarAreaWidth()
     return digitWidth + diameter + 3;
 }
 
-void SourceView::updateSideBarAreaWidth(int /* newBlockCount */)
+void SourceView::updateSideBarAreaWidth(int newBlockCount)
 {
+    Q_UNUSED(newBlockCount)
     setViewportMargins(sideBarAreaWidth(), 0, 0, 0);
 }
 
 void SourceView::updateSideBarArea(const QRect &rect, int dy)
 {
-    if (dy)
+    if(dy) {
         m_SideBarArea->scroll(0, dy);
-    else
+    } else {
         m_SideBarArea->update(0, rect.y(), m_SideBarArea->width(), rect.height());
+    }
 
-    if (rect.contains(viewport()->rect()))
+    if(rect.contains(viewport()->rect())) {
         updateSideBarAreaWidth(0);
+    }
 }
 
 void SourceView::resizeEvent(QResizeEvent *e)

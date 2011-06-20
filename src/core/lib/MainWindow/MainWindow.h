@@ -62,7 +62,8 @@ public:
     QProgressBar *addProgressBar();
     void removeProgressBar(QProgressBar *progressBar);
 
-    void setCentralWidget(QWidget *widget);
+    void addCentralWidget(QWidget *widget, int priority = 128, QString title = QString(), QIcon icon = QIcon());
+    void removeCentralWidget(QWidget *widget);
 
     NotificationWidget *notify(const QString &text,
                 NotificationWidget::Icon icon = NotificationWidget::NoIcon,
@@ -84,6 +85,9 @@ protected:
     void readSettings();
     void writeSettings();
     void initActions();
+
+protected slots:
+    void setCurrentCentralWidget();
 
 
 private:

@@ -18,6 +18,7 @@
 TEMPLATE = subdirs
 
 SUBDIRS  = Example \
+           Welcome \
            Help \
            OpenSpeedShop \
            DirectConnection \
@@ -26,8 +27,11 @@ SUBDIRS  = Example \
 
 Help.subdir                  = Help
 
+Welcome.subdir               = Welcome
+Welcome.depends              = Help
+
 OpenSpeedShop.subdir         = OpenSpeedShop
-OpenSpeedShop.depends        = Help
+OpenSpeedShop.depends        = Help Welcome
 
 DirectConnection.subdir      = DirectConnection
 DirectConnection.depends     = OpenSpeedShop

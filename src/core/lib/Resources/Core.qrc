@@ -1,9 +1,8 @@
 <RCC>
     <qresource prefix="/PluginManager">
-        <file alias="check.png">icon_check.png</file>
-        <file alias="fail.png">icon_fail.png</file>
-        <file alias="cross.png">icon_cross.png</file>
-        <file alias="plugin.png">icon_plugin.png</file>
+        <file alias="check.svg">dialog-ok-5.svg</file>
+        <file alias="plugin.svg">preferences-plugin.svg</file>
+        <file alias="fail.svg">dialog-error-4.svg</file>
     </qresource>
     <qresource prefix="/MainWindow">
         <file alias="app.png">icon_cluster.png</file>

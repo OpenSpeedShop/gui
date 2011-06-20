@@ -6,12 +6,22 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>664</width>
-    <height>488</height>
+    <width>686</width>
+    <height>459</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>TabWidget</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QStackedWidget {
+  background-color: rgba(0,0,0, 5%);
+  background-image: url(\&quot;:/OpenSpeedShop/logo_640.png\&quot;);
+  background-repeat: none;
+  background-position: center center;
+  border-radius: 5px;
+  margin: 4 3 2 4;
+}</string>
   </property>
   <property name="documentMode">
    <bool>true</bool>

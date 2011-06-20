@@ -38,6 +38,7 @@ protected slots:
 
 private:
     Ui::OpenSpeedShopWidget *ui;
+    QString m_StyleSheet;
 
 };
 

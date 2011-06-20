@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/Welcome">
+        <file alias="welcome.svg">go-home-5.svg</file>
+        <file alias="text.svg">text-x-generic.svg</file>
+        <file alias="video.svg">video-x-generic.svg</file>
+        <file alias="link.svg">emblem-web.svg</file>
+        <file alias="next.svg">go-next-view.svg</file>
+        <file alias="previous.svg">go-previous-view.svg</file>
+    </qresource>
+</RCC>

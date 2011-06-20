@@ -12,6 +12,9 @@ HelpWidget::HelpWidget(QHelpEngine *helpEngine, QWidget *parent) :
 {
     m_HelpEngine = helpEngine;
 
+    setWindowTitle("Help");
+    setWindowIcon(QIcon(":/Help/windowIcon.svg"));
+
     initSideBar();
 
     initDocumentTabs();
@@ -20,6 +23,7 @@ HelpWidget::HelpWidget(QHelpEngine *helpEngine, QWidget *parent) :
     sizes << 100 << 1000;
     setSizes(sizes);
 
+    linkActivated(QUrl("qthelp://org.openspeedshop.gui/openspeedshop-gui/index.html"));
 }
 
 void HelpWidget::initSideBar()
@@ -27,6 +31,7 @@ void HelpWidget::initSideBar()
     QTabWidget *tabContents = new QTabWidget(this);
     tabContents->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     addWidget(tabContents);
+    setCollapsible(0, false);
 
     QHelpContentWidget *helpContentWidget = m_HelpEngine->contentWidget();
     connect(helpContentWidget, SIGNAL(linkActivated(QUrl)), this, SLOT(linkActivated(QUrl)));
@@ -58,6 +63,7 @@ void HelpWidget::initDocumentTabs()
     connect(&m_Documents, SIGNAL(tabCloseRequested(int)), this, SLOT(tabCloseRequested(int)));
     connect(&m_Documents, SIGNAL(currentChanged(int)), this, SLOT(tabCurrentChanged(int)));
     addWidget(&m_Documents);
+    setCollapsible(1, false);
 }
 
 

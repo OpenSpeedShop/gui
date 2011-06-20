@@ -105,10 +105,10 @@
        gradientUnits="userSpaceOnUse"
        id="radialGradient3107"
        r="9.6875"
-       xlink:href="#linearGradient3101" />
+       />
     <radialGradient
        inkscape:collect="always"
-       xlink:href="#linearGradient3101"
+      
        id="radialGradient2998"
        gradientUnits="userSpaceOnUse"
        gradientTransform="matrix(2.182912,0,0,0.76754024,-13.50372,21.786089)"

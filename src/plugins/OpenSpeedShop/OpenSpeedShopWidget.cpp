@@ -11,6 +11,12 @@ OpenSpeedShopWidget::OpenSpeedShopWidget(QWidget *parent) :
     ui->setupUi(this);
     connect(this, SIGNAL(tabCloseRequested(int)), this, SLOT(closeExperiment(int)));
 
+    /* Set up the stylesheet for periods when we have tabs */
+    m_StyleSheet = styleSheet();
+
+    setWindowTitle(QString("Open|SpeedShop%1").arg(QChar(0x2122))); //Trademark
+    setWindowIcon(QIcon(":/OpenSpeedShop/app.png"));
+
     Core::MainWindow::MainWindow &mainWindow = Core::MainWindow::MainWindow::instance();
     foreach(QAction *action, mainWindow.menuBar()->actions()) {
         if(action->text() == tr("File")) {
@@ -113,6 +119,13 @@ void OpenSpeedShopWidget::tabInserted(int index)
         this->tabBar()->show();
     }
 
+    /* Set the stylesheet to nothing if we have tabs, otherwise we'll run into display issues */
+    if(count() <= 0) {
+        setStyleSheet(m_StyleSheet);
+    } else {
+        setStyleSheet(QString());
+    }
+
     m_CloseExperiment->setEnabled(count());
 }
 
@@ -124,6 +137,13 @@ void OpenSpeedShopWidget::tabRemoved(int index)
         this->tabBar()->hide();
     } else {
         this->tabBar()->show();
+    }
+
+    /* Set the stylesheet to nothing if we have tabs, otherwise we'll run into display issues */
+    if(count() <= 0) {
+        setStyleSheet(m_StyleSheet);
+    } else {
+        setStyleSheet(QString());
     }
 
     m_CloseExperiment->setEnabled(count());

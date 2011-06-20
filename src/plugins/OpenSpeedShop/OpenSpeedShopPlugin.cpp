@@ -85,11 +85,11 @@ bool OpenSpeedShopPlugin::initialize(QStringList &args, QString *err)
         /*** We're a main plugin, so we need to make changes to the mainWindow,
              like the application icon and the title ***/
         MainWindow::MainWindow &mainWindow = MainWindow::MainWindow::instance();
-        mainWindow.setWindowIcon(QIcon(":/OpenSpeedShop/app.png"));
-        mainWindow.setWindowTitle(QString("Open|SpeedShop%1").arg(QChar(0x2122))); //Trademark
+        mainWindow.setWindowTitle(m_MainWidget.windowTitle());
+        mainWindow.setWindowIcon(m_MainWidget.windowIcon());
 
         /*** Set our main widget in the main window ***/
-        mainWindow.setCentralWidget(&m_MainWidget);
+        mainWindow.addCentralWidget(&m_MainWidget, 32, QString("O|SS"), m_MainWidget.windowIcon());
 
         /*** Register our menu structure ***/
         foreach(QAction *action, mainWindow.menuBar()->actions()) {

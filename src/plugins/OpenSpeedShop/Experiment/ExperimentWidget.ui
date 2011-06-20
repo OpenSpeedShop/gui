@@ -23,7 +23,7 @@
       <bool>true</bool>
      </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <property name="documentMode">
       <bool>true</bool>
@@ -189,7 +189,7 @@
            </property>
            <property name="icon">
             <iconset resource="../Resources/OpenSpeedShop.qrc">
-             <normaloff>:/OpenSpeedShop/start.png</normaloff>:/OpenSpeedShop/start.png</iconset>
+             <normaloff>:/OpenSpeedShop/start.svg</normaloff>:/OpenSpeedShop/start.svg</iconset>
            </property>
           </widget>
          </item>
@@ -217,7 +217,7 @@
            </property>
            <property name="icon">
             <iconset resource="../Resources/OpenSpeedShop.qrc">
-             <normaloff>:/OpenSpeedShop/pause.png</normaloff>:/OpenSpeedShop/pause.png</iconset>
+             <normaloff>:/OpenSpeedShop/pause.svg</normaloff>:/OpenSpeedShop/pause.svg</iconset>
            </property>
           </widget>
          </item>
@@ -245,7 +245,7 @@
            </property>
            <property name="icon">
             <iconset resource="../Resources/OpenSpeedShop.qrc">
-             <normaloff>:/OpenSpeedShop/stop.png</normaloff>:/OpenSpeedShop/stop.png</iconset>
+             <normaloff>:/OpenSpeedShop/stop.svg</normaloff>:/OpenSpeedShop/stop.svg</iconset>
            </property>
           </widget>
          </item>
@@ -455,14 +455,17 @@
             <item>
              <widget class="QToolButton" name="btnAddModel">
               <property name="toolTip">
-               <string>Create a new model</string>
+               <string>Edit models in Model Manager</string>
               </property>
               <property name="text">
-               <string>...</string>
+               <string>Model Manager</string>
               </property>
               <property name="icon">
                <iconset resource="../Resources/OpenSpeedShop.qrc">
-                <normaloff>:/OpenSpeedShop/add.png</normaloff>:/OpenSpeedShop/add.png</iconset>
+                <normaloff>:/OpenSpeedShop/modelManager.svg</normaloff>:/OpenSpeedShop/modelManager.svg</iconset>
+              </property>
+              <property name="autoRaise">
+               <bool>true</bool>
               </property>
              </widget>
             </item>

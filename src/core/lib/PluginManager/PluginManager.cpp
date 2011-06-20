@@ -406,7 +406,7 @@ void PluginManager::pluginDialog()
     layout->addWidget(new PluginSettingPage(m_Plugins, dialog));
     dialog->setLayout(layout);
     dialog->resize(640, 480);
-    dialog->setWindowIcon(QIcon(":/PluginManager/plugin.png"));
+    dialog->setWindowIcon(QIcon(":/PluginManager/plugin.svg"));
     dialog->exec();
 
     delete dialog;
@@ -442,7 +442,7 @@ bool PluginManager::descending(PluginWrapper *left, PluginWrapper *right)
  */
 QIcon PluginManager::settingPageIcon()
 {
-    return QIcon(":/PluginManager/plugin.png");
+    return QIcon(":/PluginManager/plugin.svg");
 }
 
 /*!

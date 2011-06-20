@@ -41,7 +41,7 @@ class SourceView : public QPlainTextEdit
 public:
     explicit SourceView(QWidget *parent = 0);
 
-    void setCurrentLineNumber(int lineNumber);
+    void setCurrentLineNumber(const int &lineNumber);
 
     void setModel(QAbstractItemModel *model);
     void setFilePath(const QString &filePath);
