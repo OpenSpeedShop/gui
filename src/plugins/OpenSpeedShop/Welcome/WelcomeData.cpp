@@ -26,6 +26,10 @@
  */
 
 #include "WelcomeData.h"
+
+#include <QFile>
+#include <QFileInfo>
+#include <QApplication>
 #include <PluginManager/PluginManager.h>
 #include "OpenSpeedShopWidget.h"
 
@@ -35,8 +39,43 @@ namespace Plugins {
 namespace OpenSpeedShop {
 
 WelcomeData::WelcomeData(QObject *parent) :
-    QObject(parent)
+    QObject(parent),
+    m_WelcomeData("WelcomeData")
 {
+
+#ifdef WIN32
+    QFileInfo fileInfo(QString("%1/WelcomeData.xml").arg(QApplication::instance()->applicationDirPath()));
+#else
+    QFileInfo fileInfo(QString("%1/../etc/WelcomeData.xml").arg(QApplication::instance()->applicationDirPath()));
+#endif
+
+    Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
+    settingManager.beginGroup("Plugins/OpenSpeedShop/Welcome");
+    QString filePath = settingManager.value("welcomeDataPath", fileInfo.absoluteFilePath()).toString();
+    settingManager.endGroup();
+
+    if(filePath.isEmpty()) {
+        filePath = fileInfo.absoluteFilePath();
+    }
+
+    bool defaultPath = (filePath == fileInfo.absoluteFilePath());
+
+    QFile file(filePath);
+    if (!file.open(QIODevice::ReadOnly)) {
+        throw tr("Could not open welcome data file");
+    }
+    if (!m_WelcomeData.setContent(&file)) {
+        file.close();
+        throw tr("Could not use welcome data file after opening, possibly invalid text");
+    }
+    file.close();
+
+    /* User convenience.  If the path wasn't set in the settings, we'll set it for the user the first time. */
+    if(defaultPath) {
+        settingManager.beginGroup("Plugins/OpenSpeedShop/Welcome");
+        settingManager.setValue("welcomeDataPath", filePath);
+        settingManager.endGroup();
+    }
 }
 
 QList<Link> WelcomeData::actions()
@@ -82,64 +121,38 @@ QList<Link> WelcomeData::recent()
 
 QList<Link> WelcomeData::tutorials()
 {
-    QList<Link> list;
-
-    list.append(Link(tr("Getting Started with Open|SpeedShop"),
-                     tr("a video showing the basics of the Open|SpeedShop GUI."),
-                     Link::Type_Video, 16,
-                     QUrl(tr("http://youtu.be/xWYRYWDpV40?hd=1"))));
-
-    list.append(Link(tr("Performance Analysis using Open|SpeedShop"),
-                     tr("a set of videos showing basic performance analysis using the Open|SpeedShop GUI."),
-                     Link::Type_Video, 32,
-                     QUrl(tr("http://www.youtube.com/user/openspeedshop"))));
-
-    list.append(Link(tr("Advanced Performance Analysis using Open|SpeedShop"),
-                     tr("help documentation on advanced performance analysis techniques using the Open|SpeedShop GUI."),
-                     Link::Type_Text, 128,
-                     QUrl(tr("qthelp://org.openspeedshop.gui/openspeedshop/advancedTechniques.html"))));
-
-    return list;
+    return createUrlLinks("Tutorials");
 }
 
 QList<Link> WelcomeData::examples()
 {
-    QList<Link> list;
-
-    list.append(Link(tr("SMG2000 - Semicoarsening Multigrid Solver"),
-                     tr("a detailed walk-through describing how to use the Open|SpeedShop performance tools to analyze the provided test application SMG2000"),
-                     Link::Type_Text, 128,
-                     QUrl(tr("qthelp://org.openspeedshop.gui/openspeedshop/smg2000.html"))));
-
-    return list;
+    return createUrlLinks("Examples");
 }
 
 QList<Link> WelcomeData::support()
 {
-    QList<Link> list;
-
-    list.append(Link(tr("Get Open|SpeedShop GUI Support"),
-                     tr("go to the Open|SpeedShop website for more information on getting support for the GUI."),
-                     Link::Type_Web, 127,
-                     QUrl(tr("http://gui.openspeedshop.org/support"))));
-
-    list.append(Link(tr("Get Open|SpeedShop Support"),
-                     tr("go to the Open|SpeedShop website for more information on getting general support."),
-                     Link::Type_Web, 128,
-                     QUrl(tr("http://openspeedshop.org/support"))));
-
-    return list;
+    return createUrlLinks("Support");
 }
 
 QStringList WelcomeData::tipsAndTricks()
 {
     QStringList list;
 
-    //! \todo Pull this list from an xml file!
-    list << tr("Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.");
-    list << tr("Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.");
-    list << tr("Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.");
-    list << tr("Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.");
+    QDomElement welcomeData = m_WelcomeData.firstChildElement("WelcomeData");
+    if(welcomeData.isNull()) {
+        return list;
+    }
+
+    QDomElement element = welcomeData.firstChildElement("TipsAndTricks");
+    if(element.isNull()) {
+        return list;
+    }
+
+    QDomElement tip = element.firstChildElement("Tip");
+    while(!tip.isNull()) {
+        list.append(tip.attribute("text"));
+        tip = tip.nextSiblingElement(tip.tagName());
+    }
 
     return list;
 }
@@ -148,7 +161,21 @@ QList<QUrl> WelcomeData::latestNewsRss()
 {
     QList<QUrl> list;
 
-    list.append(QUrl("http://www.openspeedshop.org/wp/feed/"));
+    QDomElement welcomeData = m_WelcomeData.firstChildElement("WelcomeData");
+    if(welcomeData.isNull()) {
+        return list;
+    }
+
+    QDomElement element = welcomeData.firstChildElement("LatestNews");
+    if(element.isNull()) {
+        return list;
+    }
+
+    QDomElement rss = element.firstChildElement("Rss");
+    while(!rss.isNull()) {
+        list.append(QUrl(rss.attribute("url")));
+        rss = rss.nextSiblingElement(rss.tagName());
+    }
 
     return list;
 }
@@ -157,6 +184,53 @@ QList<QWidget *> WelcomeData::additionalTabs()
 {
     QList<QWidget *> list;
     return list;
+}
+
+QList<Link> WelcomeData::createUrlLinks(const QString &elementName)
+{
+    QList<Link> list;
+
+    QDomElement welcomeData = m_WelcomeData.firstChildElement("WelcomeData");
+    if(welcomeData.isNull()) {
+        return list;
+    }
+
+    QDomElement element = welcomeData.firstChildElement(elementName);
+    if(element.isNull()) {
+        return list;
+    }
+
+    QDomElement link = element.firstChildElement("Link");
+    while(!link.isNull()) {
+        list.append(createUrlLink(link));
+        link = link.nextSiblingElement(link.tagName());
+    }
+
+    return list;
+}
+
+Link WelcomeData::createUrlLink(const QDomElement &link)
+{
+    QString title = link.attribute("title");
+    QString description = link.attribute("description");
+
+    QString typeString = link.attribute("type");
+    Link::Type type = Link::Type_None;
+    if(typeString == "text") {
+        type = Link::Type_Text;
+    } else if(typeString == "video") {
+        type = Link::Type_Video;
+    } else if(typeString == "web") {
+        type = Link::Type_Web;
+    }
+
+    bool okay;
+    int priority = link.attribute("priority", "128").toInt(&okay);
+    if(!okay) priority = 128;
+
+    QUrl url(link.attribute("url"));
+
+    return Link(title, description, type, priority, url);
 }
 
 

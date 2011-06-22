@@ -28,6 +28,7 @@
 #ifndef WELCOMEDATA_H
 #define WELCOMEDATA_H
 
+#include <QDomDocument>
 #include <Welcome/IWelcomeData.h>
 
 using namespace Plugins::Welcome;
@@ -53,6 +54,13 @@ public:
     QList<QUrl> latestNewsRss();
     QList<QWidget *> additionalTabs();
     /* END IWelcomeData */
+
+protected:
+    QList<Link> createUrlLinks(const QString &elementName);
+    Link createUrlLink(const QDomElement &link);
+
+private:
+    QDomDocument m_WelcomeData;
 
 };
 

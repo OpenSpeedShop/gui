@@ -105,3 +105,9 @@ win32:modelDescriptors.path = /
 else:modelDescriptors.path = /etc
 modelDescriptors.files = ModelManager/ModelDescriptors.xml
 INSTALLS += modelDescriptors
+
+OTHER_FILES += Welcome/WelcomeData.xml
+win32:welcomeData.path = /
+else:welcomeData.path = /etc
+welcomeData.files = Welcome/WelcomeData.xml
+INSTALLS += welcomeData
