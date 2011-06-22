@@ -3,6 +3,8 @@
 #include <QToolBar>
 #include <QAction>
 
+#include <QDebug>
+
 namespace Plugins {
 namespace Help {
 

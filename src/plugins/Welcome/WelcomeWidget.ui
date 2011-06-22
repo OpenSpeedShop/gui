@@ -224,11 +224,7 @@
       <attribute name="title">
        <string>Latest News</string>
       </attribute>
-      <layout class="QVBoxLayout" name="layNews">
-       <property name="margin">
-        <number>0</number>
-       </property>
-      </layout>
+      <layout class="QVBoxLayout" name="layNews"/>
      </widget>
      <widget class="QWidget" name="tabSupport">
       <attribute name="title">

@@ -54,13 +54,11 @@ WelcomeWidget::WelcomeWidget(QWidget *parent) :
     setNewsTabVisible(settingManager.value("rssEnabled", true).toBool());
     settingManager.endGroup();
 
-    if(ui->tabNews->isEnabled()) {
-        QScrollArea *scrollArea = new QScrollArea(ui->tabNews);
-        scrollArea->setWidgetResizable(true);
-        m_RssReaderWidget = new RssReaderWidget(scrollArea);
-        scrollArea->setWidget(m_RssReaderWidget);
-        ui->layNews->addWidget(scrollArea);
-    }
+    QScrollArea *scrollArea = new QScrollArea(ui->tabNews);
+    scrollArea->setWidgetResizable(true);
+    m_RssReaderWidget = new RssReaderWidget(scrollArea);
+    scrollArea->setWidget(m_RssReaderWidget);
+    ui->layNews->addWidget(scrollArea);
 
     connect(&m_UrlMapper, SIGNAL(mapped(int)), this, SLOT(urlClicked(int)));
 
