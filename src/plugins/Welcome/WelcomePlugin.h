@@ -29,14 +29,19 @@
 #define WELCOMEPLUGIN_H
 
 #include <PluginManager/IPlugin.h>
+#include <SettingManager/ISettingPageFactory.h>
 
 namespace Plugins {
 namespace Welcome {
 
-class WelcomePlugin : public QObject, public Core::PluginManager::IPlugin
+class WelcomePlugin :
+        public QObject,
+        public Core::PluginManager::IPlugin,
+        public Core::SettingManager::ISettingPageFactory
 {
     Q_OBJECT
     Q_INTERFACES(Core::PluginManager::IPlugin)
+    Q_INTERFACES(Core::SettingManager::ISettingPageFactory)
 
 public:
     explicit WelcomePlugin(QObject *parent = 0);
@@ -48,6 +53,13 @@ public:
     QString version();
     QList<Core::PluginManager::Dependency> dependencies();
     /* END IPlugin */
+
+    /* BEGIN ISettingPageFactory */
+    QIcon settingPageIcon();
+    QString settingPageName();
+    int settingPagePriority();
+    Core::SettingManager::ISettingPage *createSettingPage();
+    /* END ISettingPageFactory */
 
 private:
     QString m_Name;

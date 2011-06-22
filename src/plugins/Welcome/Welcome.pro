@@ -22,19 +22,23 @@ TARGET            = Welcome
 HEADERS          += WelcomePlugin.h \
                     WelcomeWidget.h \
                     IWelcomeData.h \
-                    WelcomeLibrary.h
+                    WelcomeLibrary.h \
+                    RssReaderWidget.h \
+    SettingPage.h
 
 SOURCES          += WelcomePlugin.cpp \
                     WelcomeWidget.cpp \
-                    IWelcomeData.cpp
+                    IWelcomeData.cpp \
+                    RssReaderWidget.cpp \
+    SettingPage.cpp
 
-QT               += xml
+QT               += xml network
 
 #debug: DEFINES   += WELCOME_DEBUG
 
-FORMS += WelcomeWidget.ui
+FORMS += WelcomeWidget.ui \
+    SettingPage.ui
 
 RESOURCES += Resources/Resources.qrc
 
 DEFINES      += WELCOME_LIBRARY
-

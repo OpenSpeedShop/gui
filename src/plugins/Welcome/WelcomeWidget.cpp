@@ -31,7 +31,9 @@
 #include <QMetaClassInfo>
 #include <QDesktopServices>
 #include <QDateTime>
+#include <QScrollArea>
 #include <PluginManager/PluginManager.h>
+#include <SettingManager/SettingManager.h>
 
 #include <QDebug>
 
@@ -46,6 +48,20 @@ WelcomeWidget::WelcomeWidget(QWidget *parent) :
     ui->tabWidget->setCurrentIndex(0);
     setObjectName("welcomeWidget");
 
+    // Get settings from SettingManager and populate form
+    Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
+    settingManager.beginGroup("Plugins/Welcome");
+    setNewsTabVisible(settingManager.value("rssEnabled", true).toBool());
+    settingManager.endGroup();
+
+    if(ui->tabNews->isEnabled()) {
+        QScrollArea *scrollArea = new QScrollArea(ui->tabNews);
+        scrollArea->setWidgetResizable(true);
+        m_RssReaderWidget = new RssReaderWidget(scrollArea);
+        scrollArea->setWidget(m_RssReaderWidget);
+        ui->layNews->addWidget(scrollArea);
+    }
+
     connect(&m_UrlMapper, SIGNAL(mapped(int)), this, SLOT(urlClicked(int)));
 
     /* Check the object pool for anything we should manage */
@@ -53,7 +69,6 @@ WelcomeWidget::WelcomeWidget(QWidget *parent) :
     foreach(QObject *object, pluginManager.allObjects()) { pluginObjectRegistered(object); }
     connect(&pluginManager, SIGNAL(objectAdded(QObject*)), this, SLOT(pluginObjectRegistered(QObject*)));
     connect(&pluginManager, SIGNAL(objectRemoving(QObject*)), this, SLOT(pluginObjectDeregistered(QObject*)));
-
 }
 
 WelcomeWidget::~WelcomeWidget()
@@ -61,14 +76,6 @@ WelcomeWidget::~WelcomeWidget()
     delete ui;
 }
 
-void WelcomeWidget::setWelcomeData(const QList<IWelcomeData *> &welcomeData)
-{
-    m_WelcomeData = welcomeData;
-
-    IWelcomeData *data = m_WelcomeData.first();
-    QList<QWidget *> tabs = data->additionalTabs();
-    this->layout()->addWidget(tabs.first());
-}
 
 void WelcomeWidget::pluginObjectRegistered(QObject *object)
 {
@@ -106,6 +113,12 @@ void WelcomeWidget::registerWelcomeData(IWelcomeData *welcomeData)
         m_TipsAndTricks.append(welcomeData->tipsAndTricks());
         randomTip();
 
+        if(ui->tabNews->isEnabled()) {
+            foreach(QUrl rss, welcomeData->latestNewsRss()) {
+                m_RssReaderWidget->addFeed(rss);
+            }
+        }
+
         foreach(Link link, welcomeData->recent()) {
             QListWidgetItem *item = new QListWidgetItem(link.title, ui->lstRecent);
             item->setData(Qt::UserRole+1, link.priority);
@@ -135,6 +148,13 @@ void WelcomeWidget::addCommandButton(const Link &link, QWidget *parent)
         connect(btn, SIGNAL(clicked()), &m_UrlMapper, SLOT(map()));
         m_UrlMapper.setMapping(btn, m_Urls.count());
         m_Urls.append(link.url);
+
+        /* There's no way to see what is registered with the QDesktopServices::setUrlHandler(),
+           otherwise we should use that instead of manually hardcoding. */
+        if(link.url.scheme() != "qthelp") {
+            btn->setToolTip(link.url.toString());
+        }
+
     } else if(link.receiver && link.method) {
         connect(btn, SIGNAL(clicked()), link.receiver, link.method);
     }
@@ -217,6 +237,25 @@ void WelcomeWidget::on_btnTipNext_clicked()
 void WelcomeWidget::on_btnTipPrevious_clicked()
 {
     setCurrentTip(m_CurrentTip-1);
+}
+
+QStringList WelcomeWidget::rssNewsFeeds()
+{
+    return m_RssReaderWidget->rssFeeds();
+}
+
+void WelcomeWidget::setNewsTabVisible(bool visible)
+{
+    static int index = 0;
+
+    if(visible && !ui->tabNews->isEnabled()) {
+        ui->tabNews->setEnabled(true);
+        ui->tabWidget->insertTab(index, ui->tabNews, "Latest News");
+    } else if(!visible && ui->tabNews->isEnabled()) {
+        ui->tabNews->setEnabled(false);
+        index = ui->tabWidget->indexOf(ui->tabNews);
+        ui->tabWidget->removeTab(index);
+    }
 }
 
 } // namespace Welcome

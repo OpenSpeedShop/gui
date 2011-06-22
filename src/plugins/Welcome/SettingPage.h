@@ -25,67 +25,42 @@
 
  */
 
-#ifndef WELCOMEWIDGET_H
-#define WELCOMEWIDGET_H
+#ifndef WELCOMESETTINGPAGE_H
+#define WELCOMESETTINGPAGE_H
 
 #include <QWidget>
-#include <QList>
-#include <QSignalMapper>
-#include <QCommandLinkButton>
-#include "IWelcomeData.h"
-#include "RssReaderWidget.h"
+#include <SettingManager/ISettingPage.h>
+#include <SettingManager/SettingManager.h>
 
 namespace Plugins {
 namespace Welcome {
 
-namespace Ui {
-    class WelcomeWidget;
-}
+class WelcomeWidget;
+namespace Ui { class SettingPage; }
 
-class WelcomeWidget : public QWidget
+class SettingPage : public Core::SettingManager::ISettingPage
 {
     Q_OBJECT
+    Q_INTERFACES(Core::SettingManager::ISettingPage)
 
 public:
-    explicit WelcomeWidget(QWidget *parent = 0);
-    ~WelcomeWidget();
+    SettingPage(QWidget *parent = 0);
+    ~SettingPage();
 
-
-protected:
-    QStringList rssNewsFeeds();
-    void setNewsTabVisible(bool visible);
-
-    void registerWelcomeData(IWelcomeData *welcomeData);
-    void deregisterWelcomeData(IWelcomeData *welcomeData);
-    void addCommandButton(const Link &link, QWidget *parent);
-    void setCurrentTip(int index);
-    void refreshRss();
+public slots:
+    void apply();
+    void reset();
 
 protected slots:
-    void pluginObjectRegistered(QObject *object);
-    void pluginObjectDeregistered(QObject *object);
-
-    void urlClicked(int index);
-
-    void randomTip();
-    void on_btnTipNext_clicked();
-    void on_btnTipPrevious_clicked();
-
+    void on_btnRssAdd_clicked();
+    void on_btnRssRemove_clicked();
 
 private:
-    Ui::WelcomeWidget *ui;
-    QList<IWelcomeData *> m_WelcomeData;
-    int m_CurrentTip;
-    QStringList m_TipsAndTricks;
-    QList<QUrl> m_Urls;
-
-    QSignalMapper m_UrlMapper;
-    RssReaderWidget *m_RssReaderWidget;
-
-    friend class SettingPage;
+    WelcomeWidget *m_WelcomeWidget;
+    Ui::SettingPage *ui;
 };
 
 
 } // namespace Welcome
 } // namespace Plugins
-#endif // WELCOMEWIDGET_H
+#endif // WELCOMESETTINGPAGE_H

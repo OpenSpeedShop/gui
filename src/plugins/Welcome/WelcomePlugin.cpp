@@ -31,6 +31,7 @@
 #include <PluginManager/PluginManager.h>
 #include "WelcomeWidget.h"
 #include "IWelcomeData.h"
+#include "SettingPage.h"
 
 namespace Plugins {
 namespace Welcome {
@@ -60,8 +61,6 @@ bool WelcomePlugin::initialize(QStringList &args, QString *err)
         pluginManager.addObject(this);
         pluginManager.addObject(welcomeWidget);
 
-
-
     } catch(...) {
         return false;
     }
@@ -88,6 +87,29 @@ QList<Core::PluginManager::Dependency> WelcomePlugin::dependencies()
     return m_Dependencies;
 }
 /* END IPlugin */
+
+/* BEGIN ISettingPageFactory */
+QIcon WelcomePlugin::settingPageIcon()
+{
+    return QIcon(":/Welcome/welcome.svg");
+}
+
+QString WelcomePlugin::settingPageName()
+{
+    return tr("Welcome");
+}
+
+int WelcomePlugin::settingPagePriority()
+{
+    return 32;
+}
+
+Core::SettingManager::ISettingPage *WelcomePlugin::createSettingPage()
+{
+    return new SettingPage();
+}
+/* END ISettingPageFactory */
+
 
 
 } // namespace Welcome

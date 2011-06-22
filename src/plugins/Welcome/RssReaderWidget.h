@@ -25,67 +25,48 @@
 
  */
 
-#ifndef WELCOMEWIDGET_H
-#define WELCOMEWIDGET_H
+#ifndef RSSREADERWIDGET_H
+#define RSSREADERWIDGET_H
 
 #include <QWidget>
-#include <QList>
+#include <QUrl>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
 #include <QSignalMapper>
-#include <QCommandLinkButton>
-#include "IWelcomeData.h"
-#include "RssReaderWidget.h"
 
 namespace Plugins {
 namespace Welcome {
 
-namespace Ui {
-    class WelcomeWidget;
-}
 
-class WelcomeWidget : public QWidget
+class RssReaderWidget : public QWidget
 {
     Q_OBJECT
-
 public:
-    explicit WelcomeWidget(QWidget *parent = 0);
-    ~WelcomeWidget();
+    explicit RssReaderWidget(QWidget *parent = 0);
+    void addFeed(QUrl url);
 
-
-protected:
-    QStringList rssNewsFeeds();
-    void setNewsTabVisible(bool visible);
-
-    void registerWelcomeData(IWelcomeData *welcomeData);
-    void deregisterWelcomeData(IWelcomeData *welcomeData);
-    void addCommandButton(const Link &link, QWidget *parent);
-    void setCurrentTip(int index);
-    void refreshRss();
+    QStringList rssFeeds();
 
 protected slots:
-    void pluginObjectRegistered(QObject *object);
-    void pluginObjectDeregistered(QObject *object);
-
+    void finished(QNetworkReply *reply);
+    void getFeed(QUrl url);
+    void metaDataChanged();
+    void readyRead();
+    void error(QNetworkReply::NetworkError);
     void urlClicked(int index);
 
-    void randomTip();
-    void on_btnTipNext_clicked();
-    void on_btnTipPrevious_clicked();
-
-
 private:
-    Ui::WelcomeWidget *ui;
-    QList<IWelcomeData *> m_WelcomeData;
-    int m_CurrentTip;
-    QStringList m_TipsAndTricks;
+    QNetworkAccessManager m_NetworkManager;
+    QList<QUrl> m_Feeds;
     QList<QUrl> m_Urls;
+    QList<QNetworkReply *> m_Replies;
 
     QSignalMapper m_UrlMapper;
-    RssReaderWidget *m_RssReaderWidget;
 
-    friend class SettingPage;
+
 };
-
 
 } // namespace Welcome
 } // namespace Plugins
-#endif // WELCOMEWIDGET_H
+
+#endif // RSSREADERWIDGET_H

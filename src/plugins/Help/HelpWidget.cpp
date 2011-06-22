@@ -29,8 +29,6 @@ HelpWidget::HelpWidget(QHelpEngine *helpEngine, QWidget *parent) :
 
     //FIXME: Open home URL (this is a temporary method)
     QDesktopServices::openUrl(QUrl("qthelp://org.openspeedshop.gui/openspeedshop-gui/index.html"));
-
-
 }
 
 void HelpWidget::initSideBar()
