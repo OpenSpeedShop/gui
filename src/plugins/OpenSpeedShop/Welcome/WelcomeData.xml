@@ -13,9 +13,6 @@
   </Support>
   <LatestNews>
     <Rss url="http://www.openspeedshop.org/wp/feed/"/>
-    <Rss url="http://feeds.arstechnica.com/arstechnica/index/"/>
-    <Rss url="http://www.girlgeniusonline.com/ggmain.rss"/>
-    <Rss url="http://rss.slashdot.org/Slashdot/slashdot"/>
   </LatestNews>
   <TipsAndTricks>
     <Tip text="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."/>
