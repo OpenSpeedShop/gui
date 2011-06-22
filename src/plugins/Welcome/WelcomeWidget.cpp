@@ -104,7 +104,7 @@ void WelcomeWidget::registerWelcomeData(IWelcomeData *welcomeData)
         }
 
         m_TipsAndTricks.append(welcomeData->tipsAndTricks());
-        ui->lblTip->setText(m_TipsAndTricks.at(qrand() % m_TipsAndTricks.count()));
+        randomTip();
 
         foreach(Link link, welcomeData->recent()) {
             QListWidgetItem *item = new QListWidgetItem(link.title, ui->lstRecent);
@@ -188,12 +188,7 @@ void WelcomeWidget::deregisterWelcomeData(IWelcomeData *welcomeData)
 
 void WelcomeWidget::urlClicked(int index)
 {
-    QUrl url = m_Urls.at(index);
-    if(url.scheme() == "qthelp") {
-        //TODO: Focus on the help widget, and goto the help url
-    } else {
-        QDesktopServices::openUrl(url);
-    }
+    QDesktopServices::openUrl(m_Urls.at(index));
 }
 
 void WelcomeWidget::setCurrentTip(int index) {

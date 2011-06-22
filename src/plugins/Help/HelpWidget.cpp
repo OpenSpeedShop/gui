@@ -1,6 +1,8 @@
 #include "HelpWidget.h"
 
 #include <QVBoxLayout>
+#include <QDesktopServices>
+#include <MainWindow/MainWindow.h>
 #include "HelpBrowser.h"
 
 namespace Plugins {
@@ -23,7 +25,12 @@ HelpWidget::HelpWidget(QHelpEngine *helpEngine, QWidget *parent) :
     sizes << 100 << 1000;
     setSizes(sizes);
 
-    linkActivated(QUrl("qthelp://org.openspeedshop.gui/openspeedshop-gui/index.html"));
+    QDesktopServices::setUrlHandler(QLatin1String("qthelp"), this, "linkActivated");
+
+    //FIXME: Open home URL (this is a temporary method)
+    QDesktopServices::openUrl(QUrl("qthelp://org.openspeedshop.gui/openspeedshop-gui/index.html"));
+
+
 }
 
 void HelpWidget::initSideBar()
@@ -66,9 +73,11 @@ void HelpWidget::initDocumentTabs()
     setCollapsible(1, false);
 }
 
-
 void HelpWidget::linkActivated(QUrl url, QString string)
 {
+    Core::MainWindow::MainWindow &mainWindow = Core::MainWindow::MainWindow::instance();
+    mainWindow.setCurrentCentralWidget(this);
+
     HelpBrowser *browser = new HelpBrowser(m_HelpEngine, &m_Documents);
     browser->setSource(url);
     m_Documents.addTab(browser, browser->documentTitle());

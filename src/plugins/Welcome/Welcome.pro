@@ -28,7 +28,7 @@ SOURCES          += WelcomePlugin.cpp \
                     WelcomeWidget.cpp \
                     IWelcomeData.cpp
 
-QT               +=
+QT               += xml
 
 #debug: DEFINES   += WELCOME_DEBUG
 
