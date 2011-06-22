@@ -77,6 +77,8 @@ public:
     SettingManager::ISettingPage *createSettingPage();
     /* END ISettingPageFactory */
 
+public slots:
+    void setCurrentCentralWidget(QWidget *current);
 
 protected:
     explicit MainWindow(QWidget *parent = 0);

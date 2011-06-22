@@ -19,18 +19,22 @@ include(../plugins.pri)
 
 TARGET            = Welcome
 
-SOURCES          += WelcomePlugin.cpp \
-    WelcomeWidget.cpp
+HEADERS          += WelcomePlugin.h \
+                    WelcomeWidget.h \
+                    IWelcomeData.h \
+                    WelcomeLibrary.h
 
-HEADERS          += WelcomePlugin.h \ 
-    WelcomeWidget.h
+SOURCES          += WelcomePlugin.cpp \
+                    WelcomeWidget.cpp \
+                    IWelcomeData.cpp
 
 QT               +=
 
 #debug: DEFINES   += WELCOME_DEBUG
 
-FORMS += \
-    WelcomeWidget.ui
+FORMS += WelcomeWidget.ui
 
-RESOURCES += \
-    Resources/Resources.qrc
+RESOURCES += Resources/Resources.qrc
+
+DEFINES      += WELCOME_LIBRARY
+

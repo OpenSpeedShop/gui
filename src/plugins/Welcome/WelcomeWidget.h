@@ -1,7 +1,7 @@
 /*!
-   \file 
+   \file
    \author Dane Gardner <dane.gardner@gmail.com>
-   \version 
+   \version
 
    \section LICENSE
    This file is part of the Open|SpeedShop Graphical User Interface
@@ -29,6 +29,10 @@
 #define WELCOMEWIDGET_H
 
 #include <QWidget>
+#include <QList>
+#include <QSignalMapper>
+#include <QCommandLinkButton>
+#include "IWelcomeData.h"
 
 namespace Plugins {
 namespace Welcome {
@@ -45,8 +49,33 @@ public:
     explicit WelcomeWidget(QWidget *parent = 0);
     ~WelcomeWidget();
 
+    void setWelcomeData(const QList<IWelcomeData *> &welcomeData);
+
+protected:
+    void registerWelcomeData(IWelcomeData *welcomeData);
+    void deregisterWelcomeData(IWelcomeData *welcomeData);
+    void addCommandButton(const Link &link, QWidget *parent);
+    void setCurrentTip(int index);
+
+protected slots:
+    void pluginObjectRegistered(QObject *object);
+    void pluginObjectDeregistered(QObject *object);
+
+    void urlClicked(int index);
+
+    void randomTip();
+    void on_btnTipNext_clicked();
+    void on_btnTipPrevious_clicked();
+
 private:
     Ui::WelcomeWidget *ui;
+    QList<IWelcomeData *> m_WelcomeData;
+    int m_CurrentTip;
+    QStringList m_TipsAndTricks;
+    QList<QUrl> m_Urls;
+    QList<QUrl> m_RssFeeds;
+
+    QSignalMapper m_UrlMapper;
 };
 
 

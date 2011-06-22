@@ -17,6 +17,8 @@
 
 include(../plugins.pri)
 
+LIBS         += -L$$quote($${BUILD_PATH}/plugins/Welcome/$${POSTFIX}) -lWelcome
+
 TARGET        = OpenSpeedShop
 
 SOURCES      += OpenSpeedShopPlugin.cpp \
@@ -41,7 +43,8 @@ SOURCES      += OpenSpeedShopPlugin.cpp \
                 ViewManager/IViewFactory.cpp \
                 RemoteFileSystem/RemoteFileDialog.cpp \
                 Experiment/SourceView.cpp \
-    Experiment/SyntaxHighlighter.cpp
+                Experiment/SyntaxHighlighter.cpp \
+                Welcome/WelcomeData.cpp
 
 HEADERS      += OpenSpeedShopPlugin.h \
                 Settings/SettingPage.h \
@@ -69,7 +72,8 @@ HEADERS      += OpenSpeedShopPlugin.h \
                 ViewManager/IViewFactory.h \
                 RemoteFileSystem/RemoteFileDialog.h \
                 Experiment/SourceView.h \
-    Experiment/SyntaxHighlighter.h
+                Experiment/SyntaxHighlighter.h \
+                Welcome/WelcomeData.h
 
 FORMS        += Settings/SettingPage.ui \
                 AboutDialog.ui \

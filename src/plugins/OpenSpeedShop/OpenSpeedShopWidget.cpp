@@ -51,6 +51,9 @@ void OpenSpeedShopWidget::createExperiment()
 {
     try {
 
+        Core::MainWindow::MainWindow &mainWindow = Core::MainWindow::MainWindow::instance();
+        mainWindow.setCurrentCentralWidget(this);
+
         ExperimentWidget *experimentWidget = new ExperimentWidget(this);
         experimentWidget->create();
         int index = addTab(experimentWidget, experimentWidget->windowTitle());
@@ -70,6 +73,9 @@ void OpenSpeedShopWidget::createExperiment()
 void OpenSpeedShopWidget::loadExperiment()
 {
     try {
+
+        Core::MainWindow::MainWindow &mainWindow = Core::MainWindow::MainWindow::instance();
+        mainWindow.setCurrentCentralWidget(this);
 
         ExperimentWidget *experimentWidget = new ExperimentWidget(this);
         experimentWidget->load();

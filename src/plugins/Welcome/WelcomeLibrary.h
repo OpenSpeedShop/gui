@@ -1,5 +1,5 @@
 /*!
-   \file MainSettingPage.h
+   \file
    \author Dane Gardner <dane.gardner@gmail.com>
    \version
 
@@ -25,46 +25,15 @@
 
  */
 
-#ifndef MAINSETTINGPAGE_H
-#define MAINSETTINGPAGE_H
+#ifndef WELCOMELIBRARY_H
+#define WELCOMELIBRARY_H
 
-#include <QWidget>
-#include <QCoreApplication>
-#include <QStyle>
-#include <SettingManager/SettingManager.h>
-#include <SettingManager/ISettingPage.h>
-#include <QStyleFactory>
+#include <QtCore/QtGlobal>
 
-namespace Core {
-namespace MainWindow {
+#if defined(WELCOME_LIBRARY)
+#  define WELCOME_EXPORT Q_DECL_EXPORT
+#else
+#  define WELCOME_EXPORT Q_DECL_IMPORT
+#endif
 
-namespace Ui { class MainSettingPage; }
-
-class MainSettingPage : public SettingManager::ISettingPage
-{
-    Q_OBJECT
-    Q_INTERFACES(Core::SettingManager::ISettingPage)
-
-public:
-    explicit MainSettingPage(QWidget *parent = 0);
-    ~MainSettingPage();
-
-public slots:
-    void apply();
-    void reset();
-
-protected slots:
-    void on_cmbStyle_currentIndexChanged(QString style);
-    void on_btnStylesheet_clicked();
-
-protected:
-    QString m_OriginalStyle;
-
-private:
-    Ui::MainSettingPage *ui;
-};
-
-
-} // namespace MainWindow
-} // namespace Core
-#endif // MAINSETTINGPAGE_H
+#endif // WELCOMELIBRARY_H

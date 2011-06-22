@@ -33,6 +33,7 @@
 #include <PluginManager/IPlugin.h>
 #include <SettingManager/ISettingPageFactory.h>
 #include "OpenSpeedShopWidget.h"
+#include "Welcome/WelcomeData.h"
 
 namespace Plugins {
 namespace OpenSpeedShop {
@@ -73,6 +74,7 @@ protected:
     QList<Core::PluginManager::Dependency> m_Dependencies;
 
     OpenSpeedShopWidget m_MainWidget;
+    WelcomeData m_WelcomeData;
 
     QAction m_AboutPage;
 

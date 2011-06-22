@@ -1,5 +1,5 @@
 /*!
-   \file MainSettingPage.h
+   \file
    \author Dane Gardner <dane.gardner@gmail.com>
    \version
 
@@ -25,46 +25,38 @@
 
  */
 
-#ifndef MAINSETTINGPAGE_H
-#define MAINSETTINGPAGE_H
+#ifndef WELCOMEDATA_H
+#define WELCOMEDATA_H
 
-#include <QWidget>
-#include <QCoreApplication>
-#include <QStyle>
-#include <SettingManager/SettingManager.h>
-#include <SettingManager/ISettingPage.h>
-#include <QStyleFactory>
+#include <Welcome/IWelcomeData.h>
 
-namespace Core {
-namespace MainWindow {
+using namespace Plugins::Welcome;
 
-namespace Ui { class MainSettingPage; }
+namespace Plugins {
+namespace OpenSpeedShop {
 
-class MainSettingPage : public SettingManager::ISettingPage
+class WelcomeData : public QObject, public IWelcomeData
 {
     Q_OBJECT
-    Q_INTERFACES(Core::SettingManager::ISettingPage)
+    Q_INTERFACES(Plugins::Welcome::IWelcomeData)
 
 public:
-    explicit MainSettingPage(QWidget *parent = 0);
-    ~MainSettingPage();
+    WelcomeData(QObject *parent = 0);
 
-public slots:
-    void apply();
-    void reset();
+    /* BEGIN IWelcomeData */
+    QList<Link> actions();
+    QList<Link> recent();
+    QList<Link> tutorials();
+    QList<Link> examples();
+    QList<Link> support();
+    QStringList tipsAndTricks();
+    QList<QUrl> latestNewsRss();
+    QList<QWidget *> additionalTabs();
+    /* END IWelcomeData */
 
-protected slots:
-    void on_cmbStyle_currentIndexChanged(QString style);
-    void on_btnStylesheet_clicked();
-
-protected:
-    QString m_OriginalStyle;
-
-private:
-    Ui::MainSettingPage *ui;
 };
 
+} // namespace OpenSpeedShop
+} // namespace Plugins
 
-} // namespace MainWindow
-} // namespace Core
-#endif // MAINSETTINGPAGE_H
+#endif // WELCOMEDATA_H

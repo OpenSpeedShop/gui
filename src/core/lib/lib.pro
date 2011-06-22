@@ -74,3 +74,8 @@ else:target.path = /lib
 
 INSTALLS += target
 
+OTHER_FILES += MainWindow/StyleSheet.css
+win32:StyleSheet.path = /
+else:StyleSheet.path = /etc
+StyleSheet.files = MainWindow/StyleSheet.css
+INSTALLS += StyleSheet

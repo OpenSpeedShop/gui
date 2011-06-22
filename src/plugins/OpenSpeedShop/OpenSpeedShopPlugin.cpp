@@ -104,6 +104,8 @@ bool OpenSpeedShopPlugin::initialize(QStringList &args, QString *err)
         /*** Register any objects with the plugin manager ***/
         PluginManager::PluginManager &pluginManager = PluginManager::PluginManager::instance();
         pluginManager.addObject(this);                         /* Register ourselves as an ISettingPageFactory */
+        pluginManager.addObject(&m_MainWidget);
+        pluginManager.addObject(&m_WelcomeData);
 
         ConnectionManager &connectionManager = ConnectionManager::instance();
         if(!connectionManager.initialize(args, err)) { throw; }

@@ -34,8 +34,8 @@ LIBS         += -L$$quote($${BUILD_PATH}/plugins/OpenSpeedShop/$${POSTFIX}) -lOp
 
 # List of experiment types and their possible modifiers/metrics
 # In the future, this should be pulled from the server
-OTHER_FILES += ConnectionManager/ExperimentTypes.xml
+OTHER_FILES += ExperimentTypes.xml
 win32:experimentTypes.path = /
 else:experimentTypes.path = /etc
-experimentTypes.files = ConnectionManager/ExperimentTypes.xml
+experimentTypes.files = ExperimentTypes.xml
 INSTALLS += experimentTypes

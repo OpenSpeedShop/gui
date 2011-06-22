@@ -1,5 +1,5 @@
 /*!
-   \file MainSettingPage.h
+   \file
    \author Dane Gardner <dane.gardner@gmail.com>
    \version
 
@@ -25,46 +25,10 @@
 
  */
 
-#ifndef MAINSETTINGPAGE_H
-#define MAINSETTINGPAGE_H
+#include "IWelcomeData.h"
 
-#include <QWidget>
-#include <QCoreApplication>
-#include <QStyle>
-#include <SettingManager/SettingManager.h>
-#include <SettingManager/ISettingPage.h>
-#include <QStyleFactory>
+namespace Plugins {
+namespace Welcome {
 
-namespace Core {
-namespace MainWindow {
-
-namespace Ui { class MainSettingPage; }
-
-class MainSettingPage : public SettingManager::ISettingPage
-{
-    Q_OBJECT
-    Q_INTERFACES(Core::SettingManager::ISettingPage)
-
-public:
-    explicit MainSettingPage(QWidget *parent = 0);
-    ~MainSettingPage();
-
-public slots:
-    void apply();
-    void reset();
-
-protected slots:
-    void on_cmbStyle_currentIndexChanged(QString style);
-    void on_btnStylesheet_clicked();
-
-protected:
-    QString m_OriginalStyle;
-
-private:
-    Ui::MainSettingPage *ui;
-};
-
-
-} // namespace MainWindow
-} // namespace Core
-#endif // MAINSETTINGPAGE_H
+} // namespace Welcome
+} // namespace Plugins

@@ -30,6 +30,7 @@
 #include <MainWindow/MainWindow.h>
 #include <PluginManager/PluginManager.h>
 #include "WelcomeWidget.h"
+#include "IWelcomeData.h"
 
 namespace Plugins {
 namespace Welcome {
@@ -58,6 +59,8 @@ bool WelcomePlugin::initialize(QStringList &args, QString *err)
         PluginManager::PluginManager &pluginManager = PluginManager::PluginManager::instance();
         pluginManager.addObject(this);
         pluginManager.addObject(welcomeWidget);
+
+
 
     } catch(...) {
         return false;

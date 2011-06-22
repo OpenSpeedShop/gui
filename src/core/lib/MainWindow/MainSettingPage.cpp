@@ -28,7 +28,7 @@
 #include "MainSettingPage.h"
 #include "ui_MainSettingPage.h"
 
-#include <QDebug>
+#include <QFileDialog>
 
 namespace Core {
 namespace MainWindow {
@@ -77,11 +77,12 @@ MainSettingPage::~MainSettingPage()
 void MainSettingPage::apply()
 {
     SettingManager::SettingManager &settingManager = SettingManager::SettingManager::instance();
-
     settingManager.beginGroup("MainWindow");
 
     m_OriginalStyle = QApplication::style()->objectName();
-    settingManager.setValue("Style", m_OriginalStyle);
+    settingManager.setValue("style", m_OriginalStyle);
+
+    settingManager.setValue("styleSheet", ui->txtStylesheet->text());
 
     settingManager.endGroup();
 }
@@ -96,6 +97,8 @@ void MainSettingPage::reset()
     QString style = settingManager.value("style", m_OriginalStyle).toString();
     int index = ui->cmbStyle->findText(style, Qt::MatchFixedString);
     ui->cmbStyle->setCurrentIndex(index);
+
+    ui->txtStylesheet->setText(settingManager.value("styleSheet", QString()).toString());
 
     settingManager.endGroup();
 }
@@ -113,6 +116,18 @@ void MainSettingPage::on_cmbStyle_currentIndexChanged(QString style)
     // Set the style to the new, selected one
     QApplication::setStyle(QStyleFactory::create(style));
 }
+
+void MainSettingPage::on_btnStylesheet_clicked()
+{
+    QString filePath = QFileDialog::getOpenFileName(this,
+                                                    "Open Stylesheet",
+                                                    QApplication::instance()->applicationDirPath(),
+                                                    tr("Stylesheets (*.css)"));
+    if(!filePath.isEmpty()) {
+        ui->txtStylesheet->setText(filePath);
+    }
+}
+
 
 
 } // namespace MainWindow

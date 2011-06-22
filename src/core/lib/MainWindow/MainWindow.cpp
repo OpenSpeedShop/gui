@@ -29,6 +29,8 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
 
+#include <QFile>
+#include <QFileInfo>
 #include <SettingManager/ISettingPage.h>
 #include "MainSettingPage.h"
 
@@ -168,10 +170,34 @@ void MainWindow::readSettings()
     SettingManager::SettingManager &settingManager = SettingManager::SettingManager::instance();
     settingManager.beginGroup("MainWindow");
 
-    m_StylesheetFilePath = settingManager.value("StylesheetFilePath", QString()).toString();
-    QString styleName = settingManager.value("Style", QApplication::style()->objectName()).toString();
+    QString styleName = settingManager.value("style", QApplication::style()->objectName()).toString();
     QStyle *style = QStyleFactory::create(styleName);
     QApplication::setStyle(style);
+
+
+    //FIXME: This should not be hard coded here
+#ifdef WIN32
+    QString filePath = QString("%1/StyleSheet.css").arg(QApplication::instance()->applicationDirPath());
+#else
+    QString filePath = QString("%1/../etc/StyleSheet.css").arg(QApplication::instance()->applicationDirPath());
+#endif
+    m_StylesheetFilePath = settingManager.value("styleSheet", m_StylesheetFilePath).toString();
+    if(m_StylesheetFilePath.isEmpty()) {
+        m_StylesheetFilePath = filePath;
+    }
+
+    if(!QFile::exists(m_StylesheetFilePath)) {
+        QFileInfo fileInfo(m_StylesheetFilePath);
+        notify(tr("Failed to open style sheet: %1<br/>This file path can be changed in the settings").
+               arg(fileInfo.absoluteFilePath()), NotificationWidget::Critical);
+    }
+
+    QFile styleSheet(m_StylesheetFilePath);
+    if(styleSheet.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        setStyleSheet(styleSheet.readAll());
+        styleSheet.close();
+    }
+
 
     restoreGeometry(settingManager.value("Geometry").toByteArray());
     restoreState(settingManager.value("State").toByteArray());
@@ -301,10 +327,38 @@ void MainWindow::removeCentralWidget(QWidget *widget)
     qDebug() << __FILE__ << __LINE__ << "\tMainWindow::removeCentralWidget";
 #endif
 
-    ui->stackedWidget->removeWidget(widget);
+    /* Ensure we own the widget, remove it, and remove the button associated with it */
+    for(int index=0; index < ui->stackedWidget->count(); ++index) {
+        QWidget *currentWidget = ui->stackedWidget->widget(index);
+        if(currentWidget == widget) {
+            ui->stackedWidget->removeWidget(widget);
+            foreach(QAction *action, ui->toolbar->actions()) {
+                if(action->data().toInt() == index) {
+                    ui->toolbar->removeAction(action);
+                    break;
+                }
+            }
+            break;
+        }
+    }
+}
 
-    //TODO: remove the widget with icon from the sidebar
-
+void MainWindow::setCurrentCentralWidget(QWidget *current)
+{
+    /* Ensure that the widget actually exists in our collection, set it as current, and set its associated button to checked */
+    for(int index=0; index < ui->stackedWidget->count(); ++index) {
+        QWidget *widget = ui->stackedWidget->widget(index);
+        if(widget == current) {
+            ui->stackedWidget->setCurrentIndex(index);
+            foreach(QAction *action, ui->toolbar->actions()) {
+                action->setChecked(false);
+                if(action->data().toInt() == index) {
+                    action->setChecked(true);
+                }
+            }
+            break;
+        }
+    }
 }
 
 void MainWindow::setCurrentCentralWidget()
