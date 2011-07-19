@@ -161,7 +161,7 @@ void RssReaderWidget::readyRead()
                         }
 
                         if(dateTime.isValid()) {
-                            priority = dateTime.toMSecsSinceEpoch();
+                            priority = dateTime.toTime_t();
                             btn->setDescription(QString("[%1] %2").arg(dateTime.date().toString(Qt::SystemLocaleShortDate), description));
                         } else {
                             btn->setDescription(QString("%2").arg(description));

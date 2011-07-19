@@ -23,7 +23,7 @@
       <bool>true</bool>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <property name="documentMode">
       <bool>true</bool>
@@ -549,9 +549,6 @@
                 <width>128</width>
                 <height>0</height>
                </size>
-              </property>
-              <property name="placeholderText">
-               <string>regular expression</string>
               </property>
              </widget>
             </item>

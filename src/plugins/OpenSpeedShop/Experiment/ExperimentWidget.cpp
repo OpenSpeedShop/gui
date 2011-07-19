@@ -36,6 +36,10 @@ ExperimentWidget::ExperimentWidget(QWidget *parent) :
 
     ui->setupUi(this);
 
+#if QT_MINOR_VERSION >= 7
+    ui->txtViewFilter->placeholderText(tr("regular expression"));
+#endif
+
     ui->txtSource->close();
     ui->txtSource->deleteLater();
     ui->txtSource = &m_SourceView;
