@@ -33,6 +33,8 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QSignalMapper>
+#include <QSslError>
+#include <QSslSocket>
 
 namespace Plugins {
 namespace Welcome {
@@ -49,6 +51,7 @@ public:
 
 protected slots:
     void finished(QNetworkReply *reply);
+    void sslErrors(QNetworkReply*,QList<QSslError>);
     void getFeed(QUrl url);
     void metaDataChanged();
     void readyRead();

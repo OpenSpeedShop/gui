@@ -13,6 +13,8 @@
   </Support>
   <LatestNews>
     <Rss url="http://www.openspeedshop.org/wp/feed/"/>
+    <Rss url="http://groups.google.com/group/openspeedshop-gui/feed/rss_v2_0_topics.xml"/>
+    <!-- <Rss url="https://github.com/OpenSpeedShop/gui/commits/0.1.dev.atom"/> -->
   </LatestNews>
   <TipsAndTricks>
     <Tip text="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."/>

@@ -49,6 +49,7 @@ RssReaderWidget::RssReaderWidget(QWidget *parent) :
     setLayout(layout);
 
     connect(&m_NetworkManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(finished(QNetworkReply*)));
+    connect(&m_NetworkManager, SIGNAL(sslErrors(QNetworkReply*,QList<QSslError>)), this, SLOT(sslErrors(QNetworkReply*,QList<QSslError>)));
     connect(&m_UrlMapper, SIGNAL(mapped(int)), this, SLOT(urlClicked(int)));
 }
 
@@ -96,6 +97,7 @@ void RssReaderWidget::readyRead()
     QNetworkReply *reply = qobject_cast<QNetworkReply *>(object);
     if(reply) {
 
+        //TODO: This should be done properly, using a QDomDocument
         QXmlStreamReader feedXml;
 
         int statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
@@ -123,18 +125,32 @@ void RssReaderWidget::readyRead()
                 } else if(feedXml.isEndElement()) {
                     if(feedXml.name() == "item") {
                         QCommandLinkButton *btn = new QCommandLinkButton(this);
+
+                        /* Clean up the titles a little bit */
+                        title.replace('\t', "  ");
+                        title.replace('\n', "  ");
+                        title = title.trimmed();
+
+                        /* Clean up the descriptions a little bit */
+                        description.replace('\t', "  ");
+                        description.replace('\n', "  ");
+                        description = description.trimmed();
+
+                        /* Clean up the date a little bit */
+                        date.replace('\t', "  ");
+                        date.replace('\n', "  ");
+                        date = date.trimmed();
+
                         btn->setText(title);
                         btn->setIcon(QIcon());
 
                         /* Get the date time and priority of this item */
                         quint64 priority = 0;
-
                         // Try for ISO8601
                         QDateTime dateTime = QDateTime::fromString(date, Qt::ISODate);
-
+                        // Try for RFC2822 (email dateTime)
                         if(!dateTime.isValid()) {
-                            // Try for RFC2822 (email dateTime)
-                            static QRegExp pubDatePattern("^(?:\\S+,\\s)(.*)\\s([\\d\\+\\-]+)$");
+                            static QRegExp pubDatePattern("^(?:\\S+,\\s)(.*)\\s(\\S+)$");
                             if(pubDatePattern.exactMatch(date)) {
                                 QString pubDateString = pubDatePattern.cap(1);
                                 int pubDateOffset = pubDatePattern.cap(2).toInt();
@@ -232,6 +248,16 @@ void RssReaderWidget::finished(QNetworkReply *reply)
     }
     reply->disconnect(this);
     reply->deleteLater();
+}
+
+void RssReaderWidget::sslErrors(QNetworkReply *reply, QList<QSslError> errors)
+{
+    //TODO: Ask the user if they will accept the certificates
+    foreach(QSslError error, errors) {
+        qDebug() << "SSL Error:" << error.errorString();
+    }
+
+    reply->ignoreSslErrors();
 }
 
 void RssReaderWidget::urlClicked(int index)

@@ -14,6 +14,8 @@ HelpWidget::HelpWidget(QHelpEngine *helpEngine, QWidget *parent) :
 {
     m_HelpEngine = helpEngine;
 
+    setHandleWidth(0);
+
     setWindowTitle("Help");
     setWindowIcon(QIcon(":/Help/windowIcon.svg"));
 

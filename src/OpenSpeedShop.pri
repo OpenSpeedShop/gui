@@ -19,18 +19,35 @@ QT += core gui
 
 APPLICATION_TARGET = OpenSpeedShop
 
+#######################
+# VERSION INFORMATION #
+#######################
+#VER_MAJ      = 0
+#VER_MIN      = 1
+#VER_PAT      = 0
+#VERSION      = $${VER_MAJ}.$${VER_MIN}.$${VER_PAT}
+#DEFINES     += VER_MAJ VER_MIN VER_PAT VERSION
 
+#################
+# INSTALL PATHS #
+#################
 !isEmpty($${SOURCEDIR}): SOURCE_PATH = $${SOURCEDIR}
 isEmpty(SOURCE_PATH): SOURCE_PATH = $$quote($${PWD})
 
 !isEmpty($${BUILDDIR}): BUILD_PATH = $${BUILDDIR}
 isEmpty(BUILD_PATH): BUILD_PATH = $$quote($${PWD})
 
+#########################
+# DEBUG/RELEASE POSTFIX #
+#########################
 win32 {
   CONFIG(debug, debug|release): POSTFIX = $$quote(debug)
   else: POSTFIX = $$quote(release)
 }
 
+#################
+# INCLUDE PATHS #
+#################
 INCLUDEPATH       += $$quote($${SOURCE_PATH}/core/lib) $$quote($${SOURCE_PATH}/plugins)
 DEPENDPATH        += $$quote($${SOURCE_PATH}/core/lib) $$quote($${SOURCE_PATH}/plugins)
 
