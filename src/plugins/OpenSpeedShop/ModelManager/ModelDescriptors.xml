@@ -1,10 +1,23 @@
 <!DOCTYPE ModelDescriptors>
 <ModelDescriptors>
+ <ModelDescriptor experimentType="usertime" rowCount="100" id="{691359ca-2a54-4613-9c05-55abdbd18b58}" name="Call paths with full stack">
+  <Modifier value="CallTrees"/>
+  <Modifier value="TraceBacks"/>
+  <Metric value="exclusive_time"/>
+  <Metric value="percent"/>
+  <Metric value="count"/>
+ </ModelDescriptor>
  <ModelDescriptor experimentType="iot" rowCount="100" id="{15e3079b-d92f-4d54-b664-0849773b3e4c}" name="Default">
   <Modifier value="Functions"/>
   <Metric value="percent"/>
   <Metric value="count"/>
   <Metric value="average"/>
+ </ModelDescriptor>
+ <ModelDescriptor experimentType="usertime" rowCount="100" id="{7142e949-34e6-489a-8081-bf5de2e66726}" name="Functions Default">
+  <Modifier value="Functions"/>
+  <Metric value="exclusive_time"/>
+  <Metric value="inclusive_time"/>
+  <Metric value="percent"/>
  </ModelDescriptor>
  <ModelDescriptor experimentType="pcsamp" rowCount="100" id="{c959206d-bd12-4901-908b-eb233e80035a}" name="Functions Default">
   <Modifier value="Functions"/>
@@ -48,5 +61,11 @@
   <Metric value="exclusive_times"/>
   <Metric value="percent"/>
   <Metric value="count"/>
+ </ModelDescriptor>
+ <ModelDescriptor experimentType="usertime" rowCount="100" id="{57b31d34-c83d-4387-a2b0-bf79458c82a0}" name="Statements Default">
+  <Modifier value="Statements"/>
+  <Metric value="exclusive_time"/>
+  <Metric value="inclusive_time"/>
+  <Metric value="percent"/>
  </ModelDescriptor>
 </ModelDescriptors>

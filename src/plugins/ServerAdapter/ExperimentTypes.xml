@@ -192,6 +192,7 @@
     <Modifier value="TraceBacks" summary="will produce a calling stack report that is presented in traceback order - from the measured function to the start of the program."/>
     <Modifier value="ButterFly" summary="will produce a report that summarizes the calls to a function and the calls from the function."/>
     <Modifier value="Summary" summary="will result in an additional line of output at the end of the report that summarizes the information in each column."/>
+    <Modifier value="FullStack" summary="will produce a full stack report."/>
     <Metric value="exclusive_time" summary="reports the wall clock time used in the code unit."/>
     <Metric value="inclusive_time" summary="reports the wall clock time used in the aggregate by the unit and all the units it calls."/>
     <Metric value="percent" summary="reports the percent of total cpu the code unit represents."/>

@@ -143,6 +143,7 @@ void RemoteFileDialog::on_treeWidget_itemSelectionChanged()
     QList<QTreeWidgetItem *> selectedItems = ui->treeWidget->selectedItems();
     if(selectedItems.count() == 1) {
         ui->txtFileName->setText(selectedItems.at(0)->data(0, Qt::DisplayRole).toString());
+        m_SelectedFilePath = selectedItems.at(0)->data(0, Qt::UserRole+2).toString();
     } else {
         ui->txtFileName->setText(QString());
     }
