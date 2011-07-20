@@ -11,6 +11,9 @@
 #  include <QDebug>
 #endif
 
+#include <QDebug>
+
+
 using namespace Plugins::OpenSpeedShop;
 
 namespace Plugins {
@@ -77,6 +80,7 @@ QDomElement ServerAdapter::waitCommand(ServerCommand *serverCommand)
         if(serverCommand->state() == ServerCommand::State_Invalid) {
             throw tr("Command has been invalidated");
         }
+        Thread::sleep(10);
     }
 
     QDomElement responseElement = serverCommand->response().firstChildElement("Response");

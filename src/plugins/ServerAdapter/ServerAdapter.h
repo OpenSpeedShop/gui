@@ -1,6 +1,7 @@
 #ifndef SERVERADAPTER_H
 #define SERVERADAPTER_H
 
+#include <QThread>
 #include <QMap>
 #include <QDomDocument>
 #include <OpenSpeedShop/ConnectionManager/IAdapter.h>
@@ -12,6 +13,13 @@ namespace OpenSpeedShop {
 }
 
 namespace ServerAdapter {
+
+// Only way to get a calling thread to sleep using Qt4.
+class Thread : public QThread
+{
+public:
+    static void sleep(unsigned long msecs) { QThread::msleep(msecs); }
+};
 
 class ServerAdapter : public Plugins::OpenSpeedShop::IAdapter
 {
