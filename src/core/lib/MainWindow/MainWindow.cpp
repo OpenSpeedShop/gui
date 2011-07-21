@@ -198,7 +198,6 @@ void MainWindow::readSettings()
         styleSheet.close();
     }
 
-
     restoreGeometry(settingManager.value("Geometry").toByteArray());
     restoreState(settingManager.value("State").toByteArray());
 
