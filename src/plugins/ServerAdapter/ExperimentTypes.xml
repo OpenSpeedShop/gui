@@ -140,6 +140,7 @@
     <Modifier value="TraceBacks" summary="will produce a calling stack report that is presented in traceback order."/>
     <Modifier value="ButterFly" summary="will produce a report that summarizes the calls to a function and the calls from the function."/>
     <Modifier value="Summary" summary="will result in an additional line of output at the end of the report that summarizes the information in each column."/>
+    <Modifier value="FullStack" summary="will produce a full stack report."/>
     <Metric value="Exclusive_Times" summary="reports the wall clock time used in the function."/>
     <Metric value="Min" summary="reports the minimum time spent in the function."/>
     <Metric value="Max" summary="reports the maximum time spent in the function."/>
@@ -161,6 +162,7 @@
     <Modifier value="TraceBacks" summary="will produce a report that expands the call stack for a trace."/>
     <Modifier value="ButterFly" summary="will produce a report that summarizes the calls to a function and the calls from the function."/>
     <Modifier value="Summary" summary="will result in an additional line of output at the end of the report that summarizes the information in each column."/>
+    <Modifier value="FullStack" summary="will produce a full stack report."/>
     <Metric value="exclusive_times" summary="reports the wall clock time used in the event."/>
     <Metric value="min" summary="reports the minimum time spent in the event."/>
     <Metric value="max" summary="reports the maximum time spent in the event."/>

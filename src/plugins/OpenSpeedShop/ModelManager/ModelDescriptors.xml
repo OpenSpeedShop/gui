@@ -7,6 +7,10 @@
   <Metric value="percent"/>
   <Metric value="count"/>
  </ModelDescriptor>
+ <ModelDescriptor experimentType="mpi" rowCount="1000" id="{a64d8d99-fad8-45db-b0df-f936c659e8fd}" name="Load balance">
+  <Modifier value="Functions"/>
+  <Metric value="LoadBalance"/>
+ </ModelDescriptor>
  <ModelDescriptor experimentType="iot" rowCount="100" id="{15e3079b-d92f-4d54-b664-0849773b3e4c}" name="Default">
   <Modifier value="Functions"/>
   <Metric value="percent"/>
@@ -48,6 +52,27 @@
   <Metric value="count"/>
   <Metric value="exclusive_times"/>
   <Metric value="percent"/>
+ </ModelDescriptor>
+ <ModelDescriptor experimentType="mpi" rowCount="100" id="{de5f5163-6755-46e9-81f9-184284bdc14c}" name="Call paths with full stack">
+  <Modifier value="CallTrees"/>
+  <Modifier value="FullStack"/>
+  <Metric value="Exclusive_Times"/>
+  <Metric value="Percent"/>
+  <Metric value="Count"/>
+ </ModelDescriptor>
+ <ModelDescriptor experimentType="mpi" rowCount="100" id="{ac187ea2-0d83-4445-86f8-424891f409a2}" name="Functions Default">
+  <Modifier value="Functions"/>
+  <Metric value="ThreadMax"/>
+  <Metric value="ThreadMin"/>
+  <Metric value="Average"/>
+  <Metric value="Count"/>
+ </ModelDescriptor>
+ <ModelDescriptor experimentType="mpi" rowCount="1" id="{2be034e2-0efc-4d4d-8691-a53b3eb60c86}" name="Hot call path">
+  <Modifier value="CallTrees"/>
+  <Modifier value="FullStack"/>
+  <Metric value="Exclusive_Times"/>
+  <Metric value="Percent"/>
+  <Metric value="Count"/>
  </ModelDescriptor>
  <ModelDescriptor experimentType="io" rowCount="100" id="{7442dbdf-ef36-49d7-9264-f9d5375bf887}" name="Default">
   <Modifier value="Functions"/>
