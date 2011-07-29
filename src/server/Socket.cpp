@@ -8,6 +8,7 @@
 #include <unistd.h>
 #include <string>
 #include <arpa/inet.h>
+#include <memory>
 
 #include "Socket.h"
 
@@ -25,7 +26,7 @@ bool Socket::start(int port)
   int status;
 
   struct sockaddr_in serverAddress;
-  memset(&serverAddress, 0, sizeof(serverAddress));
+  std::memset(&serverAddress, 0, sizeof(serverAddress));
   serverAddress.sin_family = AF_INET;
   serverAddress.sin_addr.s_addr = INADDR_ANY;  //TODO: set this properly
   serverAddress.sin_port = htons(port);
@@ -90,7 +91,7 @@ bool Socket::send(std::string str)
 
   uint32_t header = htonl((uint32_t)str.size());
   unsigned char headerArray[sizeof(header)];
-  memcpy(headerArray, &header, sizeof(header));
+  std::memcpy(headerArray, &header, sizeof(header));
 
   if(::send(_socketDescriptor, headerArray, sizeof(headerArray), MSG_NOSIGNAL) >= 0) {
     return ( ::send(_socketDescriptor, str.c_str(), str.size(), MSG_NOSIGNAL) >= 0 );
@@ -106,7 +107,7 @@ int Socket::recv(std::string &str)
 
   int bufferSize = 64*1024;
   char buffer[bufferSize + 1];
-  memset(buffer, 0, bufferSize + 1);
+  std::memset(buffer, 0, bufferSize + 1);
 
   std::cerr << __FILE__ << ":" << __LINE__ << "\t\tReceiving data" << std::endl;
   retval = ::recv(_socketDescriptor, buffer, bufferSize, 0);
