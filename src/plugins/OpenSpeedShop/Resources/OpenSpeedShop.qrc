@@ -20,4 +20,7 @@
         <file alias="removeModelDescriptor.svg">list-remove-4.svg</file>
         <file alias="modelManager.svg">view-list-details-4.svg</file>
     </qresource>
+    <qresource prefix="/OpenSpeedShop/mockup">
+        <file>scalability_chart.png</file>
+    </qresource>
 </RCC>

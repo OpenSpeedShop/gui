@@ -742,6 +742,7 @@ QAbstractItemModel *ServerAdapter::waitExperimentView(QUuid experimentUid, int c
 QList<ServerAdapter::Process> ServerAdapter::waitExperimentProcesses(qint64 experimentId)
 {
     QString command = QString("expStatus -x %1").arg(experimentId);
+//    QString command = QString("expStatus -v full -x %1").arg(experimentId);
     ServerCommand *serverCommand = rawOpenSpeedShopCommand(command);
     QDomElement responseElement = waitCommand(serverCommand);
     QStringList stringList = getStringList(responseElement);
