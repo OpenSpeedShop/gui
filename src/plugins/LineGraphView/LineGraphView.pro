@@ -15,36 +15,27 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
-TEMPLATE = subdirs
+include(../plugins.pri)
+TARGET             = LineGraphView
 
-SUBDIRS  = Example \
-           Welcome \
-           Help \
-           OpenSpeedShop \
-           DirectConnection \
-           TreeView \
-           ServerAdapter \
-           LineGraphView
+SOURCES           += LineGraphViewPlugin.cpp \
+                     LineGraphView.cpp \
+                     Delegate.cpp
 
-Help.subdir                  = Help
+HEADERS           += LineGraphViewPlugin.h \
+                     LineGraphView.h \
+                     Delegate.h
 
-Welcome.subdir               = Welcome
-Welcome.depends              = Help
+FORMS             +=
 
-OpenSpeedShop.subdir         = OpenSpeedShop
-OpenSpeedShop.depends        = Help Welcome
+RESOURCES         +=
 
-DirectConnection.subdir      = DirectConnection
-DirectConnection.depends     = OpenSpeedShop
+LIBS              += -L$$quote($${BUILD_PATH}/plugins/OpenSpeedShop/$${POSTFIX}) -lOpenSpeedShop
 
-Example.subdir               = Example
-Example.depends              = OpenSpeedShop
+# Include the Serene library items to the project
+QT                += OpenGL
+LIBS              += -L$$quote($${BUILD_PATH}/Serene/lib/$${POSTFIX}) -lSerene
+INCLUDEPATH       += $$quote($${SOURCE_PATH}/Serene/lib)
+DEPENDPATH        += $$quote($${SOURCE_PATH}/Serene/lib)
 
-TreeView.subdir              = TreeView
-TreeView.depends             = OpenSpeedShop
-
-ServerAdapter.subdir         = ServerAdapter
-ServerAdapter.depends        = OpenSpeedShop
-
-LineGraphView.subdir         = LineGraphView
-LineGraphView.depends        = OpenSpeedShop
+#debug: DEFINES += LINEGRAPHVIEW_DEBUG

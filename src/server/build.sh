@@ -1,6 +1,6 @@
 #!/bin/bash
 
-OPENSS_SRC="/home/dane/src/openspeedshop-2.0.1"
+OPENSS_SRC="/home/dane/src/openspeedshop-2.0.1b1"
 OPENSS_LIB="/opt/oss/lib64"
 
 SOURCES="main Socket SocketServer OpenSpeedShopCLI FileSystem"
