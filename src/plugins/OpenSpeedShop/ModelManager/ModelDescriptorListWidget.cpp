@@ -77,6 +77,13 @@ void ModelDescriptorListWidget::setModel(QAbstractItemModel *model)
     expandAll();
 }
 
+QSortFilterProxyModel *ModelDescriptorListWidget::proxyModel() const
+{
+    QSortFilterProxyModel *proxyModel = qobject_cast<QSortFilterProxyModel *>(QTreeView::model());
+    return proxyModel;
+}
+
+
 void ModelDescriptorListWidget::selectionChanged(const QItemSelection &selected, const QItemSelection &deselected)
 {
     QModelIndexList selectedIndexes = selected.indexes();
@@ -124,8 +131,7 @@ void ModelDescriptorListWidget::selectRow(const QUuid &uid)
         selectionModel->clear();
         QModelIndex selectedIndex = findIndex(uid);
         if(selectedIndex.isValid()) {
-
-            QModelIndex selectedIndexParent = model()->parent(selectedIndex);
+            QModelIndex selectedIndexParent = selectedIndex.parent();
             if(selectedIndexParent.isValid()) {
                 expand(selectedIndexParent);
             }
@@ -135,17 +141,41 @@ void ModelDescriptorListWidget::selectRow(const QUuid &uid)
     }
 }
 
+void ModelDescriptorListWidget::selectRow(int row)
+{
+    QModelIndex rootIndex = this->rootIndex();
+    if(rootIndex.isValid()) {
+        QItemSelectionModel *selectionModel = this->selectionModel();
+        QSortFilterProxyModel *proxyModel = this->proxyModel();
+        if(row < proxyModel->rowCount(rootIndex)) {
+            selectionModel->clear();
+            QModelIndex index = proxyModel->index(row, 0, rootIndex);
+            if(index.isValid()) {
+                selectionModel->setCurrentIndex(index, QItemSelectionModel::SelectCurrent);
+            }
+        }
+    }
+}
+
+void ModelDescriptorListWidget::selectDefault()
+{
+    selectRow(0);
+}
+
 QModelIndex ModelDescriptorListWidget::findIndex(const QUuid &uid, const QModelIndex &parent) const
 {
-    QSortFilterProxyModel *proxyModel = qobject_cast<QSortFilterProxyModel *>(QTreeView::model());
-
+    QString uidString = uid.toString();
     QModelIndex modelIndex;
-    for(int row = 0; row < proxyModel->rowCount(parent); row++) {
-        QModelIndex modelIndex = proxyModel->index(row, 0, parent);
-        if(modelIndex.isValid() && QUuid(modelIndex.data(Qt::UserRole).toString()) == uid) {
-            return modelIndex;
+    for(int row = 0; row < proxyModel()->rowCount(parent); row++) {
+        modelIndex = proxyModel()->index(row, 0, parent);
+        if(modelIndex.isValid() && modelIndex.data(Qt::UserRole).toString() == uidString) {
+            break;
+        } else {
+            modelIndex = findIndex(uid, modelIndex);
+            if(modelIndex.isValid()) {
+                break;
+            }
         }
-        findIndex(uid, modelIndex);
     }
 
     return modelIndex;

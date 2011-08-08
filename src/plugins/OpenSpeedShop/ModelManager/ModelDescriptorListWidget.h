@@ -34,6 +34,9 @@ public:
     QAbstractItemModel *model() const;
     void setModel(QAbstractItemModel *model);
 
+    QSortFilterProxyModel *proxyModel() const;
+
+
 signals:
     void currentDescriptorChanged(const QUuid &descriptorUid);
     void descriptorSingleClicked(const QUuid &descriptorUid);
@@ -41,6 +44,8 @@ signals:
 
 public slots:
     void selectRow(const QUuid &uid);
+    void selectRow(int row);
+    void selectDefault();
 
 protected:
     void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
