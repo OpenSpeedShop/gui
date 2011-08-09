@@ -105,7 +105,23 @@ void ExperimentWidget::create()
 
 void ExperimentWidget::load()
 {
-    ui->tabProperties->setEnabled(false);
+
+    //! \todo Fix this cludge code to work with new additions, without having to synchronize manually
+//    ui->tabProperties->setEnabled(false);     // This disables all controls, including the QLabels, which is undesireable
+    ui->cmbExperimentTypes->setEnabled(false);
+    ui->cmbExperimentModes->setEnabled(false);
+    ui->txtSampleRate->setEnabled(false);
+    ui->txtExecutablePath->setEnabled(false);
+    ui->lstEnvironmentVariables->setEnabled(false);
+    ui->txtDatabasePath->setEnabled(false);
+    ui->txtCommand->setEnabled(false);
+    ui->btnExecutablePath->setEnabled(false);
+    ui->btnStart->setEnabled(false);
+    ui->btnContinue->setEnabled(false);
+    ui->btnPause->setEnabled(false);
+    ui->btnRefresh->setEnabled(false);
+    ui->btnStop->setEnabled(false);
+
 
     IAdapter *adapter = ConnectionManager::instance().askAdapter();
     if(!adapter) throw tr("Server not connected");
@@ -160,8 +176,6 @@ void ExperimentWidget::load()
     /* Load the source paths into the source path list */
     refreshSourcePaths();
 
-//    qDebug() << "parameters" << adapter->waitExperimentParameterValues(m_ExperimentUid);
-//    qDebug() << "objects" << adapter->waitExperimentObjectFiles(m_ExperimentUid);
 }
 
 void ExperimentWidget::refreshSourcePaths()
@@ -261,6 +275,9 @@ void ExperimentWidget::loadModelDescriptors(QString experimentType)
     listWidget->setExperimentType(experimentType);
     ui->modelListViewParent->layout()->addWidget(listWidget);
     connect(listWidget, SIGNAL(currentDescriptorChanged(QUuid)), this, SLOT(getModel(QUuid)));
+
+    /* Select the default model descriptor */
+    listWidget->selectDefault();
 }
 
 void ExperimentWidget::getModel(QUuid descriptorUid)
