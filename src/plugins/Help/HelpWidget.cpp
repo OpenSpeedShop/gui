@@ -75,6 +75,8 @@ void HelpWidget::initDocumentTabs()
 
 void HelpWidget::linkActivated(QUrl url, QString string)
 {
+    Q_UNUSED(string)
+
     Core::MainWindow::MainWindow &mainWindow = Core::MainWindow::MainWindow::instance();
     mainWindow.setCurrentCentralWidget(this);
 
