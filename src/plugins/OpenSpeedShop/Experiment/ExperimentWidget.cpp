@@ -67,6 +67,8 @@ ExperimentWidget::~ExperimentWidget()
 
 void ExperimentWidget::closeEvent(QCloseEvent *event)
 {
+    Q_UNUSED(event)
+
     //TODO: Ask the user if they really, really.
     writeSettings();
 }
