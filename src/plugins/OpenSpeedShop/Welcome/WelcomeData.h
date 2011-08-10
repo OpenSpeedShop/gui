@@ -45,6 +45,7 @@ public:
     WelcomeData(QObject *parent = 0);
 
     /* BEGIN IWelcomeData */
+    bool initialize();
     QList<Link> actions();
     QList<Link> recent();
     QList<Link> tutorials();

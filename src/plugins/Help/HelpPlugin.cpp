@@ -18,12 +18,13 @@ HelpPlugin::HelpPlugin(QObject *parent) :
     m_HelpEngine->setupData();
     m_HelpEngine->setAutoSaveFilter(false);
 
-    QString helpFile = "openspeedshop-gui.qch";
-    QString helpNamespace = "org.openspeedshop.gui";
-    if(!m_HelpEngine->registeredDocumentations().contains(helpNamespace) &&
-            !m_HelpEngine->registerDocumentation(helpFile)) {
-        qWarning(QString("Registration of help file, \"%1\", failed: %2").arg(helpFile).arg(m_HelpEngine->error()).toLatin1());
-    }
+    //DEBUG:
+//    QString helpFile = "openspeedshop-gui.qch";
+//    QString helpNamespace = "org.openspeedshop.gui";
+//    if(!m_HelpEngine->registeredDocumentations().contains(helpNamespace) &&
+//            !m_HelpEngine->registerDocumentation(helpFile)) {
+//        qWarning(QString("Registration of help file, \"%1\", failed: %2").arg(helpFile).arg(m_HelpEngine->error()).toLatin1());
+//    }
 }
 
 HelpPlugin::~HelpPlugin()

@@ -39,13 +39,13 @@ ModelManagerDialog::ModelManagerDialog(QWidget *parent) :
 
 ModelManagerDialog::~ModelManagerDialog()
 {
+    ModelManager::instance().exportDescriptors();
+
     Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
     settingManager.beginGroup("Plugins/OpenSpeedShop");
-
     settingManager.setValue("ModelManagerDialog/windowGeometry", saveGeometry());
     settingManager.setValue("ModelManagerDialog/splitterGeometry", ui->splitter->saveGeometry());
     settingManager.setValue("ModelManagerDialog/splitterState", ui->splitter->saveState());
-
     settingManager.endGroup();
 
     delete ui;

@@ -105,7 +105,20 @@ bool OpenSpeedShopPlugin::initialize(QStringList &args, QString *err)
         PluginManager::PluginManager &pluginManager = PluginManager::PluginManager::instance();
         pluginManager.addObject(this);                         /* Register ourselves as an ISettingPageFactory */
         pluginManager.addObject(&m_MainWidget);
-        pluginManager.addObject(&m_WelcomeData);
+
+        // This should be fault tollerant, as it's not mandatory to function properly
+        try {
+            m_WelcomeData.initialize();
+            pluginManager.addObject(&m_WelcomeData);
+        } catch(QString error) {
+            if(!err) err = new QString();
+            if(err->isEmpty()) err->append("\n");
+            err->append(error);
+        } catch(...) {
+            if(!err) err = new QString();
+            if(err->isEmpty()) err->append("\n");
+            err->append(tr("Could not initialize Open|SpeedShop plugin's welcome page data"));
+        }
 
         ConnectionManager &connectionManager = ConnectionManager::instance();
         if(!connectionManager.initialize(args, err)) { throw; }
@@ -117,6 +130,7 @@ bool OpenSpeedShopPlugin::initialize(QStringList &args, QString *err)
         if(!viewManager.initialize(args, err)) { throw; }
 
     } catch(...) {
+        if(!err) err = new QString();
         if(err->isEmpty()) err->append("\n");
         err->append(tr("Could not initialize Open|SpeedShop plugin"));
         return false;

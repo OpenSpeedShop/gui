@@ -20,10 +20,10 @@ OpenSpeedShopWidget::OpenSpeedShopWidget(QWidget *parent) :
     Core::MainWindow::MainWindow &mainWindow = Core::MainWindow::MainWindow::instance();
     foreach(QAction *action, mainWindow.menuBar()->actions()) {
         if(action->text() == tr("File")) {
+
             QAction *createExperiment = new QAction(tr("New Experiment"), this);
             createExperiment->setToolTip(tr("Create a new Open|SpeedShop experiment"));
             connect(createExperiment, SIGNAL(triggered()), this, SLOT(createExperiment()));
-            action->menu()->addAction(createExperiment);
 
             //FIXME: When we're set up to create, enable this
             createExperiment->setEnabled(false);
@@ -31,13 +31,30 @@ OpenSpeedShopWidget::OpenSpeedShopWidget(QWidget *parent) :
             QAction *loadExperiment = new QAction(tr("Load Experiment"), this);
             loadExperiment->setToolTip(tr("Load an Open|SpeedShop experiment"));
             connect(loadExperiment, SIGNAL(triggered()), this, SLOT(loadExperiment()));
-            action->menu()->addAction(loadExperiment);
 
             m_CloseExperiment = new QAction(tr("Close Experiment"), this);
             m_CloseExperiment->setToolTip(tr("Close the current Open|SpeedShop experiment"));
             connect(m_CloseExperiment, SIGNAL(triggered()), this, SLOT(closeExperiment()));
-            action->menu()->addAction(m_CloseExperiment);
             m_CloseExperiment->setEnabled(false);
+
+            //! \todo We really need to rely on the ActionManager to do this.
+            QAction *before = NULL;
+            foreach(QAction *item, action->menu()->actions()) {
+                if(item->priority() == QAction::LowPriority) {
+                    before = item;
+                }
+            }
+
+            if(before) {
+                action->menu()->insertAction(before, createExperiment);
+                action->menu()->insertAction(before, loadExperiment);
+                action->menu()->insertAction(before, m_CloseExperiment);
+            } else {
+                action->menu()->addAction(createExperiment);
+                action->menu()->addAction(loadExperiment);
+                action->menu()->addAction(m_CloseExperiment);
+            }
+
         }
     }
 }

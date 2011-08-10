@@ -90,6 +90,7 @@ protected:
 
 protected slots:
     void setCurrentCentralWidget();
+    void on_actionExit_triggered();
 
 
 private:

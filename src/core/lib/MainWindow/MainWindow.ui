@@ -40,6 +40,7 @@
     <property name="title">
      <string>File</string>
     </property>
+    <addaction name="actionExit"/>
    </widget>
    <widget class="QMenu" name="menuEdit">
     <property name="title">
@@ -94,6 +95,20 @@
    </attribute>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionExit">
+   <property name="text">
+    <string>E&amp;xit</string>
+   </property>
+   <property name="toolTip">
+    <string>Exit the application</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Q</string>
+   </property>
+   <property name="priority">
+    <enum>QAction::LowPriority</enum>
+   </property>
+  </action>
  </widget>
  <resources>
   <include location="../../../plugins/OpenSpeedShop/Resources/OpenSpeedShop.qrc"/>

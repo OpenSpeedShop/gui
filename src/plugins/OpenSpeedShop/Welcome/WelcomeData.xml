@@ -1,8 +1,10 @@
 <WelcomeData>
   <Tutorials>
-    <Link title="Getting Started with Open|SpeedShop" description="a video showing the basics of the Open|SpeedShop GUI." type="video" priority="16" url="http://youtu.be/xWYRYWDpV40?hd=1"/>
-    <Link title="Performance Analysis using Open|SpeedShop" description="a set of videos showing basic performance analysis using the Open|SpeedShop GUI." type="video" priority="32" url="http://www.youtube.com/user/openspeedshop"/>
-    <Link title="Advanced Performance Analysis using Open|SpeedShop" description="help documentation on advanced performance analysis techniques using the Open|SpeedShop GUI." type="text" priority="128" url="qthelp://org.openspeedshop.gui/openspeedshop/advancedTechniques.html"/>
+    <Link title="Getting Started with Open|SpeedShop" description="a video showing the basics of the Open|SpeedShop GUI." type="video" priority="8" url="http://youtu.be/Tfih5FDjlj0?hd=1"/>
+    <Link title="Open|SpeedShop Quick Start Guide" description="this two page reference card is a great way to get started quickly." type="text" priority="16" url="http://www.openspeedshop.org/wp/wp-content/uploads/2011/04/OSSQuickStartGuide_042011.pdf"/>
+    <Link title="Open|SpeedShop User's Guide" description="a link to the framework's user manual" type="text" priority="16" url="http://www.openspeedshop.org/docs/users_guide/"/>
+    <Link title="Performance Analysis using Open|SpeedShop" description="a set of videos showing basic performance analysis using the Open|SpeedShop GUI." type="video" priority="32" url="http://youtube.com/openspeedshop"/>
+<!--    <Link title="Advanced Performance Analysis using Open|SpeedShop" description="help documentation on advanced performance analysis techniques using the Open|SpeedShop GUI." type="text" priority="128" url="qthelp://org.openspeedshop.gui/openspeedshop/advancedTechniques.html"/> -->
   </Tutorials>
   <Examples>
     <Link title="SMG2000 - Semicoarsening Multigrid Solver" description="a detailed walk-through describing how to use the Open|SpeedShop performance tools to analyze the provided test application SMG2000" type="text" priority="16" url="qthelp://org.openspeedshop.gui/openspeedshop/smg2000.html"/>
@@ -17,9 +19,9 @@
     <!-- <Rss url="https://github.com/OpenSpeedShop/gui/commits/0.1.dev.atom"/> -->
   </LatestNews>
   <TipsAndTricks>
+    <Tip text="Make sure you've started the server, before trying to connect."/>
+    <Tip text="Check http://youtube.com/openspeedshop frequently for new video tutorials."/>
     <Tip text="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."/>
     <Tip text="Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."/>
-    <Tip text="Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."/>
-    <Tip text="Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."/>
   </TipsAndTricks>
 </WelcomeData>

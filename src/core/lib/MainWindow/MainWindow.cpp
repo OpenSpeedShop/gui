@@ -375,6 +375,10 @@ void MainWindow::setCurrentCentralWidget()
     }
 }
 
+void MainWindow::on_actionExit_triggered()
+{
+    close();
+}
 
 
 /*!

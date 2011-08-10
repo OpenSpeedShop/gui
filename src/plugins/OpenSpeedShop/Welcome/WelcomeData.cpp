@@ -42,7 +42,10 @@ WelcomeData::WelcomeData(QObject *parent) :
     QObject(parent),
     m_WelcomeData("WelcomeData")
 {
+}
 
+bool WelcomeData::initialize()
+{
 #ifdef WIN32
     QFileInfo fileInfo(QString("%1/WelcomeData.xml").arg(QApplication::instance()->applicationDirPath()));
 #else
@@ -76,6 +79,8 @@ WelcomeData::WelcomeData(QObject *parent) :
         settingManager.setValue("welcomeDataPath", filePath);
         settingManager.endGroup();
     }
+
+    return true;
 }
 
 QList<Link> WelcomeData::actions()
