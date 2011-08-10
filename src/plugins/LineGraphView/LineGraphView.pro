@@ -16,6 +16,8 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 include(../plugins.pri)
+include(../../Serene.pri)
+
 TARGET             = LineGraphView
 
 SOURCES           += LineGraphViewPlugin.cpp \
@@ -31,11 +33,5 @@ FORMS             +=
 RESOURCES         +=
 
 LIBS              += -L$$quote($${BUILD_PATH}/plugins/OpenSpeedShop/$${POSTFIX}) -lOpenSpeedShop
-
-# Include the Serene library items to the project
-QT                += OpenGL
-LIBS              += -L$$quote($${BUILD_PATH}/Serene/lib/$${POSTFIX}) -lSerene
-INCLUDEPATH       += $$quote($${SOURCE_PATH}/Serene/lib)
-DEPENDPATH        += $$quote($${SOURCE_PATH}/Serene/lib)
 
 #debug: DEFINES += LINEGRAPHVIEW_DEBUG

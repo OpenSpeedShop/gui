@@ -95,14 +95,15 @@ QList<Core::PluginManager::Dependency> LineGraphViewPlugin::dependencies()
 
 QString LineGraphViewPlugin::viewName()
 {
-    return "Tree/Table View";
+    return "Line Graph View";
 }
 
 bool LineGraphViewPlugin::viewHandles(QAbstractItemModel *model)
 {
     Q_UNUSED(model)
 
-    /* We can handle pretty much anything, so there's no checking needed */
+    //TODO: Ensure that the model matches what we can handle
+
     return true;
 }
 
@@ -111,9 +112,9 @@ QAbstractItemView *LineGraphViewPlugin::viewWidget(QAbstractItemModel *model)
     /* Check to see if we should even try to handle this model */
     if(!viewHandles(model)) return NULL;
 
-    LineGraphView *treeView = new LineGraphView();
-    treeView->setModel(model);
-    return treeView;
+    LineGraphView *view = new LineGraphView();
+    view->setModel(model);
+    return view;
 }
 
 } // namespace LineGraphView

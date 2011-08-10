@@ -28,9 +28,10 @@
 #ifndef LINEGRAPHVIEWM_H
 #define LINEGRAPHVIEWM_H
 
-#include <QLineGraphView>
 #include <QSortFilterProxyModel>
 #include <OpenSpeedShop/ViewManager/IViewFilterable.h>
+#include <LineGraph/LineGraphView.h>
+#include <Serene/lib/LineGraph/LineGraphView.h>
 #include "Delegate.h"
 
 namespace Plugins {

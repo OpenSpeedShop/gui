@@ -15,16 +15,18 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
-include(../OpenSpeedShop.pri)
+#################
+# CONFIGURATION #
+#################
+QT                += OpenGL
 
-TEMPLATE      = lib
-CONFIG       += plugin plugin_with_soname
-CONFIG       += depend_includepath
+#################
+# LIBRARY PATHS #
+#################
+LIBS              += -L$$quote($${BUILD_PATH}/Serene/lib/$${POSTFIX}) -lSerene
 
-LIBS         += -L$$quote($${BUILD_PATH}/core/lib/$${POSTFIX}) -lCore
-
-win32:target.path   = /
-else:target.path   = /lib
-
-INSTALLS     += target
-
+#################
+# INCLUDE PATHS #
+#################
+INCLUDEPATH       += $$quote($${SOURCE_PATH}/Serene/lib)
+DEPENDPATH        += $$quote($${SOURCE_PATH}/Serene/lib)

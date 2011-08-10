@@ -27,7 +27,6 @@
 
 #include "LineGraphView.h"
 
-
 namespace Plugins {
 namespace LineGraphView {
 
