@@ -18,7 +18,7 @@
 #################
 # CONFIGURATION #
 #################
-QT                += OpenGL
+QT                += opengl
 
 #################
 # LIBRARY PATHS #
@@ -28,5 +28,6 @@ LIBS              += -L$$quote($${BUILD_PATH}/Serene/lib/$${POSTFIX}) -lSerene
 #################
 # INCLUDE PATHS #
 #################
-INCLUDEPATH       += $$quote($${SOURCE_PATH}/Serene/lib)
-DEPENDPATH        += $$quote($${SOURCE_PATH}/Serene/lib)
+isEmpty(SERENE_PATH): SERENE_PATH = $$quote($${PWD})
+INCLUDEPATH       += $$quote($${SERENE_PATH}/lib)
+DEPENDPATH        += $$quote($${SERENE_PATH}/lib)

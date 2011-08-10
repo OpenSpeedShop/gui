@@ -29,40 +29,20 @@
 #define LINEGRAPHVIEWM_H
 
 #include <QSortFilterProxyModel>
-#include <OpenSpeedShop/ViewManager/IViewFilterable.h>
 #include <LineGraph/LineGraphView.h>
-#include <Serene/lib/LineGraph/LineGraphView.h>
-#include "Delegate.h"
 
 namespace Plugins {
 namespace LineGraphView {
 
 class Delegate;
 
-class LineGraphView : public QLineGraphView, public Plugins::OpenSpeedShop::IViewFilterable
+class LineGraphView : public Serene::LineGraphView
 {
     Q_OBJECT
-    Q_INTERFACES(Plugins::OpenSpeedShop::IViewFilterable)
 
 public:
     explicit LineGraphView(QWidget *parent = 0);
     ~LineGraphView();
-
-    QAbstractItemModel *model() const;
-    void setModel(QAbstractItemModel *model);
-
-    QString viewFilter() const;
-    void setViewFilter(const QString &regex);
-    int viewFilterColumn() const;
-    void setViewFilterColumn(int column = 0);
-
-protected slots:
-    void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
-
-protected:
-    Delegate m_ItemDelegate;
-    QSortFilterProxyModel m_ProxyModel;
-
 };
 
 } // namespace LineGraphView

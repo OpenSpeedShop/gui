@@ -21,12 +21,10 @@ include(../../Serene.pri)
 TARGET             = LineGraphView
 
 SOURCES           += LineGraphViewPlugin.cpp \
-                     LineGraphView.cpp \
-                     Delegate.cpp
+                     LineGraphView.cpp
 
 HEADERS           += LineGraphViewPlugin.h \
-                     LineGraphView.h \
-                     Delegate.h
+                     LineGraphView.h
 
 FORMS             +=
 

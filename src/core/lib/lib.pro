@@ -16,7 +16,11 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 include(lib.pri)
-TARGET   = Core
+
+TARGET            = Core
+win32:target.path = /
+else:target.path  = /lib
+INSTALLS         += target
 
 HEADERS +=  ActionManager/ActionManager.h \
             PluginManager/PluginManager.h \
@@ -68,11 +72,6 @@ DEFINES          += MAINWINDOW_LIBRARY \
 #debug:DEFINES    += ACTIONMANAGER_DEBUG
 #debug:DEFINES    += PLUGINMANAGER_DEBUG
 #debug:DEFINES    += SETTINGMANAGER_DEBUG
-
-win32:target.path = /
-else:target.path = /lib
-
-INSTALLS += target
 
 OTHER_FILES += MainWindow/StyleSheet.css
 win32:styleSheet.path = /
