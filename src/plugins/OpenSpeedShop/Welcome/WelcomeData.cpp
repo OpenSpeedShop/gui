@@ -52,10 +52,11 @@ bool WelcomeData::initialize()
     QFileInfo fileInfo(QString("%1/../etc/WelcomeData.xml").arg(QApplication::instance()->applicationDirPath()));
 #endif
 
-    Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
-    settingManager.beginGroup("Plugins/OpenSpeedShop/Welcome");
-    QString filePath = settingManager.value("welcomeDataPath", fileInfo.absoluteFilePath()).toString();
-    settingManager.endGroup();
+    QString filePath;
+//    Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
+//    settingManager.beginGroup("Plugins/OpenSpeedShop/Welcome");
+//    filePath = settingManager.value("welcomeDataPath", fileInfo.absoluteFilePath()).toString();
+//    settingManager.endGroup();
 
     if(filePath.isEmpty()) {
         filePath = fileInfo.absoluteFilePath();
@@ -77,12 +78,12 @@ bool WelcomeData::initialize()
     }
     file.close();
 
-    /* User convenience.  If the path wasn't set in the settings, we'll set it for the user the first time. */
-    if(defaultPath) {
-        settingManager.beginGroup("Plugins/OpenSpeedShop/Welcome");
-        settingManager.setValue("welcomeDataPath", filePath);
-        settingManager.endGroup();
-    }
+//    /* User convenience.  If the path wasn't set in the settings, we'll set it for the user the first time. */
+//    if(defaultPath) {
+//        settingManager.beginGroup("Plugins/OpenSpeedShop/Welcome");
+//        settingManager.setValue("welcomeDataPath", filePath);
+//        settingManager.endGroup();
+//    }
 
     return true;
 }
