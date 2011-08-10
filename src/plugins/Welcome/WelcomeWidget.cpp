@@ -210,6 +210,9 @@ void WelcomeWidget::urlClicked(int index)
 }
 
 void WelcomeWidget::setCurrentTip(int index) {
+    if(m_TipsAndTricks.count() < 1)
+        return;
+
     if(index >= m_TipsAndTricks.count()) {
         m_CurrentTip = 0;
     } else if(index < 0) {

@@ -65,11 +65,15 @@ bool WelcomeData::initialize()
 
     QFile file(filePath);
     if (!file.open(QIODevice::ReadOnly)) {
-        throw tr("Could not open welcome data file");
+        QString error = tr("Could not open welcome data file: %1").arg(filePath);
+        qWarning(error.toLatin1());
+        throw error;
     }
     if (!m_WelcomeData.setContent(&file)) {
         file.close();
-        throw tr("Could not use welcome data file after opening, possibly invalid text");
+        QString error = tr("Could not use welcome data file after opening, possibly invalid text: %1").arg(filePath);
+        qWarning(error.toLatin1());
+        throw error;
     }
     file.close();
 
