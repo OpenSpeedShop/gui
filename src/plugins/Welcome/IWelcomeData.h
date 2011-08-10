@@ -76,6 +76,7 @@ private:
 class WELCOME_EXPORT IWelcomeData
 {
 public:
+    virtual bool initialize() = 0;
     virtual QList<Link> actions() = 0;
     virtual QList<Link> recent() = 0;
     virtual QList<Link> tutorials() = 0;
