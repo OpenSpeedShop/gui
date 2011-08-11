@@ -291,9 +291,7 @@ void ExperimentWidget::getModel(QUuid descriptorUid)
 
         /* Reset the view list */
         ui->cmbViews->clear();
-        m_DisableViewChange = true;
         ui->cmbViews->addItems(ViewManager::instance().viewNames(m_CurrentModel));
-        m_DisableViewChange = false;
         ui->cmbViews->setCurrentIndex(ui->cmbViews->count() - 1);
 
         /* Let the source view know about the change */
@@ -320,7 +318,7 @@ void ExperimentWidget::on_cmbViews_currentIndexChanged(int index)
             m_CurrentView->deleteLater();
         }
 
-        if(!m_DisableViewChange && !ui->cmbViews->currentText().isEmpty()) {
+        if(!ui->cmbViews->currentText().isEmpty()) {
             m_CurrentView = ViewManager::instance().viewWidget(ui->cmbViews->currentText(), m_CurrentModel);
             ui->grpView->layout()->addWidget(m_CurrentView);
 

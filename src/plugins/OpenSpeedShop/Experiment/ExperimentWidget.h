@@ -52,8 +52,6 @@ private:
     QAbstractItemView *m_CurrentView;
     QAbstractItemModel *m_CurrentModel;
     QMap<QString, QString> m_SourceFileCache;
-
-    bool m_DisableViewChange;
 };
 
 
