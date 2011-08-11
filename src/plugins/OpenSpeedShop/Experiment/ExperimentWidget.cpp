@@ -40,12 +40,6 @@ ExperimentWidget::ExperimentWidget(QWidget *parent) :
     ui->txtViewFilter->setPlaceholderText(tr("regular expression"));
 #endif
 
-    ui->txtSource->close();
-    ui->txtSource->deleteLater();
-    ui->txtSource = &m_SourceView;
-    m_SourceView.setReadOnly(true);
-    ui->splitSource->insertWidget(1,&m_SourceView);
-
     ui->tabWidget->setCurrentIndex(0);
     ui->grpViewFilter->hide();
 
@@ -297,11 +291,13 @@ void ExperimentWidget::getModel(QUuid descriptorUid)
 
         /* Reset the view list */
         ui->cmbViews->clear();
+        m_DisableViewChange = true;
         ui->cmbViews->addItems(ViewManager::instance().viewNames(m_CurrentModel));
-        ui->cmbViews->setCurrentIndex(ui->cmbViews->count()-1);
+        m_DisableViewChange = false;
+        ui->cmbViews->setCurrentIndex(ui->cmbViews->count() - 1);
 
         /* Let the source view know about the change */
-        m_SourceView.setModel(m_CurrentModel);
+        ui->txtSource->setModel(m_CurrentModel);
 
     } catch(QString err) {
         using namespace Core::MainWindow;
@@ -324,7 +320,7 @@ void ExperimentWidget::on_cmbViews_currentIndexChanged(int index)
             m_CurrentView->deleteLater();
         }
 
-        if(!ui->cmbViews->currentText().isEmpty()) {
+        if(!m_DisableViewChange && !ui->cmbViews->currentText().isEmpty()) {
             m_CurrentView = ViewManager::instance().viewWidget(ui->cmbViews->currentText(), m_CurrentModel);
             ui->grpView->layout()->addWidget(m_CurrentView);
 
@@ -336,7 +332,6 @@ void ExperimentWidget::on_cmbViews_currentIndexChanged(int index)
             } else {
                 ui->grpViewFilter->hide();
             }
-
         }
 
     } catch(QString err) {
@@ -405,7 +400,7 @@ void ExperimentWidget::on_cmbViewFilterColumn_currentIndexChanged(int index)
 
 void ExperimentWidget::on_lstSource_currentRowChanged(int row)
 {
-    m_SourceView.clear();
+    ui->txtSource->clear();
 
     try {
 
@@ -428,8 +423,8 @@ void ExperimentWidget::on_lstSource_currentRowChanged(int row)
             m_SourceFileCache.insert(filePath, adapter->waitCatFile(filePath));
         }
 
-        m_SourceView.setPlainText(m_SourceFileCache.value(filePath));
-        m_SourceView.setFilePath(fileName);
+        ui->txtSource->setPlainText(m_SourceFileCache.value(filePath));
+        ui->txtSource->setFilePath(fileName);
 
     } catch(QString err) {
         using namespace Core::MainWindow;
@@ -512,7 +507,7 @@ void ExperimentWidget::viewItemActivated(QModelIndex index)
                 bool okay;
                 int lineNumber = statementPattern.cap(2).toInt(&okay);
                 if(okay) {
-                    m_SourceView.setCurrentLineNumber(lineNumber);
+                    ui->txtSource->setCurrentLineNumber(lineNumber);
                 }
 
                 ui->tabWidget->setCurrentWidget(ui->tabSource);

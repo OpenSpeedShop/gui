@@ -62,7 +62,7 @@ bool WelcomeData::initialize()
         filePath = fileInfo.absoluteFilePath();
     }
 
-    bool defaultPath = (filePath == fileInfo.absoluteFilePath());
+//    bool defaultPath = (filePath == fileInfo.absoluteFilePath());
 
     QFile file(filePath);
     if (!file.open(QIODevice::ReadOnly)) {
