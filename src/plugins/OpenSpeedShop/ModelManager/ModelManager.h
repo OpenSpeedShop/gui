@@ -46,6 +46,7 @@ public:
 
 protected:
     explicit ModelManager(QObject *parent = 0);
+    ~ModelManager();
 
     void insertDescriptorIntoModel(QUuid descriptorUid);
     ModelDescriptor *descriptor(QUuid descriptorUid);

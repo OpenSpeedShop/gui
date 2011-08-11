@@ -31,6 +31,12 @@ ModelManager::ModelManager(QObject *parent) :
 {
 }
 
+ModelManager::~ModelManager()
+{
+    qDeleteAll(m_DescriptorPool);
+    m_DescriptorPool.clear();
+}
+
 bool ModelManager::initialize(QStringList &args, QString *err)
 {
     Q_UNUSED(args)
