@@ -4,8 +4,6 @@
 #include <QWidget>
 #include <QUuid>
 #include <QAbstractItemView>
-#include <QTextDocument>
-#include "SourceView.h"
 
 namespace Plugins {
 namespace OpenSpeedShop {
@@ -54,9 +52,8 @@ private:
     QAbstractItemView *m_CurrentView;
     QAbstractItemModel *m_CurrentModel;
     QMap<QString, QString> m_SourceFileCache;
-    SourceView m_SourceView;
 
-
+    bool m_DisableViewChange;
 };
 
 
