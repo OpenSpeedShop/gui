@@ -3,17 +3,22 @@
 OPENSS_SRC="/home/dane/src/openspeedshop-2.0.1b1"
 OPENSS_LIB="/opt/oss/lib64"
 
+PYTHON_VER="2.4"
+PYTHON_PATH="/usr/include/python${PYTHON_VER}"
+
 SOURCES="main Socket SocketServer OpenSpeedShopCLI FileSystem"
 OPENSS_INCLUDES="framework cli queries message"
 
+INCLUDES="-I${PYTHON_PATH}"
 for INCLUDE in ${OPENSS_INCLUDES}; do INCLUDES="${INCLUDES} -I${OPENSS_SRC}/libopenss-${INCLUDE}"; done
+LIBRARIES="-lpthread"
 for LIBRARY in ${OPENSS_INCLUDES}; do LIBRARIES="${LIBRARIES} -lopenss-${LIBRARY}"; done
 
 rm -f openss-server *.o *.gch
 
 # Compile the sources
 for SOURCE in ${SOURCES}; do
-  COMMAND="g++ -c -g3 -fexceptions ${INCLUDES} -I/usr/include/python2.4 ${SOURCE}.cpp"
+  COMMAND="g++ -c -g3 -fexceptions -Wall ${INCLUDES} ${SOURCE}.cpp"
   echo -e "\n$COMMAND"
   ${COMMAND}  2>&1 | egrep -v "^${OPENSS_SRC}"
 done
