@@ -1,37 +1,22 @@
 <!DOCTYPE ModelDescriptors>
 <ModelDescriptors>
- <ModelDescriptor experimentType="usertime" rowCount="100" id="{691359ca-2a54-4613-9c05-55abdbd18b58}" name="Call paths with full stack">
-  <Modifier value="CallTrees"/>
-  <Modifier value="TraceBacks"/>
-  <Metric value="exclusive_time"/>
-  <Metric value="percent"/>
-  <Metric value="count"/>
- </ModelDescriptor>
- <ModelDescriptor experimentType="mpi" rowCount="1000" id="{a64d8d99-fad8-45db-b0df-f936c659e8fd}" name="Load balance">
-  <Modifier value="Functions"/>
-  <Metric value="LoadBalance"/>
- </ModelDescriptor>
- <ModelDescriptor experimentType="iot" rowCount="100" id="{15e3079b-d92f-4d54-b664-0849773b3e4c}" name="Default">
-  <Modifier value="Functions"/>
-  <Metric value="percent"/>
-  <Metric value="count"/>
-  <Metric value="average"/>
- </ModelDescriptor>
- <ModelDescriptor experimentType="usertime" rowCount="100" id="{7142e949-34e6-489a-8081-bf5de2e66726}" name="Functions Default">
-  <Modifier value="Functions"/>
-  <Metric value="exclusive_time"/>
-  <Metric value="inclusive_time"/>
-  <Metric value="percent"/>
- </ModelDescriptor>
- <ModelDescriptor experimentType="pcsamp" rowCount="100" id="{c959206d-bd12-4901-908b-eb233e80035a}" name="Functions Default">
-  <Modifier value="Functions"/>
-  <Metric value="Time"/>
+ <ModelDescriptor experimentType="fpe" rowCount="1000" id="{fe492205-96a6-4269-99bc-1e3a71807815}" name="Linked Objects Default">
+  <Modifier value="LinkeObjects"/>
+  <Metric value="Counts"/>
   <Metric value="Percent"/>
+  <Metric value="Time"/>
  </ModelDescriptor>
- <ModelDescriptor experimentType="pcsamp" rowCount="100" id="{9790588a-1fcb-48df-9a9b-b85f9d3cdbb7}" name="Statements Default">
+ <ModelDescriptor experimentType="hwcsamp" rowCount="1000" id="{7e748363-cb03-4d26-ba55-47b999f42dfc}" name="Statements Default">
   <Modifier value="Statements"/>
-  <Metric value="Time"/>
+  <Metric value="AllEvents"/>
   <Metric value="Percent"/>
+  <Metric value="Time"/>
+ </ModelDescriptor>
+ <ModelDescriptor experimentType="hwcsamp" rowCount="1000" id="{4d0667e8-dbd9-4c1c-96e7-61ba9a3ca032}" name="Linked Objects Default">
+  <Modifier value="LinkedObjects"/>
+  <Metric value="AllEvents"/>
+  <Metric value="Percent"/>
+  <Metric value="Time"/>
  </ModelDescriptor>
  <ModelDescriptor experimentType="pcsamp" rowCount="100" id="{30ecd7e2-a67f-4472-8882-2d0369322019}" name="Linked Objects Default">
   <Modifier value="LinkedObjects"/>
@@ -42,23 +27,67 @@
   <Modifier value="Functions"/>
   <Metric value="LoadBalance"/>
  </ModelDescriptor>
- <ModelDescriptor experimentType="pcsamp" rowCount="100" id="{910e4dad-e4fa-47c2-89c5-74caf671a8f5}" name="Compare and analyze">
-  <Modifier value="Functions"/>
-  <Metric value="ThreadAverage"/>
+ <ModelDescriptor experimentType="hwc" rowCount="1000" id="{8f791f4a-ae1f-446c-a8d9-433b222f212d}" name="Load Balance Statements">
+  <Modifier value="Statements"/>
+  <Metric value="LoadBalance"/>
  </ModelDescriptor>
- <ModelDescriptor experimentType="io" rowCount="1" id="{4a996167-610c-4c4b-b8bc-c68421733bbd}" name="Hot call path">
-  <Modifier value="CallTrees"/>
-  <Modifier value="FullStack"/>
-  <Metric value="count"/>
+ <ModelDescriptor experimentType="hwctime" rowCount="1000" id="{5ebf7bc7-3a54-4bb8-a042-383669dc0ef7}" name="Default">
+  <Modifier value="Functions"/>
+  <Metric value="Exclusive_Counts"/>
+  <Metric value="Exclusive_Overflows"/>
+  <Metric value="Inclusive_Counts"/>
+  <Metric value="Inclusive_Overflows"/>
+ </ModelDescriptor>
+ <ModelDescriptor experimentType="pcsamp" rowCount="100" id="{9790588a-1fcb-48df-9a9b-b85f9d3cdbb7}" name="Statements Default">
+  <Modifier value="Statements"/>
+  <Metric value="Time"/>
+  <Metric value="Percent"/>
+ </ModelDescriptor>
+ <ModelDescriptor experimentType="io" rowCount="100" id="{7442dbdf-ef36-49d7-9264-f9d5375bf887}" name="Default">
+  <Modifier value="Functions"/>
   <Metric value="exclusive_times"/>
   <Metric value="percent"/>
+  <Metric value="count"/>
  </ModelDescriptor>
- <ModelDescriptor experimentType="mpi" rowCount="100" id="{de5f5163-6755-46e9-81f9-184284bdc14c}" name="Call paths with full stack">
+ <ModelDescriptor experimentType="usertime" rowCount="100" id="{691359ca-2a54-4613-9c05-55abdbd18b58}" name="Call paths with full stack">
   <Modifier value="CallTrees"/>
-  <Modifier value="FullStack"/>
-  <Metric value="Exclusive_Times"/>
+  <Modifier value="TraceBacks"/>
+  <Metric value="exclusive_time"/>
+  <Metric value="percent"/>
+  <Metric value="count"/>
+ </ModelDescriptor>
+ <ModelDescriptor experimentType="hwctime" rowCount="1000" id="{c979bbf9-0604-4870-b27a-1bcdb2f544cc}" name="Linked Objects Default">
+  <Modifier value="LinkedObjects"/>
+  <Metric value="Exclusive_Counts"/>
+  <Metric value="Exclusive_Overflows"/>
+  <Metric value="Inclusive_Counts"/>
+  <Metric value="Inclusive_Overflows"/>
+ </ModelDescriptor>
+ <ModelDescriptor experimentType="fpe" rowCount="1000" id="{23ba1b4e-135d-4f37-92ed-d6391cf02fdd}" name="Statements Default">
+  <Modifier value="Statements"/>
+  <Metric value="Counts"/>
   <Metric value="Percent"/>
-  <Metric value="Count"/>
+  <Metric value="Time"/>
+ </ModelDescriptor>
+ <ModelDescriptor experimentType="hwc" rowCount="1000" id="{d9b6bea5-04c0-4bd8-8f84-a16c34fa6815}" name="Statements Default">
+  <Modifier value="Statements"/>
+  <Metric value="Counts"/>
+  <Metric value="Percent"/>
+ </ModelDescriptor>
+ <ModelDescriptor experimentType="usertime" rowCount="100" id="{57b31d34-c83d-4387-a2b0-bf79458c82a0}" name="Statements Default">
+  <Modifier value="Statements"/>
+  <Metric value="exclusive_time"/>
+  <Metric value="inclusive_time"/>
+  <Metric value="percent"/>
+ </ModelDescriptor>
+ <ModelDescriptor experimentType="hwcsamp" rowCount="1000" id="{4b8a51dd-d4f7-4996-87c4-cb5983748d47}" name="Load Balance Statements">
+  <Modifier value="Statements"/>
+  <Metric value="loadbalance"/>
+ </ModelDescriptor>
+ <ModelDescriptor experimentType="hwc" rowCount="1000" id="{bde43f01-26c9-4f7d-8766-4ec68ee6961f}" name="Default">
+  <Modifier value="Functions"/>
+  <Metric value="Counts"/>
+  <Metric value="Percent"/>
  </ModelDescriptor>
  <ModelDescriptor experimentType="mpi" rowCount="100" id="{ac187ea2-0d83-4445-86f8-424891f409a2}" name="Functions Default">
   <Modifier value="Functions"/>
@@ -67,18 +96,25 @@
   <Metric value="Average"/>
   <Metric value="Count"/>
  </ModelDescriptor>
- <ModelDescriptor experimentType="mpi" rowCount="1" id="{2be034e2-0efc-4d4d-8691-a53b3eb60c86}" name="Hot call path">
-  <Modifier value="CallTrees"/>
-  <Modifier value="FullStack"/>
-  <Metric value="Exclusive_Times"/>
-  <Metric value="Percent"/>
-  <Metric value="Count"/>
- </ModelDescriptor>
- <ModelDescriptor experimentType="io" rowCount="100" id="{7442dbdf-ef36-49d7-9264-f9d5375bf887}" name="Default">
+ <ModelDescriptor experimentType="hwcsamp" rowCount="1000" id="{1c5984ce-7d9c-4252-ae07-d25590ebb0fb}" name="Default">
   <Modifier value="Functions"/>
-  <Metric value="exclusive_times"/>
+  <Metric value="AllEvents"/>
+  <Metric value="Percent"/>
+  <Metric value="Time"/>
+ </ModelDescriptor>
+ <ModelDescriptor experimentType="usertime" rowCount="100" id="{7142e949-34e6-489a-8081-bf5de2e66726}" name="Functions Default">
+  <Modifier value="Functions"/>
+  <Metric value="exclusive_time"/>
+  <Metric value="inclusive_time"/>
   <Metric value="percent"/>
-  <Metric value="count"/>
+ </ModelDescriptor>
+ <ModelDescriptor experimentType="mpi" rowCount="1000" id="{a64d8d99-fad8-45db-b0df-f936c659e8fd}" name="Load balance">
+  <Modifier value="Functions"/>
+  <Metric value="LoadBalance"/>
+ </ModelDescriptor>
+ <ModelDescriptor experimentType="hwc" rowCount="1000" id="{c53e35f8-5632-40ab-bb9f-9d2386167d96}" name="Load Balance Functions">
+  <Modifier value="Functions"/>
+  <Metric value="LoadBalance"/>
  </ModelDescriptor>
  <ModelDescriptor experimentType="io" rowCount="100" id="{42a10ec3-5d7b-48f5-b517-f907f9d49f73}" name="Call paths with full stack">
   <Modifier value="CallTrees"/>
@@ -87,10 +123,65 @@
   <Metric value="percent"/>
   <Metric value="count"/>
  </ModelDescriptor>
- <ModelDescriptor experimentType="usertime" rowCount="100" id="{57b31d34-c83d-4387-a2b0-bf79458c82a0}" name="Statements Default">
-  <Modifier value="Statements"/>
-  <Metric value="exclusive_time"/>
-  <Metric value="inclusive_time"/>
+ <ModelDescriptor experimentType="io" rowCount="1" id="{4a996167-610c-4c4b-b8bc-c68421733bbd}" name="Hot call path">
+  <Modifier value="CallTrees"/>
+  <Modifier value="FullStack"/>
+  <Metric value="count"/>
+  <Metric value="exclusive_times"/>
   <Metric value="percent"/>
+ </ModelDescriptor>
+ <ModelDescriptor experimentType="iot" rowCount="100" id="{15e3079b-d92f-4d54-b664-0849773b3e4c}" name="Default">
+  <Modifier value="Functions"/>
+  <Metric value="percent"/>
+  <Metric value="count"/>
+  <Metric value="average"/>
+ </ModelDescriptor>
+ <ModelDescriptor experimentType="mpi" rowCount="100" id="{de5f5163-6755-46e9-81f9-184284bdc14c}" name="Call paths with full stack">
+  <Modifier value="CallTrees"/>
+  <Modifier value="FullStack"/>
+  <Metric value="Exclusive_Times"/>
+  <Metric value="Percent"/>
+  <Metric value="Count"/>
+ </ModelDescriptor>
+ <ModelDescriptor experimentType="pcsamp" rowCount="100" id="{c959206d-bd12-4901-908b-eb233e80035a}" name="Functions Default">
+  <Modifier value="Functions"/>
+  <Metric value="Time"/>
+  <Metric value="Percent"/>
+ </ModelDescriptor>
+ <ModelDescriptor experimentType="hwctime" rowCount="1000" id="{9d2528f1-5dc7-4091-bf9c-1a522a346a3a}" name="Statements Default">
+  <Modifier value="Statements"/>
+  <Metric value="Exclusive_Counts"/>
+  <Metric value="Exclusive_Overflows"/>
+  <Metric value="Inclusive_Counts"/>
+  <Metric value="Inclusive_Overflows"/>
+ </ModelDescriptor>
+ <ModelDescriptor experimentType="fpe" rowCount="1000" id="{dbebadb4-7bc0-4611-a830-b5e95546644b}" name="Default">
+  <Modifier value="Functions"/>
+  <Metric value="Counts"/>
+  <Metric value="Percent"/>
+  <Metric value="Time"/>
+ </ModelDescriptor>
+ <ModelDescriptor experimentType="hwc" rowCount="1000" id="{ed3b8111-ed1f-49ca-9eb5-8ce4e5ffdf6f}" name="Load Balance Linked Objects">
+  <Modifier value="LinkedObjects"/>
+  <Metric value="LoadBalance"/>
+ </ModelDescriptor>
+ <ModelDescriptor experimentType="hwcsamp" rowCount="1000" id="{bbdf3c4e-ebf9-47c9-9e8e-9464551b83f9}" name="Load Balance Functions">
+  <Modifier value="Functions"/>
+  <Metric value="loadbalance"/>
+ </ModelDescriptor>
+ <ModelDescriptor experimentType="hwc" rowCount="1000" id="{0c40a828-ad52-46e3-93f9-f4b66ab5ab97}" name="Linked Objects Default">
+  <Metric value="Counts"/>
+  <Metric value="Percent"/>
+ </ModelDescriptor>
+ <ModelDescriptor experimentType="pcsamp" rowCount="100" id="{910e4dad-e4fa-47c2-89c5-74caf671a8f5}" name="Compare and analyze">
+  <Modifier value="Functions"/>
+  <Metric value="ThreadAverage"/>
+ </ModelDescriptor>
+ <ModelDescriptor experimentType="mpi" rowCount="1" id="{2be034e2-0efc-4d4d-8691-a53b3eb60c86}" name="Hot call path">
+  <Modifier value="CallTrees"/>
+  <Modifier value="FullStack"/>
+  <Metric value="Exclusive_Times"/>
+  <Metric value="Percent"/>
+  <Metric value="Count"/>
  </ModelDescriptor>
 </ModelDescriptors>
