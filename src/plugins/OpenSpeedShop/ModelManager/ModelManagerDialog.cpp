@@ -84,7 +84,7 @@ void ModelManagerDialog::on_btnCreate_clicked()
 {
     QUuid descriptorId = ModelManager::instance().createDescriptor();
 
-    //TODO: Select the new item in the view, which sets the editor to display it
+    // Select the new item in the view, which sets the editor to display it
     ModelDescriptorListWidget *descriptorListWidget = ui->descriptorListParent->findChild<ModelDescriptorListWidget *>();
     if(descriptorListWidget) {
         descriptorListWidget->selectRow(descriptorId);
@@ -93,7 +93,28 @@ void ModelManagerDialog::on_btnCreate_clicked()
 
 void ModelManagerDialog::on_btnRemove_clicked()
 {
+    //TODO: Remove selected model
 }
+
+void ModelManagerDialog::accept()
+{
+    // Remove some signals that will confuse things while closing
+    ModelDescriptorListWidget *descriptorListWidget = ui->descriptorListParent->findChild<ModelDescriptorListWidget *>();
+    if(descriptorListWidget) {
+        disconnect(descriptorListWidget, SIGNAL(currentDescriptorChanged(QUuid)), this, SLOT(currentSelectionChanged(QUuid)));
+    }
+
+    // Let the current editor widget know that we're moving on (it should prompt the user to save)
+    ModelDescriptorWidget *descriptorWidget = ui->descriptorParent->findChild<ModelDescriptorWidget *>();
+    if(descriptorWidget) {
+        descriptorWidget->close();
+        ui->descriptorParent->layout()->removeWidget(descriptorWidget);
+        descriptorWidget->deleteLater();
+    }
+
+    QDialog::accept();
+}
+
 
 
 } // namespace OpenSpeedShop
