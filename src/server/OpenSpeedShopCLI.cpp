@@ -333,9 +333,9 @@ void OpenSpeedShopCLI::terminateOSS(int windowID)
 
 //  Window_Termination(windowID);  // Probably not necessary I think all of the windows are destroyed in Commander_Termination()
 
-  if(!--m_windowCount) {
-    Openss_Basic_Termination();
-  }
+//  if(!--m_windowCount) {
+//    Openss_Basic_Termination();
+//  }
 
 }
 
