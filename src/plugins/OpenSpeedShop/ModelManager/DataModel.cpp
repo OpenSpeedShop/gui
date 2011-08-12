@@ -86,6 +86,7 @@ DataModel::~DataModel()
     }
 
     qDeleteAll(m_Rows);
+    m_Rows.clear();
 }
 
 QUuid DataModel::uid() const
@@ -137,6 +138,7 @@ void DataModel::buildModel(QDomDocument document)
         throw tr("'CommandObject' element doesn't exist, as expected. No error was given from the server.");
     }
 
+    qDeleteAll(m_Rows);
     m_Rows.clear();
 
     QDomElement rowElement = commandObjectElement.firstChildElement();
