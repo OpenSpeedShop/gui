@@ -56,7 +56,7 @@ void ModelManagerDialog::currentSelectionChanged(const QUuid &current)
     // Let the current editor widget know that we're moving on (it should prompt the user to save)
     ModelDescriptorWidget *descriptorWidget = ui->descriptorParent->findChild<ModelDescriptorWidget *>();
     if(descriptorWidget) {
-        descriptorWidget->close();
+//        descriptorWidget->close();
         ui->descriptorParent->layout()->removeWidget(descriptorWidget);
         descriptorWidget->deleteLater();
     }
@@ -93,7 +93,13 @@ void ModelManagerDialog::on_btnCreate_clicked()
 
 void ModelManagerDialog::on_btnRemove_clicked()
 {
-    //TODO: Remove selected model
+    // Remove selected model
+    ModelDescriptorListWidget *descriptorListWidget = ui->descriptorListParent->findChild<ModelDescriptorListWidget *>();
+    if(descriptorListWidget) {
+        QModelIndex index = descriptorListWidget->selectionModel()->currentIndex();
+        QUuid uid(index.data(Qt::UserRole).toString());
+        ModelManager::instance().removeDescriptor(uid);
+    }
 }
 
 void ModelManagerDialog::accept()

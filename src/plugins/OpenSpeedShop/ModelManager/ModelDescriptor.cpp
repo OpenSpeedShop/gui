@@ -13,6 +13,7 @@ ModelDescriptor::ModelDescriptor(QObject *parent) :
     m_Name = tr("New Model");
     m_Empty = true;
     m_Default = false;
+    m_Removing = false;
 
 
     Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
@@ -161,6 +162,16 @@ bool ModelDescriptor::isDefault()
 void ModelDescriptor::setDefault(bool value)
 {
     m_Default = value;
+}
+
+bool ModelDescriptor::isRemoving()
+{
+    return m_Removing;
+}
+
+void ModelDescriptor::setRemoving(bool value)
+{
+    m_Removing = value;
 }
 
 

@@ -262,6 +262,9 @@ QUuid ModelManager::createDescriptor()
 void ModelManager::removeDescriptor(const QUuid &descriptorUid)
 {
     ModelDescriptor *descriptor = this->descriptor(descriptorUid);
+    if(!descriptor) { return; }
+    descriptor->setRemoving();
+
     QList<QStandardItem *> standardItems = m_DescriptorPoolModel.findItems(descriptor->name());
 
     foreach(QStandardItem *standardItem, standardItems) {
@@ -276,10 +279,11 @@ void ModelManager::removeDescriptor(const QUuid &descriptorUid)
 
     // Remove associated objects from the model, and the model item cache
     QStandardItem *descriptorItem = m_DescriptorToItem.value(descriptorUid);
-    descriptorItem->parent()->removeRow(descriptorItem->row());
-    m_DescriptorToItem.remove(descriptorUid);
-    delete(descriptorItem);
+    if(descriptorItem) {
+        descriptorItem->parent()->removeRow(descriptorItem->row()); //This deletes descriptorItem
+    }
 
+    m_DescriptorToItem.remove(descriptorUid);
     m_DescriptorPool.remove(descriptorUid);
 
     descriptor->deleteLater();
