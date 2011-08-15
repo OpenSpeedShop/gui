@@ -33,15 +33,21 @@
 #include <ConnectionManager/IAdapter.h>
 #include <ConnectionManager/ConnectionManager.h>
 
+#include <QDebug>
+
 namespace Plugins {
 namespace OpenSpeedShop {
 
 RemoteFileDialog::RemoteFileDialog(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::RemoteFileDialog)
+    ui(new Ui::RemoteFileDialog),
+    m_Filter()
 {
     ui->setupUi(this);
     setPath("/");
+
+    m_Filter.setCaseSensitivity(Qt::CaseSensitive);
+    m_Filter.setPatternSyntax(QRegExp::WildcardUnix);
 
     ui->buttonBox->setFocus();
 }
@@ -66,6 +72,18 @@ void RemoteFileDialog::setPath(const QString &path)
     on_txtPath_editingFinished();
 }
 
+QString RemoteFileDialog::filter() const
+{
+    return m_Filter.pattern();
+}
+
+void RemoteFileDialog::setFilter(const QString &filter)
+{
+    m_Filter.setPattern(filter);
+    on_txtPath_editingFinished();
+}
+
+
 QString RemoteFileDialog::selectedFilePath() const
 {
     return m_SelectedFilePath;
@@ -87,6 +105,8 @@ void RemoteFileDialog::on_txtPath_editingFinished()
         if(!adapter) throw tr("Server not connected");
         QStringList listing = adapter->waitDirStat(path);
 
+        qDebug() << "Pattern:" << m_Filter.pattern();
+
         foreach(QString fileName, listing) {
             QTreeWidgetItem *fileItem = new QTreeWidgetItem(ui->treeWidget);
             fileItem->setText(0, fileName);
@@ -99,8 +119,7 @@ void RemoteFileDialog::on_txtPath_editingFinished()
                 fileItem->setIcon(0, QIcon(":/OpenSpeedShop/file.svg"));
                 fileItem->setData(0, Qt::UserRole, "File");
 
-                //HACK: We're just doing this for now, later we'll have to implement true filtering (server-side would be nice).
-                if(!fileName.endsWith(".openss")) {
+                if(!fileName.contains(m_Filter)) {
                     fileItem->setDisabled(true);
                 }
             }

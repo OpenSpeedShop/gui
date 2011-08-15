@@ -44,7 +44,8 @@ SOURCES      += OpenSpeedShopPlugin.cpp \
                 RemoteFileSystem/RemoteFileDialog.cpp \
                 Experiment/SourceView.cpp \
                 Experiment/SyntaxHighlighter.cpp \
-                Welcome/WelcomeData.cpp
+                Welcome/WelcomeData.cpp \
+    RemoteFileSystem/PathRewriter.cpp
 
 HEADERS      += OpenSpeedShopPlugin.h \
                 Settings/SettingPage.h \
@@ -73,7 +74,8 @@ HEADERS      += OpenSpeedShopPlugin.h \
                 RemoteFileSystem/RemoteFileDialog.h \
                 Experiment/SourceView.h \
                 Experiment/SyntaxHighlighter.h \
-                Welcome/WelcomeData.h
+                Welcome/WelcomeData.h \
+    RemoteFileSystem/PathRewriter.h
 
 FORMS        += Settings/SettingPage.ui \
                 AboutDialog.ui \
