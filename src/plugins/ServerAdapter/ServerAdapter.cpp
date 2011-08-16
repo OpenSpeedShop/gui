@@ -25,6 +25,7 @@ namespace ServerAdapter {
 ServerAdapter::ServerAdapter(QObject *parent) :
     IAdapter(parent)
 {
+    setObjectName("ServerAdapter");
 }
 
 bool ServerAdapter::isCompatible(QString serverVersion)
@@ -285,6 +286,33 @@ QString ServerAdapter::waitCatFile(QString filePath)
     serverCommand->deleteLater();
     return fileContents;
 }
+
+bool ServerAdapter::waitFileExists(QString filePath)
+{
+    ServerCommand *serverCommand = rawCommand(QString("fileExists %1").arg(filePath), "FileSystem");
+    QDomElement responseElement = waitCommand(serverCommand);
+
+    QDomElement fileSystemElement = responseElement.firstChildElement("FileSystem");
+    if(fileSystemElement.isNull()) throw tr("'FileSystem' element doesn't exist, as expected.");
+
+    QDomElement fileExistsElement = fileSystemElement.firstChildElement("FileExists");
+    if(fileExistsElement.isNull()) {
+
+        // Deal with other responses, like errors
+        QDomElement exceptionElement = fileSystemElement.firstChildElement("Exception");
+        if(!exceptionElement.isNull()) {
+            throw tr("Exception returned from server: '%1'").arg(exceptionElement.text());
+        }
+
+        throw tr("'FileExists' element doesn't exist, as expected. No error was given from the server.");
+    }
+
+
+    QString fileExists = fileExistsElement.attribute("exists", "false");
+    serverCommand->deleteLater();
+    return (fileExists == "true");
+}
+
 
 /*** BEGIN OpenSpeedShopCLI commands *****************************************/
 

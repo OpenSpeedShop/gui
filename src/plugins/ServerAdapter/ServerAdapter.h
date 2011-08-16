@@ -36,6 +36,7 @@ public:
 
     QStringList waitDirStat(QString path);
     QString waitCatFile(QString filePath);
+    bool waitFileExists(QString filePath);
 
     QStringList waitOssHelp();
     QStringList waitExperimentTypes();

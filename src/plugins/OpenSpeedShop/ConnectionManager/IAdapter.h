@@ -64,6 +64,7 @@ public:
 
     virtual QStringList waitDirStat(QString path) = 0;
     virtual QString waitCatFile(QString filePath) = 0;
+    virtual bool waitFileExists(QString filePath) = 0;
 
     virtual QStringList waitOssHelp() = 0;
     virtual QStringList waitExperimentTypes() = 0;

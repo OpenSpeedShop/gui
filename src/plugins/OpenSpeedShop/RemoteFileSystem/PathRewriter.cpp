@@ -29,6 +29,12 @@
 #include <QDesktopServices>
 #include <QDomDocument>
 #include <QFile>
+#include <QDir>
+
+#ifdef QT_DEBUG
+# include <QDebug>
+#endif
+
 #include <MainWindow/MainWindow.h>
 #include <PluginManager/PluginManager.h>
 
@@ -73,7 +79,6 @@ bool PathRewriter::initialize(QStringList &args, QString *err)
 
 void PathRewriter::shutdown()
 {
-
     try {
 
         storePathCache();
@@ -99,19 +104,18 @@ void PathRewriter::restorePathCache()
     }
 
     QDomDocument document = QDomDocument("PathCache");
-
     if (!file.open(QIODevice::ReadOnly)) {
         throw tr("Could not open path cache file: %1").arg(filePath);
     }
-
     if (!document.setContent(&file)) {
         file.close();
         throw tr("Could not use path cache file after opening --possibly invalid text");
     }
-
     file.close();
 
-    QDomElement pathElement = document.firstChildElement("Path");
+    QDomElement rootElement = document.firstChildElement("PathRewrites");
+
+    QDomElement pathElement = rootElement.firstChildElement("Path");
     while(!pathElement.isNull()) {
         QString oldPath = pathElement.attribute("oldPath");
         QString newPath = pathElement.attribute("newPath");
@@ -126,29 +130,33 @@ void PathRewriter::restorePathCache()
 
 void PathRewriter::storePathCache()
 {
-    QString filePath = QDesktopServices::storageLocation(QDesktopServices::DataLocation);
-    filePath.append("/PathCache.xml");
+    QDir dataLocation(QDesktopServices::storageLocation(QDesktopServices::DataLocation));
 
-    QFile file(filePath);
+    if(!dataLocation.exists()) {
+        dataLocation.mkpath(dataLocation.path());
+    }
+
     QDomDocument document = QDomDocument("PathCache");
+    QDomElement rootElement = document.createElement("PathRewrites");
+    document.appendChild(rootElement);
 
-    foreach(QString oldPath, m_PathCache) {
+    foreach(QString oldPath, m_PathCache.keys()) {
         QString newPath = m_PathCache.value(oldPath, QString());
 
         if(!oldPath.isEmpty() && !newPath.isEmpty()) {
             QDomElement pathElement = document.createElement("Path");
             pathElement.setAttribute("oldPath", oldPath);
             pathElement.setAttribute("newPath", newPath);
-            document.appendChild(pathElement);
+            rootElement.appendChild(pathElement);
         }
-
     }
 
+    QFile file(dataLocation.absoluteFilePath("PathCache.xml"));
     if (!file.open(QIODevice::WriteOnly)) {
-        throw tr("Could not open path cache file: %1").arg(filePath);
+        throw tr("Could not open path cache file: %1").arg(file.fileName());
     }
 
-    QByteArray buffer = document.toString().toAscii();
+    QByteArray buffer = document.toString(-1).toAscii();
     qint64 written = file.write(buffer);
     if(written != buffer.count()) {
         file.close();
@@ -158,7 +166,7 @@ void PathRewriter::storePathCache()
     file.close();
 }
 
-QString PathRewriter::rewrite(QString oldPath)
+QString PathRewriter::rewrite(const QString &oldPath)
 {
     QString newPath;
     if(m_PathCache.contains(oldPath)) {
@@ -172,12 +180,18 @@ QString PathRewriter::rewrite(QString oldPath)
     return newPath;
 }
 
-void PathRewriter::setRewrite(QString oldPath, QString newPath)
+void PathRewriter::setRewrite(const QString &oldPath, const QString &newPath)
 {
     if(m_PathCache.contains(oldPath)) {
         m_PathCache.remove(oldPath);
     }
 
-    m_PathCache[oldPath] = newPath;
+    if(!newPath.isEmpty()) {
+        m_PathCache.insert(oldPath, newPath);
+    }
 }
 
+bool PathRewriter::hasRewrite(const QString &oldPath)
+{
+    return m_PathCache.contains(oldPath);
+}

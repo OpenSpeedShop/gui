@@ -33,8 +33,6 @@
 #include <ConnectionManager/IAdapter.h>
 #include <ConnectionManager/ConnectionManager.h>
 
-#include <QDebug>
-
 namespace Plugins {
 namespace OpenSpeedShop {
 
@@ -104,8 +102,6 @@ void RemoteFileDialog::on_txtPath_editingFinished()
         IAdapter *adapter = ConnectionManager::instance().askAdapter();
         if(!adapter) throw tr("Server not connected");
         QStringList listing = adapter->waitDirStat(path);
-
-        qDebug() << "Pattern:" << m_Filter.pattern();
 
         foreach(QString fileName, listing) {
             QTreeWidgetItem *fileItem = new QTreeWidgetItem(ui->treeWidget);
