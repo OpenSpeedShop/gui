@@ -649,6 +649,7 @@ void ExperimentWidget::refreshSourcePath()
 
     QString filePath(sourceFilePath(m_lstSourceContextMenuRow));
     m_SourceFileCache.remove(filePath);
+    refreshSourceIcon(m_lstSourceContextMenuRow);
     on_lstSource_currentRowChanged(m_lstSourceContextMenuRow);
 }
 
