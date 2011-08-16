@@ -85,13 +85,14 @@ bool OpenSpeedShopPlugin::initialize(QStringList &args, QString *err)
 
         readSettings();
 
-        if(!m_MainWidget) {
-            m_MainWidget = new OpenSpeedShopWidget(this);
-        }
-
         /*** We're a main plugin, so we need to make changes to the mainWindow,
              like the application icon and the title ***/
         MainWindow::MainWindow &mainWindow = MainWindow::MainWindow::instance();
+
+        if(!m_MainWidget) {
+            m_MainWidget = new OpenSpeedShopWidget(&mainWindow);
+        }
+
         mainWindow.setWindowTitle(m_MainWidget->windowTitle());
         mainWindow.setWindowIcon(m_MainWidget->windowIcon());
 
