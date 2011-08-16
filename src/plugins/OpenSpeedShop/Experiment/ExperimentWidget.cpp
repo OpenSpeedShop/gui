@@ -6,6 +6,7 @@
 #include <QFileDialog>
 #include <QDesktopServices>
 #include <QUrl>
+#include <QMessageBox>
 
 #include <MainWindow/MainWindow.h>
 #include <ConnectionManager/ConnectionManager.h>
@@ -19,6 +20,7 @@
 #include "ViewManager/IViewFilterable.h"
 
 #include "RemoteFileSystem/RemoteFileDialog.h"
+#include "RemoteFileSystem/PathRewriter.h"
 
 #ifdef QT_DEBUG
 #  include <QDebug>
@@ -64,6 +66,7 @@ void ExperimentWidget::closeEvent(QCloseEvent *event)
     Q_UNUSED(event)
 
     //TODO: Ask the user if they really, really.
+
     writeSettings();
 }
 
@@ -131,6 +134,7 @@ void ExperimentWidget::load()
 
     RemoteFileDialog dlg(this);
     dlg.setPath(filePath);
+    dlg.setFilter("*.openss");
     if(!dlg.exec()) {
         throw tr("Could not load experiment: canceled by user.");
     }
@@ -171,7 +175,6 @@ void ExperimentWidget::load()
 
     /* Load the source paths into the source path list */
     refreshSourcePaths();
-
 }
 
 void ExperimentWidget::refreshSourcePaths()
@@ -222,8 +225,11 @@ void ExperimentWidget::refreshSourcePaths()
             }
         }
 
+        /* See if we can get the path from the list of previously used paths */
+        QString newPath = PathRewriter::instance().rewrite(QLatin1Char('/') + commonPath.join(QLatin1String("/")));
+
         /* Make it available to the user in the list */
-        ui->txtSourcePath->setText(QLatin1Char('/') + commonPath.join(QLatin1String("/")));
+        ui->txtSourcePath->setText(newPath);
         foreach(QStringList path, sourcePaths) {
             QListWidgetItem *item = new QListWidgetItem(ui->lstSource);
             item->setText(path.join(QLatin1String("/")));
@@ -291,9 +297,7 @@ void ExperimentWidget::getModel(QUuid descriptorUid)
 
         /* Reset the view list */
         ui->cmbViews->clear();
-        m_DisableViewChange = true;
         ui->cmbViews->addItems(ViewManager::instance().viewNames(m_CurrentModel));
-        m_DisableViewChange = false;
         ui->cmbViews->setCurrentIndex(ui->cmbViews->count() - 1);
 
         /* Let the source view know about the change */
@@ -320,7 +324,7 @@ void ExperimentWidget::on_cmbViews_currentIndexChanged(int index)
             m_CurrentView->deleteLater();
         }
 
-        if(!m_DisableViewChange && !ui->cmbViews->currentText().isEmpty()) {
+        if(!ui->cmbViews->currentText().isEmpty()) {
             m_CurrentView = ViewManager::instance().viewWidget(ui->cmbViews->currentText(), m_CurrentModel);
             ui->grpView->layout()->addWidget(m_CurrentView);
 
@@ -417,10 +421,44 @@ void ExperimentWidget::on_lstSource_currentRowChanged(int row)
         QString fileName = item->text();
         filePath.append(fileName);
 
+        filePath = PathRewriter::instance().rewrite(filePath);
+
         if(!m_SourceFileCache.contains(filePath)) {
             IAdapter *adapter = ConnectionManager::instance().askAdapter();
             if(!adapter) throw tr("Server not connected");
-            m_SourceFileCache.insert(filePath, adapter->waitCatFile(filePath));
+
+            try {
+                m_SourceFileCache.insert(filePath, adapter->waitCatFile(filePath));
+
+            } catch(QString err) {
+                QMessageBox msg(QMessageBox::Question,
+                                tr("File not found"),
+                                tr("Would you like to find it manually?"),
+                                QMessageBox::Yes|QMessageBox::No);
+
+                if(msg.exec() == QMessageBox::Yes) {
+
+                    Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
+                    settingManager.beginGroup("Plugins/OpenSpeedShop/Experiment");
+                    QString startPath = settingManager.value("defaultSourcePath", QLatin1String("/")).toString();
+                    settingManager.endGroup();
+
+                    RemoteFileDialog dlg(this);
+                    dlg.setPath(startPath);
+                    if(!dlg.exec()) {
+                        return;
+                    }
+
+                    QString newPath = dlg.selectedFilePath();
+                    m_SourceFileCache.insert(newPath, adapter->waitCatFile(newPath));
+
+                    PathRewriter::instance().setRewrite(filePath, newPath);
+                    filePath = newPath;
+
+                } else {
+                    throw err;
+                }
+            }
         }
 
         ui->txtSource->setPlainText(m_SourceFileCache.value(filePath));
@@ -428,10 +466,10 @@ void ExperimentWidget::on_lstSource_currentRowChanged(int row)
 
     } catch(QString err) {
         using namespace Core::MainWindow;
-        MainWindow::instance().notify(tr("Failed open source file: %1").arg(err), NotificationWidget::Critical);
+        MainWindow::instance().notify(tr("Failed to open source file: %1").arg(err), NotificationWidget::Critical);
     } catch(...) {
         using namespace Core::MainWindow;
-        MainWindow::instance().notify(tr("Failed open source file."), NotificationWidget::Critical);
+        MainWindow::instance().notify(tr("Failed to open source file."), NotificationWidget::Critical);
     }
 }
 
@@ -471,10 +509,10 @@ void ExperimentWidget::on_btnSourcePath_clicked()
 
     } catch(QString err) {
         using namespace Core::MainWindow;
-        MainWindow::instance().notify(tr("Failed open source file: %1").arg(err), NotificationWidget::Critical);
+        MainWindow::instance().notify(tr("Failed to open source file: %1").arg(err), NotificationWidget::Critical);
     } catch(...) {
         using namespace Core::MainWindow;
-        MainWindow::instance().notify(tr("Failed open source file."), NotificationWidget::Critical);
+        MainWindow::instance().notify(tr("Failed to open source file."), NotificationWidget::Critical);
     }
 }
 

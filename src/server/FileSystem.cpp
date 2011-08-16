@@ -50,7 +50,7 @@ int FileSystem::dirList(const string &dirPath, vector<string> &list)
     return errno;
   }
 
-  while(direntBuffer = readdir(directory)) {
+  while( (direntBuffer = readdir(directory)) ) {
     list.push_back(string(direntBuffer->d_name));
   }
 

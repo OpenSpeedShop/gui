@@ -25,53 +25,35 @@
 
  */
 
-#ifndef REMOTEFILEDIALOG_H
-#define REMOTEFILEDIALOG_H
+#ifndef PATHREWRITER_H
+#define PATHREWRITER_H
 
-#include <QDialog>
-#include <QModelIndex>
-#include <QRegExp>
+#include <QObject>
+#include <QMap>
+#include <QString>
 
-namespace Plugins {
-namespace OpenSpeedShop {
-
-
-namespace Ui {
-    class RemoteFileDialog;
-}
-
-class RemoteFileDialog : public QDialog
+class PathRewriter : public QObject
 {
     Q_OBJECT
-
 public:
-    explicit RemoteFileDialog(QWidget *parent = 0);
-    ~RemoteFileDialog();
+    static PathRewriter &instance();
 
-    QString path() const;
-    void setPath(const QString &path);
+    bool initialize(QStringList &args, QString *err);
+    void shutdown();
 
-    QString filter() const;
-    void setFilter(const QString &filter);
+    QString rewrite(QString oldPath);
+    void setRewrite(QString oldPath, QString newPath);
 
-    QString selectedFilePath() const;
+protected:
+    explicit PathRewriter(QObject *parent = 0);
+    ~PathRewriter();
 
-protected slots:
-    void on_txtPath_editingFinished();
-    void on_treeWidget_activated(QModelIndex);
-    void on_treeWidget_itemSelectionChanged();
-    void on_btnPathUp_clicked();
+    void restorePathCache();
+    void storePathCache();
 
 private:
-    Ui::RemoteFileDialog *ui;
-    QString m_SelectedFilePath;
-
-    QRegExp m_Filter;
+    QMap<QString, QString> m_PathCache;
 
 };
 
-
-} // namespace OpenSpeedShop
-} // namespace Plugins
-
-#endif // REMOTEFILEDIALOG_H
+#endif // PATHREWRITER_H

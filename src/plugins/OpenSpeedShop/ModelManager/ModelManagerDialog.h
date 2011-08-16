@@ -24,6 +24,7 @@ protected slots:
     void currentSelectionChanged(const QUuid &current);
     void on_btnCreate_clicked();
     void on_btnRemove_clicked();
+    void accept();
 
 protected:
     ModelDescriptorWidget *m_CurrentModelDescriptorWidget;

@@ -36,9 +36,11 @@
 #include <ConnectionManager/ConnectionManager.h>
 #include <ModelManager/ModelManager.h>
 #include <ViewManager/ViewManager.h>
+#include <RemoteFileSystem/PathRewriter.h>
 
 #include "AboutDialog.h"
 #include "Settings/SettingPage.h"
+
 
 namespace Plugins {
 namespace OpenSpeedShop {
@@ -129,6 +131,9 @@ bool OpenSpeedShopPlugin::initialize(QStringList &args, QString *err)
         ViewManager &viewManager = ViewManager::instance();
         if(!viewManager.initialize(args, err)) { throw; }
 
+        PathRewriter &pathRewriter = PathRewriter::instance();
+        if(!pathRewriter.initialize(args, err)) { throw; }
+
     } catch(...) {
         if(!err) err = new QString();
         if(err->isEmpty()) err->append("\n");
@@ -144,6 +149,7 @@ void OpenSpeedShopPlugin::shutdown()
     ConnectionManager::instance().shutdown();
     ModelManager::instance().shutdown();
     ViewManager::instance().shutdown();
+    PathRewriter::instance().shutdown();
 
     writeSettings();
 }

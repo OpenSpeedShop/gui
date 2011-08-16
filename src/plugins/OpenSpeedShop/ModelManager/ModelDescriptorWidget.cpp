@@ -18,10 +18,12 @@ ModelDescriptorWidget::ModelDescriptorWidget(ModelDescriptor *modelDescriptor, Q
     ui(new Ui::ModelDescriptorWidget)
 {
     ui->setupUi(this);
-    m_ModelDescriptor = modelDescriptor;
-    init();
 
-    ui->cmbExperimentType->setEnabled(m_ModelDescriptor->isEmpty());
+    if((m_ModelDescriptor = modelDescriptor) && !m_ModelDescriptor->isRemoving()) {
+        connect(m_ModelDescriptor, SIGNAL(destroyed()), this, SLOT(modelDescriptorDestroyed()));
+        init();
+        ui->cmbExperimentType->setEnabled(m_ModelDescriptor->isEmpty());
+    }
 }
 
 ModelDescriptorWidget::~ModelDescriptorWidget()
@@ -31,6 +33,10 @@ ModelDescriptorWidget::~ModelDescriptorWidget()
 
 void ModelDescriptorWidget::init()
 {
+    if(!m_ModelDescriptor || m_ModelDescriptor->isRemoving()) {
+        return;
+    }
+
     ui->buttonBox->hide();
     ui->txtModelName->setText(m_ModelDescriptor->name());
     ui->txtRowCount->setValue(m_ModelDescriptor->rowCount());
@@ -65,6 +71,10 @@ void ModelDescriptorWidget::on_cmbExperimentType_currentIndexChanged(int index)
 {
     Q_UNUSED(index)
 
+    if(!m_ModelDescriptor || m_ModelDescriptor->isRemoving()) {
+        return;
+    }
+
     // We need a valid server connection in order
     ConnectionManager &connectionManager = ConnectionManager::instance();
     if(!connectionManager.isConnected()) {
@@ -75,7 +85,6 @@ void ModelDescriptorWidget::on_cmbExperimentType_currentIndexChanged(int index)
 
     IAdapter *adapter = connectionManager.currentAdapter();
     if(!adapter) throw tr("Server not connected");
-
 
     QString experimentType = ui->cmbExperimentType->currentText();
 
@@ -127,6 +136,11 @@ void ModelDescriptorWidget::on_buttonBox_clicked(QAbstractButton *button)
 
 void ModelDescriptorWidget::close()
 {
+    if(!m_ModelDescriptor || m_ModelDescriptor->isRemoving()) {
+        reject();
+        return;
+    }
+
     // Check to see if we've modified the modelDescriptor
     if(hasChanged()) {
         // If we have, ask the user if they would like to persist the changes.
@@ -144,6 +158,10 @@ void ModelDescriptorWidget::close()
 
 bool ModelDescriptorWidget::hasChanged()
 {
+    if(!m_ModelDescriptor || m_ModelDescriptor->isRemoving()) {
+        return true;
+    }
+
     if(m_ModelDescriptor->name().compare(ui->txtModelName->text()))
         return true;
     if(m_ModelDescriptor->experimentType().compare(ui->cmbExperimentType->currentText()))
@@ -196,6 +214,10 @@ bool ModelDescriptorWidget::hasChanged()
 
 void ModelDescriptorWidget::accept()
 {
+    if(!m_ModelDescriptor || m_ModelDescriptor->isRemoving()) {
+        return;
+    }
+
     m_ModelDescriptor->setName(ui->txtModelName->text());
     m_ModelDescriptor->setExperimentType(ui->cmbExperimentType->currentText());
     m_ModelDescriptor->setRowCount((quint64)ui->txtRowCount->value());
@@ -213,8 +235,13 @@ void ModelDescriptorWidget::accept()
 
 void ModelDescriptorWidget::reject()
 {
-
 }
+
+void ModelDescriptorWidget::modelDescriptorDestroyed()
+{
+    m_ModelDescriptor = NULL;
+}
+
 
 } // namespace OpenSpeedShop
 } // namespace Plugins

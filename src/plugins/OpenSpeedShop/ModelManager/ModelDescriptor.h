@@ -41,6 +41,9 @@ public:
 
     bool isEmpty();
 
+    bool isRemoving();
+    void setRemoving(bool value = true);
+
     bool isDefault();
     void setDefault(bool value);
 
@@ -69,6 +72,7 @@ protected:
     QStringList m_Metrics;
     bool m_Empty;
     bool m_Default;
+    bool m_Removing;
 
 };
 
