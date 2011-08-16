@@ -61,8 +61,8 @@ namespace OpenSpeedShop {
 
 
 OpenSpeedShopPlugin::OpenSpeedShopPlugin() :
-    m_AboutPage(this),
-    m_MainWidget(NULL)
+    m_MainWidget(NULL),
+    m_AboutPage(this)
 {
     m_Name = "OpenSpeedShop";
     m_Version = "0.1.dev";
