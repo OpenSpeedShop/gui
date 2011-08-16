@@ -470,6 +470,7 @@ QString ExperimentWidget::rewriteSourceFilePath(int row)
 void ExperimentWidget::on_lstSource_currentRowChanged(int row)
 {
     ui->txtSource->clear();
+    ui->txtSource->setFilePath(QString());
 
     try {
 

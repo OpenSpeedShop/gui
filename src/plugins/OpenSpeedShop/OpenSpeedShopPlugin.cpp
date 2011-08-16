@@ -61,7 +61,8 @@ namespace OpenSpeedShop {
 
 
 OpenSpeedShopPlugin::OpenSpeedShopPlugin() :
-    m_AboutPage(this)
+    m_AboutPage(this),
+    m_MainWidget(NULL)
 {
     m_Name = "OpenSpeedShop";
     m_Version = "0.1.dev";
@@ -84,14 +85,18 @@ bool OpenSpeedShopPlugin::initialize(QStringList &args, QString *err)
 
         readSettings();
 
+        if(!m_MainWidget) {
+            m_MainWidget = new OpenSpeedShopWidget(this);
+        }
+
         /*** We're a main plugin, so we need to make changes to the mainWindow,
              like the application icon and the title ***/
         MainWindow::MainWindow &mainWindow = MainWindow::MainWindow::instance();
-        mainWindow.setWindowTitle(m_MainWidget.windowTitle());
-        mainWindow.setWindowIcon(m_MainWidget.windowIcon());
+        mainWindow.setWindowTitle(m_MainWidget->windowTitle());
+        mainWindow.setWindowIcon(m_MainWidget->windowIcon());
 
         /*** Set our main widget in the main window ***/
-        mainWindow.addCentralWidget(&m_MainWidget, 32, QString("O|SS"), m_MainWidget.windowIcon());
+        mainWindow.addCentralWidget(m_MainWidget, 32, QString("O|SS"), m_MainWidget->windowIcon());
 
         /*** Register our menu structure ***/
         foreach(QAction *action, mainWindow.menuBar()->actions()) {
@@ -106,7 +111,7 @@ bool OpenSpeedShopPlugin::initialize(QStringList &args, QString *err)
         /*** Register any objects with the plugin manager ***/
         PluginManager::PluginManager &pluginManager = PluginManager::PluginManager::instance();
         pluginManager.addObject(this);                         /* Register ourselves as an ISettingPageFactory */
-        pluginManager.addObject(&m_MainWidget);
+        pluginManager.addObject(m_MainWidget);
 
         // This should be fault tollerant, as it's not mandatory to function properly
         try {

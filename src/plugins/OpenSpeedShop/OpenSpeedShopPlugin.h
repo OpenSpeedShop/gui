@@ -73,7 +73,7 @@ protected:
     QString m_Version;
     QList<Core::PluginManager::Dependency> m_Dependencies;
 
-    OpenSpeedShopWidget m_MainWidget;
+    OpenSpeedShopWidget *m_MainWidget;
     WelcomeData m_WelcomeData;
 
     QAction m_AboutPage;
