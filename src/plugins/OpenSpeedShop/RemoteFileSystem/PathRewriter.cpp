@@ -99,8 +99,11 @@ void PathRewriter::restorePathCache()
 
     QFile file(filePath);
     if(!file.exists()) {
+#ifdef QT_DEBUG
         throw tr("Path cache file does not exist: %1").arg(filePath);
+#else
         return;
+#endif
     }
 
     QDomDocument document = QDomDocument("PathCache");
@@ -133,7 +136,9 @@ void PathRewriter::storePathCache()
     QDir dataLocation(QDesktopServices::storageLocation(QDesktopServices::DataLocation));
 
     if(!dataLocation.exists()) {
-        dataLocation.mkpath(dataLocation.path());
+        if(!dataLocation.mkpath(dataLocation.path())) {
+            throw tr("Could not create data location path to store path cache: %1").arg(dataLocation.path());
+        }
     }
 
     QDomDocument document = QDomDocument("PathCache");
