@@ -37,7 +37,6 @@ protected slots:
     void reject();
 
     bool hasChanged();
-    void modelDescriptorDestroyed();
 
 private:
     Ui::ModelDescriptorWidget *ui;
