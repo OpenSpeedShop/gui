@@ -44,7 +44,14 @@ bool Socket::start(int port)
     std::cerr << __FILE__ << ":" << __LINE__ << "\t\tError setting socket options: " << status << std::endl;
     return false;
   }
-
+  
+  struct timeval tv;
+  tv.tv_sec = 10;
+  status = setsockopt(_socketDescriptor, SOL_SOCKET, SO_RCVTIMEO, (const char*)&tv, sizeof(tv));
+  if(status < 0) {
+    std::cerr << __FILE__ << ":" << __LINE__ << "\t\tError setting socket timeout options: " << status << std::endl;
+    return false;
+  }
 
   std::cerr << __FILE__ << ":" << __LINE__ << "\t\tBinding socket" << std::endl;
   status = bind(_socketDescriptor, (struct sockaddr *) &serverAddress, sizeof(serverAddress));
@@ -119,5 +126,3 @@ int Socket::recv(std::string &str)
   str = buffer;
   return retval;
 }
-
-
