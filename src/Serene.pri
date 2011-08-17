@@ -23,7 +23,7 @@ QT                += opengl
 #################
 # LIBRARY PATHS #
 #################
-LIBS              += -L$$quote($${BUILD_PATH}/Serene/lib/$${POSTFIX}) -lSerene
+LIBS              += -L$$quote($${SERENE_PATH}/Serene/lib/$${POSTFIX}) -lSerene
 
 #################
 # INCLUDE PATHS #
