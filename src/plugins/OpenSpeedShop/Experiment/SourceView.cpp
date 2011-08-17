@@ -190,7 +190,7 @@ void SourceView::refreshStatements()
                 int lineNumber = statementPattern.cap(2).toInt(&okay);
                 if(!okay) { lineNumber = 0; }
 
-                if(filePath.endsWith(m_FilePath)) {
+                if(filePath == m_FilePath) {
                     m_Statements.insert(lineNumber, index);
                 }
             }

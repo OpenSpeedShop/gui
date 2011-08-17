@@ -249,11 +249,12 @@ void ExperimentWidget::refreshSourceIcon(int row)
             refreshSourceIcon(i);
         }
     } else {
-        QString filePath = sourceFilePath(row, false);
-        if(!PathRewriter::instance().hasRewrite(filePath)) {
-            ui->lstSource->item(row)->setIcon(QIcon(":/OpenSpeedShop/SourceFile/sourcefile.svg"));
+        QListWidgetItem *item = ui->lstSource->item(row);
+        item->setToolTip(sourceFilePath(row));
+        if(!PathRewriter::instance().hasRewrite(sourceFilePath(row, false))) {
+            item->setIcon(QIcon(":/OpenSpeedShop/SourceFile/sourcefile.svg"));
         } else {
-            ui->lstSource->item(row)->setIcon(QIcon(":/OpenSpeedShop/SourceFile/sourcefile-linked.svg"));
+            item->setIcon(QIcon(":/OpenSpeedShop/SourceFile/sourcefile-linked.svg"));
         }
     }
 }
@@ -430,18 +431,31 @@ QString ExperimentWidget::sourceFilePath(int row, bool rewrite)
         return QString();
     }
 
-    QString filePath = ui->txtSourcePath->text();
+    QString fileName = item->text();
+
+    // Recreate the original file path
+    QString filePath = m_CommonPath;
     if(!filePath.endsWith(QLatin1Char('/'))) {
         filePath.append(QLatin1Char('/'));
     }
-
-    QString fileName = item->text();
     filePath.append(fileName);
 
-    if(rewrite) {
-        filePath = PathRewriter::instance().rewrite(filePath);
+    // Are we looking for the orginal?
+    if(!rewrite) {
+        return filePath;
     }
 
+    // See if it's rewritten
+    if(PathRewriter::instance().hasRewrite(filePath)) {
+        return PathRewriter::instance().rewrite(filePath);
+    }
+
+    // If not explicitly rewritten, see if we rewrote the common path
+    filePath = ui->txtSourcePath->text();
+    if(!filePath.endsWith(QLatin1Char('/'))) {
+        filePath.append(QLatin1Char('/'));
+    }
+    filePath.append(fileName);
     return filePath;
 }
 
@@ -500,7 +514,7 @@ void ExperimentWidget::on_lstSource_currentRowChanged(int row)
         }
 
         ui->txtSource->setPlainText(m_SourceFileCache.value(filePath));
-        ui->txtSource->setFilePath(filePath);
+        ui->txtSource->setFilePath(sourceFilePath(row, false));
 
     } catch(QString err) {
         using namespace Core::MainWindow;
@@ -648,10 +662,13 @@ void ExperimentWidget::refreshSourcePath()
         return;
     }
 
-    QString filePath(sourceFilePath(m_lstSourceContextMenuRow));
+    QString filePath = sourceFilePath(m_lstSourceContextMenuRow);
     m_SourceFileCache.remove(filePath);
     refreshSourceIcon(m_lstSourceContextMenuRow);
-    on_lstSource_currentRowChanged(m_lstSourceContextMenuRow);
+
+    if(m_lstSourceContextMenuRow == ui->lstSource->currentRow()) {
+        on_lstSource_currentRowChanged(m_lstSourceContextMenuRow);
+    }
 }
 
 void ExperimentWidget::rewriteSourcePath()
@@ -661,7 +678,10 @@ void ExperimentWidget::rewriteSourcePath()
     }
 
     rewriteSourceFilePath(m_lstSourceContextMenuRow);
-    on_lstSource_currentRowChanged(m_lstSourceContextMenuRow);
+
+    if(m_lstSourceContextMenuRow == ui->lstSource->currentRow()) {
+        on_lstSource_currentRowChanged(m_lstSourceContextMenuRow);
+    }
 }
 
 void ExperimentWidget::resetSourcePath()
@@ -673,7 +693,10 @@ void ExperimentWidget::resetSourcePath()
     QString filePath = sourceFilePath(m_lstSourceContextMenuRow, false);
     PathRewriter::instance().setRewrite(filePath, QString());
     refreshSourceIcon(m_lstSourceContextMenuRow);
-    on_lstSource_currentRowChanged(m_lstSourceContextMenuRow);
+
+    if(m_lstSourceContextMenuRow == ui->lstSource->currentRow()) {
+        on_lstSource_currentRowChanged(m_lstSourceContextMenuRow);
+    }
 }
 
 
