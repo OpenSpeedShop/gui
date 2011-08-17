@@ -63,8 +63,8 @@ MainWindow &MainWindow::instance()
 #ifdef MAINWINDOW_DEBUG
     qDebug() << __FILE__ << __LINE__ << "\tMainWindow::instance";
 #endif
-    static MainWindow m_Instance;
-    return m_Instance;
+    static MainWindow *m_Instance = new MainWindow();
+    return *m_Instance;
 }
 
 /*!
@@ -155,6 +155,8 @@ void MainWindow::shutdown()
 #endif
 
     writeSettings();
+
+    deleteLater();
 }
 
 /*!

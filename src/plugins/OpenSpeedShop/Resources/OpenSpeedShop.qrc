@@ -23,4 +23,8 @@
     <qresource prefix="/OpenSpeedShop/mockup">
         <file>scalability_chart.png</file>
     </qresource>
+    <qresource prefix="/OpenSpeedShop/SourceFile">
+        <file alias="sourcefile.svg">sourcefile.svg</file>
+        <file alias="sourcefile-linked.svg">sourcefile-linked.svg</file>
+    </qresource>
 </RCC>

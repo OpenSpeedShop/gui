@@ -28,6 +28,7 @@
 #include "AboutDialog.h"
 #include "ui_AboutDialog.h"
 #include <QTimer>
+#include <QDesktopWidget>
 
 namespace Plugins {
 namespace OpenSpeedShop {
@@ -66,6 +67,9 @@ void AboutDialog::splash(int ms)
     aboutDialog->setWindowFlags(Qt::WindowStaysOnTopHint|Qt::FramelessWindowHint);
     aboutDialog->setModal(true);
     aboutDialog->layout()->setMargin(0);
+
+    const QRect screen = QApplication::desktop()->screenGeometry();
+    aboutDialog->move(screen.center() - aboutDialog->rect().center());
 
     aboutDialog->open();
     QTimer::singleShot(ms, aboutDialog, SLOT(close()));

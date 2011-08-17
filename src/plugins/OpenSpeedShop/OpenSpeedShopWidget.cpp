@@ -121,6 +121,7 @@ void OpenSpeedShopWidget::closeExperiment(int index)
         ExperimentWidget *experimentWidget = qobject_cast<ExperimentWidget *>(widget(index));
         if(experimentWidget->close()) {
             removeTab(index);
+            experimentWidget->deleteLater();
         }
 
     } catch(QString err) {

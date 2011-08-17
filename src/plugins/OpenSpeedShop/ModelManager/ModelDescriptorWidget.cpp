@@ -20,7 +20,6 @@ ModelDescriptorWidget::ModelDescriptorWidget(ModelDescriptor *modelDescriptor, Q
     ui->setupUi(this);
 
     if((m_ModelDescriptor = modelDescriptor) && !m_ModelDescriptor->isRemoving()) {
-        connect(m_ModelDescriptor, SIGNAL(destroyed()), this, SLOT(modelDescriptorDestroyed()));
         init();
         ui->cmbExperimentType->setEnabled(m_ModelDescriptor->isEmpty());
     }
@@ -236,12 +235,6 @@ void ModelDescriptorWidget::accept()
 void ModelDescriptorWidget::reject()
 {
 }
-
-void ModelDescriptorWidget::modelDescriptorDestroyed()
-{
-    m_ModelDescriptor = NULL;
-}
-
 
 } // namespace OpenSpeedShop
 } // namespace Plugins

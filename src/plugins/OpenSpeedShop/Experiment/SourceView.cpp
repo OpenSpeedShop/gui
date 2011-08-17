@@ -37,10 +37,9 @@ namespace OpenSpeedShop {
 
 SourceView::SourceView(QWidget *parent) :
     QPlainTextEdit(parent),
+    m_SideBarArea(new SideBarArea(this)),
     m_SyntaxHighlighter(this->document())
 {
-    m_SideBarArea = new SideBarArea(this);
-
     connect(this, SIGNAL(blockCountChanged(int)), this, SLOT(updateSideBarAreaWidth(int)));
     connect(this, SIGNAL(updateRequest(QRect,int)), this, SLOT(updateSideBarArea(QRect,int)));
     connect(this, SIGNAL(cursorPositionChanged()), this, SLOT(highlightCurrentLine()));
@@ -129,6 +128,7 @@ void SourceView::sideBarAreaPaintEvent(QPaintEvent *event)
         if (block.isVisible() && bottom >= event->rect().top()) {
             QString number = QString::number(blockNumber + 1);
             painter.setPen(Qt::darkGray);
+
             painter.drawText(0, top, m_SideBarArea->width(), fontMetrics().height(), Qt::AlignRight, number);
 
             if(m_Statements.contains(blockNumber + 1)) {
@@ -190,7 +190,7 @@ void SourceView::refreshStatements()
                 int lineNumber = statementPattern.cap(2).toInt(&okay);
                 if(!okay) { lineNumber = 0; }
 
-                if(filePath.endsWith(m_FilePath)) {
+                if(filePath == m_FilePath) {
                     m_Statements.insert(lineNumber, index);
                 }
             }

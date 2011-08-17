@@ -134,3 +134,18 @@ xml_node<> *FileSystem::catFile(const string &path, memory_pool<> *memoryPool)
   
   return fileContentNode;
 }
+
+xml_node<> *FileSystem::fileExists(const string &path, memory_pool<> *memoryPool)
+{
+  xml_node<> *fileExistsNode = memoryPool->allocate_node(node_element, "FileExists");
+  fileExistsNode->append_attribute(memoryPool->allocate_attribute("path", memoryPool->allocate_string(path.c_str())));
+
+  struct stat statBuff;
+  if(stat(path.c_str(), &statBuff) < 0) {
+    fileExistsNode->append_attribute(memoryPool->allocate_attribute("exists", memoryPool->allocate_string("false")));
+  } else {
+    fileExistsNode->append_attribute(memoryPool->allocate_attribute("exists", memoryPool->allocate_string("true")));
+  }
+  
+  return fileExistsNode;
+}

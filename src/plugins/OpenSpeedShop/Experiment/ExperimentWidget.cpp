@@ -36,6 +36,8 @@ ExperimentWidget::ExperimentWidget(QWidget *parent) :
     m_CurrentView = NULL;
     m_CurrentModel = NULL;
 
+    m_lstSourceContextMenuRow = -1;
+
     ui->setupUi(this);
 
 #if(QT_VERSION >= QT_VERSION_CHECK(4, 7, 0))
@@ -140,7 +142,7 @@ void ExperimentWidget::load()
     }
 
     filePath = dlg.selectedFilePath();
-    if(filePath.isEmpty()) {        //TODO: Additional file path checking
+    if(filePath.isEmpty()) {
         throw tr("Could not load experiemnt: invalid filepath.");
     }
 
@@ -226,7 +228,8 @@ void ExperimentWidget::refreshSourcePaths()
         }
 
         /* See if we can get the path from the list of previously used paths */
-        QString newPath = PathRewriter::instance().rewrite(QLatin1Char('/') + commonPath.join(QLatin1String("/")));
+        m_CommonPath = QLatin1Char('/') + commonPath.join(QLatin1String("/"));
+        QString newPath = PathRewriter::instance().rewrite(m_CommonPath);
 
         /* Make it available to the user in the list */
         ui->txtSourcePath->setText(newPath);
@@ -235,8 +238,27 @@ void ExperimentWidget::refreshSourcePaths()
             item->setText(path.join(QLatin1String("/")));
             ui->lstSource->addItem(item);
         }
+        refreshSourceIcon();
     }
 }
+
+void ExperimentWidget::refreshSourceIcon(int row)
+{
+    if(row < 0) {
+        for(int i = 0; i < ui->lstSource->count(); ++i) {
+            refreshSourceIcon(i);
+        }
+    } else {
+        QListWidgetItem *item = ui->lstSource->item(row);
+        item->setToolTip(sourceFilePath(row));
+        if(!PathRewriter::instance().hasRewrite(sourceFilePath(row, false))) {
+            item->setIcon(QIcon(":/OpenSpeedShop/SourceFile/sourcefile.svg"));
+        } else {
+            item->setIcon(QIcon(":/OpenSpeedShop/SourceFile/sourcefile-linked.svg"));
+        }
+    }
+}
+
 
 void ExperimentWidget::refreshProcessTree()
 {
@@ -402,67 +424,97 @@ void ExperimentWidget::on_cmbViewFilterColumn_currentIndexChanged(int index)
     }
 }
 
+QString ExperimentWidget::sourceFilePath(int row, bool rewrite)
+{
+    QListWidgetItem *item = ui->lstSource->item(row);
+    if(item == NULL) {
+        return QString();
+    }
+
+    QString fileName = item->text();
+
+    // Recreate the original file path
+    QString filePath = m_CommonPath;
+    if(!filePath.endsWith(QLatin1Char('/'))) {
+        filePath.append(QLatin1Char('/'));
+    }
+    filePath.append(fileName);
+
+    // Are we looking for the orginal?
+    if(!rewrite) {
+        return filePath;
+    }
+
+    // See if it's rewritten
+    if(PathRewriter::instance().hasRewrite(filePath)) {
+        return PathRewriter::instance().rewrite(filePath);
+    }
+
+    // If not explicitly rewritten, see if we rewrote the common path
+    filePath = ui->txtSourcePath->text();
+    if(!filePath.endsWith(QLatin1Char('/'))) {
+        filePath.append(QLatin1Char('/'));
+    }
+    filePath.append(fileName);
+    return filePath;
+}
+
+QString ExperimentWidget::rewriteSourceFilePath(int row)
+{
+    QString filePath = sourceFilePath(row, false);
+
+    Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
+    settingManager.beginGroup("Plugins/OpenSpeedShop/Experiment");
+    QString startPath = settingManager.value("defaultSourcePath", QLatin1String("/")).toString();
+    settingManager.endGroup();
+
+    RemoteFileDialog dlg(this);
+    dlg.setPath(startPath);
+    dlg.setWindowTitle(tr("Locate replacement file for: %1").arg(filePath));
+    if(!dlg.exec()) {
+        return filePath;
+    }
+
+    QString newPath = dlg.selectedFilePath();
+    PathRewriter::instance().setRewrite(filePath, newPath);
+    refreshSourceIcon(row);
+    return newPath;
+}
+
 void ExperimentWidget::on_lstSource_currentRowChanged(int row)
 {
     ui->txtSource->clear();
+    ui->txtSource->setFilePath(QString());
 
     try {
-
-        QString filePath = ui->txtSourcePath->text();
-        if(!filePath.endsWith(QLatin1Char('/'))) {
-            filePath.append(QLatin1Char('/'));
-        }
 
         QListWidgetItem *item = ui->lstSource->item(row);
         if(item == NULL) {
             return;
         }
 
-        QString fileName = item->text();
-        filePath.append(fileName);
-
-        filePath = PathRewriter::instance().rewrite(filePath);
+        QString filePath(sourceFilePath(row));
 
         if(!m_SourceFileCache.contains(filePath)) {
             IAdapter *adapter = ConnectionManager::instance().askAdapter();
             if(!adapter) throw tr("Server not connected");
 
-            try {
+            if(adapter->waitFileExists(filePath)) {
                 m_SourceFileCache.insert(filePath, adapter->waitCatFile(filePath));
-
-            } catch(QString err) {
-                QMessageBox msg(QMessageBox::Question,
-                                tr("File not found"),
-                                tr("Would you like to find it manually?"),
+            } else {
+                QMessageBox msg(QMessageBox::Question, tr("File not found"),
+                                tr("The file path, \"%1\", does not exist.\nWould you like to find a replacement manually?").arg(filePath),
                                 QMessageBox::Yes|QMessageBox::No);
 
                 if(msg.exec() == QMessageBox::Yes) {
-
-                    Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
-                    settingManager.beginGroup("Plugins/OpenSpeedShop/Experiment");
-                    QString startPath = settingManager.value("defaultSourcePath", QLatin1String("/")).toString();
-                    settingManager.endGroup();
-
-                    RemoteFileDialog dlg(this);
-                    dlg.setPath(startPath);
-                    if(!dlg.exec()) {
-                        return;
-                    }
-
-                    QString newPath = dlg.selectedFilePath();
-                    m_SourceFileCache.insert(newPath, adapter->waitCatFile(newPath));
-
-                    PathRewriter::instance().setRewrite(filePath, newPath);
-                    filePath = newPath;
-
-                } else {
-                    throw err;
+                    filePath = rewriteSourceFilePath(row);
+                    m_SourceFileCache.insert(filePath, adapter->waitCatFile(filePath));
                 }
             }
         }
 
         ui->txtSource->setPlainText(m_SourceFileCache.value(filePath));
-        ui->txtSource->setFilePath(fileName);
+        ui->txtSource->setFilePath(sourceFilePath(row, false));
 
     } catch(QString err) {
         using namespace Core::MainWindow;
@@ -473,10 +525,9 @@ void ExperimentWidget::on_lstSource_currentRowChanged(int row)
     }
 }
 
-void ExperimentWidget::on_btnSourcePath_clicked()
+void ExperimentWidget::on_txtSourcePath_editingFinished()
 {
     try {
-
         Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
         settingManager.beginGroup("Plugins/OpenSpeedShop/Experiment");
         QString filePath = settingManager.value("defaultSourcePath", QLatin1String("/")).toString();
@@ -488,19 +539,13 @@ void ExperimentWidget::on_btnSourcePath_clicked()
             filePath = QString(QLatin1Char('/'));
         }
 
-        RemoteFileDialog dlg(this);
-        dlg.setPath(filePath);
-        if(!dlg.exec()) {
-            return;
-        }
-
-        filePath = dlg.path();
-        ui->txtSourcePath->setText(filePath);
+        filePath = ui->txtSourcePath->text();
+        PathRewriter::instance().setRewrite(m_CommonPath, filePath);
 
         /* User convenience.  If the path wasn't set in the settings, we'll set it for the user the first time. */
         if(defaultPath) {
             settingManager.beginGroup("Plugins/OpenSpeedShop/Experiment");
-            settingManager.setValue("defaultSourcePath", dlg.path());
+            settingManager.setValue("defaultSourcePath", filePath);
             settingManager.endGroup();
         }
 
@@ -509,10 +554,37 @@ void ExperimentWidget::on_btnSourcePath_clicked()
 
     } catch(QString err) {
         using namespace Core::MainWindow;
-        MainWindow::instance().notify(tr("Failed to open source file: %1").arg(err), NotificationWidget::Critical);
+        MainWindow::instance().notify(tr("Failed to open source path: %1").arg(err), NotificationWidget::Critical);
     } catch(...) {
         using namespace Core::MainWindow;
-        MainWindow::instance().notify(tr("Failed to open source file."), NotificationWidget::Critical);
+        MainWindow::instance().notify(tr("Failed to open source path."), NotificationWidget::Critical);
+    }
+}
+
+void ExperimentWidget::on_btnSourcePath_clicked()
+{
+    try {
+        Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
+        settingManager.beginGroup("Plugins/OpenSpeedShop/Experiment");
+        QString filePath = settingManager.value("defaultSourcePath", QLatin1String("/")).toString();
+        settingManager.endGroup();
+
+        RemoteFileDialog dlg(this);
+        dlg.setPath(filePath);
+        if(!dlg.exec()) {
+            return;
+        }
+
+        filePath = dlg.path();
+        ui->txtSourcePath->setText(filePath);
+        on_txtSourcePath_editingFinished();
+
+    } catch(QString err) {
+        using namespace Core::MainWindow;
+        MainWindow::instance().notify(tr("Failed to open source path from dialog: %1").arg(err), NotificationWidget::Critical);
+    } catch(...) {
+        using namespace Core::MainWindow;
+        MainWindow::instance().notify(tr("Failed to open source path from dialog."), NotificationWidget::Critical);
     }
 }
 
@@ -554,6 +626,78 @@ void ExperimentWidget::viewItemActivated(QModelIndex index)
     }
 }
 
+void ExperimentWidget::on_lstSource_customContextMenuRequested(const QPoint &position)
+{
+    QListWidgetItem *item = ui->lstSource->itemAt(position);
+
+    if(item) {
+        m_lstSourceContextMenuRow = ui->lstSource->row(item);
+
+        QMenu contextMenu(tr("Context Menu"), ui->lstSource);
+
+        QAction refresh(tr("Refresh file"), this);
+        connect(&refresh, SIGNAL(triggered()), this, SLOT(refreshSourcePath()));
+        contextMenu.addAction(&refresh);
+
+        QAction rewrite(tr("Rewrite file path"), this);
+        connect(&rewrite, SIGNAL(triggered()), this, SLOT(rewriteSourcePath()));
+        contextMenu.addAction(&rewrite);
+
+        QAction reset(tr("Reset file path"), this);
+        connect(&reset, SIGNAL(triggered()), this, SLOT(resetSourcePath()));
+        QString filePath = sourceFilePath(m_lstSourceContextMenuRow, false);
+        reset.setEnabled(PathRewriter::instance().hasRewrite(filePath));
+        contextMenu.addAction(&reset);
+
+        contextMenu.exec(ui->lstSource->mapToGlobal(position));
+
+        m_lstSourceContextMenuRow = -1;
+    }
+}
+
+
+void ExperimentWidget::refreshSourcePath()
+{
+    if(m_lstSourceContextMenuRow < 0) {
+        return;
+    }
+
+    QString filePath = sourceFilePath(m_lstSourceContextMenuRow);
+    m_SourceFileCache.remove(filePath);
+    refreshSourceIcon(m_lstSourceContextMenuRow);
+
+    if(m_lstSourceContextMenuRow == ui->lstSource->currentRow()) {
+        on_lstSource_currentRowChanged(m_lstSourceContextMenuRow);
+    }
+}
+
+void ExperimentWidget::rewriteSourcePath()
+{
+    if(m_lstSourceContextMenuRow < 0) {
+        return;
+    }
+
+    rewriteSourceFilePath(m_lstSourceContextMenuRow);
+
+    if(m_lstSourceContextMenuRow == ui->lstSource->currentRow()) {
+        on_lstSource_currentRowChanged(m_lstSourceContextMenuRow);
+    }
+}
+
+void ExperimentWidget::resetSourcePath()
+{
+    if(m_lstSourceContextMenuRow < 0) {
+        return;
+    }
+
+    QString filePath = sourceFilePath(m_lstSourceContextMenuRow, false);
+    PathRewriter::instance().setRewrite(filePath, QString());
+    refreshSourceIcon(m_lstSourceContextMenuRow);
+
+    if(m_lstSourceContextMenuRow == ui->lstSource->currentRow()) {
+        on_lstSource_currentRowChanged(m_lstSourceContextMenuRow);
+    }
+}
 
 
 } // namespace OpenSpeedShop

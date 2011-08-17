@@ -10,7 +10,6 @@
 #include <QList>
 #include <QFile>
 #include <QTreeWidgetItem>
-#include <QSortFilterProxyModel>
 
 namespace Plugins {
 namespace OpenSpeedShop {
@@ -36,7 +35,6 @@ public:
 
     QSortFilterProxyModel *proxyModel() const;
 
-
 signals:
     void currentDescriptorChanged(const QUuid &descriptorUid);
     void descriptorSingleClicked(const QUuid &descriptorUid);
@@ -55,9 +53,6 @@ protected:
 protected slots:
     void itemSingleClicked(QModelIndex index);
     void itemDoubleClicked(QModelIndex index);
-
-private:
-    QSortFilterProxyModel m_SortFilterProxyModel;
 
 };
 

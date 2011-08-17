@@ -41,8 +41,9 @@ public:
     bool initialize(QStringList &args, QString *err);
     void shutdown();
 
-    QString rewrite(QString oldPath);
-    void setRewrite(QString oldPath, QString newPath);
+    QString rewrite(const QString &oldPath);
+    void setRewrite(const QString &oldPath, const QString &newPath);
+    bool hasRewrite(const QString &oldPath);
 
 protected:
     explicit PathRewriter(QObject *parent = 0);

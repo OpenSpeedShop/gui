@@ -74,6 +74,8 @@ SocketServer::SocketServer()
               fileSystemResponse->append_node( _fileSystem.dirStat(fileSystemArguments, &responseDocument) );
             } else if(fileSystemCommand == "catFile") {
               fileSystemResponse->append_node( _fileSystem.catFile(fileSystemArguments, &responseDocument) );
+            } else if(fileSystemCommand == "fileExists") {
+              fileSystemResponse->append_node( _fileSystem.fileExists(fileSystemArguments, &responseDocument) );
             }
             
             responseNode->append_node(fileSystemResponse);
