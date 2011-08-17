@@ -226,7 +226,7 @@ void WelcomeWidget::setCurrentTip(int index) {
 
 void WelcomeWidget::randomTip()
 {
-    qsrand(QDateTime::currentDateTime().toTime_t());
+    qsrand((uint)QDateTime::currentDateTime().time().second());
     setCurrentTip(qrand() % m_TipsAndTricks.count());
 }
 
