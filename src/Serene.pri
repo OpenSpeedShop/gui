@@ -20,14 +20,26 @@
 #################
 QT                += opengl
 
-#################
-# LIBRARY PATHS #
-#################
-LIBS              += -L$$quote($${SERENE_PATH}/lib/$${POSTFIX}) -lSerene
+###########################
+# LIBRARY & INCLUDE PATHS #
+###########################
+isEmpty(SERENE_PATH): error(The SERENE_PATH variable must be set)
+isEmpty(SERENE_LIBPATH): SERENE_LIBPATH = SERENE_PATH
 
-#################
-# INCLUDE PATHS #
-#################
-isEmpty(SERENE_PATH): SERENE_PATH = $$quote($${PWD})
+!exists($$quote($${SERENE_PATH}/lib/lib.pro)) {
+    error(Source files at $$quote($${SERENE_PATH}/lib/) were not found)
+}
 INCLUDEPATH       += $$quote($${SERENE_PATH}/lib)
 DEPENDPATH        += $$quote($${SERENE_PATH}/lib)
+
+win32 {
+    POSTFIX = debug  #I don't know how/why this ends up with release only in this library!?
+    !exists($$quote($${SERENE_LIBPATH}/lib/$${POSTFIX}/Serene.dll)) {
+        error($$quote($${SERENE_LIBPATH}/lib/$${POSTFIX}/Serene.dll) was not found. Please ensure that you have already built the Serene library.)
+    }
+} else {
+    !exists($$quote($${SERENE_LIBPATH}/lib/$${POSTFIX}/libSerene.so)) {
+        error($$quote($${SERENE_LIBPATH}/lib/$${POSTFIX}/libSerene.so) was not found. Please ensure that you have already built the Serene library.)
+    }
+}
+LIBS              += -L$$quote($${SERENE_LIBPATH}/lib/$${POSTFIX}) -lSerene
