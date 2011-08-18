@@ -24,7 +24,7 @@ QT                += opengl
 # LIBRARY & INCLUDE PATHS #
 ###########################
 isEmpty(SERENE_PATH): error(The SERENE_PATH variable must be set)
-isEmpty(SERENE_LIBPATH): SERENE_LIBPATH = SERENE_PATH
+isEmpty(SERENE_LIBPATH): SERENE_LIBPATH = $${SERENE_PATH}
 
 !exists($$quote($${SERENE_PATH}/lib/lib.pro)) {
     error(Source files at $$quote($${SERENE_PATH}/lib/) were not found)
