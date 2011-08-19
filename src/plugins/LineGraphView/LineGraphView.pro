@@ -18,18 +18,26 @@
 include(../plugins.pri)
 include(../../Serene.pri)
 
-TARGET             = LineGraphView
+isEmpty(SERENE_PATH) {
+  warning()
+  warning("The LineGraphView plugin has been disabled")
+  warning("The plugin depends on headers from the Serene library")
+  warning("To enable it, pass 'SERENE_PATH=~/src/Serene' to qmake, where ~/src/Serene is the base source directory of Serene")
 
-SOURCES           += LineGraphViewPlugin.cpp \
-                     LineGraphView.cpp
+} else {
+  TARGET             = LineGraphView
 
-HEADERS           += LineGraphViewPlugin.h \
-                     LineGraphView.h
+  SOURCES           += LineGraphViewPlugin.cpp \
+                       LineGraphView.cpp
 
-FORMS             +=
+  HEADERS           += LineGraphViewPlugin.h \
+                       LineGraphView.h
 
-RESOURCES         +=
+  FORMS             +=
 
-LIBS              += -L$$quote($${BUILD_PATH}/plugins/OpenSpeedShop/$${POSTFIX}) -lOpenSpeedShop
+  RESOURCES         +=
 
-#debug: DEFINES += LINEGRAPHVIEW_DEBUG
+  LIBS              += -L$$quote($${BUILD_PATH}/plugins/OpenSpeedShop/$${POSTFIX}) -lOpenSpeedShop
+
+  #debug: DEFINES += LINEGRAPHVIEW_DEBUG
+}

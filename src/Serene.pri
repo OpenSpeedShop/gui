@@ -15,6 +15,9 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
+!isEmpty(SERENE_PRI_INCLUDED):error("Serene.pri already included")
+SERENE_PRI_INCLUDED = 1
+
 #################
 # CONFIGURATION #
 #################
@@ -23,23 +26,34 @@ QT                += opengl
 ###########################
 # LIBRARY & INCLUDE PATHS #
 ###########################
-isEmpty(SERENE_PATH): error(The SERENE_PATH variable must be set)
-isEmpty(SERENE_LIBPATH): SERENE_LIBPATH = $${SERENE_PATH}
+isEmpty(SERENE_PATH) {
+  warning()
+  warning("The SERENE_PATH variable must be set to the location of the Serene")
+  warning("library in order to build the advanced views.  See")
+  warning("<https://github.com/OpenSpeedShop/Serene/wiki/Installation>")
+  warning("for more information on downloading and building the Serene libraries.")
 
-!exists($$quote($${SERENE_PATH}/lib/lib.pro)) {
-    error(Source files at $$quote($${SERENE_PATH}/lib/) were not found)
-}
-INCLUDEPATH       += $$quote($${SERENE_PATH}/lib)
-DEPENDPATH        += $$quote($${SERENE_PATH}/lib)
+} else {
+  !exists($$quote($${SERENE_PATH}/lib/lib.pro)) {
+    warning("The plugin depends on headers from the Serene library.")
+    warning("However, the path passed to qmake through 'SERENE_PATH=$$SERENE_PATH', doesn't contain the expected source files.")
+    error("Source files at $$quote($${SERENE_PATH}/lib/) were not found.")
+  }
+  INCLUDEPATH       += $$quote($${SERENE_PATH}/lib)
+  DEPENDPATH        += $$quote($${SERENE_PATH}/lib)
 
-win32 {
+  isEmpty(SERENE_LIBPATH): SERENE_LIBPATH = $${SERENE_PATH}
+  win32 {
     POSTFIX = debug  #I don't know how/why this ends up with release only in this library!?
     !exists($$quote($${SERENE_LIBPATH}/lib/$${POSTFIX}/Serene.dll)) {
-        error($$quote($${SERENE_LIBPATH}/lib/$${POSTFIX}/Serene.dll) was not found. Please ensure that you have already built the Serene library.)
+      warning("$$quote($${SERENE_LIBPATH}/lib/$${POSTFIX}/Serene.dll) was not found.")
+      error("Please ensure that you have already built the Serene library.")
     }
-} else {
+  } else {
     !exists($$quote($${SERENE_LIBPATH}/lib/$${POSTFIX}/libSerene.so)) {
-        error($$quote($${SERENE_LIBPATH}/lib/$${POSTFIX}/libSerene.so) was not found. Please ensure that you have already built the Serene library.)
+      warning("$$quote($${SERENE_LIBPATH}/lib/$${POSTFIX}/libSerene.so) was not found.")
+      error("Please ensure that you have already built the Serene library.")
     }
+  }
+  LIBS              += -L$$quote($${SERENE_LIBPATH}/lib/$${POSTFIX}) -lSerene
 }
-LIBS              += -L$$quote($${SERENE_LIBPATH}/lib/$${POSTFIX}) -lSerene

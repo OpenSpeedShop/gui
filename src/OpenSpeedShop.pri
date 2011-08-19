@@ -15,6 +15,27 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
+!isEmpty(OPENSPEEDSHOP_PRI_INCLUDED): error("OpenSpeedShop.pri already included")
+OPENSPEEDSHOP_PRI_INCLUDED = 1
+
+##################
+# QT INFORMATION #
+##################
+defineTest(qtVer) {
+    isEqual(QT_MAJOR_VERSION, $$1) {
+        isEqual(QT_MINOR_VERSION, $$2) {
+            isEqual(QT_PATCH_VERSION, $$3) : return(true)
+            greaterThan(QT_PATCH_VERSION, $$3) : return(true)
+        }
+        greaterThan(QT_MINOR_VERSION, $$2) : return(true)
+    }
+    return(false)
+}
+!qtVer(4,6,0): error(This application requires at least Qt version 4.6.0)
+
+#####################
+# QMAKE INFORMATION #
+#####################
 QT += core gui
 
 APPLICATION_TARGET = OpenSpeedShop
@@ -22,20 +43,20 @@ APPLICATION_TARGET = OpenSpeedShop
 #######################
 # VERSION INFORMATION #
 #######################
-#VER_MAJ      = 0
-#VER_MIN      = 1
-#VER_PAT      = 0
-#VERSION      = $${VER_MAJ}.$${VER_MIN}.$${VER_PAT}
-#DEFINES     += VER_MAJ VER_MIN VER_PAT VERSION
+VER_MAJ      = 0
+VER_MIN      = 1
+VER_PAT      = 0
+VERSION      = $${VER_MAJ}.$${VER_MIN}.$${VER_PAT}
+DEFINES     += VER_MAJ VER_MIN VER_PAT VERSION
 
 #################
 # INSTALL PATHS #
 #################
 !isEmpty($${SOURCEDIR}): SOURCE_PATH = $${SOURCEDIR}
-isEmpty(SOURCE_PATH): SOURCE_PATH = $$quote($${PWD})
+isEmpty(SOURCE_PATH): SOURCE_PATH = $$quote($${IN_PWD})
 
 !isEmpty($${BUILDDIR}): BUILD_PATH = $${BUILDDIR}
-isEmpty(BUILD_PATH): BUILD_PATH = $$quote($${PWD})
+isEmpty(BUILD_PATH): BUILD_PATH = $$quote($${OUT_PWD})
 
 #########################
 # DEBUG/RELEASE POSTFIX #

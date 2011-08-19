@@ -15,6 +15,9 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
+!isEmpty(PLUGINS_PRI_INCLUDED):error("plugins/Plugins.pri already included")
+PLUGINS_PRI_INCLUDED = 1
+
 include(../OpenSpeedShop.pri)
 
 TEMPLATE      = lib
