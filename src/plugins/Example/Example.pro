@@ -16,10 +16,15 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 include(../plugins.pri)
-TARGET             = Example
+
+CONFIG(debug, debug|release) {
+  TARGET           = ExampleD
+} else {
+  TARGET           = Example
+}
 
 SOURCES           += ExamplePlugin.cpp
 HEADERS           += ExamplePlugin.h
 
-LIBS        += -L$$quote($${BUILD_PATH}/plugins/OpenSpeedShop/$${POSTFIX}) -lOpenSpeedShop
+LIBS        += -L$$quote($${BUILD_PATH}/plugins/OpenSpeedShop/$${DIR_POSTFIX}) -lOpenSpeedShop$${LIB_POSTFIX}
 

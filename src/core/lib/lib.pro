@@ -17,7 +17,12 @@
 
 include(lib.pri)
 
-TARGET            = Core
+CONFIG(debug, debug|release) {
+  TARGET          = CoreD
+} else {
+  TARGET          = Core
+}
+
 win32:target.path = /
 else:target.path  = /lib
 INSTALLS         += target

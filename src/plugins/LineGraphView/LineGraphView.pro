@@ -25,7 +25,11 @@ isEmpty(SERENE_PATH) {
   warning("To enable it, pass 'SERENE_PATH=~/src/Serene' to qmake, where ~/src/Serene is the base source directory of Serene")
 
 } else {
-  TARGET             = LineGraphView
+  CONFIG(debug, debug|release) {
+    TARGET           = LineGraphViewD
+  } else {
+    TARGET           = LineGraphView
+  }
 
   SOURCES           += LineGraphViewPlugin.cpp \
                        LineGraphView.cpp
@@ -37,7 +41,7 @@ isEmpty(SERENE_PATH) {
 
   RESOURCES         +=
 
-  LIBS              += -L$$quote($${BUILD_PATH}/plugins/OpenSpeedShop/$${POSTFIX}) -lOpenSpeedShop
+  LIBS              += -L$$quote($${BUILD_PATH}/plugins/OpenSpeedShop/$${DIR_POSTFIX}) -lOpenSpeedShop$${LIB_POSTFIX}
 
   #debug: DEFINES += LINEGRAPHVIEW_DEBUG
 }

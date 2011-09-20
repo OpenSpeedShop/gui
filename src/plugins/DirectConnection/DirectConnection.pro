@@ -17,7 +17,11 @@
 
 include(../plugins.pri)
 
-TARGET             = DirectConnection
+CONFIG(debug, debug|release) {
+  TARGET           = DirectConnectionD
+} else {
+  TARGET           = DirectConnection
+}
 
 SOURCES           += DirectConnectionPlugin.cpp \
                      DirectConnection.cpp \
@@ -33,6 +37,6 @@ RESOURCES         +=
 
 QT                += network xml
 
-LIBS        += -L$$quote($${BUILD_PATH}/plugins/OpenSpeedShop/$${POSTFIX}) -lOpenSpeedShop
+LIBS        += -L$$quote($${BUILD_PATH}/plugins/OpenSpeedShop/$${DIR_POSTFIX}) -lOpenSpeedShop$${LIB_POSTFIX}
 
 #debug: DEFINES += DIRECTCONNECTION_DEBUG

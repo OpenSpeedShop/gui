@@ -17,7 +17,11 @@
 
 include(../plugins.pri)
 
-TARGET            = Help
+CONFIG(debug, debug|release) {
+  TARGET           = HelpD
+} else {
+  TARGET           = Help
+}
 
 SOURCES          += HelpPlugin.cpp \
                     HelpWidget.cpp \

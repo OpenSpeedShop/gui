@@ -17,9 +17,13 @@
 
 include(../plugins.pri)
 
-LIBS         += -L$$quote($${BUILD_PATH}/plugins/Welcome/$${POSTFIX}) -lWelcome
+LIBS         += -L$$quote($${BUILD_PATH}/plugins/Welcome/$${DIR_POSTFIX}) -lWelcome$${LIB_POSTFIX}
 
-TARGET        = OpenSpeedShop
+CONFIG(debug, debug|release) {
+  TARGET      = OpenSpeedShopD
+} else {
+  TARGET      = OpenSpeedShop
+}
 
 SOURCES      += OpenSpeedShopPlugin.cpp \
                 Settings/SettingPage.cpp \
@@ -45,7 +49,7 @@ SOURCES      += OpenSpeedShopPlugin.cpp \
                 Experiment/SourceView.cpp \
                 Experiment/SyntaxHighlighter.cpp \
                 Welcome/WelcomeData.cpp \
-    RemoteFileSystem/PathRewriter.cpp
+                RemoteFileSystem/PathRewriter.cpp
 
 HEADERS      += OpenSpeedShopPlugin.h \
                 Settings/SettingPage.h \
@@ -75,7 +79,7 @@ HEADERS      += OpenSpeedShopPlugin.h \
                 Experiment/SourceView.h \
                 Experiment/SyntaxHighlighter.h \
                 Welcome/WelcomeData.h \
-    RemoteFileSystem/PathRewriter.h
+                RemoteFileSystem/PathRewriter.h
 
 FORMS        += Settings/SettingPage.ui \
                 AboutDialog.ui \

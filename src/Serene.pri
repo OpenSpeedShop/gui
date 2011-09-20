@@ -39,21 +39,21 @@ isEmpty(SERENE_PATH) {
     warning("However, the path passed to qmake through 'SERENE_PATH=$$SERENE_PATH', doesn't contain the expected source files.")
     error("Source files at $$quote($${SERENE_PATH}/lib/) were not found.")
   }
-  INCLUDEPATH       += $$quote($${SERENE_PATH}/lib)
-  DEPENDPATH        += $$quote($${SERENE_PATH}/lib)
+  INCLUDEPATH += $$quote($${SERENE_PATH}/lib)
+  DEPENDPATH  += $$quote($${SERENE_PATH}/lib)
 
   isEmpty(SERENE_LIBPATH): SERENE_LIBPATH = $${SERENE_PATH}
   win32 {
-    POSTFIX = debug  #I don't know how/why this ends up with release only in this library!?
-    !exists($$quote($${SERENE_LIBPATH}/lib/$${POSTFIX}/Serene.dll)) {
-      warning("$$quote($${SERENE_LIBPATH}/lib/$${POSTFIX}/Serene.dll) was not found.")
+    DIR_POSTFIX = debug
+    !exists($$quote($${SERENE_LIBPATH}/lib/$${DIR_POSTFIX}/Serene.dll)) {
+      warning("$$quote($${SERENE_LIBPATH}/lib/$${DIR_POSTFIX}/Serene.dll) was not found.")
       error("Please ensure that you have already built the Serene library.")
     }
   } else {
-    !exists($$quote($${SERENE_LIBPATH}/lib/$${POSTFIX}/libSerene.so)) {
-      warning("$$quote($${SERENE_LIBPATH}/lib/$${POSTFIX}/libSerene.so) was not found.")
+    !exists($$quote($${SERENE_LIBPATH}/lib/$${DIR_POSTFIX}/libSerene.so)) {
+      warning("$$quote($${SERENE_LIBPATH}/lib/$${DIR_POSTFIX}/libSerene.so) was not found.")
       error("Please ensure that you have already built the Serene library.")
     }
   }
-  LIBS              += -L$$quote($${SERENE_LIBPATH}/lib/$${POSTFIX}) -lSerene
+  LIBS += -L$$quote($${SERENE_LIBPATH}/lib/$${DIR_POSTFIX}) -lSerene
 }

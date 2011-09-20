@@ -17,7 +17,11 @@
 
 include(../plugins.pri)
 
-TARGET            = Welcome
+CONFIG(debug, debug|release) {
+  TARGET           = WelcomeD
+} else {
+  TARGET           = Welcome
+}
 
 HEADERS          += WelcomePlugin.h \
                     WelcomeWidget.h \

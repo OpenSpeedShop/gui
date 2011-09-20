@@ -52,18 +52,30 @@ DEFINES     += VER_MAJ VER_MIN VER_PAT VERSION
 #################
 # INSTALL PATHS #
 #################
-!isEmpty($${SOURCEDIR}): SOURCE_PATH = $${SOURCEDIR}
-isEmpty(SOURCE_PATH): SOURCE_PATH = $$quote($${IN_PWD})
+!isEmpty(SOURCEDIR): SOURCE_PATH = $${SOURCEDIR}
+isEmpty(SOURCE_PATH): SOURCE_PATH = $$quote($${PWD})
 
-!isEmpty($${BUILDDIR}): BUILD_PATH = $${BUILDDIR}
-isEmpty(BUILD_PATH): BUILD_PATH = $$quote($${OUT_PWD})
+!isEmpty(BUILDDIR): BUILD_PATH = $${BUILDDIR}
+isEmpty(BUILD_PATH): BUILD_PATH = $$quote($${PWD})
 
 #########################
-# DEBUG/RELEASE POSTFIX #
+# DEBUG/RELEASE DIR_POSTFIX #
 #########################
 win32 {
-  CONFIG(debug, debug|release): POSTFIX = $$quote(debug)
-  else: POSTFIX = $$quote(release)
+  CONFIG(debug, debug|release) {
+    DIR_POSTFIX = debug
+    LIB_POSTFIX = D$${VER_MAJ}
+  } else {
+    DIR_POSTFIX = release
+    LIB_POSTFIX = $${VER_MAJ}
+  }
+} else {
+  DIR_POSTFIX =
+  CONFIG(debug, debug|release) {
+    LIB_POSTFIX = D
+  } else {
+    LIB_POSTFIX =
+  }
 }
 
 #################

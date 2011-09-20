@@ -16,7 +16,11 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 include(../plugins.pri)
-TARGET             = TreeView
+CONFIG(debug, debug|release) {
+  TARGET           = TreeViewD
+} else {
+  TARGET           = TreeView
+}
 
 SOURCES           += TreeViewPlugin.cpp \
                      TreeView.cpp \
@@ -30,6 +34,6 @@ FORMS             +=
 RESOURCES         +=
 QT                +=
 
-LIBS        += -L$$quote($${BUILD_PATH}/plugins/OpenSpeedShop/$${POSTFIX}) -lOpenSpeedShop
+LIBS        += -L$$quote($${BUILD_PATH}/plugins/OpenSpeedShop/$${DIR_POSTFIX}) -lOpenSpeedShop$${LIB_POSTFIX}
 
 #debug: DEFINES += TREEVIEW_DEBUG

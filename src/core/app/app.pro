@@ -18,13 +18,18 @@
 include(../../OpenSpeedShop.pri)
 
 TEMPLATE = app
-TARGET   = $$APPLICATION_TARGET
+
+CONFIG(debug, debug|release) {
+  TARGET = $${APPLICATION_TARGET}D
+} else {
+  TARGET = $${APPLICATION_TARGET}
+}
 
 SOURCES += main.cpp
 HEADERS +=
 FORMS   +=
 
-LIBS    += -L$$quote($${BUILD_PATH}/core/lib/$${POSTFIX}) -lCore
+LIBS    += -L$$quote($${BUILD_PATH}/core/lib/$${DIR_POSTFIX}) -lCore$${LIB_POSTFIX}
 
 #debug:DEFINES    += MAIN_DEBUG
 

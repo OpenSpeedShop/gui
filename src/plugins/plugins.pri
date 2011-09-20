@@ -24,7 +24,7 @@ TEMPLATE      = lib
 CONFIG       += plugin plugin_with_soname
 CONFIG       += depend_includepath
 
-LIBS         += -L$$quote($${BUILD_PATH}/core/lib/$${POSTFIX}) -lCore
+LIBS         += -L$$quote($${BUILD_PATH}/core/lib/$${DIR_POSTFIX}) -lCore$${LIB_POSTFIX}
 
 win32:target.path   = /
 else:target.path   = /lib

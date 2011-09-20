@@ -182,7 +182,6 @@ void SourceView::refreshStatements()
             QModelIndex index = m_Model->index(i, statementColumn);
             QString statementText = index.data(Qt::DisplayRole).toString();
 
-
             if(statementPattern.exactMatch(statementText)) {
                 QString filePath = statementPattern.cap(1);
 
