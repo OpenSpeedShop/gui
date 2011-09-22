@@ -50,28 +50,44 @@ isEmpty(SERENE_PATH) {
 
   isEmpty(SERENE_LIBPATH): SERENE_LIBPATH = $${SERENE_PATH}
 
+  SERENE_DIRECTORIES = $${SERENE_LIBPATH}
+  SERENE_DIRECTORIES += $${SERENE_LIBPATH}/lib
+  SERENE_DIRECTORIES += $${SERENE_LIBPATH}/debug
+  SERENE_DIRECTORIES += $${SERENE_LIBPATH}/lib/debug
+  SERENE_DIRECTORIES += $${SERENE_LIBPATH}/release
+  SERENE_DIRECTORIES += $${SERENE_LIBPATH}/lib/release
+
   CONFIG(debug, debug|release) {
-    SERENE_DIR_POSTFIX = debug
-    win32: SERENE_LIB_POSTFIX = D$${VER_SERENE}
-    else:  SERENE_LIB_POSTFIX = D
-  } else {
-    SERENE_DIR_POSTFIX = release
-    win32: SERENE_LIB_POSTFIX = $${VER_SERENE}
-    else:  SERENE_LIB_POSTFIX =
-  }
-
-  win32: SERENE_LIB_EXTENSION = dll
-  else:  SERENE_LIB_EXTENSION = so
-
-  exists($$quote($${SERENE_LIBPATH}/lib/$${SERENE_DIR_POSTFIX}/Serene$${SERENE_LIB_POSTFIX}.$${SERENE_LIB_EXTENSION})) {
-    LIBS += -L$$quote($${SERENE_LIBPATH}/lib/$${SERENE_DIR_POSTFIX}) -lSerene$${SERENE_LIB_POSTFIX}
-  } else {
-    exists($$quote($${SERENE_LIBPATH}/lib/Serene$${SERENE_LIB_POSTFIX}.$${SERENE_LIB_EXTENSION})) {
-      LIBS += -L$$quote($${SERENE_LIBPATH}/lib/) -lSerene$${SERENE_LIB_POSTFIX}
+    win32 {
+      SERENE_LIBNAME = SereneD0
+      SERENE_FILENAME = $${SERENE_LIBNAME}.dll
     } else {
-      warning("$${SERENE_LIBPATH}/lib/Serene$${SERENE_LIB_POSTFIX}.$${SERENE_LIB_EXTENSION} was not found.")
-      warning("$${SERENE_LIBPATH}/lib/$${SERENE_DIR_POSTFIX}/Serene$${SERENE_LIB_POSTFIX}.$${SERENE_LIB_EXTENSION} was not found.")
-      error("Please ensure that you have already built the Serene library.")
+      SERENE_LIBNAME = SereneD
+      SERENE_FILENAME = lib$${SERENE_LIBNAME}.so
+    }
+  } else {
+    win32 {
+      SERENE_LIBNAME = Serene0
+      SERENE_FILENAME = $${SERENE_LIBNAME}.dll
+    } else {
+      SERENE_LIBNAME = Serene
+      SERENE_FILENAME = lib$${SERENE_LIBNAME}.so
     }
   }
+
+  for(SERENE_DIRECTORY, SERENE_DIRECTORIES) {
+    exists($${SERENE_DIRECTORY}/$${SERENE_FILENAME}) {
+      LIBS += -L$$quote($${SERENE_DIRECTORY}) -l$${SERENE_LIBNAME}
+      unset(SERENE_DIRECTORIES)
+      break()
+    }
+  }
+
+  !isEmpty(SERENE_DIRECTORIES) {
+    for(SERENE_DIRECTORY, SERENE_DIRECTORIES) {
+      warning("$${SERENE_DIRECTORY}/$${SERENE_FILENAME} was not found")
+    }
+    error("Please ensure that you have already built the Serene library.")
+  }
+
 }
