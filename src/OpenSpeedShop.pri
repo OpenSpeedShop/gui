@@ -36,6 +36,7 @@ defineTest(qtVer) {
 #####################
 # QMAKE INFORMATION #
 #####################
+CONFIG -= debug_and_release
 QT += core gui
 
 APPLICATION_TARGET = OpenSpeedShop
@@ -61,21 +62,20 @@ isEmpty(BUILD_PATH): BUILD_PATH = $$quote($${PWD})
 #########################
 # DEBUG/RELEASE DIR_POSTFIX #
 #########################
-win32 {
+CONFIG(debug_and_release) {
   CONFIG(debug, debug|release) {
     DIR_POSTFIX = debug
-    LIB_POSTFIX = D$${VER_MAJ}
   } else {
     DIR_POSTFIX = release
-    LIB_POSTFIX = $${VER_MAJ}
   }
+}
+
+CONFIG(debug, debug|release) {
+  win32: LIB_POSTFIX = D$${VER_MAJ}
+  else: LIB_POSTFIX = D
 } else {
-  DIR_POSTFIX =
-  CONFIG(debug, debug|release) {
-    LIB_POSTFIX = D
-  } else {
-    LIB_POSTFIX =
-  }
+  win32: LIB_POSTFIX = $${VER_MAJ}
+  else: LIB_POSTFIX =
 }
 
 #################
@@ -83,4 +83,3 @@ win32 {
 #################
 INCLUDEPATH       += $$quote($${SOURCE_PATH}/core/lib) $$quote($${SOURCE_PATH}/plugins)
 DEPENDPATH        += $$quote($${SOURCE_PATH}/core/lib) $$quote($${SOURCE_PATH}/plugins)
-

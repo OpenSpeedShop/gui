@@ -22,5 +22,3 @@ CONFIG  += ordered
 SUBDIRS  = core plugins
 
 OTHER_FILES += Doxyfile fileheader.txt
-
-

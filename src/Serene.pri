@@ -23,6 +23,11 @@ SERENE_PRI_INCLUDED = 1
 #################
 QT                += opengl
 
+#######################
+# VERSION INFORMATION #
+#######################
+VER_SERENE   = 0
+
 ###########################
 # LIBRARY & INCLUDE PATHS #
 ###########################
@@ -39,21 +44,34 @@ isEmpty(SERENE_PATH) {
     warning("However, the path passed to qmake through 'SERENE_PATH=$$SERENE_PATH', doesn't contain the expected source files.")
     error("Source files at $$quote($${SERENE_PATH}/lib/) were not found.")
   }
+
   INCLUDEPATH += $$quote($${SERENE_PATH}/lib)
   DEPENDPATH  += $$quote($${SERENE_PATH}/lib)
 
   isEmpty(SERENE_LIBPATH): SERENE_LIBPATH = $${SERENE_PATH}
-  win32 {
-    DIR_POSTFIX = debug
-    !exists($$quote($${SERENE_LIBPATH}/lib/$${DIR_POSTFIX}/Serene.dll)) {
-      warning("$$quote($${SERENE_LIBPATH}/lib/$${DIR_POSTFIX}/Serene.dll) was not found.")
-      error("Please ensure that you have already built the Serene library.")
-    }
+
+  CONFIG(debug, debug|release) {
+    SERENE_DIR_POSTFIX = debug
+    win32: SERENE_LIB_POSTFIX = D$${VER_SERENE}
+    else:  SERENE_LIB_POSTFIX = D
   } else {
-    !exists($$quote($${SERENE_LIBPATH}/lib/$${DIR_POSTFIX}/libSerene.so)) {
-      warning("$$quote($${SERENE_LIBPATH}/lib/$${DIR_POSTFIX}/libSerene.so) was not found.")
+    SERENE_DIR_POSTFIX = release
+    win32: SERENE_LIB_POSTFIX = $${VER_SERENE}
+    else:  SERENE_LIB_POSTFIX =
+  }
+
+  win32: SERENE_LIB_EXTENSION = dll
+  else:  SERENE_LIB_EXTENSION = so
+
+  exists($$quote($${SERENE_LIBPATH}/lib/$${SERENE_DIR_POSTFIX}/Serene$${SERENE_LIB_POSTFIX}.$${SERENE_LIB_EXTENSION})) {
+    LIBS += -L$$quote($${SERENE_LIBPATH}/lib/$${SERENE_DIR_POSTFIX}) -lSerene$${SERENE_LIB_POSTFIX}
+  } else {
+    exists($$quote($${SERENE_LIBPATH}/lib/Serene$${SERENE_LIB_POSTFIX}.$${SERENE_LIB_EXTENSION})) {
+      LIBS += -L$$quote($${SERENE_LIBPATH}/lib/) -lSerene$${SERENE_LIB_POSTFIX}
+    } else {
+      warning("$${SERENE_LIBPATH}/lib/Serene$${SERENE_LIB_POSTFIX}.$${SERENE_LIB_EXTENSION} was not found.")
+      warning("$${SERENE_LIBPATH}/lib/$${SERENE_DIR_POSTFIX}/Serene$${SERENE_LIB_POSTFIX}.$${SERENE_LIB_EXTENSION} was not found.")
       error("Please ensure that you have already built the Serene library.")
     }
   }
-  LIBS += -L$$quote($${SERENE_LIBPATH}/lib/$${DIR_POSTFIX}) -lSerene
 }
