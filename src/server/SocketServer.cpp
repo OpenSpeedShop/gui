@@ -3,16 +3,27 @@
 using namespace std;
 using namespace rapidxml;
 
-SocketServer::SocketServer()
+SocketServer::SocketServer(int port, const char *address)
 {
-  if(!_socket.start(2048)) {
-    cerr << __FILE__ << ":" << __LINE__ << "\tError code returned from SocketServer.start: " << endl;
+
+  if(address != NULL) {
+    cout << __FILE__ << ":" << __LINE__ << "\tStarting server on " << address << ":" << port << endl;
+  } else {
+    cout << __FILE__ << ":" << __LINE__ << "\tStarting server on 0.0.0.0:" << port << endl;
+  }
+
+  if(!_socket.start(port, address)) {
+    if(address != NULL) {
+      cerr << __FILE__ << ":" << __LINE__ << "\tError code returned from Socket.start(" << port << ", " << address << ")" << endl;
+    } else {
+      cerr << __FILE__ << ":" << __LINE__ << "\tError code returned from Socket.start(" << port << ", NULL)" << endl;
+    }
     return;
   }
 
   for(;;) {
     Socket clientConnection;
-	  _socket.accept(clientConnection);
+    _socket.accept(clientConnection);
 
     pid_t childPID = fork();
     if(childPID < 0) {

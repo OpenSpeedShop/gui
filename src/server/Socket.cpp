@@ -9,6 +9,7 @@
 #include <string>
 #include <arpa/inet.h>
 #include <cstring>
+#include <cerrno>
 
 #include "Socket.h"
 
@@ -21,49 +22,60 @@ Socket::~Socket()
 {
 }
 
-bool Socket::start(int port)
+bool Socket::start(int port, const char *address)
 {
-  int status;
-
   struct sockaddr_in serverAddress;
+
+  std::cerr << __FILE__ << ":" << __LINE__ << "\t\tClearing sockaddr structure" << std::endl;
   std::memset(&serverAddress, 0, sizeof(serverAddress));
+
+  std::cerr << __FILE__ << ":" << __LINE__ << "\t\tSetting socket address type" << std::endl;
   serverAddress.sin_family = AF_INET;
-  serverAddress.sin_addr.s_addr = INADDR_ANY;  //TODO: set this properly
+
+  std::cerr << __FILE__ << ":" << __LINE__ << "\t\tSetting socket address" << std::endl;
+  unsigned long s_addr = 0;
+  if(address != NULL) {
+    s_addr = inet_addr(address);
+  }
+  if(s_addr == 0) {
+    s_addr = INADDR_ANY;
+  }
+  serverAddress.sin_addr.s_addr = s_addr;
+
+  std::cerr << __FILE__ << ":" << __LINE__ << "\t\tSetting socket port" << std::endl;
   serverAddress.sin_port = htons(port);
 
+  /* Create the socket */ 
   std::cerr << __FILE__ << ":" << __LINE__ << "\t\tCreating socket" << std::endl;
   _socketDescriptor = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
   if(_socketDescriptor < 0) {
-    std::cerr << __FILE__ << ":" << __LINE__ << "\t\tError while opening socket: " << _socketDescriptor << std::endl;
+    std::cerr << __FILE__ << ":" << __LINE__ << "\t\tError while opening socket: " << strerror(errno) << std::endl;
     return false;
   }
 
   int on = 1;
-  status = setsockopt(_socketDescriptor, SOL_SOCKET, SO_REUSEADDR, (const char*)&on, sizeof(on));
-  if(status < 0) {
-    std::cerr << __FILE__ << ":" << __LINE__ << "\t\tError setting socket options: " << status << std::endl;
+  if(setsockopt(_socketDescriptor, SOL_SOCKET, SO_REUSEADDR, (const char*)&on, sizeof(on)) < 0) {
+    std::cerr << __FILE__ << ":" << __LINE__ << "\t\tError setting socket options: " << strerror(errno) << std::endl;
     return false;
   }
   
-//  struct timeval tv;
-//  tv.tv_sec = 10;
-//  status = setsockopt(_socketDescriptor, SOL_SOCKET, SO_RCVTIMEO, (const char*)&tv, sizeof(tv));
-//  if(status < 0) {
-//    std::cerr << __FILE__ << ":" << __LINE__ << "\t\tError setting socket timeout options: " << status << std::endl;
-//    return false;
-//  }
+  struct timeval tv;
+  tv.tv_usec = 0;
+  tv.tv_sec = 30;
+  if(setsockopt(_socketDescriptor, SOL_SOCKET, SO_RCVTIMEO, (struct timeval *)&tv, sizeof(struct timeval)) < 0) {
+    std::cerr << __FILE__ << ":" << __LINE__ << "\t\tError setting socket timeout options: " << strerror(errno) << std::endl;
+    return false;
+  }
 
   std::cerr << __FILE__ << ":" << __LINE__ << "\t\tBinding socket" << std::endl;
-  status = bind(_socketDescriptor, (struct sockaddr *) &serverAddress, sizeof(serverAddress));
-  if(status < 0) {
-    std::cerr << __FILE__ << ":" << __LINE__ << "\t\tError binding socket to hostname: " << status << std::endl;
+  if(bind(_socketDescriptor, (struct sockaddr *) &serverAddress, sizeof(serverAddress)) < 0) {
+    std::cerr << __FILE__ << ":" << __LINE__ << "\t\tError binding socket to hostname: " << strerror(errno) << std::endl;
     return false;
   }
 
   std::cerr << __FILE__ << ":" << __LINE__ << "\t\tBeginning socket listen" << std::endl;
-  status = listen(_socketDescriptor, 5);
-  if(status < 0) {
-    std::cerr << __FILE__ << ":" << __LINE__ << "\t\tError listening socket: " << status << std::endl;
+  if(listen(_socketDescriptor, 5) < 0) {
+    std::cerr << __FILE__ << ":" << __LINE__ << "\t\tError listening socket: " << strerror(errno) << std::endl;
     return false;
   }
 
@@ -78,8 +90,7 @@ bool Socket::accept(Socket &clientConnection)
   std::cerr << __FILE__ << ":" << __LINE__ << "\t\tBeginning connection accept" << std::endl;
   clientConnection._socketDescriptor = ::accept(_socketDescriptor, (struct sockaddr *) &clientAddress, &clientAddressSize);
   if(clientConnection._socketDescriptor < 0) {
-    std::cerr << __FILE__ << ":" << __LINE__ << "\t\tError while accepting connection: " 
-	                                         << clientConnection._socketDescriptor << std::endl;
+    std::cerr << __FILE__ << ":" << __LINE__ << "\t\tError while accepting connection: " << strerror(errno) << std::endl; 
     return false;
   }
   
@@ -88,7 +99,10 @@ bool Socket::accept(Socket &clientConnection)
 
 bool Socket::close()
 {
-  ::close(_socketDescriptor);
+  if(::close(_socketDescriptor) < 0) {
+    std::cerr << __FILE__ << ":" << __LINE__ << "\t\tError while accepting connection: " << strerror(errno) << std::endl;
+    return false;
+  }
   return true;
 }
 
@@ -100,11 +114,17 @@ bool Socket::send(std::string str)
   unsigned char headerArray[sizeof(header)];
   std::memcpy(headerArray, &header, sizeof(header));
 
-  if(::send(_socketDescriptor, headerArray, sizeof(headerArray), MSG_NOSIGNAL) >= 0) {
-    return ( ::send(_socketDescriptor, str.c_str(), str.size(), MSG_NOSIGNAL) >= 0 );
+  if(::send(_socketDescriptor, headerArray, sizeof(headerArray), MSG_NOSIGNAL) < 0) {
+    std::cerr << __FILE__ << ":" << __LINE__ << "\t\tError while sending header: " << strerror(errno) << std::endl;
+    return false;
+  } else {
+    if(::send(_socketDescriptor, str.c_str(), str.size(), MSG_NOSIGNAL) < 0) {
+      std::cerr << __FILE__ << ":" << __LINE__ << "\t\tError while sending data: " << strerror(errno) << std::endl;
+      return false;
+    }
   }
 
-  return false;
+  return true;
 }
 
 int Socket::recv(std::string &str)
@@ -119,10 +139,11 @@ int Socket::recv(std::string &str)
   std::cerr << __FILE__ << ":" << __LINE__ << "\t\tReceiving data" << std::endl;
   retval = ::recv(_socketDescriptor, buffer, bufferSize, 0);
   if(retval < 0) {
-    std::cerr << __FILE__ << ":" << __LINE__ << "\t\tError while recieving -- more than likely, this was an immediate disconnect from the client" << std::endl;
-    return 0;
+    std::cerr << __FILE__ << ":" << __LINE__ << "\t\tError while recieving data: " << strerror(errno) << std::endl;
+    return -1;
   }
 
   str = buffer;
   return retval;
 }
+
