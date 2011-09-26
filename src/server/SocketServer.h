@@ -16,7 +16,7 @@
 class SocketServer {
 
 public:
-  SocketServer();
+  SocketServer(int port = 2048, const char *address = NULL);
   ~SocketServer();
 
 protected:

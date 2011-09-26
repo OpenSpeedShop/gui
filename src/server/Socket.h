@@ -14,7 +14,7 @@ public:
   Socket();
   ~Socket();
 
-  bool start(int port);
+  bool start(int port, const char *address = NULL);
   bool accept(Socket &clientConnection);
   bool send(std::string str);
   int recv(std::string &str);
