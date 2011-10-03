@@ -36,6 +36,6 @@ LIBS         += -L$$quote($${BUILD_PATH}/plugins/OpenSpeedShop/$${POSTFIX}) -lOp
 # In the future, this should be pulled from the server
 OTHER_FILES += ExperimentTypes.xml
 win32:experimentTypes.path = /
-else:experimentTypes.path = /etc
+else:experimentTypes.path = /share/openspeedshop/gui/
 experimentTypes.files = ExperimentTypes.xml
 INSTALLS += experimentTypes

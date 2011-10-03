@@ -104,12 +104,12 @@ DEFINES      += OPENSPEEDSHOP_LIBRARY \
 # In the future, this should be pulled from the server
 OTHER_FILES += ModelManager/ModelDescriptors.xml
 win32:modelDescriptors.path = /
-else:modelDescriptors.path = /etc
+else:modelDescriptors.path = /share/openspeedshop/gui/
 modelDescriptors.files = ModelManager/ModelDescriptors.xml
 INSTALLS += modelDescriptors
 
 OTHER_FILES += Welcome/WelcomeData.xml
 win32:welcomeData.path = /
-else:welcomeData.path = /etc
+else:welcomeData.path = /share/openspeedshop/gui/
 welcomeData.files = Welcome/WelcomeData.xml
 INSTALLS += welcomeData

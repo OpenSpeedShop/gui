@@ -76,6 +76,6 @@ INSTALLS += target
 
 OTHER_FILES += MainWindow/StyleSheet.css
 win32:styleSheet.path = /
-else:styleSheet.path = /etc
+else:styleSheet.path = /share/openspeedshop/gui/
 styleSheet.files = MainWindow/StyleSheet.css
 INSTALLS += styleSheet

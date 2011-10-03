@@ -49,7 +49,7 @@ bool WelcomeData::initialize()
 #ifdef WIN32
     QFileInfo fileInfo(QString("%1/WelcomeData.xml").arg(QApplication::instance()->applicationDirPath()));
 #else
-    QFileInfo fileInfo(QString("%1/../etc/WelcomeData.xml").arg(QApplication::instance()->applicationDirPath()));
+    QFileInfo fileInfo(QString("%1/../share/openspeedshop/gui/WelcomeData.xml").arg(QApplication::instance()->applicationDirPath()));
 #endif
 
     QString filePath;
