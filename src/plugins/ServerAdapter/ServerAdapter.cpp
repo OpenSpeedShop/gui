@@ -626,7 +626,7 @@ QList<qint64> ServerAdapter::waitExperimentPids(QUuid experimentUid)
 
 ServerCommand *ServerAdapter::experimentSourceFiles(qint64 experimentId)
 {
-    QString command = QString("list -v src -x %1").arg(experimentId);
+    QString command = QString("list -v srcfullpath -x %1").arg(experimentId);
     return rawOpenSpeedShopCommand(command);
 }
 QStringList ServerAdapter::waitExperimentSourceFiles(qint64 experimentId)
