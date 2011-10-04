@@ -32,6 +32,7 @@ public:
     bool isCompatible(QString serverVersion);
 
     QString waitVersion();
+    int waitKeepAlive();
     void waitExit();
 
     QStringList waitDirStat(QString path);
@@ -63,6 +64,7 @@ public:
 
 protected:
     Plugins::OpenSpeedShop::ServerCommand *version();
+    Plugins::OpenSpeedShop::ServerCommand *keepAlive();
     Plugins::OpenSpeedShop::ServerCommand *exit();
 
     Plugins::OpenSpeedShop::ServerCommand *ossHelp();
@@ -113,6 +115,9 @@ protected:
     QUuid experimentUid(qint64 experimentId);
 
     void loadMetrics();
+
+protected slots:
+    void doKeepAlive();
 
 private:
     QDomDocument m_MetricsList;

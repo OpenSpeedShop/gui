@@ -2,6 +2,7 @@
 
 #include <QFile>
 #include <QMap>
+#include <QTimer>
 #include <QApplication>
 #include <OpenSpeedShop/ConnectionManager/ConnectionManager.h>
 #include <OpenSpeedShop/ConnectionManager/ServerCommand.h>
@@ -10,9 +11,6 @@
 #ifdef SERVERADAPTER_DEBUG
 #  include <QDebug>
 #endif
-
-#include <QDebug>
-
 
 using namespace Plugins::OpenSpeedShop;
 
@@ -191,12 +189,47 @@ QString ServerAdapter::waitVersion()
     if(serverResponseElement.isNull()) throw tr("'ServerResponse' doesn't exist, as expected.");
 
     if(!serverResponseElement.hasAttribute("version"))
-        throw tr("'ServerResponse'' doesn't have 'version' attribute, as expected.");
+        throw tr("'ServerResponse' doesn't have 'version' attribute, as expected.");
 
     QString version = serverResponseElement.attribute("version");
     serverCommand->deleteLater();
     return version;
 }
+
+
+ServerCommand *ServerAdapter::keepAlive()
+{
+    return rawServerCommand("keepalive");
+}
+
+int ServerAdapter::waitKeepAlive()
+{
+    ServerCommand *serverCommand = version();
+    while(serverCommand->state() != ServerCommand::State_Response)
+        QApplication::processEvents();
+
+    QDomElement responseElement = waitCommand(serverCommand);
+
+    QDomElement serverResponseElement = responseElement.firstChildElement("ServerResponse");
+    if(serverResponseElement.isNull()) throw tr("'ServerResponse' doesn't exist, as expected.");
+
+    if(!serverResponseElement.hasAttribute("milliseconds"))
+        throw tr("'ServerResponse' doesn't have 'version' attribute, as expected.");
+
+    bool okay;
+    int keepAliveMS = serverResponseElement.attribute("milliseconds").toInt(&okay);
+    serverCommand->deleteLater();
+
+    if(!okay) throw tr("Could not convert 'milliseconds' attribute to int.");
+
+    return keepAliveMS;
+}
+
+void ServerAdapter::doKeepAlive()
+{
+    QTimer::singleShot(waitKeepAlive(), this, SLOT(doKeepAlive()));
+}
+
 
 /*! \fn ServerAdapter::exit()
     \brief
