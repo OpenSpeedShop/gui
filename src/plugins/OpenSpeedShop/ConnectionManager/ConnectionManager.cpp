@@ -272,6 +272,8 @@ IAdapter *ConnectionManager::askAdapter()
  */
 void ConnectionManager::connectionStateChanged()
 {
+    static IConnection::States previousState = IConnection::State_Disconnected;
+
     if(m_CurrentConnection->state() == IConnection::State_Connected) {
         /* Get the version string from the server, so we can load the right adapter */
         ServerCommand serverCommand("version", "Server");
@@ -290,12 +292,6 @@ void ConnectionManager::connectionStateChanged()
                 setCurrentAdapter(adapter);
             }
         }
-
-        if(m_NotifyConnecting) {
-            m_NotifyConnecting->close();
-            m_NotifyConnecting->deleteLater();
-            m_NotifyConnecting = NULL;
-        }
     } else {
         /* Reset the adapter */
         setCurrentAdapter(NULL);
@@ -306,6 +302,46 @@ void ConnectionManager::connectionStateChanged()
             m_ServerCommands.removeOne(serverCommand);
         }
     }
+
+
+    /* Set up user interactions */
+    //! \todo We need a status bar icon here
+    using namespace Core::MainWindow;
+
+    if(m_NotifyConnecting) {
+        m_NotifyConnecting->close();
+        m_NotifyConnecting->deleteLater();
+        m_NotifyConnecting = NULL;
+    }
+
+    if(m_CurrentConnection->state() == IConnection::State_Connected) {
+        m_ServerConnect.setText("Disconnect from server");
+        m_ServerConnect.setEnabled(true);
+    } else if(m_CurrentConnection->state() == IConnection::State_Connecting) {
+        m_ServerConnect.setText("Connecting to server");
+        m_ServerConnect.setEnabled(false);
+        m_NotifyConnecting = MainWindow::instance().notify("Connecting to server", NotificationWidget::Loading);
+    } else if(m_CurrentConnection->state() == IConnection::State_Disconnecting) {
+        m_ServerConnect.setText("Disconnecting from server");
+        m_ServerConnect.setEnabled(false);
+        m_NotifyConnecting = MainWindow::instance().notify("Disconnecting from server", NotificationWidget::Loading);
+    } else if(m_CurrentConnection->state() == IConnection::State_Disconnected) {
+        m_ServerConnect.setText("Connect to server");
+        m_ServerConnect.setEnabled(true);
+
+        //TODO: FIX THIS
+        if(previousState == IConnection::State_Error) {
+            m_NotifyConnecting = MainWindow::instance().notify("Error occured while connecting to server", NotificationWidget::Critical);
+        } else if(previousState != IConnection::State_Disconnecting) {
+            m_NotifyConnecting = MainWindow::instance().notify("Connection lost unexpectedly", NotificationWidget::Critical);
+        }
+    } else {
+        m_ServerConnect.setText("Connect to server");
+        m_ServerConnect.setEnabled(true);
+        m_NotifyConnecting = MainWindow::instance().notify("Error occured while connecting to server", NotificationWidget::Critical);
+    }
+
+    previousState = m_CurrentConnection->state();
 }
 
 /*! \fn ConnectionManager::connectionReadyRecieve()
@@ -393,9 +429,6 @@ void ConnectionManager::connectToServer()
     if(connection->state() == IConnection::State_Disconnected) {
         connection->connectToServer();
     }
-
-    using namespace Core::MainWindow;
-    m_NotifyConnecting = MainWindow::instance().notify("Connecting to server", NotificationWidget::Loading);
 }
 
 void ConnectionManager::disconnectFromServer()
@@ -412,16 +445,26 @@ void ConnectionManager::disconnectFromServer()
 
 void ConnectionManager::serverConnect()
 {
-    try {
-
-        connectToServer();
-
-    } catch(QString err) {
-        using namespace Core::MainWindow;
-        MainWindow::instance().notify(tr("Client error while attempting to connect to server: %1").arg(err), NotificationWidget::Critical);
-    } catch(...) {
-        using namespace Core::MainWindow;
-        MainWindow::instance().notify(tr("Client error while attempting to connect to server."), NotificationWidget::Critical);
+    if(m_ServerConnect.text().startsWith("Connect")) {
+        try {
+            connectToServer();
+        } catch(QString err) {
+            using namespace Core::MainWindow;
+            MainWindow::instance().notify(tr("Client error while attempting to connect to server: %1").arg(err), NotificationWidget::Critical);
+        } catch(...) {
+            using namespace Core::MainWindow;
+            MainWindow::instance().notify(tr("Client error while attempting to connect to server."), NotificationWidget::Critical);
+        }
+    } else {
+        try {
+            disconnectFromServer();
+        } catch(QString err) {
+            using namespace Core::MainWindow;
+            MainWindow::instance().notify(tr("Client error while attempting to disconnect from server: %1").arg(err), NotificationWidget::Critical);
+        } catch(...) {
+            using namespace Core::MainWindow;
+            MainWindow::instance().notify(tr("Client error while attempting to disconnect from server."), NotificationWidget::Critical);
+        }
     }
 }
 

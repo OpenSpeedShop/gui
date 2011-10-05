@@ -842,7 +842,7 @@ void ServerAdapter::loadMetrics()
 #ifdef WIN32
     QFile file(QString("%1/ExperimentTypes.xml").arg(QApplication::instance()->applicationDirPath()));
 #else
-    QFile file(QString("%1/../etc/ExperimentTypes.xml").arg(QApplication::instance()->applicationDirPath()));
+    QFile file(QString("%1/../share/openspeedshop/gui/ExperimentTypes.xml").arg(QApplication::instance()->applicationDirPath()));
 #endif
 
     if (!file.open(QIODevice::ReadOnly)) {

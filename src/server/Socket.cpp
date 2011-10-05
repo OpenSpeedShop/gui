@@ -58,7 +58,8 @@ bool Socket::start(int port, const char *address)
     std::cerr << __FILE__ << ":" << __LINE__ << "\t\tError setting socket options: " << strerror(errno) << std::endl;
     return false;
   }
-  
+
+#if 0
   struct timeval tv;
   tv.tv_usec = 0;
   tv.tv_sec = 30;
@@ -66,6 +67,7 @@ bool Socket::start(int port, const char *address)
     std::cerr << __FILE__ << ":" << __LINE__ << "\t\tError setting socket timeout options: " << strerror(errno) << std::endl;
     return false;
   }
+#endif
 
   std::cerr << __FILE__ << ":" << __LINE__ << "\t\tBinding socket" << std::endl;
   if(bind(_socketDescriptor, (struct sockaddr *) &serverAddress, sizeof(serverAddress)) < 0) {
