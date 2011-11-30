@@ -107,6 +107,7 @@ protected slots:
 
 private:
     QAction m_ServerConnect;
+    QLabel *m_lblConnectionStatus;
 
     friend class ConnectionWidget;
 };

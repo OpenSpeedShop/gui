@@ -29,6 +29,9 @@
 
 #include <QApplication>
 #include <QMessageBox>
+#include <QLabel>
+#include <QStatusBar>
+
 #include <MainWindow/MainWindow.h>
 #include <SettingManager/SettingManager.h>
 
@@ -63,6 +66,7 @@ ConnectionManager::ConnectionManager(QObject *parent) :
     m_CurrentConnection = NULL;
     m_CurrentAdapter = NULL;
     m_NotifyConnecting = NULL;
+    m_lblConnectionStatus = NULL;
 }
 
 ConnectionManager::~ConnectionManager()
@@ -89,6 +93,14 @@ bool ConnectionManager::initialize(QStringList &args, QString *err)
                 connect(&m_ServerConnect, SIGNAL(triggered()), this, SLOT(serverConnect()));
                 action->menu()->insertAction(action->menu()->actions().at(0), &m_ServerConnect);
             }
+        }
+
+        if(!m_lblConnectionStatus) {
+            m_lblConnectionStatus = new QLabel();
+            m_lblConnectionStatus->setFixedSize(16,16);
+            m_lblConnectionStatus->setPixmap(QPixmap(":/OpenSpeedShop/ConnectionManager/disconnected.svg"));
+            m_lblConnectionStatus->setToolTip(tr("Disconnected"));
+            mainWindow.statusBar()->addWidget(m_lblConnectionStatus);
         }
 
         readSettings();
@@ -303,11 +315,8 @@ void ConnectionManager::connectionStateChanged()
         }
     }
 
-
     /* Set up user interactions */
-    //! \todo We need a status bar icon here
     using namespace Core::MainWindow;
-
     if(m_NotifyConnecting) {
         m_NotifyConnecting->close();
         m_NotifyConnecting->deleteLater();
@@ -315,30 +324,44 @@ void ConnectionManager::connectionStateChanged()
     }
 
     if(m_CurrentConnection->state() == IConnection::State_Connected) {
-        m_ServerConnect.setText("Disconnect from server");
-        m_ServerConnect.setEnabled(true);
-    } else if(m_CurrentConnection->state() == IConnection::State_Connecting) {
-        m_ServerConnect.setText("Connecting to server");
-        m_ServerConnect.setEnabled(false);
-        m_NotifyConnecting = MainWindow::instance().notify("Connecting to server", NotificationWidget::Loading);
-    } else if(m_CurrentConnection->state() == IConnection::State_Disconnecting) {
-        m_ServerConnect.setText("Disconnecting from server");
-        m_ServerConnect.setEnabled(false);
-        m_NotifyConnecting = MainWindow::instance().notify("Disconnecting from server", NotificationWidget::Loading);
-    } else if(m_CurrentConnection->state() == IConnection::State_Disconnected) {
-        m_ServerConnect.setText("Connect to server");
+        m_ServerConnect.setText(tr("Disconnect from server"));
         m_ServerConnect.setEnabled(true);
 
-        //TODO: FIX THIS
-        if(previousState == IConnection::State_Error) {
-            m_NotifyConnecting = MainWindow::instance().notify("Error occured while connecting to server", NotificationWidget::Critical);
-        } else if(previousState != IConnection::State_Disconnecting) {
-            m_NotifyConnecting = MainWindow::instance().notify("Connection lost unexpectedly", NotificationWidget::Critical);
-        }
-    } else {
-        m_ServerConnect.setText("Connect to server");
+        m_lblConnectionStatus->setPixmap(QPixmap(":/OpenSpeedShop/ConnectionManager/connected.svg"));
+        m_lblConnectionStatus->setToolTip(tr("Connected"));
+
+    } else if(m_CurrentConnection->state() == IConnection::State_Connecting) {
+        m_ServerConnect.setText(tr("Connecting to server"));
+        m_ServerConnect.setEnabled(false);
+
+        m_NotifyConnecting = MainWindow::instance().notify(tr("Connecting to server"), NotificationWidget::Loading);
+        m_lblConnectionStatus->setToolTip(tr("Connecting"));
+
+    } else if(m_CurrentConnection->state() == IConnection::State_Disconnecting) {
+        m_ServerConnect.setText(tr("Disconnecting from server"));
+        m_ServerConnect.setEnabled(false);
+
+        m_NotifyConnecting = MainWindow::instance().notify(tr("Disconnecting from server"), NotificationWidget::Loading);
+        m_lblConnectionStatus->setToolTip(tr("Disconnecting"));
+
+    } else if(m_CurrentConnection->state() == IConnection::State_Disconnected) {
+        m_ServerConnect.setText(tr("Connect to server"));
         m_ServerConnect.setEnabled(true);
-        m_NotifyConnecting = MainWindow::instance().notify("Error occured while connecting to server", NotificationWidget::Critical);
+
+        m_lblConnectionStatus->setPixmap(QPixmap(":/OpenSpeedShop/ConnectionManager/disconnected.svg"));
+        m_lblConnectionStatus->setToolTip(tr("Disconnected"));
+
+    } else {
+        m_ServerConnect.setText(tr("Connect to server"));
+        m_ServerConnect.setEnabled(true);
+
+        if(previousState == IConnection::State_Connected) {
+            MainWindow::instance().notify(tr("Unexpected loss of connection to server: %1").arg(m_CurrentConnection->errorMessage()), NotificationWidget::Critical);
+        } else if(previousState == IConnection::State_Connecting) {
+            MainWindow::instance().notify(tr("Error occured while connecting to server: %1").arg(m_CurrentConnection->errorMessage()), NotificationWidget::Critical);
+        } else if(previousState == IConnection::State_Disconnecting) {
+            MainWindow::instance().notify(tr("Error occured while disconnecting from server: %1").arg(m_CurrentConnection->errorMessage()), NotificationWidget::Critical);
+        }
     }
 
     previousState = m_CurrentConnection->state();
@@ -407,7 +430,7 @@ bool ConnectionManager::askServerConnect() {
     IConnection *connection = currentConnection();
     if(!connection) return false;
 
-    QMessageBox msg(QMessageBox::Question, "Not connected", "Connect to server?", QMessageBox::Yes|QMessageBox::No);
+    QMessageBox msg(QMessageBox::Question, tr("Not connected"), tr("Connect to server?"), QMessageBox::Yes|QMessageBox::No);
 
     if(msg.exec() == QMessageBox::Yes) {
         connectToServer();
@@ -445,7 +468,7 @@ void ConnectionManager::disconnectFromServer()
 
 void ConnectionManager::serverConnect()
 {
-    if(m_ServerConnect.text().startsWith("Connect")) {
+    if(!isConnected()) {
         try {
             connectToServer();
         } catch(QString err) {
