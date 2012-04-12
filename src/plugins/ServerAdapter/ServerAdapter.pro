@@ -39,7 +39,7 @@ LIBS         += -L$$quote($${BUILD_PATH}/plugins/OpenSpeedShop/$${DIR_POSTFIX}) 
 # List of experiment types and their possible modifiers/metrics
 # In the future, this should be pulled from the server
 OTHER_FILES += ExperimentTypes.xml
-win32:experimentTypes.path = /
+win32:experimentTypes.path = /oss/
 else:experimentTypes.path = /share/openspeedshop/gui/
 experimentTypes.files = ExperimentTypes.xml
 INSTALLS += experimentTypes

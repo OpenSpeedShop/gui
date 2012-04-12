@@ -19,6 +19,6 @@ include(OpenSpeedShop.pri)
 
 TEMPLATE = subdirs
 CONFIG  += ordered
-SUBDIRS  = core plugins
+SUBDIRS  = plugins
 
 OTHER_FILES += Doxyfile fileheader.txt

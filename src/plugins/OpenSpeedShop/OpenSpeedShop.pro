@@ -48,8 +48,8 @@ SOURCES      += OpenSpeedShopPlugin.cpp \
                 RemoteFileSystem/RemoteFileDialog.cpp \
                 Experiment/SourceView.cpp \
                 Experiment/SyntaxHighlighter.cpp \
-                Welcome/WelcomeData.cpp \
-                RemoteFileSystem/PathRewriter.cpp
+                RemoteFileSystem/PathRewriter.cpp \
+    Welcome/WelcomeData.cpp
 
 HEADERS      += OpenSpeedShopPlugin.h \
                 Settings/SettingPage.h \
@@ -107,13 +107,14 @@ DEFINES      += OPENSPEEDSHOP_LIBRARY \
 # Default data for the model descriptors
 # In the future, this should be pulled from the server
 OTHER_FILES += ModelManager/ModelDescriptors.xml
-win32:modelDescriptors.path = /
+win32:modelDescriptors.path = /oss/
 else:modelDescriptors.path = /share/openspeedshop/gui/
 modelDescriptors.files = ModelManager/ModelDescriptors.xml
 INSTALLS += modelDescriptors
 
+# Install the welcome data file
 OTHER_FILES += Welcome/WelcomeData.xml
-win32:welcomeData.path = /
-else:welcomeData.path = /share/openspeedshop/gui/
+win32: welcomeData.path = /oss/
+else: welcomeData.path = /share/openspeedshop/gui/
 welcomeData.files = Welcome/WelcomeData.xml
 INSTALLS += welcomeData

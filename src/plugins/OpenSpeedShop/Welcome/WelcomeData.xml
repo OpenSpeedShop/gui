@@ -7,6 +7,7 @@
 <!--    <Link title="Advanced Performance Analysis using Open|SpeedShop" description="help documentation on advanced performance analysis techniques using the Open|SpeedShop GUI." type="text" priority="128" url="qthelp://org.openspeedshop.gui/openspeedshop/advancedTechniques.html"/> -->
   </Tutorials>
   <Examples>
+    <Link title="Look for Bottlenecks with Open|SpeedShop" description="step-by-step examples illustrating how to find a number of different performance bottlenecks" type="text" priority="16" url="http://hpc.admin-magazine.com/Articles/Look-for-Bottlenecks-with-Open-SpeedShop"/>
     <Link title="SMG2000 - Semicoarsening Multigrid Solver" description="a detailed walk-through describing how to use the Open|SpeedShop performance tools to analyze the provided test application SMG2000" type="text" priority="16" url="qthelp://org.openspeedshop.gui/openspeedshop/smg2000.html"/>
   </Examples>
   <Support>
@@ -19,9 +20,10 @@
     <!-- <Rss url="https://github.com/OpenSpeedShop/gui/commits/0.1.dev.atom"/> -->
   </LatestNews>
   <TipsAndTricks>
-    <Tip text="Make sure you've started the server, before trying to connect."/>
-    <Tip text="Check http://youtube.com/openspeedshop frequently for new video tutorials."/>
-    <Tip text="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."/>
-    <Tip text="Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."/>
+    <Tip text="Make sure you've started the Open|SpeedShop server, before trying to connect."/>
+    <Tip text="Check http://youtube.com/openspeedshop frequently for new Open|SpeedShop video tutorials."/>
+    <Tip text="Open|SpeedShop is an open source multiplatform Linux performance tool targeted at performance analysis of applications running on both a single node and on large-scale IA64, IA32, EM64T, AMD64, IBM Power PC, Cray, and IBM Blue Gene platforms."/>
+    <Tip text="Open|SpeedShop operates on existing application binaries, so there is no need to recompile the application being analyzed."/>
+    <Tip text="Open|SpeedShop gathers several types of performance information, relates that information back to the application source code, and then displays the associated performance information to the user."/>
   </TipsAndTricks>
 </WelcomeData>

@@ -18,13 +18,12 @@
 !isEmpty(PLUGINS_PRI_INCLUDED):error("plugins/Plugins.pri already included")
 PLUGINS_PRI_INCLUDED = 1
 
+include(../PTGF.pri)
 include(../OpenSpeedShop.pri)
 
 TEMPLATE      = lib
 CONFIG       += plugin plugin_with_soname
 CONFIG       += depend_includepath
-
-LIBS         += -L$$quote($${BUILD_PATH}/core/lib/$${DIR_POSTFIX}) -lCore$${LIB_POSTFIX}
 
 win32:target.path   = /
 else:target.path   = /lib

@@ -39,8 +39,6 @@ defineTest(qtVer) {
 CONFIG -= debug_and_release
 QT += core gui
 
-APPLICATION_TARGET = OpenSpeedShop
-
 #######################
 # VERSION INFORMATION #
 #######################
@@ -81,5 +79,5 @@ CONFIG(debug, debug|release) {
 #################
 # INCLUDE PATHS #
 #################
-INCLUDEPATH       += $$quote($${SOURCE_PATH}/core/lib) $$quote($${SOURCE_PATH}/plugins)
-DEPENDPATH        += $$quote($${SOURCE_PATH}/core/lib) $$quote($${SOURCE_PATH}/plugins)
+INCLUDEPATH       += $$quote($${SOURCE_PATH}/plugins)
+DEPENDPATH        += $$quote($${SOURCE_PATH}/plugins)

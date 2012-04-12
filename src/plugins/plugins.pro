@@ -17,22 +17,13 @@
 
 TEMPLATE = subdirs
 
-SUBDIRS  = Example \
-           Welcome \
-           Help \
-           OpenSpeedShop \
+SUBDIRS  = OpenSpeedShop \
            DirectConnection \
            TreeView \
            ServerAdapter \
            LineGraphView
 
-Help.subdir                  = Help
-
-Welcome.subdir               = Welcome
-Welcome.depends              = Help
-
 OpenSpeedShop.subdir         = OpenSpeedShop
-OpenSpeedShop.depends        = Help Welcome
 
 DirectConnection.subdir      = DirectConnection
 DirectConnection.depends     = OpenSpeedShop
