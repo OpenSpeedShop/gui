@@ -1,26 +1,20 @@
 #include "ExperimentWidget.h"
 #include "ui_ExperimentWidget.h"
 
-#include <QDomDocument>
-#include <QInputDialog>
-#include <QFileDialog>
-#include <QDesktopServices>
-#include <QUrl>
-#include <QMessageBox>
-
 #include <MainWindow/MainWindow.h>
 #include <ConnectionManager/ConnectionManager.h>
 #include <ConnectionManager/IAdapter.h>
+#include <SettingManager/SettingManager.h>
 
-#include "ModelManager/ModelManager.h"
-#include "ModelManager/ModelManagerDialog.h"
-#include "ModelManager/ModelDescriptorListWidget.h"
+#include <ModelManager/ModelManager.h>
+#include <ModelManager/ModelManagerDialog.h>
+#include <ModelManager/ModelDescriptorListWidget.h>
 
-#include "ViewManager/ViewManager.h"
-#include "ViewManager/IViewFilterable.h"
+#include <ViewManager/ViewManager.h>
+#include <ViewManager/IViewFilterable.h>
 
-#include "RemoteFileSystem/RemoteFileDialog.h"
-#include "RemoteFileSystem/PathRewriter.h"
+#include <RemoteFileSystem/RemoteFileDialog.h>
+#include <RemoteFileSystem/PathRewriter.h>
 
 #ifdef QT_DEBUG
 #  include <QDebug>

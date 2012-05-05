@@ -28,8 +28,8 @@
 #ifndef SYNTAXHIGHLIGHTER_H
 #define SYNTAXHIGHLIGHTER_H
 
-#include <QSyntaxHighlighter>
-#include <QRegExp>
+#include <QtCore>
+#include <QtGui>
 
 class SyntaxHighlighter : public QSyntaxHighlighter
 {

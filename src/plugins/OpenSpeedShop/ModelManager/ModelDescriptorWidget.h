@@ -1,12 +1,13 @@
 #ifndef MODELDESCRIPTORWIDGET_H
 #define MODELDESCRIPTORWIDGET_H
 
-#include <QWidget>
-#include <QAbstractButton>
-#include <QDomDocument>
-#include <QUuid>
+#include <QtCore>
+#include <QtGui>
+#include <QtXml>
 
 #include "ModelDescriptor.h"
+
+#include "ModelManagerLibrary.h"
 
 namespace Plugins {
 namespace OpenSpeedShop {
@@ -15,7 +16,7 @@ namespace Ui {
     class ModelDescriptorWidget;
 }
 
-class ModelDescriptorWidget : public QWidget
+class MODELMANAGER_EXPORT ModelDescriptorWidget : public QWidget
 {
     Q_OBJECT
 

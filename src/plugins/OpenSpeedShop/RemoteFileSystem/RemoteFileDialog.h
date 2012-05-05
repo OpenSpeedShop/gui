@@ -28,13 +28,12 @@
 #ifndef REMOTEFILEDIALOG_H
 #define REMOTEFILEDIALOG_H
 
-#include <QDialog>
-#include <QModelIndex>
-#include <QRegExp>
+#include <QtCore>
+#include <QtGui>
+#include <QtXml>
 
 namespace Plugins {
 namespace OpenSpeedShop {
-
 
 namespace Ui {
     class RemoteFileDialog;

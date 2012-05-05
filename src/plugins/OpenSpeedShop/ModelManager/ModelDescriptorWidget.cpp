@@ -1,10 +1,10 @@
 #include "ModelDescriptorWidget.h"
 #include "ui_ModelDescriptorWidget.h"
 
-#include <QMessageBox>
-#include <QListWidgetItem>
 #include <MainWindow/MainWindow.h>
-#include "ConnectionManager/ConnectionManager.h"
+
+#include <ConnectionManager/ConnectionManager.h>
+#include <ConnectionManager/IAdapter.h>
 
 #ifdef QT_DEBUG
 #  include <QDebug>

@@ -28,8 +28,9 @@
 #ifndef SOURCEVIEW_H
 #define SOURCEVIEW_H
 
-#include <QPlainTextEdit>
-#include <QAbstractItemModel>
+#include <QtCore>
+#include <QtGui>
+
 #include "SyntaxHighlighter.h"
 
 namespace Plugins {

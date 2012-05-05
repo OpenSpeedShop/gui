@@ -1,9 +1,9 @@
 #ifndef SERVERADAPTER_H
 #define SERVERADAPTER_H
 
-#include <QThread>
-#include <QMap>
-#include <QDomDocument>
+#include <QtCore>
+#include <QtXml>
+
 #include <OpenSpeedShop/ConnectionManager/IAdapter.h>
 
 namespace Plugins {

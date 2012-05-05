@@ -26,7 +26,9 @@
  */
 
 #include "ServerAdapterPlugin.h"
+
 #include <OpenSpeedShop/ConnectionManager/ConnectionManager.h>
+#include <PluginManager/PluginManager.h>
 
 using namespace Plugins::OpenSpeedShop;
 

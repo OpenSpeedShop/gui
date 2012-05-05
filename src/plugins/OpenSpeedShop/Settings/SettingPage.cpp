@@ -28,6 +28,8 @@
 #include "SettingPage.h"
 #include "ui_SettingPage.h"
 
+#include <SettingManager/SettingManager.h>
+
 namespace Plugins {
 namespace OpenSpeedShop {
 

@@ -26,7 +26,10 @@
  */
 
 #include "ViewManager.h"
+
 #include <PluginManager/PluginManager.h>
+
+#include "IViewFactory.h"
 
 namespace Plugins {
 namespace OpenSpeedShop {

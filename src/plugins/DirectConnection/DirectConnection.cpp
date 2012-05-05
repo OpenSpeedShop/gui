@@ -27,11 +27,12 @@
 
 #include "DirectConnection.h"
 
-#include "DirectConnectionPage.h"
 #include <SettingManager/SettingManager.h>
 
+#include "DirectConnectionPage.h"
+
 #ifdef DIRECTCONNECTION_DEBUG
-#  include <QDebug>
+#  include <QtDebug>
 #endif
 
 using namespace Plugins::OpenSpeedShop;

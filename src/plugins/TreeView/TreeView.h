@@ -28,15 +28,15 @@
 #ifndef TREEVIEWM_H
 #define TREEVIEWM_H
 
-#include <QTreeView>
-#include <QSortFilterProxyModel>
+#include <QtCore>
+#include <QtGui>
+
 #include <OpenSpeedShop/ViewManager/IViewFilterable.h>
+
 #include "Delegate.h"
 
 namespace Plugins {
 namespace TreeView {
-
-class Delegate;
 
 class TreeView : public QTreeView, public Plugins::OpenSpeedShop::IViewFilterable
 {

@@ -40,3 +40,7 @@ QT                += network xml
 LIBS        += -L$$quote($${BUILD_PATH}/plugins/OpenSpeedShop/$${DIR_POSTFIX}) -lOpenSpeedShop$${LIB_POSTFIX}
 
 #debug: DEFINES += DIRECTCONNECTION_DEBUG
+
+#directConnectionHeaders.path = /include/plugins/DirectConnection
+#directConnectionHeaders.files = DirectConnectionLibrary.h DirectConnection.h
+#INSTALLS += directConnectionHeaders

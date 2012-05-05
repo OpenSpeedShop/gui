@@ -28,13 +28,10 @@
 #ifndef CONNECTIONWIDGET_H
 #define CONNECTIONWIDGET_H
 
-#include <QWidget>
+#include <QtCore>
+#include <QtGui>
+
 #include <SettingManager/ISettingPage.h>
-#include <SettingManager/SettingManager.h>
-
-#include <QProgressBar>
-#include <QMessageBox>
-
 
 namespace Plugins {
 namespace OpenSpeedShop {

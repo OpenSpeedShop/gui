@@ -29,6 +29,7 @@
 #include "ui_DirectConnectionPage.h"
 
 #include <SettingManager/SettingManager.h>
+
 #include "DirectConnection.h"
 
 namespace Plugins {

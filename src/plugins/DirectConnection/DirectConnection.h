@@ -28,9 +28,9 @@
 #ifndef DIRECTCONNECTION_H
 #define DIRECTCONNECTION_H
 
-#include <QObject>
-#include <QTcpSocket>
-#include <QDataStream>
+#include <QtCore>
+#include <QtNetwork>
+
 #include <OpenSpeedShop/ConnectionManager/IConnection.h>
 
 using namespace Plugins::OpenSpeedShop;

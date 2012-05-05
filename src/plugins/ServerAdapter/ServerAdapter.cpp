@@ -1,9 +1,5 @@
 #include "ServerAdapter.h"
 
-#include <QFile>
-#include <QMap>
-#include <QTimer>
-#include <QApplication>
 #include <OpenSpeedShop/ConnectionManager/ConnectionManager.h>
 #include <OpenSpeedShop/ConnectionManager/ServerCommand.h>
 #include <OpenSpeedShop/ModelManager/DataModel.h>

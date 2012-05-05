@@ -28,8 +28,10 @@
 #ifndef DIRECTCONNECTIONPLUGIN_H
 #define DIRECTCONNECTIONPLUGIN_H
 
-#include <QObject>
+#include <QtCore>
+
 #include <PluginManager/IPlugin.h>
+
 #include "DirectConnection.h"
 
 namespace Plugins {

@@ -27,17 +27,15 @@
 
 #include "ConnectionManager.h"
 
-#include <QApplication>
-#include <QMessageBox>
-#include <QLabel>
-#include <QStatusBar>
-
 #include <MainWindow/MainWindow.h>
+#include <MainWindow/NotificationWidget.h>
 #include <SettingManager/SettingManager.h>
+#include <PluginManager/PluginManager.h>
 
 #include "IConnection.h"
 #include "ServerCommand.h"
 #include "ConnectionWidget.h"
+#include "IAdapter.h"
 
 #ifdef CONNECTIONMANAGER_DEBUG
 #  include <QDebug>

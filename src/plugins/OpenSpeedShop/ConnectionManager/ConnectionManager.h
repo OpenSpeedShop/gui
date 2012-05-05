@@ -28,17 +28,19 @@
 #ifndef CONNECTIONMANAGER_H
 #define CONNECTIONMANAGER_H
 
-#include <QObject>
-#include <QList>
-#include <QUuid>
-#include <MainWindow/MainWindow.h>
-#include <MainWindow/NotificationWidget.h>
+#include <QtCore>
+#include <QtGui>
+
+#include <SettingManager/ISettingPageFactory.h>
+
 #include "ConnectionManagerLibrary.h"
-#include "IAdapter.h"
+
+namespace Core { namespace MainWindow { class NotificationWidget; } }
 
 namespace Plugins {
 namespace OpenSpeedShop {
 
+class IAdapter;
 class IConnection;
 class ServerCommand;
 

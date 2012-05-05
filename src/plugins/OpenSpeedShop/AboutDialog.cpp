@@ -27,8 +27,6 @@
 
 #include "AboutDialog.h"
 #include "ui_AboutDialog.h"
-#include <QTimer>
-#include <QDesktopWidget>
 
 namespace Plugins {
 namespace OpenSpeedShop {

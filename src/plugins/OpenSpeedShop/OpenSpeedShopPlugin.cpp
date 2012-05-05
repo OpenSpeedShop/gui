@@ -25,22 +25,24 @@
 
  */
 
+#include "OpenSpeedShopPlugin.h"
+
+#include <MainWindow/MainWindow.h>
+#include <PluginManager/PluginManager.h>
+#include <SettingManager/SettingManager.h>
+
+#include <ConnectionManager/ConnectionManager.h>
+#include <ModelManager/ModelManager.h>
+#include <RemoteFileSystem/PathRewriter.h>
+#include <Settings/SettingPage.h>
+#include <ViewManager/ViewManager.h>
+
+#include "OpenSpeedShopWidget.h"
+#include "AboutDialog.h"
+
 #ifdef QT_DEBUG
 #  include <QtDebug>
 #endif
-
-#include "OpenSpeedShopPlugin.h"
-
-#include <PluginManager/PluginManager.h>
-#include <SettingManager/SettingManager.h>
-#include <ConnectionManager/ConnectionManager.h>
-#include <ModelManager/ModelManager.h>
-#include <ViewManager/ViewManager.h>
-#include <RemoteFileSystem/PathRewriter.h>
-
-#include "AboutDialog.h"
-#include "Settings/SettingPage.h"
-
 
 namespace Plugins {
 namespace OpenSpeedShop {

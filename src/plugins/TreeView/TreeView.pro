@@ -37,3 +37,7 @@ QT                +=
 LIBS        += -L$$quote($${BUILD_PATH}/plugins/OpenSpeedShop/$${DIR_POSTFIX}) -lOpenSpeedShop$${LIB_POSTFIX}
 
 #debug: DEFINES += TREEVIEW_DEBUG
+
+#treeViewHeaders.path = /include/plugins/TreeView
+#treeViewHeaders.files = TreeViewLibrary.h TreeView.h Delegate.h
+#INSTALLS += treeViewHeaders

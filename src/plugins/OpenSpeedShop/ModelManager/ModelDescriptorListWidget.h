@@ -1,22 +1,17 @@
 #ifndef MODELDESCRIPTORLISTWIDGET_H
 #define MODELDESCRIPTORLISTWIDGET_H
 
-#include <QWidget>
-#include <QAbstractItemModel>
-#include <QSortFilterProxyModel>
-#include <QDomDocument>
-#include <QUuid>
-#include <QMap>
-#include <QList>
-#include <QFile>
-#include <QTreeWidgetItem>
+#include <QtCore>
+#include <QtGui>
+
+#include "ModelManagerLibrary.h"
 
 namespace Plugins {
 namespace OpenSpeedShop {
 
 class ModelDescriptor;
 
-class ModelDescriptorListWidget : public QTreeView
+class MODELMANAGER_EXPORT ModelDescriptorListWidget : public QTreeView
 {
     Q_OBJECT
 

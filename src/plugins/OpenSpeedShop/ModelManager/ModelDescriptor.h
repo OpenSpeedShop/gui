@@ -1,16 +1,15 @@
 #ifndef MODELDESCRIPTOR_H
 #define MODELDESCRIPTOR_H
 
-#include <QObject>
-#include <QDomDocument>
-#include <QUuid>
-#include <QStringList>
-#include <QFile>
+#include <QtCore>
+#include <QtXml>
+
+#include "ModelManagerLibrary.h"
 
 namespace Plugins {
 namespace OpenSpeedShop {
 
-class ModelDescriptor : public QObject
+class MODELMANAGER_EXPORT ModelDescriptor : public QObject
 {
     Q_OBJECT
 public:

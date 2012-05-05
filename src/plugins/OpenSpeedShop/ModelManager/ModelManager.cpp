@@ -1,11 +1,12 @@
 #include "ModelManager.h"
 
-#include <QApplication>
-#include <QFile>
-#include <QFileInfo>
-#include <QMimeData>
 #include <MainWindow/MainWindow.h>
-#include "ConnectionManager/ConnectionManager.h"
+#include <PluginManager/PluginManager.h>
+#include <SettingManager/SettingManager.h>
+
+#include <ConnectionManager/ConnectionManager.h>
+#include <ConnectionManager/IAdapter.h>
+
 #include "DataModel.h"
 #include "ModelManagerDialog.h"
 #include "ModelDescriptor.h"

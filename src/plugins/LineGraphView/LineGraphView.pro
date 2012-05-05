@@ -45,3 +45,7 @@ isEmpty(SERENE_PATH) {
 
   #debug: DEFINES += LINEGRAPHVIEW_DEBUG
 }
+
+#lineGraphViewHeaders.path = /include/plugins/LineGraphView
+#lineGraphViewHeaders.files = LineGraphViewLibrary.h LineGraphView.h
+#INSTALLS += lineGraphViewHeaders

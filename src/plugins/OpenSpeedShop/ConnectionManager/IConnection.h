@@ -28,14 +28,17 @@
 #ifndef ICONNECTION_H
 #define ICONNECTION_H
 
-#include <QObject>
-#include <QWidget>
-#include <QMetaType>
+#include <QtCore>
+#include <QtGui>
+
 #include "ConnectionManagerLibrary.h"
+
 #include "IConnectionPage.h"
 
 namespace Plugins {
 namespace OpenSpeedShop {
+
+class IConnectionPage;
 
 class CONNECTIONMANAGER_EXPORT IConnection : public QObject
 {

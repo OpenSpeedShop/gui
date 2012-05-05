@@ -27,10 +27,8 @@
 
 #include "DataModel.h"
 
-#include <QStringList>
-
 #ifdef DATAMODEL_DEBUG
-#  include <QDebug>
+#  include <QtDebug>
 #endif
 
 namespace Plugins {

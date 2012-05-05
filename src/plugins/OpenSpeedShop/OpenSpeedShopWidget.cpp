@@ -1,6 +1,10 @@
 #include "OpenSpeedShopWidget.h"
 #include "ui_OpenSpeedShopWidget.h"
 
+#include <MainWindow/MainWindow.h>
+
+#include <Experiment/ExperimentWidget.h>
+
 namespace Plugins {
 namespace OpenSpeedShop {
 

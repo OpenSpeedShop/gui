@@ -1,9 +1,9 @@
 #ifndef SERVERCOMMAND_H
 #define SERVERCOMMAND_H
 
-#include <QObject>
-#include <QDomDocument>
-#include <QUuid>
+#include <QtCore>
+#include <QtXml>
+
 #include "ConnectionManagerLibrary.h"
 
 namespace Plugins {

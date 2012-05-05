@@ -28,7 +28,9 @@
 #ifndef ICONNECTIONPAGE_H
 #define ICONNECTIONPAGE_H
 
-#include <QWidget>
+#include <QtCore>
+#include <QtGui>
+
 #include "ConnectionManagerLibrary.h"
 
 namespace Plugins {

@@ -28,10 +28,9 @@
 #ifndef IVIEWPLUGIN_H
 #define IVIEWPLUGIN_H
 
-#include <QtPlugin>
-#include <QString>
-#include <QAbstractItemModel>
-#include <QAbstractItemView>
+#include <QtCore>
+#include <QtGui>
+
 #include "ViewManagerLibrary.h"
 
 namespace Plugins {

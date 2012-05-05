@@ -27,11 +27,6 @@
 
 #include "Delegate.h"
 
-#include <QApplication>
-#include <QPainter>
-#include <QTextDocument>
-#include <QAbstractTextDocumentLayout>
-
 namespace Plugins {
 namespace TreeView {
 

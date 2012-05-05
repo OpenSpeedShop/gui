@@ -49,7 +49,7 @@ SOURCES      += OpenSpeedShopPlugin.cpp \
                 Experiment/SourceView.cpp \
                 Experiment/SyntaxHighlighter.cpp \
                 RemoteFileSystem/PathRewriter.cpp \
-    Welcome/WelcomeData.cpp
+                Welcome/WelcomeData.cpp
 
 HEADERS      += OpenSpeedShopPlugin.h \
                 Settings/SettingPage.h \
@@ -118,3 +118,33 @@ win32: welcomeData.path = /oss/
 else: welcomeData.path = /share/openspeedshop/gui/
 welcomeData.files = Welcome/WelcomeData.xml
 INSTALLS += welcomeData
+
+openSpeedShopHeaders.path = /include/plugins/OpenSpeedShop
+openSpeedShopHeaders.files = OpenSpeedShopLibrary.h \
+                             OpenSpeedShopWidget.h
+INSTALLS += openSpeedShopHeaders
+
+connectionManagerHeaders.path = /include/plugins/OpenSpeedShop/ConnectionManager
+connectionManagerHeaders.files = ConnectionManager/ConnectionManagerLibrary.h \
+                                 ConnectionManager/ConnectionManager.h \
+                                 ConnectionManager/IAdapter.h \
+                                 ConnectionManager/IConnection.h \
+                                 ConnectionManagerIConnectionPage.h \
+                                 ConnectionManager/ServerCommand.h
+INSTALLS += connectionManagerHeaders
+
+modelManagerHeaders.path = /include/plugins/OpenSpeedShop/ModelManager
+modelManagerHeaders.files = ModelManager/ModelManagerLibrary.h \
+                            ModelManager/ModelManager.h \
+                            ModelManager/ModelDescriptor.h \
+                            ModelManager/ModelDescriptorWidget.h \
+                            ModelManager/ModelDescriptorListWidget.h
+INSTALLS += modelManagerHeaders
+
+
+viewManagerHeaders.path = /include/plugins/OpenSpeedShop/ViewManager
+viewManagerHeaders.files = ViewManager/ViewManagerLibrary.h \
+                           ViewManager/ViewManager.h \
+                           ViewManager/IViewFactory.h \
+                           ViewManager/IViewFilterable.h \
+INSTALLS += viewManagerHeaders

@@ -28,9 +28,10 @@
 #ifndef TREEVIEWPLUGIN_H
 #define TREEVIEWPLUGIN_H
 
-#include <PluginManager/PluginManager.h>
+#include <QtCore>
+#include <QtPlugin>
+
 #include <PluginManager/IPlugin.h>
-#include <OpenSpeedShop/ViewManager/ViewManager.h>
 #include <OpenSpeedShop/ViewManager/IViewFactory.h>
 
 namespace Plugins {

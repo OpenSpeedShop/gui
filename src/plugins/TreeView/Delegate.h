@@ -28,9 +28,8 @@
 #ifndef DELEGATE_H
 #define DELEGATE_H
 
-#include <QStyledItemDelegate>
-#include <QAbstractItemModel>
-#include <QSet>
+#include <QtCore>
+#include <QtGui>
 
 namespace Plugins {
 namespace TreeView {

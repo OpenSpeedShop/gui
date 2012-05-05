@@ -26,17 +26,13 @@
  */
 
 #include "PathRewriter.h"
-#include <QDesktopServices>
-#include <QDomDocument>
-#include <QFile>
-#include <QDir>
-
-#ifdef QT_DEBUG
-# include <QDebug>
-#endif
 
 #include <MainWindow/MainWindow.h>
 #include <PluginManager/PluginManager.h>
+
+#ifdef QT_DEBUG
+# include <QtDebug>
+#endif
 
 PathRewriter &PathRewriter::instance()
 {

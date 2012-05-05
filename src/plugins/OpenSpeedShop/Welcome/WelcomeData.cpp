@@ -27,10 +27,8 @@
 
 #include "WelcomeData.h"
 
-#include <QFile>
-#include <QFileInfo>
-#include <QApplication>
 #include <PluginManager/PluginManager.h>
+
 #include "OpenSpeedShopWidget.h"
 
 using namespace Plugins::Welcome;

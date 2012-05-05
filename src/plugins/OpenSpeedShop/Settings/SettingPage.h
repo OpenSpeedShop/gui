@@ -1,7 +1,7 @@
 /*!
-   \file 
+   \file
    \author Dane Gardner <dane.gardner@gmail.com>
-   \version 
+   \version
 
    \section LICENSE
    This file is part of the Open|SpeedShop Graphical User Interface
@@ -28,9 +28,10 @@
 #ifndef OSSSETTINGPAGE_H
 #define OSSSETTINGPAGE_H
 
-#include <QWidget>
+#include <QtCore>
+#include <QtGui>
+
 #include <SettingManager/ISettingPage.h>
-#include <SettingManager/SettingManager.h>
 
 namespace Plugins {
 namespace OpenSpeedShop {

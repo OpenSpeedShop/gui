@@ -28,7 +28,7 @@
 #ifndef LINEGRAPHVIEWM_H
 #define LINEGRAPHVIEWM_H
 
-#include <QSortFilterProxyModel>
+#include <QtCore>
 #include <LineGraph/LineGraphView.h>
 
 namespace Plugins {

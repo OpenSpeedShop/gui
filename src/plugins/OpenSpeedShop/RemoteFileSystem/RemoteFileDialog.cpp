@@ -28,8 +28,6 @@
 #include "RemoteFileDialog.h"
 #include "ui_RemoteFileDialog.h"
 
-#include <QRegExp>
-#include <QDomDocument>
 #include <ConnectionManager/IAdapter.h>
 #include <ConnectionManager/ConnectionManager.h>
 

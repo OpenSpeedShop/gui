@@ -1,9 +1,9 @@
 #ifndef EXPERIMENTWIDGET_H
 #define EXPERIMENTWIDGET_H
 
-#include <QWidget>
-#include <QUuid>
-#include <QAbstractItemView>
+#include <QtCore>
+#include <QtGui>
+#include <QtXml>
 
 namespace Plugins {
 namespace OpenSpeedShop {

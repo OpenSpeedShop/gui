@@ -27,7 +27,6 @@
 
 #include "TreeView.h"
 
-
 namespace Plugins {
 namespace TreeView {
 

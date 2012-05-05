@@ -29,14 +29,16 @@
 #define OPENSPEEDSHOPPLUGIN_H
 
 #include <QtCore>
-#include <MainWindow/MainWindow.h>
+
 #include <PluginManager/IPlugin.h>
 #include <SettingManager/ISettingPageFactory.h>
-#include "OpenSpeedShopWidget.h"
+
 #include "Welcome/WelcomeData.h"
 
 namespace Plugins {
 namespace OpenSpeedShop {
+
+class OpenSpeedShopWidget;
 
 class OpenSpeedShopPlugin :
         public QObject,

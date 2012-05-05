@@ -27,11 +27,6 @@
 
 #include "SourceView.h"
 
-#include <QPainter>
-#include <QTextBlock>
-#include <QIcon>
-#include <QToolTip>
-
 namespace Plugins {
 namespace OpenSpeedShop {
 

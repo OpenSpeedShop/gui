@@ -28,12 +28,15 @@
 #ifndef VIEWMANAGER_H
 #define VIEWMANAGER_H
 
-#include <QObject>
+#include <QtCore>
+#include <QtGui>
+
 #include "ViewManagerLibrary.h"
-#include "IViewFactory.h"
 
 namespace Plugins {
 namespace OpenSpeedShop {
+
+class IViewFactory;
 
 class VIEWMANAGER_EXPORT ViewManager : public QObject
 {

@@ -2,6 +2,7 @@
 #include "ui_ModelManagerDialog.h"
 
 #include <SettingManager/SettingManager.h>
+#include <MainWindow/MainWindow.h>
 
 #include "ModelManager.h"
 #include "ModelDescriptorWidget.h"

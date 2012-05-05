@@ -28,9 +28,8 @@
 #ifndef PATHREWRITER_H
 #define PATHREWRITER_H
 
-#include <QObject>
-#include <QMap>
-#include <QString>
+#include <QtCore>
+#include <QtXml>
 
 class PathRewriter : public QObject
 {

@@ -29,8 +29,9 @@
 #define SERVERADAPTERPLUGIN_H
 
 #include <QtCore>
+
 #include <PluginManager/IPlugin.h>
-#include <OpenSpeedShop/ConnectionManager/ConnectionManager.h>
+
 #include "ServerAdapter.h"
 
 namespace Plugins {

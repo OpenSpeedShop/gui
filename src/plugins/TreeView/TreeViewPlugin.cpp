@@ -27,6 +27,9 @@
 
 #include "TreeViewPlugin.h"
 
+#include <PluginManager/PluginManager.h>
+#include <OpenSpeedShop/ViewManager/ViewManager.h>
+
 #include "TreeView.h"
 
 namespace Plugins {

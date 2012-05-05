@@ -1,11 +1,11 @@
 #ifndef MODELMANAGER_H
 #define MODELMANAGER_H
 
-#include <QObject>
-#include <QDomDocument>
-#include <QStandardItemModel>
-#include <QUuid>
-#include <QAction>
+#include <QtCore>
+#include <QtGui>
+#include <QtXml>
+
+#include "ModelManagerLibrary.h"
 
 namespace Plugins {
 namespace OpenSpeedShop {
@@ -15,7 +15,7 @@ class ModelDescriptorWidget;
 class ModelDescriptorListWidget;
 class DataModel;
 
-class ModelManager : public QObject
+class MODELMANAGER_EXPORT ModelManager : public QObject
 {
     Q_OBJECT
 public:

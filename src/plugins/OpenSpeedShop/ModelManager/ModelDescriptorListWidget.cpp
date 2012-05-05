@@ -1,6 +1,5 @@
 #include "ModelDescriptorListWidget.h"
 
-#include <QStandardItem>
 #include "ModelDescriptor.h"
 
 namespace Plugins {

@@ -1,11 +1,10 @@
 #ifndef OPENSPEEDSHOPWIDGET_H
 #define OPENSPEEDSHOPWIDGET_H
 
-#include <QTabWidget>
-#include <QAction>
-#include <MainWindow/MainWindow.h>
+#include <QtCore>
+#include <QtGui>
+
 #include "OpenSpeedShopLibrary.h"
-#include "Experiment/ExperimentWidget.h"
 
 namespace Plugins {
 namespace OpenSpeedShop {
