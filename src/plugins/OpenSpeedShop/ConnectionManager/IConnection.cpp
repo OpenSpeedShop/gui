@@ -1,7 +1,7 @@
 /*!
-   \file 
+   \file
    \author Dane Gardner <dane.gardner@gmail.com>
-   \version 
+   \version
 
    \section LICENSE
    This file is part of the Open|SpeedShop Graphical User Interface
@@ -26,6 +26,8 @@
  */
 
 #include "IConnection.h"
+
+#include "IConnectionPage.h"
 
 namespace Plugins {
 namespace OpenSpeedShop {

@@ -33,8 +33,6 @@
 
 #include "ConnectionManagerLibrary.h"
 
-#include "IConnectionPage.h"
-
 namespace Plugins {
 namespace OpenSpeedShop {
 
