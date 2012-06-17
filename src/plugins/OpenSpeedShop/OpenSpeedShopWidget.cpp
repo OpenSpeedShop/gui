@@ -217,7 +217,6 @@ void OpenSpeedShopWidget::showEvent(QShowEvent *event)
 
     Core::MainWindow::MainWindow &mainWindow = Core::MainWindow::MainWindow::instance();
     foreach(QAction *action, mainWindow.allActions()) {
-        qDebug() << action->property("oss_menuitem").isValid() << action->text();
         if(action->property("oss_menuitem").isValid()) {
             action->setVisible(true);
         }
