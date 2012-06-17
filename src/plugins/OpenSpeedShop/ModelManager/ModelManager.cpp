@@ -27,9 +27,9 @@ ModelManager &ModelManager::instance()
 }
 
 ModelManager::ModelManager(QObject *parent) :
-    QObject(parent),
-    m_ModelManagerDialog(this)
+    QObject(parent)
 {
+    m_ModelManagerDialog = NULL;
 }
 
 ModelManager::~ModelManager()
@@ -53,10 +53,14 @@ bool ModelManager::initialize(QStringList &args, QString *err)
         MainWindow::MainWindow &mainWindow = MainWindow::MainWindow::instance();
         foreach(QAction *action, mainWindow.menuBar()->actions()) {
             if(action->text() == tr("Tools")) {
-                m_ModelManagerDialog.setText(tr("Models Manager"));
-                m_ModelManagerDialog.setToolTip(tr("Displays the Open|SpeedShop model manager dialog"));
-                connect(&m_ModelManagerDialog, SIGNAL(triggered()), this, SLOT(modelManagerDialog()));
-                action->menu()->insertAction(action->menu()->actions().at(0), &m_ModelManagerDialog);
+                m_ModelManagerDialog = new QAction(tr("Models Manager"), this);
+                m_ModelManagerDialog->setToolTip(tr("Displays the Open|SpeedShop model manager dialog"));
+                m_ModelManagerDialog->setIcon(QIcon(":/OpenSpeedShop/app.png"));
+                m_ModelManagerDialog->setIconVisibleInMenu(true);
+                m_ModelManagerDialog->setVisible(false);
+                m_ModelManagerDialog->setProperty("oss_menuitem", QVariant(1));
+                connect(m_ModelManagerDialog, SIGNAL(triggered()), this, SLOT(modelManagerDialog()));
+                action->menu()->insertAction(action->menu()->actions().at(0), m_ModelManagerDialog);
             }
         }
 

@@ -106,6 +106,8 @@ bool OpenSpeedShopPlugin::initialize(QStringList &args, QString *err)
             if(action->text() == tr("Help")) {
                 m_AboutPage.setText(tr("About Open|SpeedShop"));
                 m_AboutPage.setToolTip(tr("Displays the Open|SpeedShop about dialog"));
+                m_AboutPage.setIcon(QIcon(":/OpenSpeedShop/app.png"));
+                m_AboutPage.setIconVisibleInMenu(true);
                 connect(&m_AboutPage, SIGNAL(triggered()), this, SLOT(aboutDialog()));
                 action->menu()->addAction(&m_AboutPage);
             }

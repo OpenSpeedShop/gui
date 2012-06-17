@@ -30,10 +30,15 @@ protected:
     void tabInserted(int index);
     void tabRemoved(int index);
 
+    QAction *m_CreateExperiment;
+    QAction *m_LoadExperiment;
     QAction *m_CloseExperiment;
 
 protected slots:
     void tabTitleChanged();
+
+    virtual void showEvent(QShowEvent *event);
+    virtual void hideEvent(QHideEvent *event);
 
 private:
     Ui::OpenSpeedShopWidget *ui;

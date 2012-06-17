@@ -58,13 +58,13 @@ ConnectionManager &ConnectionManager::instance()
 }
 
 ConnectionManager::ConnectionManager(QObject *parent) :
-    QObject(parent),
-    m_ServerConnect(this)
+    QObject(parent)
 {
     m_CurrentConnection = NULL;
     m_CurrentAdapter = NULL;
     m_NotifyConnecting = NULL;
     m_lblConnectionStatus = NULL;
+    m_ServerConnect =  NULL;
 }
 
 ConnectionManager::~ConnectionManager()
@@ -86,10 +86,14 @@ bool ConnectionManager::initialize(QStringList &args, QString *err)
         MainWindow::MainWindow &mainWindow = MainWindow::MainWindow::instance();
         foreach(QAction *action, mainWindow.menuBar()->actions()) {
             if(action->text() == tr("Tools")) {
-                m_ServerConnect.setText(tr("Connect to server"));
-                m_ServerConnect.setToolTip(tr("Connects to an Open|SpeedShop server"));
-                connect(&m_ServerConnect, SIGNAL(triggered()), this, SLOT(serverConnect()));
-                action->menu()->insertAction(action->menu()->actions().at(0), &m_ServerConnect);
+                m_ServerConnect = new QAction(tr("Connect to server"), this);
+                m_ServerConnect->setToolTip(tr("Connects to an Open|SpeedShop server"));
+                m_ServerConnect->setIcon(QIcon(":/OpenSpeedShop/app.png"));
+                m_ServerConnect->setIconVisibleInMenu(true);
+                m_ServerConnect->setVisible(false);
+                m_ServerConnect->setProperty("oss_menuitem", QVariant(1));
+                connect(m_ServerConnect, SIGNAL(triggered()), this, SLOT(serverConnect()));
+                action->menu()->insertAction(action->menu()->actions().at(0), m_ServerConnect);
             }
         }
 
@@ -322,36 +326,36 @@ void ConnectionManager::connectionStateChanged()
     }
 
     if(m_CurrentConnection->state() == IConnection::State_Connected) {
-        m_ServerConnect.setText(tr("Disconnect from server"));
-        m_ServerConnect.setEnabled(true);
+        m_ServerConnect->setText(tr("Disconnect from server"));
+        m_ServerConnect->setEnabled(true);
 
         m_lblConnectionStatus->setPixmap(QPixmap(":/OpenSpeedShop/ConnectionManager/connected.svg"));
         m_lblConnectionStatus->setToolTip(tr("Connected"));
 
     } else if(m_CurrentConnection->state() == IConnection::State_Connecting) {
-        m_ServerConnect.setText(tr("Connecting to server"));
-        m_ServerConnect.setEnabled(false);
+        m_ServerConnect->setText(tr("Connecting to server"));
+        m_ServerConnect->setEnabled(false);
 
         m_NotifyConnecting = MainWindow::instance().notify(tr("Connecting to server"), NotificationWidget::Loading);
         m_lblConnectionStatus->setToolTip(tr("Connecting"));
 
     } else if(m_CurrentConnection->state() == IConnection::State_Disconnecting) {
-        m_ServerConnect.setText(tr("Disconnecting from server"));
-        m_ServerConnect.setEnabled(false);
+        m_ServerConnect->setText(tr("Disconnecting from server"));
+        m_ServerConnect->setEnabled(false);
 
         m_NotifyConnecting = MainWindow::instance().notify(tr("Disconnecting from server"), NotificationWidget::Loading);
         m_lblConnectionStatus->setToolTip(tr("Disconnecting"));
 
     } else if(m_CurrentConnection->state() == IConnection::State_Disconnected) {
-        m_ServerConnect.setText(tr("Connect to server"));
-        m_ServerConnect.setEnabled(true);
+        m_ServerConnect->setText(tr("Connect to server"));
+        m_ServerConnect->setEnabled(true);
 
         m_lblConnectionStatus->setPixmap(QPixmap(":/OpenSpeedShop/ConnectionManager/disconnected.svg"));
         m_lblConnectionStatus->setToolTip(tr("Disconnected"));
 
     } else {
-        m_ServerConnect.setText(tr("Connect to server"));
-        m_ServerConnect.setEnabled(true);
+        m_ServerConnect->setText(tr("Connect to server"));
+        m_ServerConnect->setEnabled(true);
 
         if(previousState == IConnection::State_Connected) {
             MainWindow::instance().notify(tr("Unexpected loss of connection to server: %1").arg(m_CurrentConnection->errorMessage()), NotificationWidget::Critical);

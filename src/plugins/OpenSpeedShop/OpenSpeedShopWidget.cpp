@@ -12,6 +12,10 @@ OpenSpeedShopWidget::OpenSpeedShopWidget(QWidget *parent) :
     QTabWidget(parent),
     ui(new Ui::OpenSpeedShopWidget)
 {
+    m_CreateExperiment = NULL;
+    m_LoadExperiment = NULL;
+    m_CloseExperiment = NULL;
+
     ui->setupUi(this);
     connect(this, SIGNAL(tabCloseRequested(int)), this, SLOT(closeExperiment(int)));
 
@@ -25,21 +29,33 @@ OpenSpeedShopWidget::OpenSpeedShopWidget(QWidget *parent) :
     foreach(QAction *action, mainWindow.menuBar()->actions()) {
         if(action->text() == tr("File")) {
 
-            QAction *createExperiment = new QAction(tr("New Experiment"), this);
-            createExperiment->setToolTip(tr("Create a new Open|SpeedShop experiment"));
-            connect(createExperiment, SIGNAL(triggered()), this, SLOT(createExperiment()));
+            m_CreateExperiment = new QAction(tr("New O|SS Experiment"), this);
+            m_CreateExperiment->setToolTip(tr("Create a new Open|SpeedShop experiment"));
+            m_CreateExperiment->setIcon(QIcon(":/OpenSpeedShop/app.png"));
+            m_CreateExperiment->setIconVisibleInMenu(true);
+            m_CreateExperiment->setVisible(false);
+            m_CreateExperiment->setProperty("oss_menuitem", QVariant(1));
+            connect(m_CreateExperiment, SIGNAL(triggered()), this, SLOT(createExperiment()));
 
             //FIXME: When we're set up to create, enable this
-            createExperiment->setEnabled(false);
+            m_CreateExperiment->setEnabled(false);
 
-            QAction *loadExperiment = new QAction(tr("Load Experiment"), this);
-            loadExperiment->setToolTip(tr("Load an Open|SpeedShop experiment"));
-            connect(loadExperiment, SIGNAL(triggered()), this, SLOT(loadExperiment()));
+            m_LoadExperiment = new QAction(tr("Load O|SS Experiment"), this);
+            m_LoadExperiment->setToolTip(tr("Load an Open|SpeedShop experiment"));
+            m_LoadExperiment->setIcon(QIcon(":/OpenSpeedShop/app.png"));
+            m_LoadExperiment->setIconVisibleInMenu(true);
+            m_LoadExperiment->setVisible(false);
+            m_LoadExperiment->setProperty("oss_menuitem", QVariant(1));
+            connect(m_LoadExperiment, SIGNAL(triggered()), this, SLOT(loadExperiment()));
 
-            m_CloseExperiment = new QAction(tr("Close Experiment"), this);
+            m_CloseExperiment = new QAction(tr("Close O|SS Experiment"), this);
             m_CloseExperiment->setToolTip(tr("Close the current Open|SpeedShop experiment"));
-            connect(m_CloseExperiment, SIGNAL(triggered()), this, SLOT(closeExperiment()));
+            m_CloseExperiment->setIcon(QIcon(":/OpenSpeedShop/app.png"));
+            m_CloseExperiment->setIconVisibleInMenu(true);
             m_CloseExperiment->setEnabled(false);
+            m_CloseExperiment->setVisible(false);
+            m_CloseExperiment->setProperty("oss_menuitem", QVariant(1));
+            connect(m_CloseExperiment, SIGNAL(triggered()), this, SLOT(closeExperiment()));
 
             //! \todo We really need to rely on the ActionManager to do this.
             QAction *before = NULL;
@@ -50,12 +66,12 @@ OpenSpeedShopWidget::OpenSpeedShopWidget(QWidget *parent) :
             }
 
             if(before) {
-                action->menu()->insertAction(before, createExperiment);
-                action->menu()->insertAction(before, loadExperiment);
+                action->menu()->insertAction(before, m_CreateExperiment);
+                action->menu()->insertAction(before, m_LoadExperiment);
                 action->menu()->insertAction(before, m_CloseExperiment);
             } else {
-                action->menu()->addAction(createExperiment);
-                action->menu()->addAction(loadExperiment);
+                action->menu()->addAction(m_CreateExperiment);
+                action->menu()->addAction(m_LoadExperiment);
                 action->menu()->addAction(m_CloseExperiment);
             }
 
@@ -192,6 +208,31 @@ void OpenSpeedShopWidget::tabTitleChanged()
     } catch(...) {
         using namespace Core::MainWindow;
         MainWindow::instance().notify(tr("Failed to change tab name."), NotificationWidget::Critical);
+    }
+}
+
+void OpenSpeedShopWidget::showEvent(QShowEvent *event)
+{
+    Q_UNUSED(event)
+
+    Core::MainWindow::MainWindow &mainWindow = Core::MainWindow::MainWindow::instance();
+    foreach(QAction *action, mainWindow.allActions()) {
+        qDebug() << action->property("oss_menuitem").isValid() << action->text();
+        if(action->property("oss_menuitem").isValid()) {
+            action->setVisible(true);
+        }
+    }
+}
+
+void OpenSpeedShopWidget::hideEvent(QHideEvent *event)
+{
+    Q_UNUSED(event)
+
+    Core::MainWindow::MainWindow &mainWindow = Core::MainWindow::MainWindow::instance();
+    foreach(QAction *action, mainWindow.allActions()) {
+        if(action->property("oss_menuitem").isValid()) {
+            action->setVisible(false);
+        }
     }
 }
 

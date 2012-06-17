@@ -66,7 +66,7 @@ protected slots:
     void descriptorTypeChanged(ModelDescriptor *descriptor = NULL);
 
 private:
-    QAction m_ModelManagerDialog;
+    QAction *m_ModelManagerDialog;
 
 };
 
