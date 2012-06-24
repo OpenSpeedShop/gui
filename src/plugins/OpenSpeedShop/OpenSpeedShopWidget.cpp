@@ -138,18 +138,18 @@ void OpenSpeedShopWidget::closeExperiment(int index)
             index = currentIndex();
         }
 
-        ExperimentWidget *experimentWidget = qobject_cast<ExperimentWidget *>(widget(index));
-        if(experimentWidget->close()) {
+        QWidget *widget = this->widget(index);
+        if(widget->close()) {
             removeTab(index);
-            experimentWidget->deleteLater();
+            widget->deleteLater();
         }
 
     } catch(QString err) {
         using namespace Core::MainWindow;
-        MainWindow::instance().notify(tr("Failed to load experiment: %1").arg(err), NotificationWidget::Critical);
+        MainWindow::instance().notify(tr("Failed to close experiment: %1").arg(err), NotificationWidget::Critical);
     } catch(...) {
         using namespace Core::MainWindow;
-        MainWindow::instance().notify(tr("Failed to load experiment."), NotificationWidget::Critical);
+        MainWindow::instance().notify(tr("Failed to close experiment."), NotificationWidget::Critical);
     }
 }
 
