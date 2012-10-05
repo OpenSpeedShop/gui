@@ -60,7 +60,27 @@ bool ModelManager::initialize(QStringList &args, QString *err)
                 m_ModelManagerDialog->setVisible(false);
                 m_ModelManagerDialog->setProperty("oss_menuitem", QVariant(1));
                 connect(m_ModelManagerDialog, SIGNAL(triggered()), this, SLOT(modelManagerDialog()));
-                action->menu()->insertAction(action->menu()->actions().at(0), m_ModelManagerDialog);
+
+                QAction *ossAction = NULL;
+                foreach(QAction *subAction, action->menu()->actions()) {
+                    if(subAction->property("oss_menuitem").isValid()) {
+                        ossAction = subAction;
+                        break;
+                    }
+                }
+
+                if(ossAction) {
+                    action->menu()->insertAction(ossAction, m_ModelManagerDialog);
+                } else {
+                    if(action->menu()->actions().count() > 0) {
+                        action->menu()->insertSeparator(action->menu()->actions().at(0))->setProperty("oss_menuitem", QVariant(1));
+                        action->menu()->insertAction(action->menu()->actions().at(0), m_ModelManagerDialog);
+                    } else {
+                        action->menu()->addAction(m_ModelManagerDialog);
+                        action->menu()->addSeparator()->setProperty("oss_menuitem", QVariant(1));
+                    }
+                }
+
             }
         }
 

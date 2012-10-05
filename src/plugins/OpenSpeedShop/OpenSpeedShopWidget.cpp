@@ -69,12 +69,13 @@ OpenSpeedShopWidget::OpenSpeedShopWidget(QWidget *parent) :
                 action->menu()->insertAction(before, m_CreateExperiment);
                 action->menu()->insertAction(before, m_LoadExperiment);
                 action->menu()->insertAction(before, m_CloseExperiment);
+                action->menu()->insertSeparator(before)->setProperty("oss_menuitem", QVariant(1));
             } else {
                 action->menu()->addAction(m_CreateExperiment);
                 action->menu()->addAction(m_LoadExperiment);
                 action->menu()->addAction(m_CloseExperiment);
+                action->menu()->addSeparator()->setProperty("oss_menuitem", QVariant(1));
             }
-
         }
     }
 }

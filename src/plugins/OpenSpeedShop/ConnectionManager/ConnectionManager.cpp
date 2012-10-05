@@ -93,7 +93,27 @@ bool ConnectionManager::initialize(QStringList &args, QString *err)
                 m_ServerConnect->setVisible(false);
                 m_ServerConnect->setProperty("oss_menuitem", QVariant(1));
                 connect(m_ServerConnect, SIGNAL(triggered()), this, SLOT(serverConnect()));
-                action->menu()->insertAction(action->menu()->actions().at(0), m_ServerConnect);
+
+                QAction *ossAction = NULL;
+                foreach(QAction *subAction, action->menu()->actions()) {
+                    if(subAction->property("oss_menuitem").isValid()) {
+                        ossAction = subAction;
+                        break;
+                    }
+                }
+
+                if(ossAction) {
+                    action->menu()->insertAction(ossAction, m_ServerConnect);
+                } else {
+                    if(action->menu()->actions().count() > 0) {
+                        action->menu()->insertSeparator(action->menu()->actions().at(0))->setProperty("oss_menuitem", QVariant(1));
+                        action->menu()->insertAction(action->menu()->actions().at(0), m_ServerConnect);
+                    } else {
+                        action->menu()->addAction(m_ServerConnect);
+                        action->menu()->addSeparator()->setProperty("oss_menuitem", QVariant(1));
+                    }
+                }
+
             }
         }
 
