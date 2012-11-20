@@ -51,6 +51,11 @@ public slots:
 } // namespace OpenSpeedShop
 } // namespace Plugins
 
-Q_DECLARE_INTERFACE(Plugins::OpenSpeedShop::IConnectionPage, "org.openspeedshop.gui.IConnectionPage/0.1")
+#ifndef STRINGIFY
+#define STRINGIFY(X) # X
+#endif
+
+#define ICONNECTIONPAGE_VERSION "org.openspeedshop.gui.IConnectionPage/" STRINGIFY(VER_MAJ) "." STRINGIFY(VER_MIN)
+Q_DECLARE_INTERFACE(Plugins::OpenSpeedShop::IConnectionPage, ICONNECTIONPAGE_VERSION)
 
 #endif // ICONNECTIONPAGE_H

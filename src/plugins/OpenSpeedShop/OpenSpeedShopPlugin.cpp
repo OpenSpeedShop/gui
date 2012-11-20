@@ -52,7 +52,7 @@ namespace OpenSpeedShop {
  */
 
 /*! \class OpenSpeedShopPlugin
-    \version 0.1.dev
+    \version 0.3.dev
     \brief The base plugin for the Open|SpeedShop set of plugins.
 
     \par Depends on Plugins:
@@ -67,7 +67,7 @@ OpenSpeedShopPlugin::OpenSpeedShopPlugin() :
     m_AboutPage(this)
 {
     m_Name = "OpenSpeedShop";
-    m_Version = "0.1.dev";
+    m_Version = QString("%1.%2.%3").arg(VER_MAJ).arg(VER_MIN).arg(VER_PAT);
 
     // If we're in production mode, show the splash screen!
 #ifndef QT_DEBUG

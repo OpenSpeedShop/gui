@@ -37,7 +37,7 @@ namespace LineGraphView {
  */
 
 /*! \class LineGraphViewPlugin
-    \version 0.1.dev
+    \version 0.3.dev
     \brief
 
     \par Depends on Plugins:
@@ -49,8 +49,8 @@ namespace LineGraphView {
 LineGraphViewPlugin::LineGraphViewPlugin(QObject *parent) : QObject(parent)
 {
     m_Name = "LineGraphView";
-    m_Version = "0.1.dev";
-    m_Dependencies.append( Core::PluginManager::Dependency("OpenSpeedShop", "^0\\.1.*$") );
+    m_Version = QString("%1.%2.%3").arg(VER_MAJ).arg(VER_MIN).arg(VER_PAT);
+    m_Dependencies.append( Core::PluginManager::Dependency("OpenSpeedShop", QString("^%1\\.%2.*$").arg(VER_MAJ).arg(VER_MIN)) );
 }
 
 LineGraphViewPlugin::~LineGraphViewPlugin()

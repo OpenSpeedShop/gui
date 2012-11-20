@@ -40,7 +40,7 @@ namespace TreeView {
  */
 
 /*! \class TreeViewPlugin
-    \version 0.1.dev
+    \version 0.3.dev
     \brief
 
     \par Depends on Plugins:
@@ -52,8 +52,8 @@ namespace TreeView {
 TreeViewPlugin::TreeViewPlugin(QObject *parent) : QObject(parent)
 {
     m_Name = "TreeView";
-    m_Version = "0.1.dev";
-    m_Dependencies.append( Core::PluginManager::Dependency("OpenSpeedShop", "^0\\.1.*$") );
+    m_Version = QString("%1.%2.%3").arg(VER_MAJ).arg(VER_MIN).arg(VER_PAT);
+    m_Dependencies.append( Core::PluginManager::Dependency("OpenSpeedShop", QString("^%1\\.%2.*$").arg(VER_MAJ).arg(VER_MIN)) );
 }
 
 TreeViewPlugin::~TreeViewPlugin()

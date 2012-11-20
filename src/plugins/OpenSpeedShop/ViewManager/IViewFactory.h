@@ -47,6 +47,11 @@ public:
 } // namespace OpenSpeedShop
 } // namespace Plugins
 
-Q_DECLARE_INTERFACE(Plugins::OpenSpeedShop::IViewFactory, "org.openspeedshop.gui.IViewFactory/0.1")
+#ifndef STRINGIFY
+#define STRINGIFY(X) # X
+#endif
+
+#define IVIEWFACTORY_VERSION "org.openspeedshop.gui.IViewFactory/" STRINGIFY(VER_MAJ) "." STRINGIFY(VER_MIN)
+Q_DECLARE_INTERFACE(Plugins::OpenSpeedShop::IViewFactory, IVIEWFACTORY_VERSION)
 
 #endif // IVIEWPLUGIN_H

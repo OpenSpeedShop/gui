@@ -40,7 +40,7 @@ namespace DirectConnection {
  */
 
 /*! \class DirectConnectionPlugin
-    \version 0.1.dev
+    \version 0.3.dev
     \brief Main plugin which manages the loading and initialization of the
            DirectConnection.
 
@@ -55,8 +55,8 @@ DirectConnectionPlugin::DirectConnectionPlugin(QObject *parent) :
     QObject(parent)
 {
     m_Name = "DirectConnection";
-    m_Version = "0.1.dev";
-    m_Dependencies.append( Core::PluginManager::Dependency("OpenSpeedShop", "^0\\.1.*$") );
+    m_Version = QString("%1.%2.%3").arg(VER_MAJ).arg(VER_MIN).arg(VER_PAT);
+    m_Dependencies.append( Core::PluginManager::Dependency("OpenSpeedShop", QString("^%1\\.%2.*$").arg(VER_MAJ).arg(VER_MIN)) );
 }
 
 DirectConnectionPlugin::~DirectConnectionPlugin()

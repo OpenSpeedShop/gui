@@ -17,7 +17,7 @@
   <LatestNews>
     <Rss url="http://www.openspeedshop.org/wp/feed/"/>
     <Rss url="http://groups.google.com/group/openspeedshop-gui/feed/rss_v2_0_topics.xml"/>
-    <!-- <Rss url="https://github.com/OpenSpeedShop/gui/commits/0.1.dev.atom"/> -->
+    <!-- <Rss url="https://github.com/OpenSpeedShop/gui/commits/0.3.dev.atom"/> -->
   </LatestNews>
   <TipsAndTricks>
     <Tip text="Make sure you've started the Open|SpeedShop server, before trying to connect."/>

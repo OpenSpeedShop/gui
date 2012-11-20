@@ -91,8 +91,13 @@ public:
 } // namespace Plugins
 
 //! We do this so that we can use the pointer in a QVariant
-Q_DECLARE_METATYPE(Plugins::OpenSpeedShop::IAdapter *);
+Q_DECLARE_METATYPE(Plugins::OpenSpeedShop::IAdapter *)
 
-Q_DECLARE_INTERFACE(Plugins::OpenSpeedShop::IAdapter, "org.openspeedshop.gui.IAdapter/0.1");
+#ifndef STRINGIFY
+#define STRINGIFY(X) # X
+#endif
+
+#define IADAPTER_VERSION "org.openspeedshop.gui.IAdapter/" STRINGIFY(VER_MAJ) "." STRINGIFY(VER_MIN)
+Q_DECLARE_INTERFACE(Plugins::OpenSpeedShop::IAdapter, IADAPTER_VERSION)
 
 #endif // IADAPTER_H
