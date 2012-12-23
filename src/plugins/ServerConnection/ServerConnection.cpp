@@ -43,7 +43,7 @@ namespace ServerConnection {
 /*! \class ServerConnection
     \brief Handles the interaction with a standard, remote (or local) TCP
            connected server.
-    \sa ServerConnectionPage, ConnectionManager
+    \sa ServerConnectionPage, ConnectionManager, DirectConnection
  */
 
 ServerConnection::ServerConnection(QObject *parent) :

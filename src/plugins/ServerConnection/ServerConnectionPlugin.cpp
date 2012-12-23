@@ -47,7 +47,7 @@ namespace ServerConnection {
     \par Depends on Plugins:
          OpenSpeedShop
 
-    \sa ConnectionManager
+    \sa ConnectionManager, DirectConnectionPlugin
  */
 
 

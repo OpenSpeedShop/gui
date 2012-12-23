@@ -38,7 +38,7 @@ namespace DirectConnection {
 /*! \class DirectConnectionPage
     \brief Widget that displays connection data and settings to the user for
            the DirectConnection class.
-    \sa DirectConnection, ConnectionWidget
+    \sa DirectConnection, ConnectionWidget, ServerConnectionPage
  */
 
 DirectConnectionPage::DirectConnectionPage(DirectConnection *parentConnection, QWidget *parent) :

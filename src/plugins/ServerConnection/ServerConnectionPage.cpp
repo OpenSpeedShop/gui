@@ -38,7 +38,7 @@ namespace ServerConnection {
 /*! \class ServerConnectionPage
     \brief Widget that displays connection data and settings to the user for
            the ServerConnection class.
-    \sa ServerConnection, ConnectionWidget
+    \sa ServerConnection, ConnectionWidget, DirectConnectionPage
  */
 
 ServerConnectionPage::ServerConnectionPage(ServerConnection *parentConnection, QWidget *parent) :

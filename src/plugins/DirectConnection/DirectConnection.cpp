@@ -31,6 +31,8 @@
 
 #include "DirectConnectionPage.h"
 
+#include <SS_Input_Manager.hxx>
+
 #ifdef DIRECTCONNECTION_DEBUG
 #  include <QtDebug>
 #endif
@@ -41,9 +43,8 @@ namespace Plugins {
 namespace DirectConnection {
 
 /*! \class DirectConnection
-    \brief Handles the interaction with a standard, remote (or local) TCP
-           connected server.
-    \sa DirectConnectionPage, ConnectionManager
+    \brief Handles the interaction as a compiled connection library
+    \sa DirectConnectionPage, ConnectionManager, ServerConnection
  */
 
 DirectConnection::DirectConnection(QObject *parent) :
