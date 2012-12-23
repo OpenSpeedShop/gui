@@ -1,5 +1,5 @@
 /*!
-   \file
+   \file ServerConnectionPlugin.cpp
    \author Dane Gardner <dane.gardner@gmail.com>
    \version
 
@@ -25,7 +25,7 @@
 
  */
 
-#include "DirectConnectionPlugin.h"
+#include "ServerConnectionPlugin.h"
 
 #include <PluginManager/PluginManager.h>
 #include <OpenSpeedShop/ConnectionManager/ConnectionManager.h>
@@ -33,16 +33,16 @@
 using namespace Plugins::OpenSpeedShop;
 
 namespace Plugins {
-namespace DirectConnection {
+namespace ServerConnection {
 
-/*! \namespace Plugins::DirectConnection
-    \brief Contains the DirectConnectionPlugin
+/*! \namespace Plugins::ServerConnection
+    \brief Contains the ServerConnectionPlugin
  */
 
-/*! \class DirectConnectionPlugin
+/*! \class ServerConnectionPlugin
     \version 0.3.dev
     \brief Main plugin which manages the loading and initialization of the
-           DirectConnection.
+           ServerConnection.
 
     \par Depends on Plugins:
          OpenSpeedShop
@@ -51,26 +51,26 @@ namespace DirectConnection {
  */
 
 
-DirectConnectionPlugin::DirectConnectionPlugin(QObject *parent) :
+ServerConnectionPlugin::ServerConnectionPlugin(QObject *parent) :
     QObject(parent)
 {
-    m_Name = "DirectConnection";
+    m_Name = "ServerConnection";
     m_Version = QString("%1.%2.%3").arg(VER_MAJ).arg(VER_MIN).arg(VER_PAT);
     m_Dependencies.append( Core::PluginManager::Dependency("OpenSpeedShop", QString("^%1\\.%2.*$").arg(VER_MAJ).arg(VER_MIN)) );
 }
 
-DirectConnectionPlugin::~DirectConnectionPlugin()
+ServerConnectionPlugin::~ServerConnectionPlugin()
 {
 }
 
-bool DirectConnectionPlugin::initialize(QStringList &args, QString *err)
+bool ServerConnectionPlugin::initialize(QStringList &args, QString *err)
 {
     Q_UNUSED(args)
     Q_UNUSED(err)
 
     try {
         Core::PluginManager::PluginManager &pluginManager = Core::PluginManager::PluginManager::instance();
-        pluginManager.addObject(&m_DirectConnection);
+        pluginManager.addObject(&m_ServerConnection);
     } catch(...) {
         return false;
     }
@@ -78,26 +78,26 @@ bool DirectConnectionPlugin::initialize(QStringList &args, QString *err)
     return true;
 }
 
-void DirectConnectionPlugin::shutdown()
+void ServerConnectionPlugin::shutdown()
 {
 }
 
-QString DirectConnectionPlugin::name()
+QString ServerConnectionPlugin::name()
 {
     return m_Name;
 }
 
-QString DirectConnectionPlugin::version()
+QString ServerConnectionPlugin::version()
 {
     return m_Version;
 }
 
-QList<Core::PluginManager::Dependency> DirectConnectionPlugin::dependencies()
+QList<Core::PluginManager::Dependency> ServerConnectionPlugin::dependencies()
 {
     return m_Dependencies;
 }
 
-} // namespace DirectConnection
+} // namespace ServerConnection
 } // namespace Plugins
 
-Q_EXPORT_PLUGIN(Plugins::DirectConnection::DirectConnectionPlugin)
+Q_EXPORT_PLUGIN(Plugins::ServerConnection::ServerConnectionPlugin)

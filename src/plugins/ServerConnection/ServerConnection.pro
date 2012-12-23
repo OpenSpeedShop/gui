@@ -18,31 +18,29 @@
 include(../plugins.pri)
 
 CONFIG(debug, debug|release) {
-  TARGET            = ServerAdapterD
+  TARGET           = ServerConnectionD
 } else {
-  TARGET            = ServerAdapter
+  TARGET           = ServerConnection
 }
 
-SOURCES            += ServerAdapterPlugin.cpp \
-                      ServerAdapter.cpp
+SOURCES           += ServerConnectionPlugin.cpp \
+                     ServerConnection.cpp \
+                     ServerConnectionPage.cpp
 
-HEADERS            += ServerAdapterPlugin.h \
-                      ServerAdapter.h
+HEADERS           += ServerConnectionPlugin.h \
+                     ServerConnection.h \
+                     ServerConnectionPage.h
 
-QT                 += xml
+FORMS             += ServerConnectionPage.ui
 
-LIBS         += -L$$quote($${BUILD_PATH}/plugins/OpenSpeedShop/$${DIR_POSTFIX}) -lOpenSpeedShop$${LIB_POSTFIX}
+RESOURCES         +=
 
-#debug: DEFINES += SERVERADAPTER_DEBUG
+QT                += network xml
 
-# List of experiment types and their possible modifiers/metrics
-# In the future, this should be pulled from the server
-OTHER_FILES += ExperimentTypes.xml
-win32:experimentTypes.path = /oss/
-else:experimentTypes.path = /share/openspeedshop/gui/
-experimentTypes.files = ExperimentTypes.xml
-INSTALLS += experimentTypes
+LIBS        += -L$$quote($${BUILD_PATH}/plugins/OpenSpeedShop/$${DIR_POSTFIX}) -lOpenSpeedShop$${LIB_POSTFIX}
 
-#serverAdapterHeaders.path = /include/plugins/ServerAdapter
-#serverAdapterHeaders.files = ServerAdapterLibrary.h ServerAdapter.h
-#INSTALLS += serverAdapterHeaders
+#debug: DEFINES += DIRECTCONNECTION_DEBUG
+
+#serverConnectionHeaders.path = /include/plugins/ServerConnection
+#serverConnectionHeaders.files = ServerConnectionLibrary.h ServerConnection.h
+#INSTALLS += serverConnectionHeaders

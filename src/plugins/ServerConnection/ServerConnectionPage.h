@@ -1,5 +1,5 @@
 /*!
-   \file
+   \file ServerConnectionPage.h
    \author Dane Gardner <dane.gardner@gmail.com>
    \version
 
@@ -25,33 +25,42 @@
 
  */
 
-#ifndef IVIEWPLUGIN_H
-#define IVIEWPLUGIN_H
+#ifndef SERVERCONNECTIONPAGE_H
+#define SERVERCONNECTIONPAGE_H
 
 #include <QtCore>
 #include <QtGui>
 
-#include "ViewManagerLibrary.h"
+#include <OpenSpeedShop/ConnectionManager/IConnectionPage.h>
 
 namespace Plugins {
-namespace OpenSpeedShop {
+namespace ServerConnection {
 
-class VIEWMANAGER_EXPORT IViewFactory
+class ServerConnection;
+namespace Ui { class ServerConnectionPage; }
+
+class ServerConnectionPage : public Plugins::OpenSpeedShop::IConnectionPage
 {
+    Q_OBJECT
+    Q_INTERFACES(Plugins::OpenSpeedShop::IConnectionPage)
+
 public:
-    virtual QString viewName() = 0;
-    virtual bool viewHandles(QAbstractItemModel *model) = 0;
-    virtual QAbstractItemView *viewWidget(QAbstractItemModel *model) = 0;
+    explicit ServerConnectionPage(ServerConnection *parentConnection, QWidget *parent = 0);
+    ~ServerConnectionPage();
+
+public slots:
+    void apply();
+    void reset();
+
+protected:
+    ServerConnection *m_ParentConnection;
+
+private:
+    Ui::ServerConnectionPage *ui;
 };
 
-} // namespace OpenSpeedShop
+
+} // namespace ServerConnection
 } // namespace Plugins
 
-#ifndef STRINGIFY
-#define STRINGIFY(X) # X
-#endif
-
-#define IVIEWFACTORY_VERSION "org.openspeedshop.gui.IViewFactory/" STRINGIFY(VER_MAJ) "." STRINGIFY(VER_MIN)
-Q_DECLARE_INTERFACE(Plugins::OpenSpeedShop::IViewFactory, IVIEWFACTORY_VERSION)
-
-#endif // IVIEWPLUGIN_H
+#endif // SERVERCONNECTIONPAGE_H

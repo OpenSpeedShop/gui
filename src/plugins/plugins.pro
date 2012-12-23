@@ -1,5 +1,5 @@
 # This file is part of the Open|SpeedShop Graphical User Interface
-# Copyright (C) 2010-2011 Argo Navis Technologies, LLC
+# Copyright (C) 2010-2013 Argo Navis Technologies, LLC
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -19,6 +19,7 @@ TEMPLATE = subdirs
 
 SUBDIRS  = OpenSpeedShop \
            DirectConnection \
+           ServerConnection \
            TreeView \
            ServerAdapter \
            LineGraphView
@@ -27,6 +28,9 @@ OpenSpeedShop.subdir         = OpenSpeedShop
 
 DirectConnection.subdir      = DirectConnection
 DirectConnection.depends     = OpenSpeedShop
+
+ServerConnection.subdir      = ServerConnection
+ServerConnection.depends     = OpenSpeedShop
 
 Example.subdir               = Example
 Example.depends              = OpenSpeedShop

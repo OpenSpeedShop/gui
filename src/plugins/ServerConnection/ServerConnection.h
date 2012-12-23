@@ -1,5 +1,5 @@
 /*!
-   \file
+   \file ServerConnection.h
    \author Dane Gardner <dane.gardner@gmail.com>
    \version
 
@@ -25,8 +25,8 @@
 
  */
 
-#ifndef DIRECTCONNECTION_H
-#define DIRECTCONNECTION_H
+#ifndef SERVERCONNECTION_H
+#define SERVERCONNECTION_H
 
 #include <QtCore>
 #include <QtNetwork>
@@ -36,18 +36,18 @@
 using namespace Plugins::OpenSpeedShop;
 
 namespace Plugins {
-namespace DirectConnection {
+namespace ServerConnection {
 
-class DirectConnectionPage;
+class ServerConnectionPage;
 
-class DirectConnection : public IConnection
+class ServerConnection : public IConnection
 {
     Q_OBJECT
     Q_INTERFACES(Plugins::OpenSpeedShop::IConnection)
 
 public:
-    explicit DirectConnection(QObject *parent = 0);
-    ~DirectConnection();
+    explicit ServerConnection(QObject *parent = 0);
+    ~ServerConnection();
 
     QString name() const;
     IConnectionPage *page();
@@ -65,15 +65,24 @@ protected:
     void readSettings();
     void setState(States state);
 
+protected slots:
+    void readReady();
+    void error(QAbstractSocket::SocketError);
+    void connected();
+    void disconnected();
+
 private:
+    QTcpSocket m_TcpSocket;
+    QString m_HostName;
+    int m_Port;
     IConnection::States m_State;
     QString m_ErrorMessage;
     QByteArray m_Buffer;
     quint32 m_BufferSize;
 
-    friend class DirectConnectionPage;
+    friend class ServerConnectionPage;
 };
 
-} // namespace DirectConnection
+} // namespace ServerConnection
 } // namespace Plugins
-#endif // DIRECTCONNECTION_H
+#endif // SERVERCONNECTION_H

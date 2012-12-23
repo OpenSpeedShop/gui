@@ -5,7 +5,7 @@
 
    \section LICENSE
    This file is part of the Open|SpeedShop Graphical User Interface
-   Copyright (C) 2010-2011 Argo Navis Technologies, LLC
+   Copyright (C) 2010-2013 Argo Navis Technologies, LLC
 
    This library is free software; you can redistribute it and/or modify it
    under the terms of the GNU Lesser General Public License as published by the
@@ -48,7 +48,7 @@ AboutDialog::AboutDialog(QWidget *parent) :
                      arg(QCoreApplication::applicationName()).
                      arg(QCoreApplication::applicationVersion()));
     aboutText.append(tr("Built on %1 at %2\n").arg(__DATE__).arg(__TIME__));
-    aboutText.append(tr("Copyright 2010-2011 Argo Navis Technologies LLC.  All rights reserved.\n"));
+    aboutText.append(tr("Copyright 2010-2013 Argo Navis Technologies LLC.  All rights reserved.\n"));
     ui->lblAbout->setText(aboutText);
 }
 

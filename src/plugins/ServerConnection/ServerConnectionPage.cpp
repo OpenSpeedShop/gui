@@ -1,5 +1,5 @@
 /*!
-   \file
+   \file ServerConnectionPage.cpp
    \author Dane Gardner <dane.gardner@gmail.com>
    \version
 
@@ -25,25 +25,25 @@
 
  */
 
-#include "DirectConnectionPage.h"
-#include "ui_DirectConnectionPage.h"
+#include "ServerConnectionPage.h"
+#include "ui_ServerConnectionPage.h"
 
 #include <SettingManager/SettingManager.h>
 
-#include "DirectConnection.h"
+#include "ServerConnection.h"
 
 namespace Plugins {
-namespace DirectConnection {
+namespace ServerConnection {
 
-/*! \class DirectConnectionPage
+/*! \class ServerConnectionPage
     \brief Widget that displays connection data and settings to the user for
-           the DirectConnection class.
-    \sa DirectConnection, ConnectionWidget
+           the ServerConnection class.
+    \sa ServerConnection, ConnectionWidget
  */
 
-DirectConnectionPage::DirectConnectionPage(DirectConnection *parentConnection, QWidget *parent) :
+ServerConnectionPage::ServerConnectionPage(ServerConnection *parentConnection, QWidget *parent) :
     IConnectionPage(parent),
-    ui(new Ui::DirectConnectionPage)
+    ui(new Ui::ServerConnectionPage)
 {
     ui->setupUi(this);
 
@@ -52,30 +52,30 @@ DirectConnectionPage::DirectConnectionPage(DirectConnection *parentConnection, Q
     reset();
 }
 
-DirectConnectionPage::~DirectConnectionPage()
+ServerConnectionPage::~ServerConnectionPage()
 {
     delete ui;
 }
 
-void DirectConnectionPage::apply()
+void ServerConnectionPage::apply()
 {
     Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
-    settingManager.beginGroup("Plugins/ConnectionManager/DirectConnection");
-
-
+    settingManager.beginGroup("Plugins/ConnectionManager/ServerConnection");
+    settingManager.setValue("HostName", ui->txtHostname->text());
+    settingManager.setValue("Port", ui->txtPort->value());
     settingManager.endGroup();
 
     m_ParentConnection->readSettings();
 }
 
-void DirectConnectionPage::reset()
+void ServerConnectionPage::reset()
 {
     Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
-    settingManager.beginGroup("Plugins/ConnectionManager/DirectConnection");
-
-
+    settingManager.beginGroup("Plugins/ConnectionManager/ServerConnection");
+    ui->txtHostname->setText(settingManager.value("HostName", m_ParentConnection->m_HostName).toString());
+    ui->txtPort->setValue(settingManager.value("Port", m_ParentConnection->m_Port).toInt());
     settingManager.endGroup();
 }
 
-} // namespace DirectConnection
+} // namespace ServerConnection
 } // namespace Plugins

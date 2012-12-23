@@ -1,9 +1,9 @@
 #!/bin/bash
 
-OPENSS_SRC="/home/dane/src/openspeedshop-2.0.1b1"
-OPENSS_LIB="/opt/oss/lib64"
+OPENSS_SRC="/home/dane/src/OpenSpeedShop"
+OPENSS_LIB="/opt/openss/lib64"
 
-PYTHON_VER="2.4"
+PYTHON_VER="2.6"
 PYTHON_PATH="/usr/include/python${PYTHON_VER}"
 
 SOURCES="main Socket SocketServer OpenSpeedShopCLI FileSystem"
