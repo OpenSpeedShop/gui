@@ -30,8 +30,8 @@
 #include <SettingManager/SettingManager.h>
 
 #include "DirectConnectionPage.h"
+#include <string>
 
-#include <SS_Input_Manager.hxx>
 
 #ifdef DIRECTCONNECTION_DEBUG
 #  include <QtDebug>
@@ -51,9 +51,7 @@ DirectConnection::DirectConnection(QObject *parent) :
     IConnection(parent)
 {
     m_State = State_Connected;
-
     m_Buffer.clear();
-    m_BufferSize = 0;
 
     readSettings();
 }
@@ -126,19 +124,16 @@ void DirectConnection::send(QString command)
 {
     if(!command.endsWith('\n'))
         command.append('\n');
-//    m_TcpSocket.write(command.toLatin1());
+
+    m_Buffer = QString(m_DirectCLI.execute(std::string(command.toLocal8Bit())).c_str());
+    emit readyReceive();
 }
 
 QString DirectConnection::receive()
 {
-//    if((quint32)m_Buffer.count() >= m_BufferSize) {
-//        QString buffer(m_Buffer);
-//        m_Buffer.clear();
-//        m_BufferSize = 0;
-//        return buffer;
-//    }
-
-    return QString();
+    QString retval = m_Buffer;
+    m_Buffer.clear();
+    return retval;
 }
 
 

@@ -64,7 +64,7 @@ SocketServer::SocketServer(int port, const char *address)
             xml_node<> *serverResponse = responseDocument.allocate_node(node_element, "ServerResponse");
 
             if(commandText == "version") {
-              serverResponse->append_attribute(responseDocument.allocate_attribute("version", "0.1.dev"));
+              serverResponse->append_attribute(responseDocument.allocate_attribute("version", "ServerConnection_0.1.dev"));
             } else if(commandText == "exit") {
               exitNow = true;
             }

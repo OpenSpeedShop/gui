@@ -33,6 +33,8 @@
 
 #include <OpenSpeedShop/ConnectionManager/IConnection.h>
 
+#include <openspeedshop/Direct.h>
+
 using namespace Plugins::OpenSpeedShop;
 
 namespace Plugins {
@@ -68,8 +70,11 @@ protected:
 private:
     IConnection::States m_State;
     QString m_ErrorMessage;
-    QByteArray m_Buffer;
-    quint32 m_BufferSize;
+//    QByteArray m_Buffer;
+//    quint32 m_BufferSize;
+
+    QString m_Buffer;
+    Direct m_DirectCLI;
 
     friend class DirectConnectionPage;
 };

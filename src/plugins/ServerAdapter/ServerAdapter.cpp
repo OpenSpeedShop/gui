@@ -24,10 +24,8 @@ ServerAdapter::ServerAdapter(QObject *parent) :
 
 bool ServerAdapter::isCompatible(QString serverVersion)
 {
-    Q_UNUSED(serverVersion);
-
-    //TODO: Implement a regex check for the supplied serverVersion.  Right now there's only one adapter, so this works.
-    return true;
+    static const QRegExp regex = QRegExp(QString("^ServerConnection_.*$"), Qt::CaseInsensitive);
+    return regex.exactMatch(serverVersion);
 }
 
 /*! \fn ServerAdapter::rawCommand()
