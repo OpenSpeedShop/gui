@@ -1,5 +1,5 @@
 /*!
-   \file
+   \file DirectAdapterPlugin.h
    \author Dane Gardner <dane.gardner@gmail.com>
    \version
 
@@ -25,58 +25,44 @@
 
  */
 
-#ifndef DIRECTCONNECTION_H
-#define DIRECTCONNECTION_H
+#ifndef DIRECTADAPTERPLUGIN_H
+#define DIRECTADAPTERPLUGIN_H
 
 #include <QtCore>
-#include <QtNetwork>
 
-#include <OpenSpeedShop/ConnectionManager/IConnection.h>
+#include <PluginManager/IPlugin.h>
 
-#include <openspeedshop/Direct.h>
-
-using namespace Plugins::OpenSpeedShop;
+#include "DirectAdapter.h"
 
 namespace Plugins {
-namespace DirectConnection {
+namespace DirectAdapter {
 
-class DirectConnectionPage;
-
-class DirectConnection : public IConnection
-{
-    Q_OBJECT
-    Q_INTERFACES(Plugins::OpenSpeedShop::IConnection)
+class DirectAdapterPlugin : public QObject, public Core::PluginManager::IPlugin {
+Q_OBJECT
+Q_INTERFACES(Core::PluginManager::IPlugin)
 
 public:
-    explicit DirectConnection(QObject *parent = 0);
-    ~DirectConnection();
+    DirectAdapterPlugin();
 
-    QString name() const;
-    IConnectionPage *page();
-    IConnection::States state();
-    QString errorMessage();
-    void connectToServer();
-    void disconnectFromServer();
-    void abort();
-
-    void send(QString command);
-    QString receive();
+    /* IPlugin Interface */
+    ~DirectAdapterPlugin();
+    bool initialize(QStringList &args, QString *err);
+    void shutdown();
+    QString name();
+    QString version();
+    QList<Core::PluginManager::Dependency> dependencies();
 
 protected:
-    void writeSettings();
-    void readSettings();
-    void setState(States state);
+    QString m_Name;
+    QString m_Version;
+    QList<Core::PluginManager::Dependency> m_Dependencies;
+    DirectAdapter m_DirectAdapter;
 
-private:
-    IConnection::States m_State;
-    QString m_ErrorMessage;
-
-    QString m_Buffer;
-    Direct m_DirectCLI;
-
-    friend class DirectConnectionPage;
 };
 
-} // namespace DirectConnection
+
+
+} // namespace DirectAdapter
 } // namespace Plugins
-#endif // DIRECTCONNECTION_H
+
+#endif // DIRECTADAPTERPLUGIN_H

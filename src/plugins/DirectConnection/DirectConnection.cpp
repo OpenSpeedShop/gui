@@ -50,7 +50,7 @@ namespace DirectConnection {
 DirectConnection::DirectConnection(QObject *parent) :
     IConnection(parent)
 {
-    m_State = State_Connected;
+    m_State = State_Disconnected;
     m_Buffer.clear();
 
     readSettings();
@@ -73,17 +73,20 @@ IConnectionPage *DirectConnection::page()
 
 void DirectConnection::connectToServer()
 {
+    setState(State_Connecting);
     setState(State_Connected);
 }
 
 void DirectConnection::disconnectFromServer()
 {
-    setState(State_Connected);
+    setState(State_Disconnecting);
+    setState(State_Disconnected);
 }
 
 void DirectConnection::abort()
 {
-    setState(State_Connected);
+    setState(State_Disconnecting);
+    setState(State_Disconnected);
 }
 
 QString DirectConnection::errorMessage()
@@ -126,6 +129,7 @@ void DirectConnection::send(QString command)
         command.append('\n');
 
     m_Buffer = QString(m_DirectCLI.execute(std::string(command.toLocal8Bit())).c_str());
+
     emit readyReceive();
 }
 

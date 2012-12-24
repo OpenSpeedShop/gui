@@ -36,9 +36,9 @@ done
 echo -e "\n$COMMAND"
 ${COMMAND}
 
-cp ${TARGET}.${VER_MAJ}.${VER_MIN} ${OPENSS_LIB}
-ln -sf ${OPENSS_LIB}/${TARGET}.${VER_MAJ}.${VER_MIN} ${TARGET}.${VER_MAJ}
-ln -sf ${OPENSS_LIB}/${TARGET}.${VER_MAJ} ${TARGET}
+cp -f ${TARGET}.${VER_MAJ}.${VER_MIN} ${OPENSS_LIB}/
+ln -sf ${TARGET}.${VER_MAJ}.${VER_MIN} ${OPENSS_LIB}/${TARGET}.${VER_MAJ}
+ln -sf ${TARGET}.${VER_MAJ} ${OPENSS_LIB}/${TARGET}
 
-cp Direct.h ${OPENSS_PREFIX}/include/openspeedshop/
+cp -f Direct.h ${OPENSS_PREFIX}/include/openspeedshop/
 

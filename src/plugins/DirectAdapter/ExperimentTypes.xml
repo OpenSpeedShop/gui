@@ -1,0 +1,210 @@
+<ExperimentTypes>
+  <ExperimentType value="pcsamp">
+    <Modifier value="LinkedObjects" summary="will report times by linked object."/>
+    <Modifier value="Functions" summary="will report times by function."/>
+    <Modifier value="Statements" summary="will report times by statement."/>
+    <Metric value="Time" summary="reports the total cpu time for all the processes."/>
+    <Metric value="Percent" summary="reports the percent of total cpu time for all the processes."/>
+    <Metric value="ThreadMax" summary="reports the maximum accumulated cpu time for a process."/>
+    <Metric value="ThreadMaxIndex" summary="reports the process Id for the thread of the 'ThreadMax'."/>
+    <Metric value="ThreadMin" summary="reports the minimum accumulated cpu time for a process."/>
+    <Metric value="ThreadMinIndex" summary="reports the process Id for the thread of the 'ThreadMin'."/>
+    <Metric value="ThreadAverage" summary="reports the average accumulated cpu time for a process."/>
+    <Metric value="LoadBalance" summary="is the same as 'ThreadMax, ThreadMaxIndex, ThreadMin, ThreadMinIndex, ThreadAverage'."/>
+  </ExperimentType>
+  <ExperimentType value="io">
+    <Modifier value="Functions" summary="will produce a summary report."/>
+    <Modifier value="Trace" summary="will produce a report of each individual  call to an io function."/>
+    <Modifier value="CallTrees" summary="will produce a calling stack report that is presented in calling tree order - from the start of the program to the measured program."/>
+    <Modifier value="FullStack" summary="will produce a full stack report."/>
+    <Modifier value="TraceBacks" summary="will produce a calling stack report that is presented in traceback order - from the measured function to the start of the program."/>
+    <Modifier value="ButterFly" summary="will produce a report that summarizes the calls to and from a given function list."/>
+    <Modifier value="Summary" summary="will result in an additional line of output at the end of the report that summarizes the information in each column."/>
+    <Metric value="exclusive_times" summary="reports the wall clock time used in the function."/>
+    <Metric value="min" summary="reports the minimum time spent in the function."/>
+    <Metric value="max" summary="reports the maximum time spent in the function."/>
+    <Metric value="average" summary="reports the average time spent in the function."/>
+    <Metric value="count" summary="reports the number of times the function was called."/>
+    <Metric value="percent" summary="reports the percent of io time the function represents."/>
+    <Metric value="stddev" summary="reports the standard deviation of the average io time that the function represents."/>
+    <Metric value="ThreadMax" summary="reports the maximum accumulated cpu time for a process."/>
+    <Metric value="ThreadMaxIndex" summary="reports the process Id for the thread of the 'ThreadMax'."/>
+    <Metric value="ThreadMin" summary="reports the minimum accumulated cpu time for a process."/>
+    <Metric value="ThreadMinIndex" summary="reports the process Id for the thread of the 'ThreadMin'."/>
+    <Metric value="ThreadAverage" summary="reports the average accumulated cpu time for a process."/>
+    <Metric value="loadbalance" summary="is the same as 'ThreadMax, ThreadMaxIndex, ThreadMin, ThreadMinIndex, ThreadAverage'."/>
+  </ExperimentType>
+  <ExperimentType value="iot">
+    <Modifier value="Functions" summary="will produce a summary report."/>
+    <Modifier value="Trace" summary="will produce a report of each individual  call to an io function."/>
+    <Modifier value="CallTrees" summary="will produce a calling stack report that is presented in calling tree order - from the start of the program to the measured program."/>
+    <Modifier value="TraceBacks" summary="will produce a calling stack report that is presented in traceback order - from the measured function to the start of the program."/>
+    <Modifier value="ButterFly" summary="will produce a report that summarizes the calls to and from a given function list."/>
+    <Modifier value="Summary" summary="will result in an additional line of output at the end of the report that summarizes the information in each column."/>
+    <Metric value="exclusive_times" summary="reports the wall clock time used in the function."/>
+    <Metric value="min" summary="reports the minimum time spent in the function."/>
+    <Metric value="max" summary="reports the maximum time spent in the function."/>
+    <Metric value="average" summary="reports the average time spent in the function."/>
+    <Metric value="count" summary="reports the number of times the function was called."/>
+    <Metric value="percent" summary="reports the percent of io time the function represents."/>
+    <Metric value="stddev" summary="reports the standard deviation of the average io time that the function represents."/>
+    <Metric value="syscallno" summary="reports the system call number associated  with the function."/>
+    <Metric value="retval" summary="reports the value returned from the call."/>
+    <Metric value="nsysargs" summary="reports the number of arguments to the call."/>
+    <Metric value="pathname" summary="reports the pathname to the function."/>
+    <Metric value="ThreadMax" summary="reports the maximum accumulated cpu time for a process."/>
+    <Metric value="ThreadMaxIndex" summary="reports the process Id for the thread of the 'ThreadMax'."/>
+    <Metric value="ThreadMin" summary="reports the minimum accumulated cpu time for a process."/>
+    <Metric value="ThreadMinIndex" summary="reports the process Id for the thread of the 'ThreadMin'."/>
+    <Metric value="ThreadAverage" summary="reports the average accumulated cpu time for a process."/>
+    <Metric value="loadbalance" summary="is the same as 'ThreadMax, ThreadMaxIndex, ThreadMin, ThreadMinIndex, ThreadAverage'."/>
+  </ExperimentType>
+  <ExperimentType value="fpe">
+    <Modifier value="Functions" summary="will produce a summary report of the function."/>
+    <Modifier value="Statements" summary="will produce a summary report of the statement the event occurred in."/>
+    <Modifier value="LinkeObjects" summary="will produce a summary report of the linked object the event occurred in."/>
+    <Modifier value="Trace" summary="will produce a report of each call to an mpi function."/>
+    <Modifier value="CallTrees" summary="will produce a calling stack report that is presented in calling tree order."/>
+    <Modifier value="TraceBacks" summary="will produce a calling stack report that is presented in traceback order."/>
+    <Modifier value="ButterFly" summary="will produce a report that summarizes the calls to and from a given function list."/>
+    <Modifier value="Summary" summary="will result in an additional line of output at the end of the report that summarizes the information in each column."/>
+    <Metric value="Time" summary="reports the first time at which the event occurred."/>
+    <Metric value="Counts" summary="reports the number of times the event occurred in the code unit."/>
+    <Metric value="Percent" summary="reports the percent of total counts the code unit."/>
+    <Metric value="ThreadMax" summary="reports the maximum counts for a process."/>
+    <Metric value="ThreadMaxIndex" summary="reports the procecss Id for the thread of the 'ThreadMax'."/>
+    <Metric value="ThreadMin" summary="reports the minimum counts for a process."/>
+    <Metric value="ThreadMinIndex" summary="reports the procecss Id for the thread of the 'ThreadMin'."/>
+    <Metric value="ThreadAverage" summary="reports the average counts for a process."/>
+    <Metric value="LoadBalance" summary="is the same as '-m ThreadMax, ThreadMaxIndex, ThreadMin, ThreadMinIndex, ThreadAverage'."/>
+    <Metric value="Type" summary="reports the type of the floating point exception:"/>
+    <Metric value="Inexact_Result_Count" summary=""/>
+    <Metric value="Underflow_Count" summary=""/>
+    <Metric value="Overflow_Count" summary=""/>
+    <Metric value="Division_By_Zero_Count" summary=""/>
+    <Metric value="Unnormal_Count" summary=""/>
+    <Metric value="Invalid_Count" summary=""/>
+    <Metric value="Unknown_Count" summary=""/>
+  </ExperimentType>
+  <ExperimentType value="hwc">
+    <Modifier value="LinkedObjects" summary="will report counts by linked object."/>
+    <Modifier value="Functions" summary="will report counts by function. This is the default."/>
+    <Modifier value="Statements" summary="will report counts by statement."/>
+    <Metric value="Counts" summary="reports the total hardware event counts for all the processes."/>
+    <Metric value="Percent" summary="reports the percent of total counts for all the processes."/>
+    <Metric value="ThreadMax" summary="reports the maximum counts for a process."/>
+    <Metric value="ThreadMaxIndex" summary="reports the procecss Id for the thread of the 'ThreadMax'."/>
+    <Metric value="ThreadMin" summary="reports the minimum counts for a process."/>
+    <Metric value="ThreadMinIndex" summary="reports the procecss Id for the thread of the 'ThreadMin'."/>
+    <Metric value="ThreadAverage" summary="reports the average counts for a process."/>
+    <Metric value="LoadBalance" summary="is the same as 'ThreadMax, ThreadMaxIndex, ThreadMin, ThreadMinIndex, ThreadAverage'."/>
+  </ExperimentType>
+  <ExperimentType value="hwcsamp">
+    <Modifier value="LinkedObjects" summary="will report times by linked object."/>
+    <Modifier value="Functions" summary="will report times by function. This is the default."/>
+    <Modifier value="Statements" summary="will report times by statement."/>
+    <Metric value="Time" summary="reports the total cpu time for all the processes."/>
+    <Metric value="Percent" summary="reports the percent of total cpu time for all the processes."/>
+    <Metric value="[event_name]" summary="reports counts associated with the named event for all the processes. (Use 'expStatus' to see active event counters.."/>
+    <Metric value="AllEvents" summary="reports all the counter values for all the processes."/>
+    <Metric value="ThreadMax" summary="reports the maximum accumulated cpu time for a process."/>
+    <Metric value="ThreadMaxIndex" summary="reports the process Id for the thread of the 'ThreadMax'."/>
+    <Metric value="ThreadMin" summary="reports the minimum accumulated cpu time for a process."/>
+    <Metric value="ThreadMinIndex" summary="reports the process Id for the thread of the 'ThreadMin'."/>
+    <Metric value="ThreadAverage" summary="reports the average accumulated cpu time for a process."/>
+    <Metric value="loadbalance" summary="is the same as 'ThreadMax, ThreadMaxIndex, ThreadMin, ThreadMinIndex, ThreadAverage'."/>
+  </ExperimentType>
+  <ExperimentType value="hwctime">
+    <Modifier value="LinkedObjects" summary="will report times by linked object."/>
+    <Modifier value="Statements" summary="will report times by statement."/>
+    <Modifier value="Functions" summary="will report times by function."/>
+    <Modifier value="CallTrees" summary="will produce a calling stack report that is presented in calling tree order."/>
+    <Modifier value="TraceBacks" summary="will produce a calling stack report that is presented in traceback order."/>
+    <Modifier value="ButterFly" summary="will produce a report that summarizes the calls to a function and the calls from the function."/>
+    <Modifier value="Summary" summary="will result in an additional line of output at the end of the report that summarizes the information in each column."/>
+    <Metric value="Exclusive_Counts" summary="reports the number of times the measured event occurred in the code unit."/>
+    <Metric value="Exclusive_Overflows" summary="reports the number of times the hardware's counters overflowed and samples were recorded for the code unit."/>
+    <Metric value="Inclusive_Counts" summary="reports the number of times the measured event occurred in the code unit and all the units it calls."/>
+    <Metric value="Inclusive_Overflows" summary="reports the number of times the hardware's counters overflowed, samples were recorded for the code unit and all the units it calls."/>
+    <Metric value="ThreadMin" summary="reports the minimum counts for a process."/>
+    <Metric value="ThreadMinIndex" summary="reports the Rank for the thread of the 'ThreadMin'."/>
+    <Metric value="ThreadMax" summary="reports the maximum counts for a process."/>
+    <Metric value="ThreadMaxIndex" summary="reports the Rank for the thread of the 'ThreadMax'."/>
+    <Metric value="ThreadAverage" summary="reports the average counts for a process."/>
+    <Metric value="LoadBalance" summary="is the same as 'ThreadMax, ThreadMaxIndex, ThreadMin, ThreadMinIndex, ThreadAverage'."/>
+  </ExperimentType>
+  <ExperimentType value="mpi">
+    <Modifier value="Functions" summary="will produce a summary report."/>
+    <Modifier value="Trace" summary="will produce a report of each individual call to an mpi function."/>
+    <Modifier value="CallTrees" summary="will produce a calling stack report that is presented in calling tree order."/>
+    <Modifier value="TraceBacks" summary="will produce a calling stack report that is presented in traceback order."/>
+    <Modifier value="ButterFly" summary="will produce a report that summarizes the calls to a function and the calls from the function."/>
+    <Modifier value="Summary" summary="will result in an additional line of output at the end of the report that summarizes the information in each column."/>
+    <Modifier value="FullStack" summary="will produce a full stack report."/>
+    <Metric value="Exclusive_Times" summary="reports the wall clock time used in the function."/>
+    <Metric value="Min" summary="reports the minimum time spent in the function."/>
+    <Metric value="Max" summary="reports the maximum time spent in the function."/>
+    <Metric value="Average" summary="reports the average time spent in each call to the function."/>
+    <Metric value="Count" summary="reports the number of times the function was called."/>
+    <Metric value="Percent" summary="reports the percent of total mpi time the function represents."/>
+    <Metric value="StdDev" summary="reports the standard deviation of the average mpi time that the function represents."/>
+    <Metric value="ThreadMax" summary="reports the maximum accumulated cpu time for a process."/>
+    <Metric value="ThreadMaxIndex" summary="reports the process Id for the thread of the 'ThreadMax'."/>
+    <Metric value="ThreadMin" summary="reports the minimum accumulated cpu time for a process."/>
+    <Metric value="ThreadMinIndex" summary="reports the process Id for the thread of the 'ThreadMin'."/>
+    <Metric value="ThreadAverage" summary="reports the average accumulated cpu time for a process."/>
+    <Metric value="LoadBalance" summary="is the same as 'ThreadMax, ThreadMaxIndex, ThreadMin, ThreadMinIndex, ThreadAverage'."/>
+  </ExperimentType>
+  <ExperimentType value="mpit">
+    <Modifier value="Functions" summary="will produce a summary report for each function."/>
+    <Modifier value="Trace" summary="will produce a report of each call to an mpi function."/>
+    <Modifier value="CallTrees" summary="will produce report that expands the call stack for a trace."/>
+    <Modifier value="TraceBacks" summary="will produce a report that expands the call stack for a trace."/>
+    <Modifier value="ButterFly" summary="will produce a report that summarizes the calls to a function and the calls from the function."/>
+    <Modifier value="Summary" summary="will result in an additional line of output at the end of the report that summarizes the information in each column."/>
+    <Modifier value="FullStack" summary="will produce a full stack report."/>
+    <Metric value="exclusive_times" summary="reports the wall clock time used in the event."/>
+    <Metric value="min" summary="reports the minimum time spent in the event."/>
+    <Metric value="max" summary="reports the maximum time spent in the event."/>
+    <Metric value="average" summary="reports the average time spent in the event."/>
+    <Metric value="count" summary="reports the number of times the event occured."/>
+    <Metric value="percent" summary="reports the percent of mpi time the event represents."/>
+    <Metric value="stddev" summary="reports the standard deviation of the average mpi time that the event represents."/>
+    <Metric value="start_time" summary="reports the starting time of the event."/>
+    <Metric value="stop_time" summary="reports the ending time of the event."/>
+    <Metric value="source" summary="reports the source rank of the event."/>
+    <Metric value="dest" summary="reports the destination rank of the event."/>
+    <Metric value="size" summary="reports the number of bytes in the message."/>
+    <Metric value="tag" summary="reports the tag of the event."/>
+    <Metric value="comm" summary="reports the communicator used for the event."/>
+    <Metric value="datatype" summary="reports the data type of the message."/>
+    <Metric value="retval" summary="reports the return value of the event."/>
+    <Metric value="ThreadMax" summary="reports the maximum accumulated cpu time for a process."/>
+    <Metric value="ThreadMaxIndex" summary="reports the process Id for the thread of the 'ThreadMax'."/>
+    <Metric value="ThreadMin" summary="reports the minimum accumulated cpu time for a process."/>
+    <Metric value="ThreadMinIndex" summary="reports the process Id for the thread of the 'ThreadMin'."/>
+    <Metric value="ThreadAverage" summary="reports the average accumulated cpu time for a process."/>
+    <Metric value="loadbalance" summary="is the same as 'ThreadMax, ThreadMaxIndex, ThreadMin, ThreadMinIndex, ThreadAverage'."/>
+  </ExperimentType>
+  <ExperimentType value="usertime">
+    <Modifier value="LinkedObjects" summary="will report times by linked object."/>
+    <Modifier value="Statements" summary="will report times by statement."/>
+    <Modifier value="Functions" summary="will report times by function."/>
+    <Modifier value="CallTrees" summary="will produce a calling stack report that is presented in calling tree order - from the start of the program to the measured program."/>
+    <Modifier value="TraceBacks" summary="will produce a calling stack report that is presented in traceback order - from the measured function to the start of the program."/>
+    <Modifier value="ButterFly" summary="will produce a report that summarizes the calls to a function and the calls from the function."/>
+    <Modifier value="Summary" summary="will result in an additional line of output at the end of the report that summarizes the information in each column."/>
+    <Modifier value="FullStack" summary="will produce a full stack report."/>
+    <Metric value="exclusive_time" summary="reports the wall clock time used in the code unit."/>
+    <Metric value="inclusive_time" summary="reports the wall clock time used in the aggregate by the unit and all the units it calls."/>
+    <Metric value="percent" summary="reports the percent of total cpu the code unit represents."/>
+    <Metric value="count" summary="reports the number calls into the code unit."/>
+    <Metric value="ThreadMax" summary="reports the maximum accumulated cpu time for a process."/>
+    <Metric value="ThreadMaxIndex" summary="reports the process Id for the thread of the 'ThreadMax'."/>
+    <Metric value="ThreadMin" summary="reports the minimum accumulated cpu time for a process."/>
+    <Metric value="ThreadMinIndex" summary="reports the process Id for the thread of the 'ThreadMin'."/>
+    <Metric value="ThreadAverage" summary="reports the average accumulated cpu time for a process."/>
+    <Metric value="loadbalance" summary="is the same as 'ThreadMax, ThreadMaxIndex, ThreadMin, ThreadMinIndex, ThreadAverage'."/>
+  </ExperimentType>
+  <ExperimentType value="mpiotf"/>
+</ExperimentTypes>

@@ -10,6 +10,8 @@
 
 #include "OpenSpeedShopCLI.h"
 
+//#define DIRECTDEBUG
+
 using namespace std;
 using namespace rapidxml;
 
@@ -26,10 +28,12 @@ string Direct::execute(const string &command)
         string commandType(commandNode->first_attribute("type")->value());
         char *commandID(commandNode->first_attribute("id")->value());
 
-        cerr << __FILE__ << ":" << __LINE__ << "\tRecieved commandText: \"" << commandText << "\""
+#ifdef DIRECTDEBUG
+        cout << __FILE__ << ":" << __LINE__ << "\tRecieved commandText: \"" << commandText << "\""
                                             << " commandType: \""           << commandType << "\""
                                             << " commandID: \""             << commandID   << "\""
                                             << endl;
+#endif
 
         // Build the response document
         xml_document<> responseDocument;
@@ -56,7 +60,9 @@ string Direct::execute(const string &command)
         }
 
         // Send the result back to the client
+#ifdef DIRECTDEBUG
         cout << "responseDocument \"\n" << responseDocument << "\n\"" << endl;
+#endif
         ostringstream responseString;
         responseString << responseDocument;
 

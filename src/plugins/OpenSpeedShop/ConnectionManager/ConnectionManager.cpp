@@ -437,9 +437,9 @@ bool ConnectionManager::sendCommand(ServerCommand *command)
     }
 
     m_ServerCommands.append(command);
+    command->setState(ServerCommand::State_Sent);
     currentConnection()->send(command->command().toString());
 
-    command->setState(ServerCommand::State_Sent);
     return true;
 }
 

@@ -21,6 +21,7 @@ SUBDIRS  = OpenSpeedShop \
            DirectConnection \
            ServerConnection \
            TreeView \
+           DirectAdapter \
            ServerAdapter \
            LineGraphView
 
@@ -37,6 +38,9 @@ Example.depends              = OpenSpeedShop
 
 TreeView.subdir              = TreeView
 TreeView.depends             = OpenSpeedShop
+
+DirectAdapter.subdir         = DirectAdapter
+DirectAdapter.depends        = OpenSpeedShop
 
 ServerAdapter.subdir         = ServerAdapter
 ServerAdapter.depends        = OpenSpeedShop
