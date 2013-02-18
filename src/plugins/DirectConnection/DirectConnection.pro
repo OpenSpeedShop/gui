@@ -18,30 +18,40 @@
 include(../plugins.pri)
 include(../../OpenSS.pri)
 
-CONFIG(debug, debug|release) {
-  TARGET           = DirectConnectionD
+
+isEmpty(OPENSS_PATH) {
+  warning()
+  warning("The DirectConnection plugin has been disabled")
+  warning("The plugin depends on headers from the Open|SpeedShop framework")
+  warning("To enable it, pass 'OPENSS_PATH=~/src/OpenSpeedShop' to qmake, where ~/src/OpenSpeedShop is the base source directory of Open|SpeedShop")
+
 } else {
-  TARGET           = DirectConnection
+
+  CONFIG(debug, debug|release) {
+    TARGET           = DirectConnectionD
+  } else {
+    TARGET           = DirectConnection
+  }
+
+  SOURCES           += DirectConnectionPlugin.cpp \
+                       DirectConnection.cpp \
+                       DirectConnectionPage.cpp
+
+  HEADERS           += DirectConnectionPlugin.h \
+                       DirectConnection.h \
+                       DirectConnectionPage.h
+
+  FORMS             += DirectConnectionPage.ui
+
+  RESOURCES         +=
+
+  QT                += network xml
+
+  LIBS        += -L$$quote($${BUILD_PATH}/plugins/OpenSpeedShop/$${DIR_POSTFIX}) -lOpenSpeedShop$${LIB_POSTFIX}
+
+  #debug: DEFINES += DIRECTCONNECTION_DEBUG
+
+  #directConnectionHeaders.path = /include/plugins/DirectConnection
+  #directConnectionHeaders.files = DirectConnectionLibrary.h DirectConnection.h
+   #INSTALLS += directConnectionHeaders
 }
-
-SOURCES           += DirectConnectionPlugin.cpp \
-                     DirectConnection.cpp \
-                     DirectConnectionPage.cpp
-
-HEADERS           += DirectConnectionPlugin.h \
-                     DirectConnection.h \
-                     DirectConnectionPage.h
-
-FORMS             += DirectConnectionPage.ui
-
-RESOURCES         +=
-
-QT                += network xml
-
-LIBS        += -L$$quote($${BUILD_PATH}/plugins/OpenSpeedShop/$${DIR_POSTFIX}) -lOpenSpeedShop$${LIB_POSTFIX}
-
-#debug: DEFINES += DIRECTCONNECTION_DEBUG
-
-#directConnectionHeaders.path = /include/plugins/DirectConnection
-#directConnectionHeaders.files = DirectConnectionLibrary.h DirectConnection.h
-#INSTALLS += directConnectionHeaders
