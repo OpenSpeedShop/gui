@@ -2,7 +2,7 @@
 #include "ui_ModelManagerDialog.h"
 
 #include <SettingManager/SettingManager.h>
-#include <MainWindow/MainWindow.h>
+#include <CoreWindow/CoreWindow.h>
 
 #include "ModelManager.h"
 #include "ModelDescriptorWidget.h"
@@ -72,11 +72,11 @@ void ModelManagerDialog::currentSelectionChanged(const QUuid &current)
             ui->descriptorParent->layout()->addWidget(descriptor);
             ui->descriptorParent->layout()->setMargin(0);
         } catch(QString err) {
-            using namespace Core::MainWindow;
-            MainWindow::instance().notify(tr("Failed to open model descriptor: %1").arg(err), NotificationWidget::Critical);
+            using namespace Core::CoreWindow;
+            CoreWindow::instance().notify(tr("Failed to open model descriptor: %1").arg(err), NotificationWidget::Critical);
         } catch(...) {
-            using namespace Core::MainWindow;
-            MainWindow::instance().notify(tr("Failed to open model descriptor."), NotificationWidget::Critical);
+            using namespace Core::CoreWindow;
+            CoreWindow::instance().notify(tr("Failed to open model descriptor."), NotificationWidget::Critical);
         }
     }
 }

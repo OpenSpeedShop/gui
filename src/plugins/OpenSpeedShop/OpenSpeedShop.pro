@@ -27,7 +27,6 @@ CONFIG(debug, debug|release) {
 
 SOURCES      += OpenSpeedShopPlugin.cpp \
                 Settings/SettingPage.cpp \
-                AboutDialog.cpp \
                 Experiment/ExperimentWidget.cpp \
                 OpenSpeedShopWidget.cpp \
                 ConnectionManager/ServerCommand.cpp \
@@ -49,11 +48,12 @@ SOURCES      += OpenSpeedShopPlugin.cpp \
                 Experiment/SourceView.cpp \
                 Experiment/SyntaxHighlighter.cpp \
                 RemoteFileSystem/PathRewriter.cpp \
-                Welcome/WelcomeData.cpp
+                Welcome/WelcomeData.cpp \
+    AboutWidget.cpp \
+    MainWindow.cpp
 
 HEADERS      += OpenSpeedShopPlugin.h \
                 Settings/SettingPage.h \
-                AboutDialog.h \
                 Experiment/ExperimentWidget.h \
                 OpenSpeedShopWidget.h \
                 ConnectionManager/ServerCommand.h \
@@ -79,16 +79,18 @@ HEADERS      += OpenSpeedShopPlugin.h \
                 Experiment/SourceView.h \
                 Experiment/SyntaxHighlighter.h \
                 Welcome/WelcomeData.h \
-                RemoteFileSystem/PathRewriter.h
+                RemoteFileSystem/PathRewriter.h \
+    AboutWidget.h \
+    MainWindow.h
 
 FORMS        += Settings/SettingPage.ui \
-                AboutDialog.ui \
                 Experiment/ExperimentWidget.ui \
                 OpenSpeedShopWidget.ui \
                 ConnectionManager/ConnectionWidget.ui \
                 ModelManager/ModelDescriptorWidget.ui \
                 ModelManager/ModelManagerDialog.ui \
-                RemoteFileSystem/RemoteFileDialog.ui
+                RemoteFileSystem/RemoteFileDialog.ui \
+    AboutWidget.ui
 
 RESOURCES    += Resources/OpenSpeedShop.qrc
 

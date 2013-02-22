@@ -38,7 +38,7 @@
 namespace Plugins {
 namespace OpenSpeedShop {
 
-class OpenSpeedShopWidget;
+class MainWindow;
 
 class OpenSpeedShopPlugin :
         public QObject,
@@ -67,25 +67,18 @@ public:
     Core::SettingManager::ISettingPage *createSettingPage();
     /* END ISettingPageFactory */
 
-public slots:
-    void aboutDialog();
-
 protected:
     QString m_Name;
     QString m_Version;
     QList<Core::PluginManager::Dependency> m_Dependencies;
 
-    OpenSpeedShopWidget *m_MainWidget;
+    MainWindow *m_MainWindow;
     WelcomeData m_WelcomeData;
-
-    QAction m_AboutPage;
 
     void readSettings();
     void writeSettings();
 
 };
-
-
 
 } // namespace OpenSpeedShop
 } // namespace Plugins
