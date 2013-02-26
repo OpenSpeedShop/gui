@@ -44,8 +44,9 @@ isEmpty(SERENE_PATH) {
   LIBS              += -L$$quote($${BUILD_PATH}/plugins/OpenSpeedShop/$${DIR_POSTFIX}) -lOpenSpeedShop$${LIB_POSTFIX}
 
   #debug: DEFINES += LINEGRAPHVIEW_DEBUG
+
+  #lineGraphViewHeaders.path = /include/plugins/LineGraphView
+  #lineGraphViewHeaders.files = LineGraphViewLibrary.h LineGraphView.h
+  #INSTALLS += lineGraphViewHeaders
 }
 
-#lineGraphViewHeaders.path = /include/plugins/LineGraphView
-#lineGraphViewHeaders.files = LineGraphViewLibrary.h LineGraphView.h
-#INSTALLS += lineGraphViewHeaders
