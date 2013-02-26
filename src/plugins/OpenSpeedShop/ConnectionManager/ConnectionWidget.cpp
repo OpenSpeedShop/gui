@@ -28,7 +28,7 @@
 #include "ConnectionWidget.h"
 #include "ui_ConnectionWidget.h"
 
-#include <MainWindow/MainWindow.h>
+#include <CoreWindow/CoreWindow.h>
 #include <SettingManager/SettingManager.h>
 
 #include "ConnectionManager.h"

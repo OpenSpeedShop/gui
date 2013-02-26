@@ -27,8 +27,8 @@
 
 #include "ConnectionManager.h"
 
-#include <MainWindow/MainWindow.h>
-#include <MainWindow/NotificationWidget.h>
+#include <CoreWindow/CoreWindow.h>
+#include <CoreWindow/NotificationWidget.h>
 #include <SettingManager/SettingManager.h>
 #include <PluginManager/PluginManager.h>
 
@@ -83,8 +83,8 @@ bool ConnectionManager::initialize(QStringList &args, QString *err)
     try {
 
         /*** Register our menu structure ***/
-        MainWindow::MainWindow &mainWindow = MainWindow::MainWindow::instance();
-        foreach(QAction *action, mainWindow.menuBar()->actions()) {
+        CoreWindow::CoreWindow &coreWindow = CoreWindow::CoreWindow::instance();
+        foreach(QAction *action, coreWindow.menuBar()->actions()) {
             if(action->text() == tr("Tools")) {
                 m_ServerConnect = new QAction(tr("Connect to server"), this);
                 m_ServerConnect->setToolTip(tr("Connects to an Open|SpeedShop server"));
@@ -122,7 +122,7 @@ bool ConnectionManager::initialize(QStringList &args, QString *err)
             m_lblConnectionStatus->setFixedSize(16,16);
             m_lblConnectionStatus->setPixmap(QPixmap(":/OpenSpeedShop/ConnectionManager/disconnected.svg"));
             m_lblConnectionStatus->setToolTip(tr("Disconnected"));
-            mainWindow.statusBar()->addWidget(m_lblConnectionStatus);
+            coreWindow.statusBar()->addWidget(m_lblConnectionStatus);
         }
 
         readSettings();
@@ -338,7 +338,7 @@ void ConnectionManager::connectionStateChanged()
     }
 
     /* Set up user interactions */
-    using namespace Core::MainWindow;
+    using namespace Core::CoreWindow;
     if(m_NotifyConnecting) {
         m_NotifyConnecting->close();
         m_NotifyConnecting->deleteLater();
@@ -356,14 +356,14 @@ void ConnectionManager::connectionStateChanged()
         m_ServerConnect->setText(tr("Connecting to server"));
         m_ServerConnect->setEnabled(false);
 
-        m_NotifyConnecting = MainWindow::instance().notify(tr("Connecting to server"), NotificationWidget::Loading);
+        m_NotifyConnecting = CoreWindow::instance().notify(tr("Connecting to server"), NotificationWidget::Loading);
         m_lblConnectionStatus->setToolTip(tr("Connecting"));
 
     } else if(m_CurrentConnection->state() == IConnection::State_Disconnecting) {
         m_ServerConnect->setText(tr("Disconnecting from server"));
         m_ServerConnect->setEnabled(false);
 
-        m_NotifyConnecting = MainWindow::instance().notify(tr("Disconnecting from server"), NotificationWidget::Loading);
+        m_NotifyConnecting = CoreWindow::instance().notify(tr("Disconnecting from server"), NotificationWidget::Loading);
         m_lblConnectionStatus->setToolTip(tr("Disconnecting"));
 
     } else if(m_CurrentConnection->state() == IConnection::State_Disconnected) {
@@ -378,11 +378,11 @@ void ConnectionManager::connectionStateChanged()
         m_ServerConnect->setEnabled(true);
 
         if(previousState == IConnection::State_Connected) {
-            MainWindow::instance().notify(tr("Unexpected loss of connection to server: %1").arg(m_CurrentConnection->errorMessage()), NotificationWidget::Critical);
+            CoreWindow::instance().notify(tr("Unexpected loss of connection to server: %1").arg(m_CurrentConnection->errorMessage()), NotificationWidget::Critical);
         } else if(previousState == IConnection::State_Connecting) {
-            MainWindow::instance().notify(tr("Error occured while connecting to server: %1").arg(m_CurrentConnection->errorMessage()), NotificationWidget::Critical);
+            CoreWindow::instance().notify(tr("Error occured while connecting to server: %1").arg(m_CurrentConnection->errorMessage()), NotificationWidget::Critical);
         } else if(previousState == IConnection::State_Disconnecting) {
-            MainWindow::instance().notify(tr("Error occured while disconnecting from server: %1").arg(m_CurrentConnection->errorMessage()), NotificationWidget::Critical);
+            CoreWindow::instance().notify(tr("Error occured while disconnecting from server: %1").arg(m_CurrentConnection->errorMessage()), NotificationWidget::Critical);
         }
     }
 
@@ -494,21 +494,21 @@ void ConnectionManager::serverConnect()
         try {
             connectToServer();
         } catch(QString err) {
-            using namespace Core::MainWindow;
-            MainWindow::instance().notify(tr("Client error while attempting to connect to server: %1").arg(err), NotificationWidget::Critical);
+            using namespace Core::CoreWindow;
+            CoreWindow::instance().notify(tr("Client error while attempting to connect to server: %1").arg(err), NotificationWidget::Critical);
         } catch(...) {
-            using namespace Core::MainWindow;
-            MainWindow::instance().notify(tr("Client error while attempting to connect to server."), NotificationWidget::Critical);
+            using namespace Core::CoreWindow;
+            CoreWindow::instance().notify(tr("Client error while attempting to connect to server."), NotificationWidget::Critical);
         }
     } else {
         try {
             disconnectFromServer();
         } catch(QString err) {
-            using namespace Core::MainWindow;
-            MainWindow::instance().notify(tr("Client error while attempting to disconnect from server: %1").arg(err), NotificationWidget::Critical);
+            using namespace Core::CoreWindow;
+            CoreWindow::instance().notify(tr("Client error while attempting to disconnect from server: %1").arg(err), NotificationWidget::Critical);
         } catch(...) {
-            using namespace Core::MainWindow;
-            MainWindow::instance().notify(tr("Client error while attempting to disconnect from server."), NotificationWidget::Critical);
+            using namespace Core::CoreWindow;
+            CoreWindow::instance().notify(tr("Client error while attempting to disconnect from server."), NotificationWidget::Critical);
         }
     }
 }

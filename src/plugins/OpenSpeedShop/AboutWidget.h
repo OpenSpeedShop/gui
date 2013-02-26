@@ -25,8 +25,8 @@
 
  */
 
-#ifndef ABOUTDIALOG_H
-#define ABOUTDIALOG_H
+#ifndef PLUGINS_OPENSPEEDSHOP_ABOUTWIDGET_H
+#define PLUGINS_OPENSPEEDSHOP_ABOUTWIDGET_H
 
 #include <QtCore>
 #include <QtGui>
@@ -35,26 +35,24 @@ namespace Plugins {
 namespace OpenSpeedShop {
 
 namespace Ui {
-    class AboutDialog;
+    class AboutWidget;
 }
 
-class AboutDialog : public QDialog
+class AboutWidget : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit AboutDialog(QWidget *parent = 0);
-    ~AboutDialog();
-
-    static void splash(int ms = 2000);
+    explicit AboutWidget(QWidget *parent = 0);
+    ~AboutWidget();
 
 protected:
 
 private:
-    Ui::AboutDialog *ui;
+    Ui::AboutWidget *ui;
 };
 
 
 } // namespace OpenSpeedShop
 } // namespace Plugins
-#endif // ABOUTDIALOG_H
+#endif // PLUGINS_OPENSPEEDSHOP_ABOUTWIDGET_H

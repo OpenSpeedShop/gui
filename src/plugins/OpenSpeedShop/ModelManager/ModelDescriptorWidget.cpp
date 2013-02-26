@@ -1,7 +1,7 @@
 #include "ModelDescriptorWidget.h"
 #include "ui_ModelDescriptorWidget.h"
 
-#include <MainWindow/MainWindow.h>
+#include <CoreWindow/CoreWindow.h>
 
 #include <ConnectionManager/ConnectionManager.h>
 #include <ConnectionManager/IAdapter.h>

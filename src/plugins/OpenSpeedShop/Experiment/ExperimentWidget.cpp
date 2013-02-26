@@ -1,7 +1,7 @@
 #include "ExperimentWidget.h"
 #include "ui_ExperimentWidget.h"
 
-#include <MainWindow/MainWindow.h>
+#include <CoreWindow/CoreWindow.h>
 #include <ConnectionManager/ConnectionManager.h>
 #include <ConnectionManager/IAdapter.h>
 #include <SettingManager/SettingManager.h>
@@ -320,11 +320,11 @@ void ExperimentWidget::getModel(QUuid descriptorUid)
         ui->txtSource->setModel(m_CurrentModel);
 
     } catch(QString err) {
-        using namespace Core::MainWindow;
-        MainWindow::instance().notify(tr("Failed to fetch experiemnt model: %1").arg(err), NotificationWidget::Critical);
+        using namespace Core::CoreWindow;
+        CoreWindow::instance().notify(tr("Failed to fetch experiemnt model: %1").arg(err), NotificationWidget::Critical);
     } catch(...) {
-        using namespace Core::MainWindow;
-        MainWindow::instance().notify(tr("Failed to fetch experiement model."), NotificationWidget::Critical);
+        using namespace Core::CoreWindow;
+        CoreWindow::instance().notify(tr("Failed to fetch experiement model."), NotificationWidget::Critical);
     }
 }
 
@@ -355,11 +355,11 @@ void ExperimentWidget::on_cmbViews_currentIndexChanged(int index)
         }
 
     } catch(QString err) {
-        using namespace Core::MainWindow;
-        MainWindow::instance().notify(tr("Failed to fetch view widget: %1").arg(err), NotificationWidget::Critical);
+        using namespace Core::CoreWindow;
+        CoreWindow::instance().notify(tr("Failed to fetch view widget: %1").arg(err), NotificationWidget::Critical);
     } catch(...) {
-        using namespace Core::MainWindow;
-        MainWindow::instance().notify(tr("Failed to fetch view widget."), NotificationWidget::Critical);
+        using namespace Core::CoreWindow;
+        CoreWindow::instance().notify(tr("Failed to fetch view widget."), NotificationWidget::Critical);
     }
 }
 
@@ -372,11 +372,11 @@ void ExperimentWidget::on_btnAddModel_clicked()
         models.exec();
 
     } catch(QString err) {
-        using namespace Core::MainWindow;
-        MainWindow::instance().notify(tr("Failed to open model descriptor dialog: %1").arg(err), NotificationWidget::Critical);
+        using namespace Core::CoreWindow;
+        CoreWindow::instance().notify(tr("Failed to open model descriptor dialog: %1").arg(err), NotificationWidget::Critical);
     } catch(...) {
-        using namespace Core::MainWindow;
-        MainWindow::instance().notify(tr("Failed to open model descriptor dialog."), NotificationWidget::Critical);
+        using namespace Core::CoreWindow;
+        CoreWindow::instance().notify(tr("Failed to open model descriptor dialog."), NotificationWidget::Critical);
     }
 }
 
@@ -392,11 +392,11 @@ void ExperimentWidget::on_txtViewFilter_textChanged(const QString &text)
         }
 
     } catch(QString err) {
-        using namespace Core::MainWindow;
-        MainWindow::instance().notify(tr("Failed to change filter text: %1").arg(err), NotificationWidget::Critical);
+        using namespace Core::CoreWindow;
+        CoreWindow::instance().notify(tr("Failed to change filter text: %1").arg(err), NotificationWidget::Critical);
     } catch(...) {
-        using namespace Core::MainWindow;
-        MainWindow::instance().notify(tr("Failed to change filter text."), NotificationWidget::Critical);
+        using namespace Core::CoreWindow;
+        CoreWindow::instance().notify(tr("Failed to change filter text."), NotificationWidget::Critical);
     }
 }
 
@@ -410,11 +410,11 @@ void ExperimentWidget::on_cmbViewFilterColumn_currentIndexChanged(int index)
         }
 
     } catch(QString err) {
-        using namespace Core::MainWindow;
-        MainWindow::instance().notify(tr("Failed to change filter column: %1").arg(err), NotificationWidget::Critical);
+        using namespace Core::CoreWindow;
+        CoreWindow::instance().notify(tr("Failed to change filter column: %1").arg(err), NotificationWidget::Critical);
     } catch(...) {
-        using namespace Core::MainWindow;
-        MainWindow::instance().notify(tr("Failed to change filter column."), NotificationWidget::Critical);
+        using namespace Core::CoreWindow;
+        CoreWindow::instance().notify(tr("Failed to change filter column."), NotificationWidget::Critical);
     }
 }
 
@@ -511,11 +511,11 @@ void ExperimentWidget::on_lstSource_currentRowChanged(int row)
         ui->txtSource->setFilePath(sourceFilePath(row, false));
 
     } catch(QString err) {
-        using namespace Core::MainWindow;
-        MainWindow::instance().notify(tr("Failed to open source file: %1").arg(err), NotificationWidget::Critical);
+        using namespace Core::CoreWindow;
+        CoreWindow::instance().notify(tr("Failed to open source file: %1").arg(err), NotificationWidget::Critical);
     } catch(...) {
-        using namespace Core::MainWindow;
-        MainWindow::instance().notify(tr("Failed to open source file."), NotificationWidget::Critical);
+        using namespace Core::CoreWindow;
+        CoreWindow::instance().notify(tr("Failed to open source file."), NotificationWidget::Critical);
     }
 }
 
@@ -547,11 +547,11 @@ void ExperimentWidget::on_txtSourcePath_editingFinished()
         on_lstSource_currentRowChanged(ui->lstSource->currentRow());
 
     } catch(QString err) {
-        using namespace Core::MainWindow;
-        MainWindow::instance().notify(tr("Failed to open source path: %1").arg(err), NotificationWidget::Critical);
+        using namespace Core::CoreWindow;
+        CoreWindow::instance().notify(tr("Failed to open source path: %1").arg(err), NotificationWidget::Critical);
     } catch(...) {
-        using namespace Core::MainWindow;
-        MainWindow::instance().notify(tr("Failed to open source path."), NotificationWidget::Critical);
+        using namespace Core::CoreWindow;
+        CoreWindow::instance().notify(tr("Failed to open source path."), NotificationWidget::Critical);
     }
 }
 
@@ -574,11 +574,11 @@ void ExperimentWidget::on_btnSourcePath_clicked()
         on_txtSourcePath_editingFinished();
 
     } catch(QString err) {
-        using namespace Core::MainWindow;
-        MainWindow::instance().notify(tr("Failed to open source path from dialog: %1").arg(err), NotificationWidget::Critical);
+        using namespace Core::CoreWindow;
+        CoreWindow::instance().notify(tr("Failed to open source path from dialog: %1").arg(err), NotificationWidget::Critical);
     } catch(...) {
-        using namespace Core::MainWindow;
-        MainWindow::instance().notify(tr("Failed to open source path from dialog."), NotificationWidget::Critical);
+        using namespace Core::CoreWindow;
+        CoreWindow::instance().notify(tr("Failed to open source path from dialog."), NotificationWidget::Critical);
     }
 }
 

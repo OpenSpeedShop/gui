@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Plugins::OpenSpeedShop::AboutDialog</class>
- <widget class="QDialog" name="Plugins::OpenSpeedShop::AboutDialog">
+ <class>Plugins::OpenSpeedShop::AboutWidget</class>
+ <widget class="QDialog" name="Plugins::OpenSpeedShop::AboutWidget">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -14,7 +14,7 @@
    <string>About Open|SpeedShop</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="Resources/OpenSpeedShop.qrc">
+   <iconset>
     <normaloff>:/OpenSpeedShop/app.png</normaloff>:/OpenSpeedShop/app.png</iconset>
   </property>
   <property name="sizeGripEnabled">
@@ -41,17 +41,14 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
-        <property name="text">
-         <string/>
-        </property>
         <property name="pixmap">
-         <pixmap resource="Resources/OpenSpeedShop.qrc">:/OpenSpeedShop/logo_320.png</pixmap>
+         <pixmap>:/OpenSpeedShop/logo_320.png</pixmap>
         </property>
         <property name="scaledContents">
          <bool>false</bool>
         </property>
         <property name="alignment">
-         <set>Qt::AlignHCenter|Qt::AlignTop</set>
+         <set>Qt::AlignCenter</set>
         </property>
         <property name="margin">
          <number>5</number>
@@ -66,13 +63,8 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
-        <property name="font">
-         <font>
-          <pointsize>8</pointsize>
-         </font>
-        </property>
-        <property name="frameShape">
-         <enum>QFrame::NoFrame</enum>
+        <property name="styleSheet">
+         <string notr="true">font: 10pt;</string>
         </property>
         <property name="text">
          <string>About text goes here.</string>
@@ -87,60 +79,15 @@
          <number>5</number>
         </property>
         <property name="openExternalLinks">
-         <bool>false</bool>
+         <bool>true</bool>
         </property>
        </widget>
       </item>
      </layout>
     </widget>
    </item>
-   <item>
-    <widget class="QDialogButtonBox" name="buttonBox">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Close</set>
-     </property>
-    </widget>
-   </item>
   </layout>
  </widget>
- <resources>
-  <include location="Resources/OpenSpeedShop.qrc"/>
- </resources>
- <connections>
-  <connection>
-   <sender>buttonBox</sender>
-   <signal>accepted()</signal>
-   <receiver>Plugins::OpenSpeedShop::AboutDialog</receiver>
-   <slot>accept()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>248</x>
-     <y>254</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>157</x>
-     <y>274</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>buttonBox</sender>
-   <signal>rejected()</signal>
-   <receiver>Plugins::OpenSpeedShop::AboutDialog</receiver>
-   <slot>reject()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>316</x>
-     <y>260</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>286</x>
-     <y>274</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <resources/>
+ <connections/>
 </ui>

@@ -35,7 +35,7 @@
 
 #include "ConnectionManagerLibrary.h"
 
-namespace Core { namespace MainWindow { class NotificationWidget; } }
+namespace Core { namespace CoreWindow { class NotificationWidget; } }
 
 namespace Plugins {
 namespace OpenSpeedShop {
@@ -98,7 +98,7 @@ protected:
     IAdapter *m_CurrentAdapter;
 
     QList<ServerCommand *> m_ServerCommands;
-    Core::MainWindow::NotificationWidget *m_NotifyConnecting;
+    Core::CoreWindow::NotificationWidget *m_NotifyConnecting;
 
 protected slots:
     void pluginObjectRegistered(QObject *);

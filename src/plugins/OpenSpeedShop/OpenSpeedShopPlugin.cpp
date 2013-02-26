@@ -27,7 +27,7 @@
 
 #include "OpenSpeedShopPlugin.h"
 
-#include <MainWindow/MainWindow.h>
+#include <CoreWindow/CoreWindow.h>
 #include <PluginManager/PluginManager.h>
 #include <SettingManager/SettingManager.h>
 
@@ -37,8 +37,7 @@
 #include <Settings/SettingPage.h>
 #include <ViewManager/ViewManager.h>
 
-#include "OpenSpeedShopWidget.h"
-#include "AboutDialog.h"
+#include "MainWindow.h"
 
 #ifdef QT_DEBUG
 #  include <QtDebug>
@@ -63,16 +62,10 @@ namespace OpenSpeedShop {
 
 
 OpenSpeedShopPlugin::OpenSpeedShopPlugin() :
-    m_MainWidget(NULL),
-    m_AboutPage(this)
+    m_MainWindow(NULL)
 {
     m_Name = "OpenSpeedShop";
     m_Version = QString("%1.%2.%3").arg(VER_MAJ).arg(VER_MIN).arg(VER_PAT);
-
-    // If we're in production mode, show the splash screen!
-#ifndef QT_DEBUG
-    AboutDialog::splash();
-#endif
 }
 
 OpenSpeedShopPlugin::~OpenSpeedShopPlugin()
@@ -87,36 +80,14 @@ bool OpenSpeedShopPlugin::initialize(QStringList &args, QString *err)
 
         readSettings();
 
-        /*** We're a main plugin, so we need to make changes to the mainWindow,
-             like the application icon and the title ***/
-        MainWindow::MainWindow &mainWindow = MainWindow::MainWindow::instance();
-
-        if(!m_MainWidget) {
-            m_MainWidget = new OpenSpeedShopWidget(&mainWindow);
-        }
-
-        mainWindow.setWindowTitle(m_MainWidget->windowTitle());
-        mainWindow.setWindowIcon(m_MainWidget->windowIcon());
-
-        /*** Set our main widget in the main window ***/
-        mainWindow.addCentralWidget(m_MainWidget, 32, QString("O|SS"), m_MainWidget->windowIcon());
-
-        /*** Register our menu structure ***/
-        foreach(QAction *action, mainWindow.menuBar()->actions()) {
-            if(action->text() == tr("Help")) {
-                m_AboutPage.setText(tr("About Open|SpeedShop"));
-                m_AboutPage.setToolTip(tr("Displays the Open|SpeedShop about dialog"));
-                m_AboutPage.setIcon(QIcon(":/OpenSpeedShop/app.png"));
-                m_AboutPage.setIconVisibleInMenu(true);
-                connect(&m_AboutPage, SIGNAL(triggered()), this, SLOT(aboutDialog()));
-                action->menu()->addAction(&m_AboutPage);
-            }
+        if(!m_MainWindow) {
+            m_MainWindow = new MainWindow(this);
         }
 
         /*** Register any objects with the plugin manager ***/
         PluginManager::PluginManager &pluginManager = PluginManager::PluginManager::instance();
         pluginManager.addObject(this);                         /* Register ourselves as an ISettingPageFactory */
-        pluginManager.addObject(m_MainWidget);
+        pluginManager.addObject(m_MainWindow);
 
         // This should be fault tollerant, as it's not mandatory to function properly
         try {
@@ -163,21 +134,6 @@ void OpenSpeedShopPlugin::shutdown()
 
     writeSettings();
 }
-
-void OpenSpeedShopPlugin::aboutDialog()
-{
-    try {
-        AboutDialog about;
-        about.exec();
-    } catch(QString err) {
-        using namespace Core::MainWindow;
-        MainWindow::instance().notify(tr("Failed to open about dialog: %1").arg(err), NotificationWidget::Critical);
-    } catch(...) {
-        using namespace Core::MainWindow;
-        MainWindow::instance().notify(tr("Failed to open about dialog."), NotificationWidget::Critical);
-    }
-}
-
 
 QString OpenSpeedShopPlugin::name()
 {

@@ -1,6 +1,6 @@
 #include "ModelManager.h"
 
-#include <MainWindow/MainWindow.h>
+#include <CoreWindow/CoreWindow.h>
 #include <PluginManager/PluginManager.h>
 #include <SettingManager/SettingManager.h>
 
@@ -50,8 +50,8 @@ bool ModelManager::initialize(QStringList &args, QString *err)
         importDescriptors();
 
         /*** Register our menu structure ***/
-        MainWindow::MainWindow &mainWindow = MainWindow::MainWindow::instance();
-        foreach(QAction *action, mainWindow.menuBar()->actions()) {
+        CoreWindow::CoreWindow &coreWindow = CoreWindow::CoreWindow::instance();
+        foreach(QAction *action, coreWindow.menuBar()->actions()) {
             if(action->text() == tr("Tools")) {
                 m_ModelManagerDialog = new QAction(tr("Models Manager"), this);
                 m_ModelManagerDialog->setToolTip(tr("Displays the Open|SpeedShop model manager dialog"));
@@ -99,9 +99,9 @@ void ModelManager::shutdown()
     try {
         exportDescriptors();
     } catch(QString err) {
-        //TODO: This should probably be a popup, considering the MainWindow is shutting down.
-        using namespace Core::MainWindow;
-        MainWindow::instance().notify(err, NotificationWidget::Critical);
+        //TODO: This should probably be a popup, considering the CoreWindow is shutting down.
+        using namespace Core::CoreWindow;
+        CoreWindow::instance().notify(err, NotificationWidget::Critical);
     }
 }
 
@@ -231,11 +231,11 @@ void ModelManager::modelManagerDialog()
         models.exec();
 
     } catch(QString err) {
-        using namespace Core::MainWindow;
-        MainWindow::instance().notify(tr("Failed to open model manager dialog: %1").arg(err), NotificationWidget::Critical);
+        using namespace Core::CoreWindow;
+        CoreWindow::instance().notify(tr("Failed to open model manager dialog: %1").arg(err), NotificationWidget::Critical);
     } catch(...) {
-        using namespace Core::MainWindow;
-        MainWindow::instance().notify(tr("Failed to open model manager dialog."), NotificationWidget::Critical);
+        using namespace Core::CoreWindow;
+        CoreWindow::instance().notify(tr("Failed to open model manager dialog."), NotificationWidget::Critical);
     }
 }
 

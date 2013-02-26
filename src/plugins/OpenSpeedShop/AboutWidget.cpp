@@ -25,21 +25,20 @@
 
  */
 
-#include "AboutDialog.h"
-#include "ui_AboutDialog.h"
+#include "AboutWidget.h"
+#include "ui_AboutWidget.h"
 
 namespace Plugins {
 namespace OpenSpeedShop {
 
-/*! \class AboutDialog
-    \brief Handles the displaying of the about and splash pages for the
-           Open|SpeedShop plugin set.
+/*! \class AboutWidget
+    \brief Handles the displaying of the about page for the Open|SpeedShop plugin set.
     \sa OpenSpeedShopPlugin
  */
 
-AboutDialog::AboutDialog(QWidget *parent) :
+AboutWidget::AboutWidget(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::AboutDialog)
+    ui(new Ui::AboutWidget)
 {
     ui->setupUi(this);
 
@@ -52,25 +51,9 @@ AboutDialog::AboutDialog(QWidget *parent) :
     ui->lblAbout->setText(aboutText);
 }
 
-AboutDialog::~AboutDialog()
+AboutWidget::~AboutWidget()
 {
     delete ui;
-}
-
-void AboutDialog::splash(int ms)
-{
-    AboutDialog *aboutDialog = new AboutDialog();
-    aboutDialog->ui->buttonBox->setHidden(true);
-    aboutDialog->setAttribute(Qt::WA_DeleteOnClose);    // So we don't have to worry about deleting it
-    aboutDialog->setWindowFlags(Qt::WindowStaysOnTopHint|Qt::FramelessWindowHint);
-    aboutDialog->setModal(true);
-    aboutDialog->layout()->setMargin(0);
-
-    const QRect screen = QApplication::desktop()->screenGeometry();
-    aboutDialog->move(screen.center() - aboutDialog->rect().center());
-
-    aboutDialog->open();
-    QTimer::singleShot(ms, aboutDialog, SLOT(close()));
 }
 
 } // namespace OpenSpeedShop
