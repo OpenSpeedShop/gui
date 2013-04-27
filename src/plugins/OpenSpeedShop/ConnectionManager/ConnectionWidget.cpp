@@ -28,7 +28,6 @@
 #include "ConnectionWidget.h"
 #include "ui_ConnectionWidget.h"
 
-#include <CoreWindow/CoreWindow.h>
 #include <SettingManager/SettingManager.h>
 
 #include "ConnectionManager.h"

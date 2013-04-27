@@ -1,6 +1,6 @@
 #include "ModelManager.h"
 
-#include <CoreWindow/CoreWindow.h>
+#include <ActionManager/ActionManager.h>
 #include <PluginManager/PluginManager.h>
 #include <SettingManager/SettingManager.h>
 
@@ -43,48 +43,33 @@ bool ModelManager::initialize(QStringList &args, QString *err)
     Q_UNUSED(args)
     Q_UNUSED(err)
 
-    using namespace Core;
-
     try {
 
         importDescriptors();
 
         /*** Register our menu structure ***/
-        CoreWindow::CoreWindow &coreWindow = CoreWindow::CoreWindow::instance();
-        foreach(QAction *action, coreWindow.menuBar()->actions()) {
-            if(action->text() == tr("Tools")) {
-                m_ModelManagerDialog = new QAction(tr("Models Manager"), this);
-                m_ModelManagerDialog->setToolTip(tr("Displays the Open|SpeedShop model manager dialog"));
-                m_ModelManagerDialog->setIcon(QIcon(":/OpenSpeedShop/app.png"));
-                m_ModelManagerDialog->setIconVisibleInMenu(true);
-                m_ModelManagerDialog->setVisible(false);
-                m_ModelManagerDialog->setProperty("oss_menuitem", QVariant(1));
-                connect(m_ModelManagerDialog, SIGNAL(triggered()), this, SLOT(modelManagerDialog()));
+        using namespace Core::ActionManager;
+        ActionManager &actionManager = ActionManager::instance();
 
-                QAction *ossAction = NULL;
-                foreach(QAction *subAction, action->menu()->actions()) {
-                    if(subAction->property("oss_menuitem").isValid()) {
-                        ossAction = subAction;
-                        break;
-                    }
-                }
+        Context *context = actionManager.createContext(); //TODO: Use OpenSpeedShopWidget's context as parent
 
-                if(ossAction) {
-                    action->menu()->insertAction(ossAction, m_ModelManagerDialog);
-                } else {
-                    if(action->menu()->actions().count() > 0) {
-                        action->menu()->insertSeparator(action->menu()->actions().at(0))->setProperty("oss_menuitem", QVariant(1));
-                        action->menu()->insertAction(action->menu()->actions().at(0), m_ModelManagerDialog);
-                    } else {
-                        action->menu()->addAction(m_ModelManagerDialog);
-                        action->menu()->addSeparator()->setProperty("oss_menuitem", QVariant(1));
-                    }
-                }
+        MenuPath menuPath("Tools");
+        actionManager.createMenuPath(menuPath);
 
-            }
-        }
+        m_ModelManagerDialog = new QAction(tr("Models Manager"), this);
+        m_ModelManagerDialog->setToolTip(tr("Displays the Open|SpeedShop model manager dialog"));
+        m_ModelManagerDialog->setIcon(QIcon(":/OpenSpeedShop/app.png"));
+        m_ModelManagerDialog->setIconVisibleInMenu(true);
+        m_ModelManagerDialog->setVisible(false);
+        m_ModelManagerDialog->setProperty("oss_menuitem", QVariant(1));
+        connect(m_ModelManagerDialog, SIGNAL(triggered()), this, SLOT(modelManagerDialog()));
 
-        PluginManager::PluginManager &pluginManager = PluginManager::PluginManager::instance();
+        actionManager.registerAction(context, menuPath, m_ModelManagerDialog);
+
+
+
+        using namespace Core::PluginManager;
+        PluginManager &pluginManager = PluginManager::instance();
         pluginManager.addObject(this);
 
     } catch(...) {
@@ -99,9 +84,9 @@ void ModelManager::shutdown()
     try {
         exportDescriptors();
     } catch(QString err) {
-        //TODO: This should probably be a popup, considering the CoreWindow is shutting down.
-        using namespace Core::CoreWindow;
-        CoreWindow::instance().notify(err, NotificationWidget::Critical);
+        qCritical() << tr("Error occured while shutting down ModelManager: %1").arg(err);
+    } catch(...) {
+        qCritical() << tr("Error occured while shutting down ModelManager");
     }
 }
 
@@ -231,11 +216,9 @@ void ModelManager::modelManagerDialog()
         models.exec();
 
     } catch(QString err) {
-        using namespace Core::CoreWindow;
-        CoreWindow::instance().notify(tr("Failed to open model manager dialog: %1").arg(err), NotificationWidget::Critical);
+        qCritical() << tr("Failed to open model manager dialog: %1").arg(err);
     } catch(...) {
-        using namespace Core::CoreWindow;
-        CoreWindow::instance().notify(tr("Failed to open model manager dialog."), NotificationWidget::Critical);
+        qCritical() << tr("Failed to open model manager dialog.");
     }
 }
 

@@ -32,7 +32,7 @@
 #include "ServerConnectionPage.h"
 
 #ifdef SERVERCONNECTION_DEBUG
-#  include <QtDebug>
+#  include <QDebug>
 #endif
 
 using namespace Plugins::OpenSpeedShop;

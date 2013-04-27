@@ -28,7 +28,7 @@
 #include "DataModel.h"
 
 #ifdef DATAMODEL_DEBUG
-#  include <QtDebug>
+#  include <QDebug>
 #endif
 
 namespace Plugins {

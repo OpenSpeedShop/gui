@@ -28,30 +28,31 @@ isEmpty(OPENSS_PATH) {
 } else {
 
   CONFIG(debug, debug|release) {
-    TARGET           = DirectConnectionD
+    TARGET    = DirectConnectionD
   } else {
-    TARGET           = DirectConnection
+    TARGET    = DirectConnection
   }
 
-  SOURCES           += DirectConnectionPlugin.cpp \
-                       DirectConnection.cpp \
-                       DirectConnectionPage.cpp
+  SOURCES    += DirectConnectionPlugin.cpp \
+                DirectConnection.cpp \
+                DirectConnectionPage.cpp
 
-  HEADERS           += DirectConnectionPlugin.h \
-                       DirectConnection.h \
-                       DirectConnectionPage.h
+  HEADERS    += DirectConnectionPlugin.h \
+                DirectConnection.h \
+                DirectConnectionPage.h
 
-  FORMS             += DirectConnectionPage.ui
+  FORMS      += DirectConnectionPage.ui
 
-  RESOURCES         +=
+  RESOURCES  +=
 
-  QT                += network xml
+  QT         += network xml
 
-  LIBS        += -L$$quote($${BUILD_PATH}/plugins/OpenSpeedShop/$${DIR_POSTFIX}) -lOpenSpeedShop$${LIB_POSTFIX}
+  LIBS       += -L$$quote($${BUILD_PATH}/plugins/OpenSpeedShop/$${DIR_POSTFIX}) -lOpenSpeedShop$${LIB_POSTFIX}
 
   #debug: DEFINES += DIRECTCONNECTION_DEBUG
 
   #directConnectionHeaders.path = /include/plugins/DirectConnection
   #directConnectionHeaders.files = DirectConnectionLibrary.h DirectConnection.h
-   #INSTALLS += directConnectionHeaders
+  #INSTALLS += directConnectionHeaders
+
 }

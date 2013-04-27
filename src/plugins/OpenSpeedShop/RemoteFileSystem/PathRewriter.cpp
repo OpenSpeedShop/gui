@@ -27,12 +27,10 @@
 
 #include "PathRewriter.h"
 
-#include <CoreWindow/CoreWindow.h>
 #include <PluginManager/PluginManager.h>
 
-#ifdef QT_DEBUG
-# include <QtDebug>
-#endif
+#include <QDesktopServices>
+#include <QDebug>
 
 PathRewriter &PathRewriter::instance()
 {
@@ -63,11 +61,9 @@ bool PathRewriter::initialize(QStringList &args, QString *err)
         pluginManager.addObject(this);
 
     } catch(QString err) {
-        using namespace Core::CoreWindow;
-        CoreWindow::instance().notify(tr("Could not initialize remote file path rewriter: %1").arg(err), NotificationWidget::Critical);
+        qCritical() << tr("Could not initialize remote file path rewriter: %1").arg(err);
     } catch(...) {
-        using namespace Core::CoreWindow;
-        CoreWindow::instance().notify(tr("Could not initialize remote file path rewriter."), NotificationWidget::Critical);
+        qCritical() << tr("Could not initialize remote file path rewriter.");
     }
 
     return true;
@@ -80,11 +76,9 @@ void PathRewriter::shutdown()
         storePathCache();
 
     } catch(QString err) {
-        using namespace Core::CoreWindow;
-        CoreWindow::instance().notify(tr("Could not shut down remote file path rewriter: %1").arg(err), NotificationWidget::Critical);
+        qCritical() << tr("Could not shut down remote file path rewriter: %1").arg(err);
     } catch(...) {
-        using namespace Core::CoreWindow;
-        CoreWindow::instance().notify(tr("Could not shut down remote file path rewriter."), NotificationWidget::Critical);
+        qCritical() << tr("Could not shut down remote file path rewriter.");
     }
 }
 

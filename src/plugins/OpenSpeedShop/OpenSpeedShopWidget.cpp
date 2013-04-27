@@ -1,7 +1,9 @@
 #include "OpenSpeedShopWidget.h"
 #include "ui_OpenSpeedShopWidget.h"
 
-#include <CoreWindow/CoreWindow.h>
+#include <QDebug>
+
+#include <ActionManager/ActionManager.h>
 
 #include <Experiment/ExperimentWidget.h>
 
@@ -25,59 +27,37 @@ OpenSpeedShopWidget::OpenSpeedShopWidget(QWidget *parent) :
     setWindowTitle(QString("Open|SpeedShop%1").arg(QChar(0x2122))); //Trademark
     setWindowIcon(QIcon(":/OpenSpeedShop/app.png"));
 
-    Core::CoreWindow::CoreWindow &coreWindow = Core::CoreWindow::CoreWindow::instance();
-    foreach(QAction *action, coreWindow.menuBar()->actions()) {
-        if(action->text() == tr("File")) {
+    using namespace Core::ActionManager;
+    ActionManager &actionManager = ActionManager::instance();
 
-            m_CreateExperiment = new QAction(tr("New O|SS Experiment"), this);
-            m_CreateExperiment->setToolTip(tr("Create a new Open|SpeedShop experiment"));
-            m_CreateExperiment->setIcon(QIcon(":/OpenSpeedShop/app.png"));
-            m_CreateExperiment->setIconVisibleInMenu(true);
-            m_CreateExperiment->setVisible(false);
-            m_CreateExperiment->setProperty("oss_menuitem", QVariant(1));
-            connect(m_CreateExperiment, SIGNAL(triggered()), this, SLOT(createExperiment()));
+    m_Context = actionManager.createContext();
 
-            //FIXME: When we're set up to create, enable this
-            m_CreateExperiment->setEnabled(false);
+    MenuPath menuPath("File");
+    actionManager.createMenuPath(menuPath);
 
-            m_LoadExperiment = new QAction(tr("Load O|SS Experiment"), this);
-            m_LoadExperiment->setToolTip(tr("Load an Open|SpeedShop experiment"));
-            m_LoadExperiment->setIcon(QIcon(":/OpenSpeedShop/app.png"));
-            m_LoadExperiment->setIconVisibleInMenu(true);
-            m_LoadExperiment->setVisible(false);
-            m_LoadExperiment->setProperty("oss_menuitem", QVariant(1));
-            connect(m_LoadExperiment, SIGNAL(triggered()), this, SLOT(loadExperiment()));
+    m_CreateExperiment = new QAction(tr("New O|SS Experiment"), this);
+    m_CreateExperiment->setToolTip(tr("Create a new Open|SpeedShop experiment"));
+    m_CreateExperiment->setIcon(QIcon(":/OpenSpeedShop/app.png"));
+    m_CreateExperiment->setIconVisibleInMenu(true);
+    m_CreateExperiment->setEnabled(false);      //FIXME: When we're set up to create, enable this
+    connect(m_CreateExperiment, SIGNAL(triggered()), this, SLOT(createExperiment()));
 
-            m_CloseExperiment = new QAction(tr("Close O|SS Experiment"), this);
-            m_CloseExperiment->setToolTip(tr("Close the current Open|SpeedShop experiment"));
-            m_CloseExperiment->setIcon(QIcon(":/OpenSpeedShop/app.png"));
-            m_CloseExperiment->setIconVisibleInMenu(true);
-            m_CloseExperiment->setEnabled(false);
-            m_CloseExperiment->setVisible(false);
-            m_CloseExperiment->setProperty("oss_menuitem", QVariant(1));
-            connect(m_CloseExperiment, SIGNAL(triggered()), this, SLOT(closeExperiment()));
+    m_LoadExperiment = new QAction(tr("Load O|SS Experiment"), this);
+    m_LoadExperiment->setToolTip(tr("Load an Open|SpeedShop experiment"));
+    m_LoadExperiment->setIcon(QIcon(":/OpenSpeedShop/app.png"));
+    m_LoadExperiment->setIconVisibleInMenu(true);
+    connect(m_LoadExperiment, SIGNAL(triggered()), this, SLOT(loadExperiment()));
 
-            //! \todo We really need to rely on the ActionManager to do this.
-            QAction *before = NULL;
-            foreach(QAction *item, action->menu()->actions()) {
-                if(item->priority() == QAction::LowPriority) {
-                    before = item;
-                }
-            }
+    m_CloseExperiment = new QAction(tr("Close O|SS Experiment"), this);
+    m_CloseExperiment->setToolTip(tr("Close the current Open|SpeedShop experiment"));
+    m_CloseExperiment->setIcon(QIcon(":/OpenSpeedShop/app.png"));
+    m_CloseExperiment->setIconVisibleInMenu(true);
+    m_CloseExperiment->setEnabled(false);
+    connect(m_CloseExperiment, SIGNAL(triggered()), this, SLOT(closeExperiment()));
 
-            if(before) {
-                action->menu()->insertAction(before, m_CreateExperiment);
-                action->menu()->insertAction(before, m_LoadExperiment);
-                action->menu()->insertAction(before, m_CloseExperiment);
-                action->menu()->insertSeparator(before)->setProperty("oss_menuitem", QVariant(1));
-            } else {
-                action->menu()->addAction(m_CreateExperiment);
-                action->menu()->addAction(m_LoadExperiment);
-                action->menu()->addAction(m_CloseExperiment);
-                action->menu()->addSeparator()->setProperty("oss_menuitem", QVariant(1));
-            }
-        }
-    }
+    actionManager.registerAction(m_Context, menuPath, m_CreateExperiment);
+    actionManager.registerAction(m_Context, menuPath, m_LoadExperiment);
+    actionManager.registerAction(m_Context, menuPath, m_CloseExperiment);
 }
 
 OpenSpeedShopWidget::~OpenSpeedShopWidget()
@@ -89,8 +69,8 @@ void OpenSpeedShopWidget::createExperiment()
 {
     try {
 
-        Core::CoreWindow::CoreWindow &coreWindow = Core::CoreWindow::CoreWindow::instance();
-        coreWindow.setCurrentCentralWidget(this);
+        emit active();
+        m_Context->setVisible(true);
 
         ExperimentWidget *experimentWidget = new ExperimentWidget(this);
         experimentWidget->create();
@@ -100,11 +80,9 @@ void OpenSpeedShopWidget::createExperiment()
         connect(experimentWidget, SIGNAL(windowTitleChanged()), this, SLOT(tabTitleChanged()));
 
     } catch(QString err) {
-        using namespace Core::CoreWindow;
-        CoreWindow::instance().notify(tr("Failed to create experiment: %1").arg(err), NotificationWidget::Critical);
+        qCritical() << tr("Failed to create experiment: %1").arg(err);
     } catch(...) {
-        using namespace Core::CoreWindow;
-        CoreWindow::instance().notify(tr("Failed to create experiment."), NotificationWidget::Critical);
+        qCritical() << tr("Failed to create experiment.");
     }
 }
 
@@ -112,8 +90,8 @@ void OpenSpeedShopWidget::loadExperiment()
 {
     try {
 
-        Core::CoreWindow::CoreWindow &coreWindow = Core::CoreWindow::CoreWindow::instance();
-        coreWindow.setCurrentCentralWidget(this);
+        emit active();
+        m_Context->setVisible(true);
 
         ExperimentWidget *experimentWidget = new ExperimentWidget(this);
         experimentWidget->load();
@@ -123,11 +101,9 @@ void OpenSpeedShopWidget::loadExperiment()
         connect(experimentWidget, SIGNAL(windowTitleChanged()), this, SLOT(tabTitleChanged()));
 
     } catch(QString err) {
-        using namespace Core::CoreWindow;
-        CoreWindow::instance().notify(tr("Failed to load experiment: %1").arg(err), NotificationWidget::Critical);
+        qCritical() << tr("Failed to load experiment: %1").arg(err);
     } catch(...) {
-        using namespace Core::CoreWindow;
-        CoreWindow::instance().notify(tr("Failed to load experiment."), NotificationWidget::Critical);
+        qCritical() << tr("Failed to load experiment.");
     }
 }
 
@@ -146,11 +122,9 @@ void OpenSpeedShopWidget::closeExperiment(int index)
         }
 
     } catch(QString err) {
-        using namespace Core::CoreWindow;
-        CoreWindow::instance().notify(tr("Failed to close experiment: %1").arg(err), NotificationWidget::Critical);
+        qCritical() << tr("Failed to close experiment: %1").arg(err);
     } catch(...) {
-        using namespace Core::CoreWindow;
-        CoreWindow::instance().notify(tr("Failed to close experiment."), NotificationWidget::Critical);
+        qCritical() << tr("Failed to close experiment: %1");
     }
 }
 
@@ -192,6 +166,8 @@ void OpenSpeedShopWidget::tabRemoved(int index)
     }
 
     m_CloseExperiment->setEnabled(count());
+
+    QTabWidget::tabRemoved(index);
 }
 
 void OpenSpeedShopWidget::tabTitleChanged()
@@ -204,11 +180,9 @@ void OpenSpeedShopWidget::tabTitleChanged()
         }
 
     } catch(QString err) {
-        using namespace Core::CoreWindow;
-        CoreWindow::instance().notify(tr("Failed to change tab name: %1").arg(err), NotificationWidget::Critical);
+        qCritical() << tr("Failed to change tab name: %1").arg(err);
     } catch(...) {
-        using namespace Core::CoreWindow;
-        CoreWindow::instance().notify(tr("Failed to change tab name."), NotificationWidget::Critical);
+        qCritical() << tr("Failed to change tab name: %1");
     }
 }
 
@@ -216,24 +190,19 @@ void OpenSpeedShopWidget::showEvent(QShowEvent *event)
 {
     Q_UNUSED(event)
 
-    Core::CoreWindow::CoreWindow &coreWindow = Core::CoreWindow::CoreWindow::instance();
-    foreach(QAction *action, coreWindow.allActions()) {
-        if(action->property("oss_menuitem").isValid()) {
-            action->setVisible(true);
-        }
-    }
+    emit active();
+    m_Context->setVisible(true);
+
+    QTabWidget::showEvent(event);
 }
 
 void OpenSpeedShopWidget::hideEvent(QHideEvent *event)
 {
     Q_UNUSED(event)
 
-    Core::CoreWindow::CoreWindow &coreWindow = Core::CoreWindow::CoreWindow::instance();
-    foreach(QAction *action, coreWindow.allActions()) {
-        if(action->property("oss_menuitem").isValid()) {
-            action->setVisible(false);
-        }
-    }
+    m_Context->setVisible(false);
+
+    QTabWidget::hideEvent(event);
 }
 
 

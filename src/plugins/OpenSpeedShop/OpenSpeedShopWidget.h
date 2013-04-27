@@ -6,6 +6,9 @@
 
 #include "OpenSpeedShopLibrary.h"
 
+
+namespace Core { namespace ActionManager { class Context; } }
+
 namespace Plugins {
 namespace OpenSpeedShop {
 
@@ -20,6 +23,9 @@ class OPENSPEEDSHOP_EXPORT OpenSpeedShopWidget : public QTabWidget
 public:
     explicit OpenSpeedShopWidget(QWidget *parent = 0);
     ~OpenSpeedShopWidget();
+
+signals:
+    void active();
 
 public slots:
     void createExperiment();
@@ -43,6 +49,8 @@ protected slots:
 private:
     Ui::OpenSpeedShopWidget *ui;
     QString m_StyleSheet;
+
+    Core::ActionManager::Context *m_Context;
 
 };
 

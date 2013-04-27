@@ -16,6 +16,7 @@ QWidget *MainWindow::mainWindowWidget()
 {
     if(!m_Widget) {
         m_Widget = new OpenSpeedShopWidget();
+        connect(m_Widget, SIGNAL(active()), this, SLOT(widgetActivated()));
     }
     return m_Widget;
 }
@@ -39,6 +40,13 @@ QWidget *MainWindow::createAboutWidget()
 {
     return new AboutWidget();
 }
+
+
+void MainWindow::widgetActivated()
+{
+    emit active();
+}
+
 
 } // namespace OpenSpeedShop
 } // namespace Plugins

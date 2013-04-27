@@ -2,15 +2,12 @@
 #include "ui_ModelManagerDialog.h"
 
 #include <SettingManager/SettingManager.h>
-#include <CoreWindow/CoreWindow.h>
 
 #include "ModelManager.h"
 #include "ModelDescriptorWidget.h"
 #include "ModelDescriptorListWidget.h"
 
-#ifdef QT_DEBUG
-#  include <QDebug>
-#endif
+#include <QDebug>
 
 namespace Plugins {
 namespace OpenSpeedShop {
@@ -72,11 +69,9 @@ void ModelManagerDialog::currentSelectionChanged(const QUuid &current)
             ui->descriptorParent->layout()->addWidget(descriptor);
             ui->descriptorParent->layout()->setMargin(0);
         } catch(QString err) {
-            using namespace Core::CoreWindow;
-            CoreWindow::instance().notify(tr("Failed to open model descriptor: %1").arg(err), NotificationWidget::Critical);
+            qCritical() << tr("Failed to open model descriptor: %1").arg(err);
         } catch(...) {
-            using namespace Core::CoreWindow;
-            CoreWindow::instance().notify(tr("Failed to open model descriptor."), NotificationWidget::Critical);
+            qCritical() << tr("Failed to open model descriptor.");
         }
     }
 }

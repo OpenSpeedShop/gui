@@ -28,7 +28,7 @@
 #ifndef VIEWMANAGERLIBRARY_H
 #define VIEWMANAGERLIBRARY_H
 
-#include <QtCore/QtGlobal>
+#include <Global.h>
 
 #if defined(VIEWMANAGER_LIBRARY)
 #  define VIEWMANAGER_EXPORT Q_DECL_EXPORT

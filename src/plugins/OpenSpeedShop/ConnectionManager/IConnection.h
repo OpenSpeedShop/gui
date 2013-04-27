@@ -80,10 +80,6 @@ signals:
 //! We do this so that we can use the pointer in a QVariant
 Q_DECLARE_METATYPE(Plugins::OpenSpeedShop::IConnection *)
 
-#ifndef STRINGIFY
-#define STRINGIFY(X) # X
-#endif
-
 #define ICONNECTION_VERSION "org.openspeedshop.gui.IConnection/" STRINGIFY(VER_MAJ) "." STRINGIFY(VER_MIN)
 Q_DECLARE_INTERFACE(Plugins::OpenSpeedShop::IConnection, ICONNECTION_VERSION)
 

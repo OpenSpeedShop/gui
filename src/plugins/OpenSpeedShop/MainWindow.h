@@ -23,6 +23,9 @@ public:
 
     QWidget *createAboutWidget();
 
+protected slots:
+    void widgetActivated();
+
 private:
     OpenSpeedShopWidget *m_Widget;
 };

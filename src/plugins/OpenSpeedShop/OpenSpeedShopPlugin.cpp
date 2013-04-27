@@ -27,7 +27,6 @@
 
 #include "OpenSpeedShopPlugin.h"
 
-#include <CoreWindow/CoreWindow.h>
 #include <PluginManager/PluginManager.h>
 #include <SettingManager/SettingManager.h>
 
@@ -40,7 +39,7 @@
 #include "MainWindow.h"
 
 #ifdef QT_DEBUG
-#  include <QtDebug>
+#  include <QDebug>
 #endif
 
 namespace Plugins {
@@ -88,8 +87,9 @@ bool OpenSpeedShopPlugin::initialize(QStringList &args, QString *err)
         PluginManager::PluginManager &pluginManager = PluginManager::PluginManager::instance();
         pluginManager.addObject(this);                         /* Register ourselves as an ISettingPageFactory */
         pluginManager.addObject(m_MainWindow);
+        pluginManager.addObject(m_MainWindow->mainWindowWidget());
 
-        // This should be fault tollerant, as it's not mandatory to function properly
+        // This should be fault tolerant, as it's not mandatory to function properly
         try {
             m_WelcomeData.initialize();
             pluginManager.addObject(&m_WelcomeData);

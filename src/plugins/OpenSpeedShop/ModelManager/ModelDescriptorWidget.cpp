@@ -1,14 +1,8 @@
 #include "ModelDescriptorWidget.h"
 #include "ui_ModelDescriptorWidget.h"
 
-#include <CoreWindow/CoreWindow.h>
-
 #include <ConnectionManager/ConnectionManager.h>
 #include <ConnectionManager/IAdapter.h>
-
-#ifdef QT_DEBUG
-#  include <QDebug>
-#endif
 
 namespace Plugins {
 namespace OpenSpeedShop {
