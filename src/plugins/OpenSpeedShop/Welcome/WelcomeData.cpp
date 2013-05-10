@@ -44,7 +44,7 @@ WelcomeData::WelcomeData(QObject *parent) :
 
 bool WelcomeData::initialize()
 {
-#ifdef WIN32
+#ifdef Q_OS_WIN
     QFileInfo fileInfo(QString("%1/oss/WelcomeData.xml").arg(QApplication::instance()->applicationDirPath()));
 #else
     QFileInfo fileInfo(QString("%1/../share/openspeedshop/gui/WelcomeData.xml").arg(QApplication::instance()->applicationDirPath()));

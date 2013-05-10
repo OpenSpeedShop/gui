@@ -101,7 +101,7 @@ void ModelManager::importDescriptors(const QString &filepath)
         Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
 
         //FIXME: This should not be hard coded here
-#ifdef WIN32
+#ifdef Q_OS_WIN
         filePath = QString("%1/oss/ModelDescriptors.xml").arg(QApplication::instance()->applicationDirPath());
 #else
         filePath = QString("%1/../share/openspeedshop/gui/ModelDescriptors.xml").arg(QApplication::instance()->applicationDirPath());
@@ -244,7 +244,7 @@ void ModelManager::exportDescriptors(const QString &filepath)
         Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
 
         //FIXME: This should not be hard coded here
-#ifdef WIN32
+#ifdef Q_OS_WIN
         filePath = QString("%1/oss/ModelDescriptors.xml").arg(QApplication::instance()->applicationDirPath());
 #else
         filePath = QString("%1/../share/openspeedshop/gui/ModelDescriptors.xml").arg(QApplication::instance()->applicationDirPath());

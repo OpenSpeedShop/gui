@@ -773,7 +773,7 @@ void DirectAdapter::loadMetrics()
     m_MetricsList = QDomDocument("Modifiers");
 
     //FIXME: This should not be hard coded here
-#ifdef WIN32
+#ifdef Q_OS_WIN
     QFile file(QString("%1/oss/ExperimentTypes.xml").arg(QApplication::instance()->applicationDirPath()));
 #else
     QFile file(QString("%1/../share/openspeedshop/gui/ExperimentTypes.xml").arg(QApplication::instance()->applicationDirPath()));
