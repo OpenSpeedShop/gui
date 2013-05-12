@@ -49,7 +49,6 @@ public:
 } // namespace OpenSpeedShop
 } // namespace Plugins
 
-#define IVIEWFILTERABLE_VERSION "org.openspeedshop.gui.IViewFilterable/" STRINGIFY(VER_MAJ) "." STRINGIFY(VER_MIN)
-Q_DECLARE_INTERFACE(Plugins::OpenSpeedShop::IViewFilterable, IVIEWFILTERABLE_VERSION)
+Q_DECLARE_INTERFACE(Plugins::OpenSpeedShop::IViewFilterable, "org.openspeedshop.gui.IViewFilterable")
 
 #endif // IVIEWFILTERABLE_H
