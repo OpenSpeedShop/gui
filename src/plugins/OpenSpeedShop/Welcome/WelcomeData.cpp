@@ -27,6 +27,8 @@
 
 #include "WelcomeData.h"
 
+#include <QDebug>
+
 #include <PluginManager/PluginManager.h>
 
 #include "OpenSpeedShopWidget.h"
@@ -65,13 +67,13 @@ bool WelcomeData::initialize()
     QFile file(filePath);
     if (!file.open(QIODevice::ReadOnly)) {
         QString error = tr("Could not open welcome data file: %1").arg(filePath);
-        qWarning(error.toLatin1());
+        qWarning() << error;
         throw error;
     }
     if (!m_WelcomeData.setContent(&file)) {
         file.close();
         QString error = tr("Could not use welcome data file after opening, possibly invalid text: %1").arg(filePath);
-        qWarning(error.toLatin1());
+        qWarning() << error;
         throw error;
     }
     file.close();

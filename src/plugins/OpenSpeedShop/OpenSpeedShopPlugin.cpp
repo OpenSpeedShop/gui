@@ -27,6 +27,8 @@
 
 #include "OpenSpeedShopPlugin.h"
 
+#include <QDebug>
+
 #include <PluginManager/PluginManager.h>
 #include <SettingManager/SettingManager.h>
 
@@ -38,9 +40,6 @@
 
 #include "MainWindow.h"
 
-#ifdef QT_DEBUG
-#  include <QDebug>
-#endif
 
 namespace Plugins {
 namespace OpenSpeedShop {
