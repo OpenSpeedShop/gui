@@ -40,6 +40,11 @@ namespace DirectConnection {
 class DirectConnectionPlugin : public QObject, public Core::PluginManager::IPlugin
 {
     Q_OBJECT
+
+#if QT_VERSION >= 0x050000
+    Q_PLUGIN_METADATA("org.krellinst.oss.DirectConnectionPlugin")
+#endif
+
     Q_INTERFACES(Core::PluginManager::IPlugin)
 
 public:

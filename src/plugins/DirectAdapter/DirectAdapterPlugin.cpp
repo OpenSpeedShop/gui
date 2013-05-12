@@ -97,4 +97,6 @@ QList<Core::PluginManager::Dependency> DirectAdapterPlugin::dependencies()
 } // namespace DirectAdapter
 } // namespace Plugins
 
+#if QT_VERSION < 0x050000
 Q_EXPORT_PLUGIN(Plugins::DirectAdapter::DirectAdapterPlugin)
+#endif

@@ -40,6 +40,11 @@ namespace ServerConnection {
 class ServerConnectionPlugin : public QObject, public Core::PluginManager::IPlugin
 {
     Q_OBJECT
+
+#if QT_VERSION >= 0x050000
+    Q_PLUGIN_METADATA("org.krellinst.oss.ServerConnectionPlugin")
+#endif
+
     Q_INTERFACES(Core::PluginManager::IPlugin)
 
 public:
@@ -54,9 +59,8 @@ public:
     QList<Core::PluginManager::Dependency> dependencies();
 
 protected:
-
-    void readSettings();
-    void writeSettings();
+//    void readSettings();
+//    void writeSettings();
 
 private:
     QString m_Name;

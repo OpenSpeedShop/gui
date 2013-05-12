@@ -43,6 +43,11 @@ class LineGraphViewPlugin :
 {
 
     Q_OBJECT
+
+#if QT_VERSION >= 0x050000
+    Q_PLUGIN_METADATA("org.krellinst.oss.LineGraphViewPlugin")
+#endif
+
     Q_INTERFACES(Core::PluginManager::IPlugin)
     Q_INTERFACES(Plugins::OpenSpeedShop::IViewFactory)
 

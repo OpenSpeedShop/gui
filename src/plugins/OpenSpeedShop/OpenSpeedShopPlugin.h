@@ -46,6 +46,11 @@ class OpenSpeedShopPlugin :
         public Core::SettingManager::ISettingPageFactory
 {
     Q_OBJECT
+
+#if QT_VERSION >= 0x050000
+    Q_PLUGIN_METADATA("org.krellinst.oss.OpenSpeedShopPlugin")
+#endif
+
     Q_INTERFACES(Core::PluginManager::IPlugin)
     Q_INTERFACES(Core::SettingManager::ISettingPageFactory)
 

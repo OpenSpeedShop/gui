@@ -122,4 +122,6 @@ QAbstractItemView *TreeViewPlugin::viewWidget(QAbstractItemModel *model)
 } // namespace TreeView
 } // namespace Plugins
 
+#if QT_VERSION < 0x050000
 Q_EXPORT_PLUGIN(Plugins::TreeView::TreeViewPlugin)
+#endif

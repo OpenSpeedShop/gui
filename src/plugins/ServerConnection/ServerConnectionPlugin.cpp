@@ -100,4 +100,6 @@ QList<Core::PluginManager::Dependency> ServerConnectionPlugin::dependencies()
 } // namespace ServerConnection
 } // namespace Plugins
 
+#if QT_VERSION < 0x050000
 Q_EXPORT_PLUGIN(Plugins::ServerConnection::ServerConnectionPlugin)
+#endif

@@ -195,5 +195,6 @@ Core::SettingManager::ISettingPage *OpenSpeedShopPlugin::createSettingPage()
 } // namespace OpenSpeedShop
 } // namespace Plugins
 
+#if QT_VERSION < 0x050000
 Q_EXPORT_PLUGIN(Plugins::OpenSpeedShop::OpenSpeedShopPlugin)
-
+#endif
