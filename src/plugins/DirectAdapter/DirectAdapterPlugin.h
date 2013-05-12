@@ -41,7 +41,7 @@ class DirectAdapterPlugin : public QObject, public Core::PluginManager::IPlugin 
 Q_OBJECT
 
 #if QT_VERSION >= 0x050000
-    Q_PLUGIN_METADATA("org.krellinst.oss.DirectAdapterPlugin")
+    Q_PLUGIN_METADATA(IID "org.krellinst.oss.DirectAdapterPlugin")
 #endif
 
 Q_INTERFACES(Core::PluginManager::IPlugin)

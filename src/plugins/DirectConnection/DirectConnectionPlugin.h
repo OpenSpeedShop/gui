@@ -42,7 +42,7 @@ class DirectConnectionPlugin : public QObject, public Core::PluginManager::IPlug
     Q_OBJECT
 
 #if QT_VERSION >= 0x050000
-    Q_PLUGIN_METADATA("org.krellinst.oss.DirectConnectionPlugin")
+    Q_PLUGIN_METADATA(IID "org.krellinst.oss.DirectConnectionPlugin")
 #endif
 
     Q_INTERFACES(Core::PluginManager::IPlugin)

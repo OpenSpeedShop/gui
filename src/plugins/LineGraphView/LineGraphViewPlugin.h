@@ -45,7 +45,7 @@ class LineGraphViewPlugin :
     Q_OBJECT
 
 #if QT_VERSION >= 0x050000
-    Q_PLUGIN_METADATA("org.krellinst.oss.LineGraphViewPlugin")
+    Q_PLUGIN_METADATA(IID "org.krellinst.oss.LineGraphViewPlugin")
 #endif
 
     Q_INTERFACES(Core::PluginManager::IPlugin)
