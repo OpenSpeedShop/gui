@@ -98,14 +98,15 @@ bool ConnectionManager::initialize(QStringList &args, QString *err)
         actionManager.registerAction(context, menuPath, m_ServerConnect);
 
 
-        //TODO: Add support to either WindowManager or NotificationManager
-//        if(!m_lblConnectionStatus) {
-//            m_lblConnectionStatus = new QLabel();
-//            m_lblConnectionStatus->setFixedSize(16,16);
-//            m_lblConnectionStatus->setPixmap(QPixmap(":/OpenSpeedShop/ConnectionManager/disconnected.svg"));
-//            m_lblConnectionStatus->setToolTip(tr("Disconnected"));
+        if(!m_lblConnectionStatus) {
+            m_lblConnectionStatus = new QLabel();
+            m_lblConnectionStatus->setFixedSize(16,16);
+            m_lblConnectionStatus->setPixmap(QPixmap(":/OpenSpeedShop/ConnectionManager/disconnected.svg"));
+            m_lblConnectionStatus->setToolTip(tr("Disconnected"));
+
+            //! \todo Add support to either WindowManager or NotificationManager
 //            coreWindow.statusBar()->addWidget(m_lblConnectionStatus);
-//        }
+        }
 
         readSettings();
 
@@ -428,6 +429,10 @@ bool ConnectionManager::sendCommand(ServerCommand *command)
 
 bool ConnectionManager::isConnected()
 {
+    if(!currentConnection()) {
+        return false;
+    }
+
     return currentConnection()->state() == IConnection::State_Connected;
 }
 

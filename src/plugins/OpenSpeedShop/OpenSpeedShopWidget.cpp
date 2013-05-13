@@ -116,7 +116,7 @@ void OpenSpeedShopWidget::closeExperiment(int index)
         }
 
         QWidget *widget = this->widget(index);
-        if(widget->close()) {
+        if(widget && widget->close()) {
             removeTab(index);
             widget->deleteLater();
         }
