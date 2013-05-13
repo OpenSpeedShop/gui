@@ -24,13 +24,16 @@ OPENSS_PRI_INCLUDED = 1
 !win32 {
   isEmpty(OPENSS_PATH) {
     warning()
-    warning("The OPENSS_PATH variable must be set to the location of the Open|SpeedShop framework in order to build the direct connection plugin.  See <https://www.openspeedshop.org/> for more information on downloading and building the Open|SpeedShop framework.")
+    warning("The OPENSS_PATH variable must be set to the location of the Open|SpeedShop framework in order to "
+            "build the direct connection plugin.  See <https://www.openspeedshop.org/> for more information on "
+            "downloading and building the Open|SpeedShop framework.")
     warning()
 
   } else {
     !exists($$quote($${OPENSS_PATH}/include/openspeedshop/Direct.h)) {
       warning()
-      warning("The plugin depends on headers from the Open|SpeedShop tool framework.  However, the path passed to qmake through 'OPENSS_PATH=$$OPENSS_PATH', doesn't contain the expected source files.")
+      warning("The plugin depends on headers from the Open|SpeedShop tool framework.  However, the path passed "
+              "to qmake through 'OPENSS_PATH=$$OPENSS_PATH', doesn't contain the expected source files.")
       error("Source files at $$quote($${OPENSS_PATH}/include/) were not found.")
     }
 
