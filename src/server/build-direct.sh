@@ -5,10 +5,10 @@ VER_MAJ="0"
 VER_MIN="1"
 
 OPENSS_SRC="/home/dane/src/OpenSpeedShop"
-OPENSS_PREFIX="/opt/openss"
+OPENSS_PREFIX="/opt/OSS"
 OPENSS_LIB="${OPENSS_PREFIX}/lib64"
 
-PYTHON_VER="2.6"
+PYTHON_VER="2.7"
 PYTHON_PATH="/usr/include/python${PYTHON_VER}"
 
 SOURCES="Direct OpenSpeedShopCLI"
@@ -23,7 +23,7 @@ rm -f *.so* *.o
 
 # Compile the sources
 for SOURCE in ${SOURCES}; do
-  COMMAND="g++ -c -g3 -fexceptions -fPIC -Wall ${INCLUDES} ${SOURCE}.cpp"
+  COMMAND="g++ -c -g3 -fpermissive -fexceptions -fPIC -Wall ${INCLUDES} ${SOURCE}.cpp"
   echo -e "\n$COMMAND"
   ${COMMAND}  2>&1 | egrep -v "^${OPENSS_SRC}"
 done
