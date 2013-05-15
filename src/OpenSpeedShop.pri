@@ -61,7 +61,7 @@ DEFINES     += 'VER_MAJ=$${VER_MAJ}' 'VER_MIN=$${VER_MIN}' 'VER_PAT=$${VER_PAT}'
 isEmpty(SOURCE_PATH): SOURCE_PATH = $$quote($${PWD})
 
 !isEmpty(BUILDDIR): BUILD_PATH = $${BUILDDIR}
-isEmpty(BUILD_PATH): BUILD_PATH = $$quote($${PWD})
+isEmpty(BUILD_PATH): BUILD_PATH = $$quote($$replace(OUT_PWD,$$replace(_PRO_FILE_PWD_,$${PWD},),))
 
 #########################
 # DEBUG/RELEASE DIR_POSTFIX #
