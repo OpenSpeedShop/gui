@@ -28,8 +28,8 @@
 #ifndef CONNECTIONMANAGER_H
 #define CONNECTIONMANAGER_H
 
-#include <QtCore>
-#include <QtGui>
+class QAction;
+class QLabel;
 
 #include <SettingManager/ISettingPageFactory.h>
 

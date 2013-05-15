@@ -28,8 +28,9 @@
 #ifndef DATAMODEL_H
 #define DATAMODEL_H
 
-#include <QtCore>
-#include <QtXml>
+#include <QAbstractItemModel>
+#include <QDomDocument>
+#include <QUuid>
 
 #include "ModelManagerLibrary.h"
 

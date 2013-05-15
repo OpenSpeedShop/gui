@@ -1,9 +1,10 @@
 #ifndef EXPERIMENTWIDGET_H
 #define EXPERIMENTWIDGET_H
 
-#include <QtCore>
-#include <QtGui>
-#include <QtXml>
+#include <QWidget>
+#include <QModelIndex>
+#include <QUuid>
+class QAbstractItemView;
 
 namespace Plugins {
 namespace OpenSpeedShop {

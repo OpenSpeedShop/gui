@@ -28,9 +28,6 @@
 #ifndef DIRECTCONNECTIONPAGE_H
 #define DIRECTCONNECTIONPAGE_H
 
-#include <QtCore>
-#include <QtGui>
-
 #include <OpenSpeedShop/ConnectionManager/IConnectionPage.h>
 
 namespace Plugins {

@@ -28,9 +28,6 @@
 #ifndef SERVERCONNECTIONPAGE_H
 #define SERVERCONNECTIONPAGE_H
 
-#include <QtCore>
-#include <QtGui>
-
 #include <OpenSpeedShop/ConnectionManager/IConnectionPage.h>
 
 namespace Plugins {

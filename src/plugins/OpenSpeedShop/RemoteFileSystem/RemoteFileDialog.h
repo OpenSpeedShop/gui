@@ -28,9 +28,8 @@
 #ifndef REMOTEFILEDIALOG_H
 #define REMOTEFILEDIALOG_H
 
-#include <QtCore>
-#include <QtGui>
-#include <QtXml>
+#include <QDialog>
+#include <QModelIndex>
 
 namespace Plugins {
 namespace OpenSpeedShop {

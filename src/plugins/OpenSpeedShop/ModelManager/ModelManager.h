@@ -1,9 +1,12 @@
 #ifndef MODELMANAGER_H
 #define MODELMANAGER_H
 
-#include <QtCore>
-#include <QtGui>
-#include <QtXml>
+#include <QObject>
+#include <QUuid>
+#include <QMimeData>
+#include <QHash>
+#include <QStandardItemModel>
+class QAction;
 
 #include "ModelManagerLibrary.h"
 

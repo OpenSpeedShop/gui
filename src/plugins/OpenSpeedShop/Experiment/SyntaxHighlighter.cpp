@@ -27,6 +27,8 @@
 
 #include "SyntaxHighlighter.h"
 
+#include <QTextEdit>
+
 SyntaxHighlighter::SyntaxHighlighter(QObject *parent) :
     QSyntaxHighlighter(parent)
 {

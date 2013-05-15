@@ -27,6 +27,8 @@
 
 #include "ViewManager.h"
 
+#include <QAbstractItemView>
+
 #include <PluginManager/PluginManager.h>
 
 #include "IViewFactory.h"

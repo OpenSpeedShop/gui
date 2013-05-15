@@ -28,8 +28,7 @@
 #ifndef PLUGINS_OPENSPEEDSHOP_ABOUTWIDGET_H
 #define PLUGINS_OPENSPEEDSHOP_ABOUTWIDGET_H
 
-#include <QtCore>
-#include <QtGui>
+#include <QDialog>
 
 namespace Plugins {
 namespace OpenSpeedShop {

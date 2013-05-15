@@ -1,12 +1,13 @@
 #include "ServerAdapter.h"
 
+#include <QApplication>
+#include <QFile>
+#include <QTimer>
+#include <QDebug>
+
 #include <OpenSpeedShop/ConnectionManager/ConnectionManager.h>
 #include <OpenSpeedShop/ConnectionManager/ServerCommand.h>
 #include <OpenSpeedShop/ModelManager/DataModel.h>
-
-#ifdef SERVERADAPTER_DEBUG
-#  include <QDebug>
-#endif
 
 using namespace Plugins::OpenSpeedShop;
 

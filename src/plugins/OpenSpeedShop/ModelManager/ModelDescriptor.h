@@ -1,8 +1,10 @@
 #ifndef MODELDESCRIPTOR_H
 #define MODELDESCRIPTOR_H
 
-#include <QtCore>
-#include <QtXml>
+#include <QObject>
+#include <QUuid>
+#include <QDomDocument>
+#include <QStringList>
 
 #include "ModelManagerLibrary.h"
 

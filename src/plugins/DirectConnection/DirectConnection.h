@@ -28,9 +28,6 @@
 #ifndef DIRECTCONNECTION_H
 #define DIRECTCONNECTION_H
 
-#include <QtCore>
-#include <QtNetwork>
-
 #include <OpenSpeedShop/ConnectionManager/IConnection.h>
 
 #include <openspeedshop/Direct.h>

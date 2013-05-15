@@ -28,9 +28,6 @@
 #ifndef CONNECTIONWIDGET_H
 #define CONNECTIONWIDGET_H
 
-#include <QtCore>
-#include <QtGui>
-
 #include <SettingManager/ISettingPage.h>
 
 namespace Plugins {

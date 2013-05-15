@@ -1,5 +1,7 @@
 #include "ModelDescriptorListWidget.h"
 
+#include <QSortFilterProxyModel>
+
 #include "ModelDescriptor.h"
 
 namespace Plugins {

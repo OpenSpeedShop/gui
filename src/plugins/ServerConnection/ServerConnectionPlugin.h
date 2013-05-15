@@ -28,8 +28,6 @@
 #ifndef SERVERCONNECTIONPLUGIN_H
 #define SERVERCONNECTIONPLUGIN_H
 
-#include <QtCore>
-
 #include <PluginManager/IPlugin.h>
 
 #include "ServerConnection.h"

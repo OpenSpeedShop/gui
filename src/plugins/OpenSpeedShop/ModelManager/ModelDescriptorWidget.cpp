@@ -1,6 +1,9 @@
 #include "ModelDescriptorWidget.h"
 #include "ui_ModelDescriptorWidget.h"
 
+#include <QAbstractButton>
+#include <QMessageBox>
+
 #include <ConnectionManager/ConnectionManager.h>
 #include <ConnectionManager/IAdapter.h>
 

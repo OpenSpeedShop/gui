@@ -27,6 +27,10 @@
 
 #include "SourceView.h"
 
+#include <QPainter>
+#include <QIcon>
+#include <QToolTip>
+
 namespace Plugins {
 namespace OpenSpeedShop {
 

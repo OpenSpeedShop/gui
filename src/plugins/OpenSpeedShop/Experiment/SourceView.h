@@ -28,8 +28,8 @@
 #ifndef SOURCEVIEW_H
 #define SOURCEVIEW_H
 
-#include <QtCore>
-#include <QtGui>
+#include <QPlainTextEdit>
+#include <QModelIndex>
 
 #include "SyntaxHighlighter.h"
 

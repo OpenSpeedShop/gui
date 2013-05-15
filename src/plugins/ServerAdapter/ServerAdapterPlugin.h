@@ -28,7 +28,7 @@
 #ifndef SERVERADAPTERPLUGIN_H
 #define SERVERADAPTERPLUGIN_H
 
-#include <QtCore>
+
 
 #include <PluginManager/IPlugin.h>
 

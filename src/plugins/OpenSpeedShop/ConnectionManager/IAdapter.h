@@ -28,7 +28,11 @@
 #ifndef IADAPTER_H
 #define IADAPTER_H
 
-#include <QtCore>
+#include <QObject>
+#include <QUuid>
+#include <QMap>
+#include <QVariant>
+class QAbstractItemModel;
 
 #include "ConnectionManagerLibrary.h"
 

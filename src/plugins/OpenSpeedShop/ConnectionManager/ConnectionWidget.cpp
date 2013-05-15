@@ -28,6 +28,8 @@
 #include "ConnectionWidget.h"
 #include "ui_ConnectionWidget.h"
 
+#include <QMessageBox>
+
 #include <SettingManager/SettingManager.h>
 
 #include "ConnectionManager.h"

@@ -28,8 +28,8 @@
 #ifndef TREEVIEWM_H
 #define TREEVIEWM_H
 
-#include <QtCore>
-#include <QtGui>
+#include <QTreeView>
+#include <QSortFilterProxyModel>
 
 #include <OpenSpeedShop/ViewManager/IViewFilterable.h>
 

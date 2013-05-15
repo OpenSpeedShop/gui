@@ -28,9 +28,6 @@
 #ifndef OSSSETTINGPAGE_H
 #define OSSSETTINGPAGE_H
 
-#include <QtCore>
-#include <QtGui>
-
 #include <SettingManager/ISettingPage.h>
 
 namespace Plugins {

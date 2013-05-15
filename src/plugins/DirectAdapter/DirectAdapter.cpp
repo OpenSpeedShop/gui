@@ -1,12 +1,14 @@
 #include "DirectAdapter.h"
 
+#include <QApplication>
+#include <QFile>
+#include <QDir>
+#include <QTimer>
+#include <QDebug>
+
 #include <OpenSpeedShop/ConnectionManager/ConnectionManager.h>
 #include <OpenSpeedShop/ConnectionManager/ServerCommand.h>
 #include <OpenSpeedShop/ModelManager/DataModel.h>
-
-#ifdef DIRECTADAPTER_DEBUG
-#  include <QDebug>
-#endif
 
 using namespace Plugins::OpenSpeedShop;
 

@@ -1,8 +1,9 @@
 #ifndef MODELDESCRIPTORLISTWIDGET_H
 #define MODELDESCRIPTORLISTWIDGET_H
 
-#include <QtCore>
-#include <QtGui>
+#include <QTreeView>
+#include <QUuid>
+class QSortFilterProxyModel;
 
 #include "ModelManagerLibrary.h"
 

@@ -1,5 +1,8 @@
 #include "ModelDescriptor.h"
 
+#include <QFile>
+#include <QFileInfo>
+
 #include <SettingManager/SettingManager.h>
 
 namespace Plugins {

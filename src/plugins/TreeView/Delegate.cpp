@@ -27,6 +27,9 @@
 
 #include "Delegate.h"
 
+#include <QApplication>
+#include <QHelpEvent>
+
 namespace Plugins {
 namespace TreeView {
 

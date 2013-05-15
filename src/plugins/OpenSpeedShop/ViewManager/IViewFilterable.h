@@ -28,9 +28,7 @@
 #ifndef IVIEWFILTERABLE_H
 #define IVIEWFILTERABLE_H
 
-
-#include <QtCore>
-#include <QtPlugin>
+#include <QObject>
 
 #include "ViewManagerLibrary.h"
 

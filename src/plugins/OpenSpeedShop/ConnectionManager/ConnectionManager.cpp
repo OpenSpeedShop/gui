@@ -27,6 +27,11 @@
 
 #include "ConnectionManager.h"
 
+#include <QLabel>
+#include <QApplication>
+#include <QDebug>
+#include <QMessageBox>
+
 #include <NotificationManager/NotificationManager.h>
 #include <NotificationManager/NotificationWidget.h>
 #include <ActionManager/ActionManager.h>
@@ -37,10 +42,6 @@
 #include "ServerCommand.h"
 #include "ConnectionWidget.h"
 #include "IAdapter.h"
-
-#ifdef CONNECTIONMANAGER_DEBUG
-#  include <QDebug>
-#endif
 
 namespace Plugins {
 namespace OpenSpeedShop {

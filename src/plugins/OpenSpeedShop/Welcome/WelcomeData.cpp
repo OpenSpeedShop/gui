@@ -27,6 +27,9 @@
 
 #include "WelcomeData.h"
 
+#include <QApplication>
+#include <QFile>
+#include <QFileInfo>
 #include <QDebug>
 
 #include <PluginManager/PluginManager.h>

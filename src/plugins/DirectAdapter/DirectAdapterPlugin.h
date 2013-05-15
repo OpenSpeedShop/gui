@@ -28,8 +28,6 @@
 #ifndef DIRECTADAPTERPLUGIN_H
 #define DIRECTADAPTERPLUGIN_H
 
-#include <QtCore>
-
 #include <PluginManager/IPlugin.h>
 
 #include "DirectAdapter.h"

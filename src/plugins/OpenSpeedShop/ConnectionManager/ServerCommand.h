@@ -1,8 +1,9 @@
 #ifndef SERVERCOMMAND_H
 #define SERVERCOMMAND_H
 
-#include <QtCore>
-#include <QtXml>
+#include <QObject>
+#include <QDomDocument>
+#include <QUuid>
 
 #include "ConnectionManagerLibrary.h"
 

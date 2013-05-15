@@ -28,8 +28,9 @@
 #ifndef IVIEWPLUGIN_H
 #define IVIEWPLUGIN_H
 
-#include <QtCore>
-#include <QtGui>
+#include <QObject>
+class QAbstractItemModel;
+class QAbstractItemView;
 
 #include "ViewManagerLibrary.h"
 

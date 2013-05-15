@@ -28,8 +28,7 @@
 #ifndef ICONNECTIONPAGE_H
 #define ICONNECTIONPAGE_H
 
-#include <QtCore>
-#include <QtGui>
+#include <QWidget>
 
 #include "ConnectionManagerLibrary.h"
 

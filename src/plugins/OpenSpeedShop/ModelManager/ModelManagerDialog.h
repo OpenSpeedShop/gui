@@ -1,8 +1,8 @@
 #ifndef MODELMANAGERDIALOG_H
 #define MODELMANAGERDIALOG_H
 
-#include <QtCore>
-#include <QtGui>
+#include <QDialog>
+#include <QUuid>
 
 namespace Plugins {
 namespace OpenSpeedShop {

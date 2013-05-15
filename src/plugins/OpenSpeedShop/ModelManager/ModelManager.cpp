@@ -1,5 +1,10 @@
 #include "ModelManager.h"
 
+#include <QDebug>
+#include <QApplication>
+#include <QFile>
+#include <QFileInfo>
+
 #include <ActionManager/ActionManager.h>
 #include <PluginManager/PluginManager.h>
 #include <SettingManager/SettingManager.h>
@@ -12,10 +17,6 @@
 #include "ModelDescriptor.h"
 #include "ModelDescriptorWidget.h"
 #include "ModelDescriptorListWidget.h"
-
-#ifdef MODELMANAGER_DEBUG
-#  include <QDebug>
-#endif
 
 namespace Plugins {
 namespace OpenSpeedShop {

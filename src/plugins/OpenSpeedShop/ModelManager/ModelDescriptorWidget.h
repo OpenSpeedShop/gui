@@ -1,9 +1,8 @@
 #ifndef MODELDESCRIPTORWIDGET_H
 #define MODELDESCRIPTORWIDGET_H
 
-#include <QtCore>
-#include <QtGui>
-#include <QtXml>
+#include <QWidget>
+class QAbstractButton;
 
 #include "ModelDescriptor.h"
 

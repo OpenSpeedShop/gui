@@ -28,8 +28,8 @@
 #ifndef WELCOMEDATA_H
 #define WELCOMEDATA_H
 
-#include <QtCore>
-#include <QtXml>
+#include <QDomElement>
+#include <QDomDocument>
 
 #include <Welcome/IWelcomeData.h>
 

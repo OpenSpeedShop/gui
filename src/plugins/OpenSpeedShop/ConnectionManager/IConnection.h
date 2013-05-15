@@ -28,8 +28,8 @@
 #ifndef ICONNECTION_H
 #define ICONNECTION_H
 
-#include <QtCore>
-#include <QtGui>
+#include <QObject>
+#include <QVariant>
 
 #include "ConnectionManagerLibrary.h"
 

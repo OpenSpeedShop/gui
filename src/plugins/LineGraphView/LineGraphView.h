@@ -28,7 +28,6 @@
 #ifndef LINEGRAPHVIEWM_H
 #define LINEGRAPHVIEWM_H
 
-#include <QtCore>
 #include <LineGraph/LineGraphView.h>
 
 namespace Plugins {

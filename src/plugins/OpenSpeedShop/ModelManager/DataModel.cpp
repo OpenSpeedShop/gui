@@ -27,9 +27,8 @@
 
 #include "DataModel.h"
 
-#ifdef DATAMODEL_DEBUG
-#  include <QDebug>
-#endif
+#include <QStringList>
+#include <QDebug>
 
 namespace Plugins {
 namespace OpenSpeedShop {
@@ -153,7 +152,14 @@ DataModel::Cell *DataModel::processCell(QDomElement cellElement, Cell *parent)
     cell->data["type"] = QVariant(cellElement.tagName());
 
     QDomNamedNodeMap attributes = cellElement.attributes();
-    for(uint i=0; i < attributes.length(); i++) {
+
+#if QT_VERSION >= 0x050000
+    int i = 0;
+#else
+    uint i = 0;
+#endif
+
+    for(i=0; i < attributes.length(); i++) {
         QDomAttr cellAttr = attributes.item(i).toAttr();
         if(!cellAttr.isNull()) {
             QString attrName = cellAttr.name();

@@ -28,8 +28,7 @@
 #ifndef SERVERCONNECTION_H
 #define SERVERCONNECTION_H
 
-#include <QtCore>
-#include <QtNetwork>
+#include <QTcpSocket>
 
 #include <OpenSpeedShop/ConnectionManager/IConnection.h>
 

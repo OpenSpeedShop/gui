@@ -28,7 +28,7 @@
 #ifndef MODELMANAGERLIBRARY_H
 #define MODELMANAGERLIBRARY_H
 
-#include <QtCore/QtGlobal>
+#include <Global.h>
 
 #if defined(MODELMANAGER_LIBRARY)
 #  define MODELMANAGER_EXPORT Q_DECL_EXPORT

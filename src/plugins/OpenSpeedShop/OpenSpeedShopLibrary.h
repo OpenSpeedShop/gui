@@ -1,7 +1,7 @@
 #ifndef OPENSPEEDSHOPLIBRARY_H
 #define OPENSPEEDSHOPLIBRARY_H
 
-#include <QtCore/QtGlobal>
+#include <Global.h>
 
 #if defined(OPENSPEEDSHOP_LIBRARY)
 #  define OPENSPEEDSHOP_EXPORT Q_DECL_EXPORT

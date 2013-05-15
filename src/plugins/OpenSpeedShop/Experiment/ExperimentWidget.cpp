@@ -1,6 +1,9 @@
 #include "ExperimentWidget.h"
 #include "ui_ExperimentWidget.h"
 
+#include <QMenu>
+#include <QMessageBox>
+
 #include <ConnectionManager/ConnectionManager.h>
 #include <ConnectionManager/IAdapter.h>
 #include <SettingManager/SettingManager.h>

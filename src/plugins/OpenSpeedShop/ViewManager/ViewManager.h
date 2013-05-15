@@ -28,8 +28,10 @@
 #ifndef VIEWMANAGER_H
 #define VIEWMANAGER_H
 
-#include <QtCore>
-#include <QtGui>
+#include <QObject>
+#include <QMap>
+class QAbstractItemView;
+class QAbstractItemModel;
 
 #include "ViewManagerLibrary.h"
 

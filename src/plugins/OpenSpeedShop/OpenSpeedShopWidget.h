@@ -1,11 +1,9 @@
 #ifndef OPENSPEEDSHOPWIDGET_H
 #define OPENSPEEDSHOPWIDGET_H
 
-#include <QtCore>
-#include <QtGui>
+#include <QTabWidget>
 
 #include "OpenSpeedShopLibrary.h"
-
 
 namespace Core { namespace ActionManager { class Context; } }
 

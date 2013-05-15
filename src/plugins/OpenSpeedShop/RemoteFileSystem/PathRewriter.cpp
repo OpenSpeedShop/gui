@@ -29,7 +29,17 @@
 
 #include <PluginManager/PluginManager.h>
 
-#include <QDesktopServices>
+#if QT_VERSION >= 0x050000
+#  include <QStandardPaths>
+#else
+#  include <QDesktopServices>
+#endif
+
+#include <QDir>
+#include <QFile>
+#include <QFileInfo>
+#include <QDomDocument>
+#include <QIcon>
 #include <QDebug>
 
 PathRewriter &PathRewriter::instance()
@@ -84,7 +94,12 @@ void PathRewriter::shutdown()
 
 void PathRewriter::restorePathCache()
 {
+#if QT_VERSION >= 0x050000
+    QString filePath = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+#else
     QString filePath = QDesktopServices::storageLocation(QDesktopServices::DataLocation);
+#endif
+
     filePath.append("/PathCache.xml");
 
     QFile file(filePath);
@@ -123,7 +138,12 @@ void PathRewriter::restorePathCache()
 
 void PathRewriter::storePathCache()
 {
+#if QT_VERSION >= 0x050000
+    QDir dataLocation(QStandardPaths::writableLocation(QStandardPaths::DataLocation));
+#else
     QDir dataLocation(QDesktopServices::storageLocation(QDesktopServices::DataLocation));
+#endif
+
 
     if(!dataLocation.exists()) {
         if(!dataLocation.mkpath(dataLocation.path())) {
@@ -151,7 +171,7 @@ void PathRewriter::storePathCache()
         throw tr("Could not open path cache file: %1").arg(file.fileName());
     }
 
-    QByteArray buffer = document.toString(-1).toAscii();
+    QByteArray buffer = document.toString(-1).toLocal8Bit();
     qint64 written = file.write(buffer);
     if(written != buffer.count()) {
         file.close();
