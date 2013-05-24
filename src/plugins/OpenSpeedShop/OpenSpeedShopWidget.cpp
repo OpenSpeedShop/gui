@@ -58,6 +58,8 @@ OpenSpeedShopWidget::OpenSpeedShopWidget(QWidget *parent) :
     actionManager.registerAction(m_Context, menuPath, m_CreateExperiment);
     actionManager.registerAction(m_Context, menuPath, m_LoadExperiment);
     actionManager.registerAction(m_Context, menuPath, m_CloseExperiment);
+
+    connect(this, SIGNAL(active()), m_Context, SLOT(show()));
 }
 
 OpenSpeedShopWidget::~OpenSpeedShopWidget()
@@ -70,7 +72,6 @@ void OpenSpeedShopWidget::createExperiment()
     try {
 
         emit active();
-        m_Context->setVisible(true);
 
         ExperimentWidget *experimentWidget = new ExperimentWidget(this);
         experimentWidget->create();
@@ -88,23 +89,30 @@ void OpenSpeedShopWidget::createExperiment()
 
 void OpenSpeedShopWidget::loadExperiment()
 {
+    ExperimentWidget *experimentWidget = NULL;
+
     try {
 
         emit active();
-        m_Context->setVisible(true);
 
-        ExperimentWidget *experimentWidget = new ExperimentWidget(this);
-        experimentWidget->load();
-        int index = addTab(experimentWidget, experimentWidget->windowTitle());
-        setCurrentIndex(index);
+        experimentWidget = new ExperimentWidget(this);
+        if(experimentWidget->load()) {
+            int index = addTab(experimentWidget, experimentWidget->windowTitle());
+            setCurrentIndex(index);
 
-        connect(experimentWidget, SIGNAL(windowTitleChanged()), this, SLOT(tabTitleChanged()));
+            connect(experimentWidget, SIGNAL(windowTitleChanged()), this, SLOT(tabTitleChanged()));
+            return;
+        }
 
     } catch(QString err) {
         qCritical() << tr("Failed to load experiment: %1").arg(err);
     } catch(...) {
         qCritical() << tr("Failed to load experiment.");
     }
+
+    // User canceled, or critical error, delete it!
+    experimentWidget->setParent(NULL);
+    experimentWidget->deleteLater();
 }
 
 void OpenSpeedShopWidget::closeExperiment(int index)
@@ -191,7 +199,6 @@ void OpenSpeedShopWidget::showEvent(QShowEvent *event)
     Q_UNUSED(event)
 
     emit active();
-    m_Context->setVisible(true);
 
     QTabWidget::showEvent(event);
 }

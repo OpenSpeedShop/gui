@@ -98,7 +98,7 @@ void ExperimentWidget::create()
 {
 }
 
-void ExperimentWidget::load()
+bool ExperimentWidget::load()
 {
 
     //! \todo Fix this cludge code to work with new additions, without having to synchronize manually
@@ -132,7 +132,8 @@ void ExperimentWidget::load()
     dlg.setPath(filePath);
     dlg.setFilter("*.openss");
     if(!dlg.exec()) {
-        throw tr("Could not load experiment: canceled by user.");
+        return false;
+//        throw tr("Could not load experiment: canceled by user.");
     }
 
     filePath = dlg.selectedFilePath();
@@ -171,6 +172,8 @@ void ExperimentWidget::load()
 
     /* Load the source paths into the source path list */
     refreshSourcePaths();
+
+    return true;
 }
 
 void ExperimentWidget::refreshSourcePaths()
@@ -313,7 +316,7 @@ void ExperimentWidget::getModel(QUuid descriptorUid)
 
         /* Reset the view list */
         ui->cmbViews->clear();
-        ui->cmbViews->addItems(ViewManager::instance().viewNames(m_CurrentModel));
+        ui->cmbViews->addItems(Core::ViewManager::ViewManager::instance().viewNames(m_CurrentModel));
         ui->cmbViews->setCurrentIndex(ui->cmbViews->count() - 1);
 
         /* Let the source view know about the change */
@@ -339,12 +342,12 @@ void ExperimentWidget::on_cmbViews_currentIndexChanged(int index)
         }
 
         if(!ui->cmbViews->currentText().isEmpty()) {
-            m_CurrentView = ViewManager::instance().viewWidget(ui->cmbViews->currentText(), m_CurrentModel);
+            m_CurrentView = Core::ViewManager::ViewManager::instance().viewWidget(ui->cmbViews->currentText(), m_CurrentModel);
             ui->grpView->layout()->addWidget(m_CurrentView);
 
             connect(m_CurrentView, SIGNAL(activated(QModelIndex)), this, SLOT(viewItemActivated(QModelIndex)));
 
-            IViewFilterable *viewFilterable = qobject_cast<IViewFilterable *>(m_CurrentView);
+            Core::ViewManager::IViewFilterable *viewFilterable = qobject_cast<Core::ViewManager::IViewFilterable *>(m_CurrentView);
             if(viewFilterable) {
                 ui->grpViewFilter->show();
             } else {
@@ -380,7 +383,7 @@ void ExperimentWidget::on_txtViewFilter_textChanged(const QString &text)
 
     try {
 
-        IViewFilterable *viewFilterable = qobject_cast<IViewFilterable *>(m_CurrentView);
+        Core::ViewManager::IViewFilterable *viewFilterable = qobject_cast<Core::ViewManager::IViewFilterable *>(m_CurrentView);
         if(viewFilterable) {
             viewFilterable->setViewFilter(ui->txtViewFilter->text());
         }
@@ -396,7 +399,7 @@ void ExperimentWidget::on_cmbViewFilterColumn_currentIndexChanged(int index)
 {
     try {
 
-        IViewFilterable *viewFilterable = qobject_cast<IViewFilterable *>(m_CurrentView);
+        Core::ViewManager::IViewFilterable *viewFilterable = qobject_cast<Core::ViewManager::IViewFilterable *>(m_CurrentView);
         if(viewFilterable) {
             viewFilterable->setViewFilterColumn(index);
         }

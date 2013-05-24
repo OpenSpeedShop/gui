@@ -31,17 +31,17 @@
 #include <QTreeView>
 #include <QSortFilterProxyModel>
 
-#include <OpenSpeedShop/ViewManager/IViewFilterable.h>
+#include <ViewManager/IViewFilterable.h>
 
 #include "Delegate.h"
 
 namespace Plugins {
 namespace TreeView {
 
-class TreeView : public QTreeView, public Plugins::OpenSpeedShop::IViewFilterable
+class TreeView : public QTreeView, public Core::ViewManager::IViewFilterable
 {
     Q_OBJECT
-    Q_INTERFACES(Plugins::OpenSpeedShop::IViewFilterable)
+    Q_INTERFACES(Core::ViewManager::IViewFilterable)
 
 public:
     explicit TreeView(QWidget *parent = 0);

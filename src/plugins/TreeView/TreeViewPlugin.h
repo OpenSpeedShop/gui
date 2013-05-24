@@ -29,7 +29,7 @@
 #define TREEVIEWPLUGIN_H
 
 #include <PluginManager/IPlugin.h>
-#include <OpenSpeedShop/ViewManager/IViewFactory.h>
+#include <ViewManager/IViewFactory.h>
 
 namespace Plugins {
 namespace TreeView {
@@ -37,7 +37,7 @@ namespace TreeView {
 class TreeViewPlugin :
         public QObject,
         public Core::PluginManager::IPlugin,
-        public Plugins::OpenSpeedShop::IViewFactory
+        public Core::ViewManager::IViewFactory
 {
 
     Q_OBJECT
@@ -47,7 +47,7 @@ class TreeViewPlugin :
 #endif
 
     Q_INTERFACES(Core::PluginManager::IPlugin)
-    Q_INTERFACES(Plugins::OpenSpeedShop::IViewFactory)
+    Q_INTERFACES(Core::ViewManager::IViewFactory)
 
 public:
     TreeViewPlugin(QObject *parent = 0);

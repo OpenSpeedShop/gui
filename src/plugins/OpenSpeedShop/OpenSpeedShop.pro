@@ -41,16 +41,13 @@ SOURCES      += OpenSpeedShopPlugin.cpp \
                 ModelManager/ModelDescriptorListWidget.cpp \
                 ConnectionManager/IAdapter.cpp \
                 ConnectionManager/IConnectionPage.cpp \
-                ViewManager/ViewManager.cpp \
-                ViewManager/IViewFilterable.cpp \
-                ViewManager/IViewFactory.cpp \
                 RemoteFileSystem/RemoteFileDialog.cpp \
                 Experiment/SourceView.cpp \
                 Experiment/SyntaxHighlighter.cpp \
                 RemoteFileSystem/PathRewriter.cpp \
                 Welcome/WelcomeData.cpp \
-    AboutWidget.cpp \
-    MainWindow.cpp
+                AboutWidget.cpp \
+                MainWindow.cpp
 
 HEADERS      += OpenSpeedShopPlugin.h \
                 Settings/SettingPage.h \
@@ -70,18 +67,14 @@ HEADERS      += OpenSpeedShopPlugin.h \
                 ModelManager/ModelDescriptorListWidget.h \
                 ConnectionManager/IAdapter.h \
                 ConnectionManager/IConnectionPage.h \
-                ViewManager/ViewManager.h \
-                ViewManager/ViewManagerLibrary.h \
-                ViewManager/IViewFilterable.h \
                 ModelManager/ModelManagerLibrary.h \
-                ViewManager/IViewFactory.h \
                 RemoteFileSystem/RemoteFileDialog.h \
                 Experiment/SourceView.h \
                 Experiment/SyntaxHighlighter.h \
                 Welcome/WelcomeData.h \
                 RemoteFileSystem/PathRewriter.h \
-    AboutWidget.h \
-    MainWindow.h
+                AboutWidget.h \
+                MainWindow.h
 
 FORMS        += Settings/SettingPage.ui \
                 Experiment/ExperimentWidget.ui \
@@ -142,11 +135,3 @@ modelManagerHeaders.files = ModelManager/ModelManagerLibrary.h \
                             ModelManager/ModelDescriptorWidget.h \
                             ModelManager/ModelDescriptorListWidget.h
 INSTALLS += modelManagerHeaders
-
-
-viewManagerHeaders.path = /include/plugins/OpenSpeedShop/ViewManager
-viewManagerHeaders.files = ViewManager/ViewManagerLibrary.h \
-                           ViewManager/ViewManager.h \
-                           ViewManager/IViewFactory.h \
-                           ViewManager/IViewFilterable.h \
-INSTALLS += viewManagerHeaders

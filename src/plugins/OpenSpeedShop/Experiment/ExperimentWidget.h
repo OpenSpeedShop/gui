@@ -21,7 +21,7 @@ public:
 
 
     void create();
-    void load();
+    bool load();
 
 signals:
     void windowTitleChanged();
