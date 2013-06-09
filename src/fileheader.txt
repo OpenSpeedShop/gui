@@ -1,11 +1,10 @@
 /*!
-   \file 
+   \file %FILENAME%
    \author Dane Gardner <dane.gardner@gmail.com>
-   \version 
 
    \section LICENSE
    This file is part of the Open|SpeedShop Graphical User Interface
-   Copyright (C) 2010-2013 Argo Navis Technologies, LLC
+   Copyright (C) 2010-%YEAR% Argo Navis Technologies, LLC
 
    This library is free software; you can redistribute it and/or modify it
    under the terms of the GNU Lesser General Public License as published by the
@@ -20,7 +19,4 @@
    You should have received a copy of the GNU Lesser General Public License
    along with this library; if not, write to the Free Software Foundation,
    Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
-
-   \section DESCRIPTION
-
  */
