@@ -17,27 +17,26 @@
 
 include(../plugins.pri)
 CONFIG(debug, debug|release) {
-  TARGET           = TreeViewD
+  TARGET           = OSSViewD
 } else {
-  TARGET           = TreeView
+  TARGET           = OSSView
 }
 
-SOURCES           += TreeViewPlugin.cpp \
-                     TreeView.cpp \
-                     Delegate.cpp
+SOURCES           += OSSViewPlugin.cpp \
+    OSSDelegate.cpp
 
-HEADERS           += TreeViewPlugin.h \
-                     TreeView.h \
-                     Delegate.h
+HEADERS           += OSSViewPlugin.h \
+    OSSDelegate.h
 
 FORMS             +=
 RESOURCES         +=
 QT                +=
 
 LIBS        += -L$$quote($${BUILD_PATH}/plugins/OpenSpeedShop/$${DIR_POSTFIX}) -lOpenSpeedShop$${LIB_POSTFIX}
+LIBS        += -lTableView$${LIB_POSTFIX}
 
-#debug: DEFINES += TREEVIEW_DEBUG
+#debug: DEFINES += OSSVIEW_DEBUG
 
-#treeViewHeaders.path = /include/plugins/TreeView
-#treeViewHeaders.files = TreeViewLibrary.h TreeView.h Delegate.h
-#INSTALLS += treeViewHeaders
+#ossViewHeaders.path = /include/plugins/OSSView
+#ossViewHeaders.files = OSSViewLibrary.h OSSView.h Delegate.h
+#INSTALLS += ossViewHeaders

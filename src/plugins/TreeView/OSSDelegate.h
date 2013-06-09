@@ -25,46 +25,31 @@
 
  */
 
-#ifndef TREEVIEWM_H
-#define TREEVIEWM_H
+#ifndef DELEGATE_H
+#define DELEGATE_H
 
-#include <QTreeView>
-#include <QSortFilterProxyModel>
+#include <QSet>
 
-#include <ViewManager/IViewFilterable.h>
-
-#include "Delegate.h"
+#include <TableView/Delegate.h>
 
 namespace Plugins {
-namespace TreeView {
+namespace OSSView {
 
-class TreeView : public QTreeView, public Core::ViewManager::IViewFilterable
+class OSSDelegate : public Plugins::TableView::Delegate
 {
     Q_OBJECT
-    Q_INTERFACES(Core::ViewManager::IViewFilterable)
-
 public:
-    explicit TreeView(QWidget *parent = 0);
-    ~TreeView();
+    explicit OSSDelegate(QObject *parent = 0);
 
-    QAbstractItemModel *model() const;
-    void setModel(QAbstractItemModel *model);
+    virtual void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    virtual QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
-    QString viewFilter() const;
-    void setViewFilter(const QString &regex);
-    int viewFilterColumn() const;
-    void setViewFilterColumn(int column = 0);
-
-protected slots:
-    void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
-
-protected:
-    Delegate m_ItemDelegate;
-    QSortFilterProxyModel m_ProxyModel;
+public slots:
+    virtual bool helpEvent(QHelpEvent *event, QAbstractItemView *view, const QStyleOptionViewItem &option, const QModelIndex &index);
 
 };
 
-} // namespace TreeView
+} // namespace OSSView
 } // namespace Plugins
 
-#endif // TREEVIEWM_H
+#endif // DELEGATE_H

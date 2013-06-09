@@ -1,5 +1,5 @@
 /*!
-   \file TreeViewPlugin.h
+   \file OSSViewPlugin.h
    \author Dane Gardner <dane.gardner@gmail.com>
    \version
 
@@ -25,16 +25,16 @@
 
  */
 
-#ifndef TREEVIEWPLUGIN_H
-#define TREEVIEWPLUGIN_H
+#ifndef OSSVIEWPLUGIN_H
+#define OSSVIEWPLUGIN_H
 
 #include <PluginManager/IPlugin.h>
 #include <ViewManager/IViewFactory.h>
 
 namespace Plugins {
-namespace TreeView {
+namespace OSSView {
 
-class TreeViewPlugin :
+class OSSViewPlugin :
         public QObject,
         public Core::PluginManager::IPlugin,
         public Core::ViewManager::IViewFactory
@@ -43,17 +43,17 @@ class TreeViewPlugin :
     Q_OBJECT
 
 #if QT_VERSION >= 0x050000
-    Q_PLUGIN_METADATA(IID "org.krellinst.oss.TreeViewPlugin")
+    Q_PLUGIN_METADATA(IID "org.krellinst.oss.OSSViewPlugin")
 #endif
 
     Q_INTERFACES(Core::PluginManager::IPlugin)
     Q_INTERFACES(Core::ViewManager::IViewFactory)
 
 public:
-    TreeViewPlugin(QObject *parent = 0);
+    OSSViewPlugin(QObject *parent = 0);
 
     /* IPlugin Interface */
-    ~TreeViewPlugin();
+    ~OSSViewPlugin();
     bool initialize(QStringList &args, QString *err);
     void shutdown();
     QString name();
@@ -72,7 +72,7 @@ protected:
 
 };
 
-} // namespace TreeView
+} // namespace OSSView
 } // namespace Plugins
 
-#endif // TREEVIEWPLUGIN_H
+#endif // OSSVIEWPLUGIN_H
