@@ -144,6 +144,9 @@ void DataModel::buildModel(QDomDocument document)
         if(cell) m_Rows.append(cell);
         rowElement = rowElement.nextSiblingElement();
     }
+
+
+
 }
 
 DataModel::Cell *DataModel::processCell(QDomElement cellElement, Cell *parent)
@@ -472,12 +475,24 @@ QVariant DataModel::editRole(Cell *cell) const
 
 QVariant DataModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    if(orientation == Qt::Horizontal) {
+    if((orientation == Qt::Horizontal) && (m_Header) && (m_Header->columns.count() > section)) {
         Cell *header = m_Header->columns.at(section);
         if(role == Qt::DisplayRole) {
             return header->data["value"];
         } else if(role == Qt::ToolTipRole) {
             return header->data["columnType"];
+        }
+    }
+
+    if((orientation == Qt::Vertical) && (m_Rows.count() > section)) {
+        Cell *row = m_Rows.at(section);
+        if(row && row->columns.count()) {
+            Cell *header = row->columns.last();
+            if(role == Qt::DisplayRole) {
+                return displayRole(header);
+            } else if(role == Qt::ToolTipRole) {
+                return toolTipRole(header);
+            }
         }
     }
 
