@@ -25,8 +25,8 @@
 
  */
 
-#ifndef CONNECTIONMANAGER_H
-#define CONNECTIONMANAGER_H
+#ifndef PLUGINS_OPENSPEEDSHOP_CONNECTIONMANAGER_H
+#define PLUGINS_OPENSPEEDSHOP_CONNECTIONMANAGER_H
 
 class QAction;
 class QLabel;
@@ -116,4 +116,4 @@ private:
 
 } // namespace OpenSpeedShop
 } // namespace Plugins
-#endif // CONNECTIONMANAGER_H
+#endif // PLUGINS_OPENSPEEDSHOP_CONNECTIONMANAGER_H

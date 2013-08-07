@@ -25,8 +25,8 @@
 
  */
 
-#ifndef DIRECTCONNECTIONPAGE_H
-#define DIRECTCONNECTIONPAGE_H
+#ifndef PLUGINS_DIRECTCONNECTION_DIRECTCONNECTIONPAGE_H
+#define PLUGINS_DIRECTCONNECTION_DIRECTCONNECTIONPAGE_H
 
 #include <OpenSpeedShop/ConnectionManager/IConnectionPage.h>
 
@@ -60,4 +60,4 @@ private:
 } // namespace DirectConnection
 } // namespace Plugins
 
-#endif // DIRECTCONNECTIONPAGE_H
+#endif // PLUGINS_DIRECTCONNECTION_DIRECTCONNECTIONPAGE_H

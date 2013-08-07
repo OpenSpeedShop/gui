@@ -25,8 +25,8 @@
 
  */
 
-#ifndef DATAMODEL_H
-#define DATAMODEL_H
+#ifndef PLUGINS_OPENSPEEDSHOP_DATAMODEL_H
+#define PLUGINS_OPENSPEEDSHOP_DATAMODEL_H
 
 #include <QAbstractItemModel>
 #include <QDomDocument>
@@ -140,4 +140,4 @@ protected:
 } // namespace OpenSpeedShop
 } // namespace Plugins
 
-#endif // DATAMODEL_H
+#endif // PLUGINS_OPENSPEEDSHOP_DATAMODEL_H

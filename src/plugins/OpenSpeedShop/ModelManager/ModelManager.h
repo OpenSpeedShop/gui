@@ -1,5 +1,5 @@
-#ifndef MODELMANAGER_H
-#define MODELMANAGER_H
+#ifndef PLUGINS_OPENSPEEDSHOP_MODELMANAGER_H
+#define PLUGINS_OPENSPEEDSHOP_MODELMANAGER_H
 
 #include <QObject>
 #include <QUuid>
@@ -76,4 +76,4 @@ private:
 } // namespace OpenSpeedShop
 } // namespace Plugins
 
-#endif // MODELMANAGER_H
+#endif // PLUGINS_OPENSPEEDSHOP_MODELMANAGER_H

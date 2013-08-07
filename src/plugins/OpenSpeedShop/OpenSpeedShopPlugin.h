@@ -25,8 +25,8 @@
 
  */
 
-#ifndef OPENSPEEDSHOPPLUGIN_H
-#define OPENSPEEDSHOPPLUGIN_H
+#ifndef PLUGINS_OPENSPEEDSHOP_OPENSPEEDSHOPPLUGIN_H
+#define PLUGINS_OPENSPEEDSHOP_OPENSPEEDSHOPPLUGIN_H
 
 #include <PluginManager/IPlugin.h>
 #include <SettingManager/ISettingPageFactory.h>
@@ -85,4 +85,4 @@ protected:
 
 } // namespace OpenSpeedShop
 } // namespace Plugins
-#endif // OPENSPEEDSHOPPLUGIN_H
+#endif // PLUGINS_OPENSPEEDSHOP_OPENSPEEDSHOPPLUGIN_H

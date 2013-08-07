@@ -1,5 +1,5 @@
-#ifndef SERVERADAPTER_H
-#define SERVERADAPTER_H
+#ifndef PLUGINS_SERVERADAPTER_SERVERADAPTER_H
+#define PLUGINS_SERVERADAPTER_SERVERADAPTER_H
 
 #include <QDomDocument>
 #include <QThread>
@@ -130,4 +130,4 @@ private:
 } // namespace ServerAdapter
 } // namespace Plugins
 
-#endif // SERVERADAPTER_H
+#endif // PLUGINS_SERVERADAPTER_SERVERADAPTER_H

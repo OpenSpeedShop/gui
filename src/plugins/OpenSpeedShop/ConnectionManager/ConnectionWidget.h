@@ -25,8 +25,8 @@
 
  */
 
-#ifndef CONNECTIONWIDGET_H
-#define CONNECTIONWIDGET_H
+#ifndef PLUGINS_OPENSPEEDSHOP_CONNECTIONWIDGET_H
+#define PLUGINS_OPENSPEEDSHOP_CONNECTIONWIDGET_H
 
 #include <SettingManager/ISettingPage.h>
 
@@ -63,4 +63,4 @@ private:
 
 } // namespace OpenSpeedShop
 } // namespace Plugins
-#endif // CONNECTIONWIDGET_H
+#endif // PLUGINS_OPENSPEEDSHOP_CONNECTIONWIDGET_H

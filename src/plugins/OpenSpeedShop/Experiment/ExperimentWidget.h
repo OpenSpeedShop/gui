@@ -1,5 +1,5 @@
-#ifndef EXPERIMENTWIDGET_H
-#define EXPERIMENTWIDGET_H
+#ifndef PLUGINS_OPENSPEEDSHOP_EXPERIMENTWIDGET_H
+#define PLUGINS_OPENSPEEDSHOP_EXPERIMENTWIDGET_H
 
 #include <QWidget>
 #include <QModelIndex>
@@ -71,4 +71,4 @@ private:
 
 } // namespace OpenSpeedShop
 } // namespace Plugins
-#endif // EXPERIMENTWIDGET_H
+#endif // PLUGINS_OPENSPEEDSHOP_EXPERIMENTWIDGET_H

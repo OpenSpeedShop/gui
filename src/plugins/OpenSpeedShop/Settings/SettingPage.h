@@ -25,8 +25,8 @@
 
  */
 
-#ifndef OSSSETTINGPAGE_H
-#define OSSSETTINGPAGE_H
+#ifndef PLUGINS_OPENSPEEDSHOP_OSSSETTINGPAGE_H
+#define PLUGINS_OPENSPEEDSHOP_OSSSETTINGPAGE_H
 
 #include <SettingManager/ISettingPage.h>
 
@@ -59,4 +59,4 @@ private:
 
 
 }}
-#endif // OSSSETTINGPAGE_H
+#endif // PLUGINS_OPENSPEEDSHOP_OSSSETTINGPAGE_H

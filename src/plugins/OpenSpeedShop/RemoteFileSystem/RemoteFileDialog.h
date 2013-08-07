@@ -25,8 +25,8 @@
 
  */
 
-#ifndef REMOTEFILEDIALOG_H
-#define REMOTEFILEDIALOG_H
+#ifndef PLUGINS_OPENSPEEDSHOP_REMOTEFILEDIALOG_H
+#define PLUGINS_OPENSPEEDSHOP_REMOTEFILEDIALOG_H
 
 #include <QDialog>
 #include <QModelIndex>
@@ -72,4 +72,4 @@ private:
 } // namespace OpenSpeedShop
 } // namespace Plugins
 
-#endif // REMOTEFILEDIALOG_H
+#endif // PLUGINS_OPENSPEEDSHOP_REMOTEFILEDIALOG_H

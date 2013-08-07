@@ -25,8 +25,8 @@
 
  */
 
-#ifndef IADAPTER_H
-#define IADAPTER_H
+#ifndef PLUGINS_OPENSPEEDSHOP_IADAPTER_H
+#define PLUGINS_OPENSPEEDSHOP_IADAPTER_H
 
 #include <QObject>
 #include <QUuid>
@@ -99,4 +99,4 @@ Q_DECLARE_METATYPE(Plugins::OpenSpeedShop::IAdapter *)
 
 Q_DECLARE_INTERFACE(Plugins::OpenSpeedShop::IAdapter, "org.openspeedshop.gui.IAdapter")
 
-#endif // IADAPTER_H
+#endif // PLUGINS_OPENSPEEDSHOP_IADAPTER_H

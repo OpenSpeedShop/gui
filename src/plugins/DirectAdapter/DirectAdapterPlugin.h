@@ -25,8 +25,8 @@
 
  */
 
-#ifndef DIRECTADAPTERPLUGIN_H
-#define DIRECTADAPTERPLUGIN_H
+#ifndef PLUGINS_DIRECTADAPTER_DIRECTADAPTERPLUGIN_H
+#define PLUGINS_DIRECTADAPTER_DIRECTADAPTERPLUGIN_H
 
 #include <PluginManager/IPlugin.h>
 
@@ -68,4 +68,4 @@ protected:
 } // namespace DirectAdapter
 } // namespace Plugins
 
-#endif // DIRECTADAPTERPLUGIN_H
+#endif // PLUGINS_DIRECTADAPTER_DIRECTADAPTERPLUGIN_H

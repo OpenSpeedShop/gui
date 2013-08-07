@@ -1,5 +1,5 @@
-#ifndef MODELDESCRIPTOR_H
-#define MODELDESCRIPTOR_H
+#ifndef PLUGINS_OPENSPEEDSHOP_MODELDESCRIPTOR_H
+#define PLUGINS_OPENSPEEDSHOP_MODELDESCRIPTOR_H
 
 #include <QObject>
 #include <QUuid>
@@ -80,4 +80,4 @@ protected:
 } // namespace OpenSpeedShop
 } // namespace Plugins
 
-#endif // MODELDESCRIPTOR_H
+#endif // PLUGINS_OPENSPEEDSHOP_MODELDESCRIPTOR_H

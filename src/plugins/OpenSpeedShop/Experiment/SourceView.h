@@ -25,8 +25,8 @@
 
  */
 
-#ifndef SOURCEVIEW_H
-#define SOURCEVIEW_H
+#ifndef PLUGINS_OPENSPEEDSHOP_SOURCEVIEW_H
+#define PLUGINS_OPENSPEEDSHOP_SOURCEVIEW_H
 
 #include <QPlainTextEdit>
 #include <QModelIndex>
@@ -84,4 +84,4 @@ private:
 
 } // namespace OpenSpeedShop
 } // namespace Plugins
-#endif // SOURCEVIEW_H
+#endif // PLUGINS_OPENSPEEDSHOP_SOURCEVIEW_H

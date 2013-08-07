@@ -1,5 +1,5 @@
-#ifndef SERVERCOMMAND_H
-#define SERVERCOMMAND_H
+#ifndef PLUGINS_OPENSPEEDSHOP_SERVERCOMMAND_H
+#define PLUGINS_OPENSPEEDSHOP_SERVERCOMMAND_H
 
 #include <QObject>
 #include <QDomDocument>
@@ -54,4 +54,4 @@ protected:
 } // namespace OpenSpeedShop
 } // namespace Plugins
 
-#endif // SERVERCOMMAND_H
+#endif // PLUGINS_OPENSPEEDSHOP_SERVERCOMMAND_H

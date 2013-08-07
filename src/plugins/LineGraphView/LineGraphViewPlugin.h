@@ -25,8 +25,8 @@
 
  */
 
-#ifndef LINEGRAPHVIEWPLUGIN_H
-#define LINEGRAPHVIEWPLUGIN_H
+#ifndef PLUGINS_LINEGRAPHVIEW_LINEGRAPHVIEWPLUGIN_H
+#define PLUGINS_LINEGRAPHVIEW_LINEGRAPHVIEWPLUGIN_H
 
 #include <PluginManager/PluginManager.h>
 #include <PluginManager/IPlugin.h>
@@ -77,4 +77,4 @@ protected:
 } // namespace LineGraphView
 } // namespace Plugins
 
-#endif // LINEGRAPHVIEWPLUGIN_H
+#endif // PLUGINS_LINEGRAPHVIEW_LINEGRAPHVIEWPLUGIN_H

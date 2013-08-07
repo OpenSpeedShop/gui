@@ -25,8 +25,8 @@
 
  */
 
-#ifndef OSSVIEWPLUGIN_H
-#define OSSVIEWPLUGIN_H
+#ifndef PLUGINS_OSSVIEW_OSSVIEWPLUGIN_H
+#define PLUGINS_OSSVIEW_OSSVIEWPLUGIN_H
 
 #include <PluginManager/IPlugin.h>
 #include <ViewManager/IViewFactory.h>
@@ -75,4 +75,4 @@ protected:
 } // namespace OSSView
 } // namespace Plugins
 
-#endif // OSSVIEWPLUGIN_H
+#endif // PLUGINS_OSSVIEW_OSSVIEWPLUGIN_H

@@ -25,8 +25,8 @@
 
  */
 
-#ifndef ICONNECTIONPAGE_H
-#define ICONNECTIONPAGE_H
+#ifndef PLUGINS_OPENSPEEDSHOP_ICONNECTIONPAGE_H
+#define PLUGINS_OPENSPEEDSHOP_ICONNECTIONPAGE_H
 
 #include <QWidget>
 
@@ -52,4 +52,4 @@ public slots:
 
 Q_DECLARE_INTERFACE(Plugins::OpenSpeedShop::IConnectionPage, "org.openspeedshop.gui.IConnectionPage")
 
-#endif // ICONNECTIONPAGE_H
+#endif // PLUGINS_OPENSPEEDSHOP_ICONNECTIONPAGE_H

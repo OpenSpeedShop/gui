@@ -25,8 +25,8 @@
 
  */
 
-#ifndef SERVERCONNECTION_H
-#define SERVERCONNECTION_H
+#ifndef PLUGINS_SERVERCONNECTION_SERVERCONNECTION_H
+#define PLUGINS_SERVERCONNECTION_SERVERCONNECTION_H
 
 #include <QTcpSocket>
 
@@ -84,4 +84,4 @@ private:
 
 } // namespace ServerConnection
 } // namespace Plugins
-#endif // SERVERCONNECTION_H
+#endif // PLUGINS_SERVERCONNECTION_SERVERCONNECTION_H

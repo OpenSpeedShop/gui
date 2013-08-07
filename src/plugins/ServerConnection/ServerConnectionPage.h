@@ -25,8 +25,8 @@
 
  */
 
-#ifndef SERVERCONNECTIONPAGE_H
-#define SERVERCONNECTIONPAGE_H
+#ifndef PLUGINS_SERVERCONNECTION_SERVERCONNECTIONPAGE_H
+#define PLUGINS_SERVERCONNECTION_SERVERCONNECTIONPAGE_H
 
 #include <OpenSpeedShop/ConnectionManager/IConnectionPage.h>
 
@@ -60,4 +60,4 @@ private:
 } // namespace ServerConnection
 } // namespace Plugins
 
-#endif // SERVERCONNECTIONPAGE_H
+#endif // PLUGINS_SERVERCONNECTION_SERVERCONNECTIONPAGE_H

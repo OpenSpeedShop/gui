@@ -25,8 +25,8 @@
 
  */
 
-#ifndef DELEGATE_H
-#define DELEGATE_H
+#ifndef PLUGINS_OSSVIEW_OSSDELEGATE_H
+#define PLUGINS_OSSVIEW_OSSDELEGATE_H
 
 #include <QSet>
 
@@ -52,4 +52,4 @@ public slots:
 } // namespace OSSView
 } // namespace Plugins
 
-#endif // DELEGATE_H
+#endif // PLUGINS_OSSVIEW_OSSDELEGATE_H

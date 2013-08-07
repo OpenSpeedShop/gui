@@ -1,5 +1,5 @@
-#ifndef DIRECTADAPTER_H
-#define DIRECTADAPTER_H
+#ifndef PLUGINS_DIRECTADAPTER_DIRECTADAPTER_H
+#define PLUGINS_DIRECTADAPTER_DIRECTADAPTER_H
 
 #include <QDomDocument>
 #include <QThread>
@@ -130,4 +130,4 @@ private:
 } // namespace DirectAdapter
 } // namespace Plugins
 
-#endif // DIRECTADAPTER_H
+#endif // PLUGINS_DIRECTADAPTER_DIRECTADAPTER_H

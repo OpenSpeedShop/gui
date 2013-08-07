@@ -25,8 +25,8 @@
 
  */
 
-#ifndef WELCOMEDATA_H
-#define WELCOMEDATA_H
+#ifndef PLUGINS_OPENSPEEDSHOP_WELCOMEDATA_H
+#define PLUGINS_OPENSPEEDSHOP_WELCOMEDATA_H
 
 #include <QDomElement>
 #include <QDomDocument>
@@ -70,4 +70,4 @@ private:
 } // namespace OpenSpeedShop
 } // namespace Plugins
 
-#endif // WELCOMEDATA_H
+#endif // PLUGINS_OPENSPEEDSHOP_WELCOMEDATA_H

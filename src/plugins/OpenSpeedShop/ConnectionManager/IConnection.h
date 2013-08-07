@@ -25,8 +25,8 @@
 
  */
 
-#ifndef ICONNECTION_H
-#define ICONNECTION_H
+#ifndef PLUGINS_OPENSPEEDSHOP_ICONNECTION_H
+#define PLUGINS_OPENSPEEDSHOP_ICONNECTION_H
 
 #include <QObject>
 #include <QVariant>
@@ -82,4 +82,4 @@ Q_DECLARE_METATYPE(Plugins::OpenSpeedShop::IConnection *)
 
 Q_DECLARE_INTERFACE(Plugins::OpenSpeedShop::IConnection, "org.openspeedshop.gui.IConnection")
 
-#endif // ICONNECTION_H
+#endif // PLUGINS_OPENSPEEDSHOP_ICONNECTION_H

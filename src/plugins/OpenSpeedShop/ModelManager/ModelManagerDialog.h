@@ -1,5 +1,5 @@
-#ifndef MODELMANAGERDIALOG_H
-#define MODELMANAGERDIALOG_H
+#ifndef PLUGINS_OPENSPEEDSHOP_MODELMANAGERDIALOG_H
+#define PLUGINS_OPENSPEEDSHOP_MODELMANAGERDIALOG_H
 
 #include <QDialog>
 #include <QUuid>
@@ -34,4 +34,4 @@ private:
 
 } // namespace OpenSpeedShop
 } // namespace Plugins
-#endif // MODELMANAGERDIALOG_H
+#endif // PLUGINS_OPENSPEEDSHOP_MODELMANAGERDIALOG_H

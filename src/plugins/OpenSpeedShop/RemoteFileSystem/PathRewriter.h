@@ -25,8 +25,8 @@
 
  */
 
-#ifndef PATHREWRITER_H
-#define PATHREWRITER_H
+#ifndef PLUGINS_OPENSPEEDSHOP_PATHREWRITER_H
+#define PLUGINS_OPENSPEEDSHOP_PATHREWRITER_H
 
 #include <QObject>
 #include <QMap>
@@ -56,4 +56,4 @@ private:
 
 };
 
-#endif // PATHREWRITER_H
+#endif // PLUGINS_OPENSPEEDSHOP_PATHREWRITER_H
