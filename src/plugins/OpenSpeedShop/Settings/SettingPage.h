@@ -33,9 +33,7 @@
 namespace Plugins {
 namespace OpenSpeedShop {
 
-namespace Ui {
-    class SettingPage;
-}
+namespace Ui { class SettingPage; }
 
 class SettingPage : public Core::SettingManager::ISettingPage
 {
