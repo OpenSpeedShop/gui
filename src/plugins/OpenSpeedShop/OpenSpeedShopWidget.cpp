@@ -111,8 +111,10 @@ void OpenSpeedShopWidget::loadExperiment()
     }
 
     // User canceled, or critical error, delete it!
-    experimentWidget->setParent(NULL);
-    experimentWidget->deleteLater();
+    if(experimentWidget) {
+        experimentWidget->setParent(NULL);
+        experimentWidget->deleteLater();
+    }
 }
 
 void OpenSpeedShopWidget::closeExperiment(int index)
@@ -196,8 +198,6 @@ void OpenSpeedShopWidget::tabTitleChanged()
 
 void OpenSpeedShopWidget::showEvent(QShowEvent *event)
 {
-    Q_UNUSED(event)
-
     emit active();
 
     QTabWidget::showEvent(event);
@@ -205,8 +205,6 @@ void OpenSpeedShopWidget::showEvent(QShowEvent *event)
 
 void OpenSpeedShopWidget::hideEvent(QHideEvent *event)
 {
-    Q_UNUSED(event)
-
     m_Context->setVisible(false);
 
     QTabWidget::hideEvent(event);
