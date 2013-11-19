@@ -38,11 +38,11 @@
   <Metric value="Inclusive_Counts"/>
   <Metric value="Inclusive_Overflows"/>
  </ModelDescriptor>
- <ModelDescriptor experimentType="pcsamp" rowCount="100" id="{9790588a-1fcb-48df-9a9b-b85f9d3cdbb7}" name="Statements Default">
+<!-- <ModelDescriptor experimentType="pcsamp" rowCount="100" id="{9790588a-1fcb-48df-9a9b-b85f9d3cdbb7}" name="Statements Default">
   <Modifier value="Statements"/>
   <Metric value="Time"/>
   <Metric value="Percent"/>
- </ModelDescriptor>
+ </ModelDescriptor> -->
  <ModelDescriptor experimentType="io" rowCount="100" id="{7442dbdf-ef36-49d7-9264-f9d5375bf887}" name="Default">
   <Modifier value="Functions"/>
   <Metric value="exclusive_times"/>

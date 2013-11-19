@@ -83,7 +83,6 @@ DataModel::~DataModel()
     }
 
     qDeleteAll(m_Rows);
-    m_Rows.clear();
 }
 
 QUuid DataModel::uid() const
@@ -141,7 +140,9 @@ void DataModel::buildModel(QDomDocument document)
     QDomElement rowElement = commandObjectElement.firstChildElement();
     while(!rowElement.isNull()) {
         Cell *cell = processCell(rowElement, NULL);
-        if(cell) m_Rows.append(cell);
+        if(cell) {
+            m_Rows.append(cell);
+        }
         rowElement = rowElement.nextSiblingElement();
     }
 
