@@ -140,6 +140,19 @@ QString DirectConnection::receive()
     return retval;
 }
 
+void DirectConnection::setIsCurrent(const bool &current)
+{
+    if(IConnection::isCurrent() == current) {
+        return;
+    }
+
+    IConnection::setIsCurrent(current);
+
+    // We have to pretend to connect in order to get the ConnectionManager to generate an Adapter
+    if(IConnection::isCurrent()) {
+        connectToServer();
+    }
+}
 
 } // namespace DirectConnection
 } // namespace Plugins

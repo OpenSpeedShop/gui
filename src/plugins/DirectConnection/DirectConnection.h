@@ -59,6 +59,8 @@ public:
     void send(QString command);
     QString receive();
 
+    void setIsCurrent(const bool &current);
+
 protected:
     void writeSettings();
     void readSettings();

@@ -233,11 +233,15 @@ void ConnectionManager::setCurrentConnection(IConnection *connection)
     if(m_CurrentConnection) {
         disconnect(m_CurrentConnection, SIGNAL(readyReceive()), this, SLOT(connectionReadyRecieve()));
         disconnect(m_CurrentConnection, SIGNAL(stateChanged()), this, SLOT(connectionStateChanged()));
+        m_CurrentConnection->setIsCurrent(false);
     }
 
     m_CurrentConnection = connection;
+
     connect(m_CurrentConnection, SIGNAL(readyReceive()), this, SLOT(connectionReadyRecieve()));
     connect(m_CurrentConnection, SIGNAL(stateChanged()), this, SLOT(connectionStateChanged()));
+    m_CurrentConnection->setIsCurrent(true);
+
     emit currentConnectionChanged();
 }
 

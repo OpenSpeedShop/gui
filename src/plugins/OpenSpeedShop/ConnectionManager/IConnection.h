@@ -66,9 +66,15 @@ public:
     virtual void send(QString command) = 0;
     virtual QString receive() = 0;
 
+    virtual void setIsCurrent(const bool &current) { m_Current = current; }
+    virtual bool isCurrent() const { return m_Current; }
+
 signals:
     void stateChanged();
     void readyReceive();
+
+private:
+    bool m_Current;
 
 };
 
