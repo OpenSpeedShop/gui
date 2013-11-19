@@ -316,8 +316,14 @@ void ExperimentWidget::getModel(QUuid descriptorUid)
 
         /* Reset the view list */
         ui->cmbViews->clear();
-        ui->cmbViews->addItems(Core::ViewManager::ViewManager::instance().viewNames(m_CurrentModel));
-        ui->cmbViews->setCurrentIndex(ui->cmbViews->count() - 1);
+        QStringList viewNameList = Core::ViewManager::ViewManager::instance().viewNames(m_CurrentModel);
+
+        // Remove the view that the Open|SpeedShop View replaced
+        viewNameList.removeAll("Table View");
+
+        ui->cmbViews->addItems(viewNameList);
+
+        ui->cmbViews->setCurrentIndex(ui->cmbViews->findText("Open|SpeedShop View", Qt::MatchExactly));
 
         /* Let the source view know about the change */
         ui->txtSource->setModel(m_CurrentModel);
