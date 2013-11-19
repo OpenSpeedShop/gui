@@ -273,7 +273,14 @@ QString DirectAdapter::waitCatFile(QString filePath)
         throw QString("File \"%1\" doens't exist").arg(filePath);
     }
 
-    return QString(file.readAll());
+    if(!file.open(QFile::ReadOnly)) {
+        throw QString("File \"%1\" unable to open").arg(filePath);
+    }
+
+    QByteArray text = file.readAll();
+    file.close();
+
+    return QString(text);
 }
 
 bool DirectAdapter::waitFileExists(QString filePath)
