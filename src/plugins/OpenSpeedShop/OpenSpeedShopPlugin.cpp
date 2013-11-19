@@ -27,6 +27,8 @@
 
 #include "OpenSpeedShopPlugin.h"
 
+#include <QFile>
+#include <QApplication>
 #include <QDebug>
 
 #include <PluginManager/PluginManager.h>
@@ -36,6 +38,7 @@
 #include <ModelManager/ModelManager.h>
 #include <RemoteFileSystem/PathRewriter.h>
 #include <Settings/SettingPage.h>
+#include <Help/HelpManager.h>
 
 #include "MainWindow.h"
 
@@ -110,6 +113,8 @@ bool OpenSpeedShopPlugin::initialize(QStringList &args, QString *err)
         PathRewriter &pathRewriter = PathRewriter::instance();
         if(!pathRewriter.initialize(args, err)) { throw; }
 
+        registerHelpFile();
+
     } catch(...) {
         if(!err) err = new QString();
         if(err->isEmpty()) err->append("\n");
@@ -161,6 +166,30 @@ void OpenSpeedShopPlugin::writeSettings()
 
     settingManager.endGroup();
 }
+
+void OpenSpeedShopPlugin::registerHelpFile()
+{
+    Core::PluginManager::PluginManager &pluginManager = Core::PluginManager::PluginManager::instance();
+    QList<Plugins::Help::HelpManager*> helpManagers = pluginManager.getObjects<Plugins::Help::HelpManager>();
+    if(helpManagers.count() < 1) {
+        return;
+    }
+
+    Plugins::Help::HelpManager *helpManager = helpManagers.first();
+
+# ifdef Q_OS_WIN
+    QString helpFile = QString("%1/oss/OpenSpeedShop.qch").arg(QApplication::instance()->applicationDirPath());
+# else
+    QString helpFile = QString("%1/../share/oss/OpenSpeedShop.qch").arg(QApplication::instance()->applicationDirPath());
+# endif
+
+    if(QFile::exists(helpFile) && !helpManager->registeredNamespaces().contains("org.krellinst.oss")) {
+        if(!helpManager->registerHelpFile(helpFile)) {
+            qWarning() << Q_FUNC_INFO << tr("Registration of help file, \"%1\", failed: %2").arg(helpFile).arg(helpManager->registrationError());
+        }
+    }
+}
+
 
 
 /* BEGIN ISettingPageFactory */

@@ -80,6 +80,7 @@ protected:
 
     void readSettings();
     void writeSettings();
+    void registerHelpFile();
 
 };
 
