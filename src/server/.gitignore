@@ -1,3 +1,5 @@
 *.o
 openss-server
 X*.openss
+*.so
+*.so.*
