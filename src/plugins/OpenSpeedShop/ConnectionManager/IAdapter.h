@@ -89,6 +89,8 @@ public:
     virtual QMap<QString,QString> waitExperimentTypeModifiers(QString experimentType) = 0;
     virtual QMap<QString,QString> waitExperimentTypeMetrics(QString experimentType) = 0;
 
+
+    virtual bool useLocalFileDialog() { return false; }
 };
 
 } // namespace OpenSpeedShop

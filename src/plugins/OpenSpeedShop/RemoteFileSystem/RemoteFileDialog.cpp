@@ -31,6 +31,8 @@
 #include <ConnectionManager/IAdapter.h>
 #include <ConnectionManager/ConnectionManager.h>
 
+#include <QKeyEvent>
+
 namespace Plugins {
 namespace OpenSpeedShop {
 
@@ -175,6 +177,19 @@ void RemoteFileDialog::on_btnPathUp_clicked()
     }
 
     setPath(newPath);
+}
+
+
+void RemoteFileDialog::keyPressEvent(QKeyEvent *event)
+{
+    if(!event->modifiers() || (event->modifiers() & Qt::KeypadModifier && event->key() == Qt::Key_Enter)) {
+        if(ui->txtPath->hasFocus() &&
+                (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter)) {
+            return;
+        }
+    }
+
+    QDialog::keyPressEvent(event);
 }
 
 

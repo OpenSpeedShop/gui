@@ -54,6 +54,8 @@ public:
 
     QString selectedFilePath() const;
 
+    void keyPressEvent(QKeyEvent *event);
+
 protected slots:
     void on_txtPath_editingFinished();
     void on_treeWidget_activated(QModelIndex);

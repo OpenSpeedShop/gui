@@ -64,6 +64,8 @@ public:
     QMap<QString,QString> waitExperimentTypeModifiers(QString experimentType);
     QMap<QString,QString> waitExperimentTypeMetrics(QString experimentType);
 
+    virtual bool useLocalFileDialog() { return true; }
+
 protected:
     Plugins::OpenSpeedShop::ServerCommand *version();
     Plugins::OpenSpeedShop::ServerCommand *keepAlive();

@@ -17,6 +17,7 @@
 
 #include <RemoteFileSystem/RemoteFileDialog.h>
 #include <RemoteFileSystem/PathRewriter.h>
+#include <QFileDialog>
 
 #include <QDebug>
 
@@ -127,16 +128,27 @@ bool ExperimentWidget::load()
     settingManager.endGroup();
 
     bool defaultPath = (filePath == QLatin1String("/"));
+    QString absolutePath;
 
-    RemoteFileDialog dlg(this);
-    dlg.setPath(filePath);
-    dlg.setFilter("*.openss");
-    if(!dlg.exec()) {
-        return false;
-//        throw tr("Could not load experiment: canceled by user.");
+    if(adapter->useLocalFileDialog()) {
+        filePath = QFileDialog::getOpenFileName(this, tr("Open File"), filePath, "*.openss");
+        if(filePath.isEmpty()) {
+            return false;
+        }
+        absolutePath = QFileInfo(filePath).absolutePath();
+    } else {
+        RemoteFileDialog dlg(this);
+        dlg.setPath(filePath);
+        dlg.setFilter("*.openss");
+        if(!dlg.exec()) {
+            return false;
+//            throw tr("Could not load experiment: canceled by user.");
+        }
+
+        filePath = dlg.selectedFilePath();
+        absolutePath = dlg.path();
     }
 
-    filePath = dlg.selectedFilePath();
     if(filePath.isEmpty()) {
         throw tr("Could not load experiemnt: invalid filepath.");
     }
@@ -144,7 +156,7 @@ bool ExperimentWidget::load()
     /* User convenience.  If the path wasn't set in the settings, we'll set it for the user the first time. */
     if(defaultPath) {
         settingManager.beginGroup("Plugins/OpenSpeedShop/Experiment");
-        settingManager.setValue("defaultExperimentPath", dlg.path());
+        settingManager.setValue("defaultExperimentPath", absolutePath);
         settingManager.endGroup();
     }
 
