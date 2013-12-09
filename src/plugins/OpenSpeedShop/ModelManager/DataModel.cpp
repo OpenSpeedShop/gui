@@ -485,17 +485,17 @@ QVariant DataModel::headerData(int section, Qt::Orientation orientation, int rol
         }
     }
 
-    if((orientation == Qt::Vertical) && (m_Rows.count() > section)) {
-        Cell *row = m_Rows.at(section);
-        if(row && row->columns.count()) {
-            Cell *header = row->columns.last();
-            if(role == Qt::DisplayRole) {
-                return displayRole(header);
-            } else if(role == Qt::ToolTipRole) {
-                return toolTipRole(header);
-            }
-        }
-    }
+//    if((orientation == Qt::Vertical) && (section < m_Rows.count())) {
+//        Cell *row = m_Rows.at(section);
+//        if(row && row->columns.count()) {
+//            Cell *header = row->columns.last();
+//            if(role == Qt::DisplayRole) {
+//                return displayRole(header);
+//            } else if(role == Qt::ToolTipRole) {
+//                return toolTipRole(header);
+//            }
+//        }
+//    }
 
     return QVariant();
 }
