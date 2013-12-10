@@ -29,6 +29,14 @@ if [ ! -d $OPENSS_LIB ]; then
   ERROR=1
 fi
 
+if [ ! -w $OPENSS_LIB ]; then
+  echo "ERROR: OpenSpeedShop library path is not writable: \"$OPENSS_LIB\""
+  ERROR=1
+fi
+if [ ! -w ${OPENSS_PREFIX}/include/openspeedshop/ ]; then
+  echo "ERROR: OpenSpeedShop include path is not writable (or does not exist): \"${OPENSS_PREFIX}/include/openspeedshop/\""
+  ERROR=1
+fi
 
 if [ -z $PYTHON_VER ]; then 
   PYTHON_VER=$(python --version 2>&1 | sed -r "s/^Python ([0-9]+\.[0-9]+)\..+\$/\1/g")
@@ -42,8 +50,9 @@ if [ ! -d $PYTHON_PATH ]; then
 fi
 
 
-if [ $ERROR ]; then exit 1; fi
+if [ $ERROR -ne 0 ]; then echo "ERROR: Exiting"; exit 1; fi
 
+rm -f error.log
 
 SOURCES="Direct OpenSpeedShopCLI"
 OPENSS_INCLUDES="framework cli queries message"
@@ -55,24 +64,36 @@ for LIBRARY in ${OPENSS_INCLUDES}; do LIBRARIES="${LIBRARIES} -lopenss-${LIBRARY
 
 rm -f *.so* *.o
 
-# Compile the sources
+echo -e "\nCompiling..." | tee -a error.log
 for SOURCE in ${SOURCES}; do
   COMMAND="g++ -c -g3 -fpermissive -fexceptions -fPIC -Wall ${INCLUDES} ${SOURCE}.cpp"
-  echo -e "\n$COMMAND"
-  ${COMMAND}  2>&1 | egrep -v "^${OPENSS_SRC}"
+  echo -e "\n$COMMAND" >> error.log
+  ${COMMAND} &>> error.log
+  if [ $? -ne 0 ]; then echo "ERROR: Exiting; see error.log for details"; exit 1; fi
 done
 
-# Link the compiled objects
+
+
+echo -e "\nLinking..." | tee -a error.log
 COMMAND="g++ -shared -Wl,-soname,${TARGET}.${VER_MAJ} -L${OPENSS_LIB} ${LIBRARIES} -o ${TARGET}.${VER_MAJ}.${VER_MIN}"
 for SOURCE in ${SOURCES}; do
   COMMAND="${COMMAND} ${SOURCE}.o"
 done
-echo -e "\n$COMMAND"
-${COMMAND}
+echo -e "\n$COMMAND" >> error.log
+${COMMAND} &>> error.log
+if [ $? -ne 0 ]; then echo "ERROR: Exiting; see error.log for details"; exit 1; fi
 
-cp -f ${TARGET}.${VER_MAJ}.${VER_MIN} ${OPENSS_LIB}/
-ln -sf ${TARGET}.${VER_MAJ}.${VER_MIN} ${OPENSS_LIB}/${TARGET}.${VER_MAJ}
-ln -sf ${TARGET}.${VER_MAJ} ${OPENSS_LIB}/${TARGET}
 
-cp -f Direct.h ${OPENSS_PREFIX}/include/openspeedshop/
+echo -e "\nInstalling..." | tee -a error.log
+cp -f ${TARGET}.${VER_MAJ}.${VER_MIN} ${OPENSS_LIB}/ \
+  || echo "FAILED to install \"${OPENSS_LIB}/${TARGET}.${VER_MAJ}.${VER_MIN}\"" | tee -a error.log
+ln -sf ${TARGET}.${VER_MAJ}.${VER_MIN} ${OPENSS_LIB}/${TARGET}.${VER_MAJ} \
+  || echo "FAILED to install \"${OPENSS_LIB}/${TARGET}.${VER_MAJ}\"" | tee -a error.log
+ln -sf ${TARGET}.${VER_MAJ} ${OPENSS_LIB}/${TARGET} \
+  || echo "FAILED to install \"${OPENSS_LIB}/${TARGET}\"" | tee -a error.log
+cp -f Direct.h ${OPENSS_PREFIX}/include/openspeedshop/ \
+  || echo "FAILED to install \"${OPENSS_PREFIX}/include/openspeedshop/Direct.h\"" | tee -a error.log
+
+
+echo
 
