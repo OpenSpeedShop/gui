@@ -2,14 +2,48 @@
 
 TARGET="libopenss-direct.so"
 VER_MAJ="0"
-VER_MIN="1"
+VER_MIN="4"
 
-OPENSS_SRC="/home/dane/src/OpenSpeedShop"
-OPENSS_PREFIX="/opt/OSS"
-OPENSS_LIB="${OPENSS_PREFIX}/lib64"
+ERROR=0
 
-PYTHON_VER="2.7"
-PYTHON_PATH="/usr/include/python${PYTHON_VER}"
+if [ -z $OPENSS_SRC ]; then
+  OPENSS_SRC="~/src/openss"
+fi
+if [ -z $OPENSS_PREFIX ]; then
+  OPENSS_PREFIX="/opt/openss"
+fi
+if [ -z $OPENSS_LIB ]; then
+  OPENSS_LIB="${OPENSS_PREFIX}/lib64"
+fi
+
+if [ ! -d $OPENSS_SRC ]; then
+  echo "ERROR: OpenSpeedShop source path not found at: \"$OPENSS_SRC\"; try setting \$OPENSS_SRC"
+  ERROR=1
+fi
+if [ ! -d $OPENSS_PREFIX ]; then
+  echo "ERROR: OpenSpeedShop installation path not found at: \"$OPENSS_PREFIX\"; try setting \$OPENSS_PREFIX"
+  ERROR=1
+fi
+if [ ! -d $OPENSS_LIB ]; then
+  echo "ERROR: OpenSpeedShop library path not found at: \"$OPENSS_LIB\"; try setting \$OPENSS_LIB"
+  ERROR=1
+fi
+
+
+if [ -z $PYTHON_VER ]; then 
+  PYTHON_VER=$(python --version 2>&1 | sed -r "s/^Python ([0-9]+\.[0-9]+)\..+\$/\1/g")
+fi
+if [ -z $PYTHON_PATH ]; then
+  PYTHON_PATH="/usr/include/python${PYTHON_VER}"
+fi
+if [ ! -d $PYTHON_PATH ]; then
+  echo "ERROR: a valid Python header directory is not found at: \"$PYTHON_PATH\"; try setting \$PYTHON_PATH"
+  ERROR=1
+fi
+
+
+if [ $ERROR ]; then exit 1; fi
+
 
 SOURCES="Direct OpenSpeedShopCLI"
 OPENSS_INCLUDES="framework cli queries message"
