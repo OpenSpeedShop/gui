@@ -57,7 +57,7 @@ for(PTGF_PATH, PTGF_INCPATHS) {
     warning("$${PTGF_PATH}/$${PTGF_FILENAME} was not found")
   }
   warning("The PTGF header files could not be found.")
-  warning("The SWAT plugin requires access to the framework source.")
+  warning("The Open|SpeedShop plugin requires access to the framework source.")
   warning("Pass 'PTGF_INCPATH=~/src/PTGF' to qmake, where ~/src/PTGF is the base source directory of PTGF.")
   warning("-=] OR [=-")
   error("Pass 'PTGF_INSTALLROOT=/opt/PTGF' to qmake, where /opt/PTGF is the base install directory of PTGF.")
@@ -114,7 +114,7 @@ for(PTGF_PATH, PTGF_LIBPATHS) {
     warning("$${PTGF_PATH}/$${PTGF_FILENAME} was not found")
   }
   warning("The PTGF library files could not be found.")
-  warning("The SWAT plugin requires access to the framework libraries.")
+  warning("The Open|SpeedShop plugin requires access to the framework libraries.")
   warning("Please ensure that you have already built the PTGF Core library.")
   warning("Pass 'PTGF_LIBPATH=/opt/PTGF' to qmake, where /opt/PTGF is the base library install directory of PTGF.")
   warning("-=] OR [=-")
