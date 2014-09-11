@@ -32,11 +32,16 @@ VER_SERENE   = 0
 # LIBRARY & INCLUDE PATHS #
 ###########################
 isEmpty(SERENE_PATH) {
-  warning()
-  warning("The SERENE_PATH variable must be set to the location of the Serene")
-  warning("library in order to build the advanced views.  See")
-  warning("<https://github.com/OpenSpeedShop/Serene/wiki/Installation>")
-  warning("for more information on downloading and building the Serene libraries.")
+#
+#  NOTE: Serene has been deprecated;
+#        we'll no longer warn that it's missing, and
+#        the code will eventually be removed completely
+#
+#  warning()
+#  warning("The SERENE_PATH variable must be set to the location of the Serene")
+#  warning("library in order to build the advanced views.  See")
+#  warning("<https://github.com/OpenSpeedShop/Serene/wiki/Installation>")
+#  warning("for more information on downloading and building the Serene libraries.")
 
 } else {
   !exists($$quote($${SERENE_PATH}/lib/lib.pro)) {

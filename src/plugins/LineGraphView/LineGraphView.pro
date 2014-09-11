@@ -19,10 +19,15 @@ include(../plugins.pri)
 include(../../Serene.pri)
 
 isEmpty(SERENE_PATH) {
-  warning()
-  warning("The LineGraphView plugin has been disabled")
-  warning("The plugin depends on headers from the Serene library")
-  warning("To enable it, pass 'SERENE_PATH=~/src/Serene' to qmake, where ~/src/Serene is the base source directory of Serene")
+#
+#  NOTE: Serene has been deprecated;
+#        we'll no longer warn that it's missing, and
+#        the code will eventually be removed completely
+#
+#  warning()
+#  warning("The LineGraphView plugin has been disabled")
+#  warning("The plugin depends on headers from the Serene library")
+#  warning("To enable it, pass 'SERENE_PATH=~/src/Serene' to qmake, where ~/src/Serene is the base source directory of Serene")
 
 } else {
   CONFIG(debug, debug|release) {
