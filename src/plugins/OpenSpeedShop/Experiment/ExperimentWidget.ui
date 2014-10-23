@@ -23,7 +23,7 @@
       <cursorShape>ArrowCursor</cursorShape>
      </property>
      <property name="currentIndex">
-      <number>3</number>
+      <number>1</number>
      </property>
      <property name="documentMode">
       <bool>true</bool>
@@ -341,6 +341,9 @@
        <string>Processes</string>
       </attribute>
       <layout class="QHBoxLayout" name="horizontalLayout_7">
+       <property name="spacing">
+        <number>0</number>
+       </property>
        <property name="leftMargin">
         <number>0</number>
        </property>
@@ -351,41 +354,32 @@
         <number>0</number>
        </property>
        <item>
-        <widget class="QTreeWidget" name="trvProcesses">
-         <property name="rootIsDecorated">
-          <bool>false</bool>
+        <widget class="QSplitter" name="splitter">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
          </property>
-         <property name="sortingEnabled">
-          <bool>true</bool>
-         </property>
-         <property name="columnCount">
-          <number>5</number>
-         </property>
-         <column>
-          <property name="text">
-           <string notr="true">1</string>
+         <widget class="Plugins::NodeListView::NodeListView" name="trvNodeList" native="true">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
           </property>
-         </column>
-         <column>
-          <property name="text">
-           <string notr="true">2</string>
+         </widget>
+         <widget class="QTreeView" name="trvProcesses">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>3</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
           </property>
-         </column>
-         <column>
-          <property name="text">
-           <string notr="true">3</string>
+          <property name="rootIsDecorated">
+           <bool>false</bool>
           </property>
-         </column>
-         <column>
-          <property name="text">
-           <string notr="true">4</string>
+          <property name="sortingEnabled">
+           <bool>true</bool>
           </property>
-         </column>
-         <column>
-          <property name="text">
-           <string notr="true">5</string>
-          </property>
-         </column>
+         </widget>
         </widget>
        </item>
       </layout>
@@ -816,8 +810,8 @@ p, li { white-space: pre-wrap; }
            <rect>
             <x>0</x>
             <y>0</y>
-            <width>98</width>
-            <height>28</height>
+            <width>96</width>
+            <height>26</height>
            </rect>
           </property>
           <layout class="QGridLayout" name="gridLayout_11">
@@ -869,6 +863,12 @@ p, li { white-space: pre-wrap; }
    <class>SourceView</class>
    <extends>QPlainTextEdit</extends>
    <header>Experiment/SourceView.h</header>
+  </customwidget>
+  <customwidget>
+   <class>Plugins::NodeListView::NodeListView</class>
+   <extends>QWidget</extends>
+   <header location="global">NodeListView/NodeListView.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources>

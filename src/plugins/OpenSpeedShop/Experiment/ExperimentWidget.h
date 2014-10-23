@@ -4,7 +4,9 @@
 #include <QWidget>
 #include <QModelIndex>
 #include <QUuid>
+
 class QAbstractItemView;
+class QSortFilterProxyModel;
 
 namespace Plugins {
 namespace OpenSpeedShop {
@@ -57,6 +59,8 @@ protected slots:
 
     void closeEvent(QCloseEvent *);
 
+    void on_trvNodeList_selectionChanged();
+
 private:
     Ui::ExperimentWidget *ui;
     QUuid m_ExperimentUid;
@@ -64,6 +68,8 @@ private:
     QAbstractItemModel *m_CurrentModel;
     QMap<QString, QString> m_SourceFileCache;
     QString m_CommonPath;
+
+    QSortFilterProxyModel *proxyModelProcesses;
 
     int m_lstSourceContextMenuRow;
 };

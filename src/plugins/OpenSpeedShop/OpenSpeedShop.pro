@@ -18,6 +18,7 @@
 include(../plugins.pri)
 
 LIBS         += -L$$quote($${BUILD_PATH}/plugins/Welcome/$${DIR_POSTFIX}) -lWelcome$${LIB_POSTFIX}
+LIBS         += -L$$quote($${BUILD_PATH}/plugins/NodeListView/$${DIR_POSTFIX}) -lNodeListView$${LIB_POSTFIX}
 
 CONFIG(debug, debug|release) {
   TARGET      = OpenSpeedShopD

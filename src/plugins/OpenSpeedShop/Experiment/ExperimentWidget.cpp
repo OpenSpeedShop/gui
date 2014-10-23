@@ -1,9 +1,6 @@
 #include "ExperimentWidget.h"
 #include "ui_ExperimentWidget.h"
 
-#include <QMenu>
-#include <QMessageBox>
-
 #include <ConnectionManager/ConnectionManager.h>
 #include <ConnectionManager/IAdapter.h>
 #include <SettingManager/SettingManager.h>
@@ -17,7 +14,11 @@
 
 #include <RemoteFileSystem/RemoteFileDialog.h>
 #include <RemoteFileSystem/PathRewriter.h>
+
+#include <QMenu>
+#include <QMessageBox>
 #include <QFileDialog>
+#include <QSortFilterProxyModel>
 
 #include <QDebug>
 
@@ -41,6 +42,18 @@ ExperimentWidget::ExperimentWidget(QWidget *parent) :
 
     ui->tabWidget->setCurrentIndex(0);
     ui->grpViewFilter->hide();
+
+
+    // Set up the proxy model for node filtering and sorting
+    proxyModelProcesses = new QSortFilterProxyModel();
+    proxyModelProcesses->setFilterKeyColumn(0);
+    proxyModelProcesses->setFilterRole(Qt::DisplayRole);
+    proxyModelProcesses->setDynamicSortFilter(true);
+    proxyModelProcesses->setSortCaseSensitivity(Qt::CaseInsensitive);
+    proxyModelProcesses->setSortRole(Qt::DisplayRole);
+    proxyModelProcesses->setSourceModel(new QStandardItemModel());
+    ui->trvProcesses->setModel(proxyModelProcesses);
+
 
     // readSettings has to be called after we set up the presentation entirely
     readSettings();
@@ -269,30 +282,63 @@ void ExperimentWidget::refreshSourceIcon(int row)
 }
 
 
+/*! Updates the node list and process tree views with data from adapter
+    \sa ExperimentWidget::on_trvNodeList_selectionChanged()
+ */
 void ExperimentWidget::refreshProcessTree()
 {
     IAdapter *adapter = ConnectionManager::instance().askAdapter();
     if(!adapter) throw tr("Server not connected");
 
-    ui->trvProcesses->clear();
+    QStandardItemModel *model = qobject_cast<QStandardItemModel*>(proxyModelProcesses->sourceModel());
+    Q_ASSERT(model);
+
+    model->clear();
+
     QStringList headers;
-    headers << tr("Host") << tr("Rank") << tr("Process ID") << tr("Thread ID") << tr("Executable");
-    ui->trvProcesses->setHeaderLabels(headers);
+    headers << tr("Host") << tr("Rank") << tr("Process ID") << tr("Thread ID");
+    model->setColumnCount(headers.count());
+    for(int i = 0; i < headers.count(); ++i) {
+        model->setHeaderData(i, Qt::Horizontal, headers.at(i), Qt::DisplayRole);
+    }
+
+    QStringList nodes;
 
     QList<IAdapter::Process> processes = adapter->waitExperimentProcesses(m_ExperimentUid);
     foreach(IAdapter::Process process, processes) {
-        QTreeWidgetItem *item = new QTreeWidgetItem(ui->trvProcesses);
-        item->setData(0, Qt::DisplayRole, process.host);
-        item->setData(1, Qt::DisplayRole, process.rank);
-        item->setData(2, Qt::DisplayRole, process.processId);
-        item->setData(3, Qt::DisplayRole, process.threadId);
-        item->setData(4, Qt::DisplayRole, process.executable);
-        ui->trvProcesses->addTopLevelItem(item);
+        QList<QStandardItem *> items;
+        QStandardItem *item = new QStandardItem();
+        item->setData(process.host, Qt::DisplayRole);
+        items.append(item);
+
+        item = new QStandardItem();
+        item->setData(process.rank, Qt::DisplayRole);
+        items.append(item);
+
+        item = new QStandardItem();
+        item->setData(process.processId, Qt::DisplayRole);
+        item->setData(process.executable, Qt::ToolTipRole);
+        items.append(item);
+
+        item = new QStandardItem();
+        item->setData(process.threadId, Qt::DisplayRole);
+        item->setData(process.executable, Qt::ToolTipRole);
+        items.append(item);
+
+        model->invisibleRootItem()->appendRow(items);
+
+        nodes << process.host;
     }
 
-    for(int i=0; i < ui->trvProcesses->columnCount(); i++) {
+    ui->trvNodeList->setNodes(nodes.join(","));
+
+
+    for(int i=0; i < model->columnCount(); i++) {
         ui->trvProcesses->resizeColumnToContents(i);
     }
+
+    proxyModelProcesses->sort(1);
+    proxyModelProcesses->sort(0);
 }
 
 void ExperimentWidget::loadModelDescriptors(QString experimentType)
@@ -344,6 +390,26 @@ void ExperimentWidget::getModel(QUuid descriptorUid)
         qCritical() << tr("Failed to fetch experiemnt model: %1").arg(err);
     } catch(...) {
         qCritical() << tr("Failed to fetch experiement model.");
+    }
+}
+
+/*! Filter the process list based on the node list selection
+    \sa ExperimentWidget::refreshProcessTree()
+ */
+void ExperimentWidget::on_trvNodeList_selectionChanged()
+{
+    QString nodeListFilter = ui->trvNodeList->selectedNodes(true);
+    nodeListFilter = nodeListFilter.replace(',','|');    // Cludgy, but it works
+
+    if(!nodeListFilter.isEmpty()) {
+        nodeListFilter = nodeListFilter.prepend("^(").append(")$");
+    }
+
+    proxyModelProcesses->setFilterRegExp(nodeListFilter);
+    proxyModelProcesses->sort(1);
+    proxyModelProcesses->sort(0);
+    for(int i=0; i < proxyModelProcesses->columnCount(); i++) {
+        ui->trvProcesses->resizeColumnToContents(i);
     }
 }
 
