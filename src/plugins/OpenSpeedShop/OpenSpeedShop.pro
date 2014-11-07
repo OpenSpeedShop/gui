@@ -35,6 +35,7 @@ SOURCES      += OpenSpeedShopPlugin.cpp \
                 ConnectionManager/ConnectionWidget.cpp \
                 ConnectionManager/ConnectionManager.cpp \
                 ModelManager/DataModel.cpp \
+                ModelManager/FilterDescriptor.cpp \
                 ModelManager/ModelDescriptor.cpp \
                 ModelManager/ModelDescriptorWidget.cpp \
                 ModelManager/ModelManager.cpp \
@@ -61,6 +62,7 @@ HEADERS      += OpenSpeedShopPlugin.h \
                 ModelManager/DataModel.h \
                 ConnectionManager/ConnectionManagerLibrary.h \
                 OpenSpeedShopLibrary.h \
+                ModelManager/FilterDescriptor.h \
                 ModelManager/ModelDescriptor.h \
                 ModelManager/ModelDescriptorWidget.h \
                 ModelManager/ModelManager.h \
@@ -84,7 +86,7 @@ FORMS        += Settings/SettingPage.ui \
                 ModelManager/ModelDescriptorWidget.ui \
                 ModelManager/ModelManagerDialog.ui \
                 RemoteFileSystem/RemoteFileDialog.ui \
-    AboutWidget.ui
+                AboutWidget.ui
 
 RESOURCES    += Resources/OpenSpeedShop.qrc
 

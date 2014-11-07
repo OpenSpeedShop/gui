@@ -84,7 +84,7 @@ public:
     virtual QList<qint64> waitExperimentThreads(QUuid experimentUid) = 0;
     virtual QStringList waitExperimentViews(QString experimentType) = 0;
     virtual QMap<QString, QVariant> waitExperimentParameterValues(QUuid experimentUid) = 0;
-    virtual QAbstractItemModel *waitExperimentView(QUuid experimentUid, QStringList modifiers, QStringList metrics, int count) = 0;
+    virtual QAbstractItemModel *waitExperimentView(QUuid experimentUid, QStringList modifiers, QStringList metrics, QStringList filters, int count) = 0;
     virtual QList<Process> waitExperimentProcesses(QUuid experimentUid) = 0;
     virtual QMap<QString,QString> waitExperimentTypeModifiers(QString experimentType) = 0;
     virtual QMap<QString,QString> waitExperimentTypeMetrics(QString experimentType) = 0;

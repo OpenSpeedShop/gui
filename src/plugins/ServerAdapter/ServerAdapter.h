@@ -59,7 +59,7 @@ public:
     QStringList waitExperimentViews(QString experimentType);
     QMap<QString, QVariant> waitExperimentParameterValues(QUuid experimentUid);
     QAbstractItemModel *waitExperimentView(QUuid experimentUid, int count = 1000);
-    QAbstractItemModel *waitExperimentView(QUuid experimentUid, QStringList modifiers, QStringList metrics, int count = 1000);
+    QAbstractItemModel *waitExperimentView(QUuid experimentUid, QStringList modifiers, QStringList metrics, QStringList filters, int count = 1000);
     QList<Plugins::OpenSpeedShop::IAdapter::Process> waitExperimentProcesses(QUuid experimentUid);
     QMap<QString,QString> waitExperimentTypeModifiers(QString experimentType);
     QMap<QString,QString> waitExperimentTypeMetrics(QString experimentType);
@@ -100,8 +100,8 @@ protected:
     QMap<QString, QVariant> waitExperimentParameterValues(qint64 experimentId);
     Plugins::OpenSpeedShop::ServerCommand *experimentView(qint64 experimentId, QString experimentType = QString(), int count = 1000);
     QAbstractItemModel *waitExperimentView(qint64 experimentId, QString experimentType = QString(), int count = 1000);
-    Plugins::OpenSpeedShop::ServerCommand *experimentView(qint64 experimentId, QStringList modifiers, QStringList metrics, QString experimentType = QString(), int count = 1000);
-    QAbstractItemModel *waitExperimentView(qint64 experimentId, QStringList modifiers, QStringList metrics, QString experimentType = QString(), int count = 1000);
+    Plugins::OpenSpeedShop::ServerCommand *experimentView(qint64 experimentId, QStringList modifiers, QStringList metrics, QStringList filters, QString experimentType = QString(), int count = 1000);
+    QAbstractItemModel *waitExperimentView(qint64 experimentId, QStringList modifiers, QStringList metrics, QStringList filters, QString experimentType = QString(), int count = 1000);
     QList<Plugins::OpenSpeedShop::IAdapter::Process> waitExperimentProcesses(qint64 experimentId);
 
     Plugins::OpenSpeedShop::ServerCommand *rawCommand(QString command, QString type);

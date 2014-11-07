@@ -5,6 +5,8 @@
 #include <QModelIndex>
 #include <QUuid>
 
+#include <ModelManager/FilterDescriptor.h>
+
 class QAbstractItemView;
 class QSortFilterProxyModel;
 
@@ -38,10 +40,18 @@ protected:
     void refreshSourceIcon(int row = -1);
 
 protected slots:
+    // Processes tab
+    void on_trvNodeList_selectionChanged();
+    void on_trvNodeList_doubleClicked(QString);
+    void on_trvProcesses_doubleClicked(QModelIndex);
+
+    // Views tab
     void on_cmbViews_currentIndexChanged(int index);
     void on_btnAddModel_clicked();
     void on_txtViewFilter_textChanged(const QString &text);
     void on_cmbViewFilterColumn_currentIndexChanged(int index);
+
+    // Source tab
     void on_btnSourcePath_clicked();
     void on_lstSource_currentRowChanged(int row);
     void on_lstSource_customContextMenuRequested(const QPoint &position);
@@ -59,7 +69,6 @@ protected slots:
 
     void closeEvent(QCloseEvent *);
 
-    void on_trvNodeList_selectionChanged();
 
 private:
     Ui::ExperimentWidget *ui;
@@ -70,6 +79,8 @@ private:
     QString m_CommonPath;
 
     QSortFilterProxyModel *proxyModelProcesses;
+
+    FilterDescriptor m_CurrentFilter;
 
     int m_lstSourceContextMenuRow;
 };

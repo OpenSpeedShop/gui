@@ -13,6 +13,7 @@
 #include <ConnectionManager/IAdapter.h>
 
 #include "DataModel.h"
+#include "FilterDescriptor.h"
 #include "ModelManagerDialog.h"
 #include "ModelDescriptor.h"
 #include "ModelDescriptorWidget.h"
@@ -20,6 +21,18 @@
 
 namespace Plugins {
 namespace OpenSpeedShop {
+
+class ModelLookupRow {
+public:
+    ModelLookupRow(QUuid descriptorUid, QUuid experimentUid, QByteArray filterHash, QUuid modelUid) :
+        m_DescriptorUid(descriptorUid), m_ExperimentUid(experimentUid), m_FilterHash(filterHash), m_ModelUid(modelUid) {}
+
+    QUuid m_DescriptorUid;
+    QUuid m_ExperimentUid;
+    QByteArray m_FilterHash;
+    QUuid m_ModelUid;
+};
+
 
 ModelManager &ModelManager::instance()
 {
@@ -349,7 +362,7 @@ QAbstractItemModel *ModelManager::descriptorModel()
 
 
 /*! \brief Fetches the model's data from the server, using the descriptor specified. */
-QUuid ModelManager::fetchModel(const QUuid &descriptorUid, const QUuid &experimentUid)
+QUuid ModelManager::fetchModel(const QUuid &descriptorUid, const QUuid &experimentUid, const FilterDescriptor *filterDescriptor)
 {
     ConnectionManager &connectionManager = ConnectionManager::instance();
     if(!connectionManager.isConnected()) {
@@ -372,6 +385,7 @@ QUuid ModelManager::fetchModel(const QUuid &descriptorUid, const QUuid &experime
                 experimentUid,
                 modelDescriptor->modifiers(),
                 modelDescriptor->metrics(),
+                filterDescriptor->filters(),
                 modelDescriptor->rowCount());
 
     DataModel *dataModel = qobject_cast<DataModel *>(model);
@@ -386,9 +400,7 @@ QUuid ModelManager::fetchModel(const QUuid &descriptorUid, const QUuid &experime
 #endif
 
     // Add everything to the look up table
-    QHash<QUuid, QUuid> *experimentModels = new QHash<QUuid, QUuid>();
-    experimentModels->insert(experimentUid, dataModel->uid());
-    m_ModelLookupTable.insert(descriptorUid, experimentModels);
+    m_ModelLookupTable.append(new ModelLookupRow(descriptorUid, experimentUid, filterDescriptor->getHash(), dataModel->uid()));
 
     return dataModel->uid();
 }
@@ -415,29 +427,28 @@ void ModelManager::ModelManager::exportModel(const QUuid &modelUid, const QStrin
 }
 
 /*! \brief Removes the model's data from memory, requiring a re-fetch from the server if it is accessed again. */
-void ModelManager::unloadModel(const QUuid &descriptorUid, const QUuid &experimentUid)
+void ModelManager::unloadModel(const QUuid &descriptorUid, const QUuid &experimentUid, const FilterDescriptor *filterDescriptor)
 {
-    QHash<QUuid, QUuid> *experimentModels = m_ModelLookupTable.value(descriptorUid);
-    if(!experimentModels || experimentModels->count() <= 0) {
+    ModelLookupRow *modelLookupRow = NULL;
+    foreach(ModelLookupRow *row, m_ModelLookupTable) {  // Not the fastest lookup method, but we're not expecting a huge list
+        if(     row->m_DescriptorUid == descriptorUid &&
+                row->m_ExperimentUid == experimentUid &&
+                row->m_FilterHash == filterDescriptor->getHash()) {
+            modelLookupRow = row;
+        }
+    }
+
+    if(!modelLookupRow || modelLookupRow->m_ModelUid.isNull()) {  // isn't there anyway, just return
         return;
     }
 
-    QUuid modelUid = experimentModels->value(experimentUid);
-    if(modelUid.isNull()) {
-        return;
+    DataModel *model = m_ModelPool.value(modelLookupRow->m_ModelUid);
+    if(!model) {
+        m_ModelPool.remove(modelLookupRow->m_ModelUid);
+        model->deleteLater();
     }
 
-    DataModel *dataModel = m_ModelPool.value(modelUid);
-    if(!dataModel) {
-        return;
-    }
-
-    m_ModelPool.remove(modelUid);
-    experimentModels->remove(experimentUid);
-
-    if(experimentModels->count() <= 0) {
-        m_ModelLookupTable.remove(descriptorUid, experimentModels);
-    }
+    m_ModelLookupTable.removeAll(modelLookupRow);
 }
 
 /*! \brief Returns a container for the MIME type data for the specified descriptor.
@@ -452,19 +463,24 @@ QMimeData ModelManager::modelMimeData(const QUuid &descriptorUid, const QUuid &e
 }
 
 /*! \brief Returns the model from the cache. If it's not in the cache a fetch is automatically performed. */
-QAbstractItemModel *ModelManager::model(const QUuid &descriptorUid, const QUuid &experimentUid)
+QAbstractItemModel *ModelManager::model(const QUuid &descriptorUid, const QUuid &experimentUid, const FilterDescriptor &filterDescriptor)
 {
-    QUuid modelUid;
-
     // Try to find it in the cache
-    QHash<QUuid, QUuid> *experimentModels = m_ModelLookupTable.value(descriptorUid);
-    if(experimentModels && experimentModels->count() > 0) {
-        modelUid = experimentModels->value(experimentUid);
+    ModelLookupRow *modelLookupRow = NULL;
+    foreach(ModelLookupRow *row, m_ModelLookupTable) {  // Not the fastest lookup method, but we're not expecting a huge list
+        if(     row->m_DescriptorUid == descriptorUid &&
+                row->m_ExperimentUid == experimentUid &&
+                row->m_FilterHash == filterDescriptor.getHash()) {
+            modelLookupRow = row;
+        }
     }
 
     // If the model wasn't cached, fetch it from the server
-    if(modelUid.isNull()) {
-        modelUid = fetchModel(descriptorUid, experimentUid);
+    QUuid modelUid;
+    if(!modelLookupRow || modelLookupRow->m_ModelUid.isNull()) {
+        modelUid = fetchModel(descriptorUid, experimentUid, &filterDescriptor);
+    } else {
+        modelUid = modelLookupRow->m_ModelUid;
     }
 
 #ifdef MODELMANAGER_DEBUG

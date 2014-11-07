@@ -5,6 +5,7 @@
 #include <ConnectionManager/IAdapter.h>
 #include <SettingManager/SettingManager.h>
 
+#include <ModelManager/FilterDescriptor.h>
 #include <ModelManager/ModelManager.h>
 #include <ModelManager/ModelManagerDialog.h>
 #include <ModelManager/ModelDescriptorListWidget.h>
@@ -363,17 +364,26 @@ void ExperimentWidget::getModel(QUuid descriptorUid)
 {
     try {
 
-        m_CurrentModel = ModelManager::instance().model(descriptorUid, m_ExperimentUid);
-
-        /* Reset the view filter for this model */
+        // Clear the model dependent stuff
         ui->txtViewFilter->setText(QString());
         ui->cmbViewFilterColumn->clear();
+        ui->cmbViews->clear();
+
+        m_CurrentModel = ModelManager::instance().model(descriptorUid, m_ExperimentUid, m_CurrentFilter);
+
+        /* Let the source view know about the change */
+        ui->txtSource->setModel(m_CurrentModel);
+
+        if(!m_CurrentModel) {
+            return;
+        }
+
+        /* Reset the view filter for this model */
         for(int i = 0; i < m_CurrentModel->columnCount(); i++) {
             ui->cmbViewFilterColumn->addItem(m_CurrentModel->headerData(i, Qt::Horizontal, Qt::DisplayRole).toString());
         }
 
         /* Reset the view list */
-        ui->cmbViews->clear();
         QStringList viewNameList = Core::ViewManager::ViewManager::instance().viewNames(m_CurrentModel);
 
         // Remove the view that the Open|SpeedShop View replaced
@@ -383,8 +393,6 @@ void ExperimentWidget::getModel(QUuid descriptorUid)
 
         ui->cmbViews->setCurrentIndex(ui->cmbViews->findText("Open|SpeedShop View", Qt::MatchExactly));
 
-        /* Let the source view know about the change */
-        ui->txtSource->setModel(m_CurrentModel);
 
     } catch(QString err) {
         qCritical() << tr("Failed to fetch experiemnt model: %1").arg(err);
@@ -412,6 +420,29 @@ void ExperimentWidget::on_trvNodeList_selectionChanged()
         ui->trvProcesses->resizeColumnToContents(i);
     }
 }
+
+void ExperimentWidget::on_trvNodeList_doubleClicked(QString node)
+{
+    m_CurrentFilter.clearHosts();
+    m_CurrentFilter.clearThreads();
+    m_CurrentFilter.clearRanks();
+    m_CurrentFilter.insertHost(node);
+}
+
+void ExperimentWidget::on_trvProcesses_doubleClicked(QModelIndex index)
+{
+    QModelIndex nodeIndex = index.sibling(index.row(), 0);
+    QModelIndex rankIndex = index.sibling(index.row(), 1);
+    QModelIndex threadIndex = index.sibling(index.row(), 3);
+
+    m_CurrentFilter.clearHosts();
+    m_CurrentFilter.clearThreads();
+    m_CurrentFilter.clearRanks();
+    m_CurrentFilter.insertHost(nodeIndex.data(Qt::DisplayRole).toString());
+    m_CurrentFilter.insertThread(threadIndex.data(Qt::DisplayRole).toString());
+    m_CurrentFilter.insertRank(rankIndex.data(Qt::DisplayRole).toString());
+}
+
 
 void ExperimentWidget::on_cmbViews_currentIndexChanged(int index)
 {

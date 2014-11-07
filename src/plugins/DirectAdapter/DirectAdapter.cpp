@@ -693,7 +693,7 @@ QMap<QString, QVariant> DirectAdapter::waitExperimentParameterValues(QUuid exper
     return waitExperimentParameterValues(experimentId(experimentUid));
 }
 
-ServerCommand *DirectAdapter::experimentView(qint64 experimentId, QStringList modifiers, QStringList metrics, QString experimentType, int count)
+ServerCommand *DirectAdapter::experimentView(qint64 experimentId, QStringList modifiers, QStringList metrics, QStringList filters, QString experimentType, int count)
 {
     QString command = QString("expView -x %1").arg(experimentId);
 
@@ -705,15 +705,21 @@ ServerCommand *DirectAdapter::experimentView(qint64 experimentId, QStringList mo
         command.append(" -m " + metrics.join(","));
     }
 
+    //TODO: Rebuild this into a filter object that handles the parameter flags instead of doing it in the front end code!
+    if(!filters.isEmpty()) {
+        command.append(" " + filters.join(" "));
+    }
+
     if(!experimentType.isEmpty()) {
         command.append(QString(" %1%2").arg(experimentType).arg(count));
     }
 
     return rawOpenSpeedShopCommand(command);
 }
-QAbstractItemModel *DirectAdapter::waitExperimentView(qint64 experimentId, QStringList modifiers, QStringList metrics, QString experimentType, int count)
+QAbstractItemModel *DirectAdapter::waitExperimentView(qint64 experimentId, QStringList modifiers, QStringList metrics, QStringList filters, QString experimentType, int count)
 {
-    ServerCommand *serverCommand = experimentView(experimentId, modifiers, metrics, experimentType, count);
+    ServerCommand *serverCommand = experimentView(experimentId, modifiers, metrics, filters, experimentType, count);
+    qDebug() << serverCommand->commandText();
     waitCommand(serverCommand);
 
     DataModel *dataModel = NULL;
@@ -723,19 +729,19 @@ QAbstractItemModel *DirectAdapter::waitExperimentView(qint64 experimentId, QStri
     serverCommand->deleteLater();
     return dataModel;
 }
-QAbstractItemModel *DirectAdapter::waitExperimentView(QUuid experimentUid, QStringList modifiers, QStringList metrics, int count)
+QAbstractItemModel *DirectAdapter::waitExperimentView(QUuid experimentUid, QStringList modifiers, QStringList metrics, QStringList filters, int count)
 {
     QString experimentType = waitExperimentType(experimentUid);
-    return waitExperimentView(experimentId(experimentUid), modifiers, metrics, experimentType, count);
+    return waitExperimentView(experimentId(experimentUid), modifiers, metrics, filters, experimentType, count);
 }
 
 ServerCommand *DirectAdapter::experimentView(qint64 experimentId, QString experimentType, int count)
 {
-    return experimentView(experimentId, QStringList(), QStringList(), experimentType, count);
+    return experimentView(experimentId, QStringList(), QStringList(), QStringList(), experimentType, count);
 }
 QAbstractItemModel *DirectAdapter::waitExperimentView(qint64 experimentId, QString experimentType, int count)
 {
-    return waitExperimentView(experimentId, QStringList(), QStringList(), experimentType, count);
+    return waitExperimentView(experimentId, QStringList(), QStringList(), QStringList(), experimentType, count);
 }
 QAbstractItemModel *DirectAdapter::waitExperimentView(QUuid experimentUid, int count)
 {

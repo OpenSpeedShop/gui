@@ -13,10 +13,13 @@ class QAction;
 namespace Plugins {
 namespace OpenSpeedShop {
 
+class DataModel;
+class FilterDescriptor;
 class ModelDescriptor;
 class ModelDescriptorWidget;
 class ModelDescriptorListWidget;
-class DataModel;
+
+class ModelLookupRow;
 
 class MODELMANAGER_EXPORT ModelManager : public QObject
 {
@@ -38,13 +41,12 @@ public:
 
     QUuid importModel(const QString &filepath = QString());
     void exportModel(const QUuid &modelUid, const QString &filepath = QString());
-    QUuid fetchModel(const QUuid &descriptorUid, const QUuid &experimentUid);
+    QUuid fetchModel(const QUuid &descriptorUid, const QUuid &experimentUid, const FilterDescriptor *filterDescriptor);
     void unloadModel(const QUuid &modelUid);
-    void unloadModel(const QUuid &descriptorUid, const QUuid &experimentUid);
+    void unloadModel(const QUuid &descriptorUid, const QUuid &experimentUid, const FilterDescriptor *filterDescriptor);
     QMimeData modelMimeData(const QUuid &modelUid);
     QMimeData modelMimeData(const QUuid &descriptorUid, const QUuid &experimentUid);
-    QAbstractItemModel *model(const QUuid &modelUid);
-    QAbstractItemModel *model(const QUuid &descriptorUid, const QUuid &experimentUid);
+    QAbstractItemModel *model(const QUuid &descriptorUid, const QUuid &experimentUid, const FilterDescriptor &filter);
     QUuid modelUid(const QUuid &descriptorUid, const QUuid &experimentUid) const;
 
 protected:
@@ -59,8 +61,7 @@ protected:
     QHash<QUuid, QStandardItem *> m_DescriptorToItem;
     QStandardItemModel m_DescriptorPoolModel;
 
-    // DescriptorID -> ExperimentID -> ModelID
-    QMultiHash<QUuid, QHash<QUuid, QUuid>*> m_ModelLookupTable;
+    QList<ModelLookupRow *> m_ModelLookupTable;
     QHash<QUuid, DataModel*> m_ModelPool;
 
 protected slots:
