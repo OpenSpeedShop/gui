@@ -23,23 +23,24 @@ public:
         State_Invalid
     };
 
-    explicit ServerCommand(QString command, QString type = QString(), QObject *parent = 0);
+    explicit ServerCommand(const QString &command, const QString &type = QString(), QObject *parent = 0);
 
-    QDomDocument command();
-    QString commandText();
-    QString commandType();
-    QString commandID();
+    QDomDocument command() const;
+    QString commandText() const;
+    QString commandType() const;
+    QString commandID() const;
+    QUuid commandUid() const;
 
-    QDomDocument response();
+    QDomDocument response() const;
 
-    States state();
+    States state() const;
 
 signals:
     void readyResponse();
     void stateChanged();
 
 protected:
-    explicit ServerCommand(QDomDocument command, QObject *parent = 0);
+    explicit ServerCommand(const QDomDocument &command, QObject *parent = 0);
     void setResponse(QDomDocument response);
     void setState(States state);
 

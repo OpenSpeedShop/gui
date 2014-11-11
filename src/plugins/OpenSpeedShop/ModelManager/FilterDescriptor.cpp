@@ -27,8 +27,7 @@
 namespace Plugins {
 namespace OpenSpeedShop {
 
-FilterDescriptor::FilterDescriptor(QObject *parent) :
-    QObject(parent)
+FilterDescriptor::FilterDescriptor()
 {
 }
 
@@ -100,17 +99,19 @@ void FilterDescriptor::clearHosts()
 void FilterDescriptor::removeHost(const QString &host)
 {
     m_Hosts.removeOne(host);
-
-    emit hostsChanged();
-    emit dataChanged();
 }
 
 void FilterDescriptor::insertHost(const QString &host)
 {
-    m_Hosts.append(host);
+    if(host.trimmed().isEmpty()) {
+        return;
+    }
 
-    emit hostsChanged();
-    emit dataChanged();
+    if(m_Hosts.contains(host)) {
+        return;
+    }
+
+    m_Hosts.append(host);
 }
 
 
@@ -127,17 +128,19 @@ void FilterDescriptor::clearThreads()
 void FilterDescriptor::removeThread(const QString &thread)
 {
     m_Threads.removeOne(thread);
-
-    emit threadsChanged();
-    emit dataChanged();
 }
 
 void FilterDescriptor::insertThread(const QString &thread)
 {
-    m_Threads.append(thread);
+    if(thread.trimmed().isEmpty()) {
+        return;
+    }
 
-    emit threadsChanged();
-    emit dataChanged();
+    if(m_Threads.contains(thread)) {
+        return;
+    }
+
+    m_Threads.append(thread);
 }
 
 
@@ -154,17 +157,19 @@ void FilterDescriptor::clearRanks()
 void FilterDescriptor::removeRank(const QString &rank)
 {
     m_Ranks.removeOne(rank);
-
-    emit ranksChanged();
-    emit dataChanged();
 }
 
 void FilterDescriptor::insertRank(const QString &rank)
 {
-    m_Ranks.append(rank);
+    if(rank.trimmed().isEmpty()) {
+        return;
+    }
 
-    emit ranksChanged();
-    emit dataChanged();
+    if(m_Ranks.contains(rank)) {
+        return;
+    }
+
+    m_Ranks.append(rank);
 }
 
 

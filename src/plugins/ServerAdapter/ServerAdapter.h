@@ -64,6 +64,9 @@ public:
     QMap<QString,QString> waitExperimentTypeModifiers(QString experimentType);
     QMap<QString,QString> waitExperimentTypeMetrics(QString experimentType);
 
+public slots:
+    virtual void cancelWaitOperation();
+
 protected:
     Plugins::OpenSpeedShop::ServerCommand *version();
     Plugins::OpenSpeedShop::ServerCommand *keepAlive();
@@ -124,6 +127,9 @@ protected slots:
 private:
     QDomDocument m_MetricsList;
     QHash<QUuid, int> m_ExperimentIds;
+
+    bool m_isWaiting;
+    bool m_CancelWaitCommand;
 
 };
 

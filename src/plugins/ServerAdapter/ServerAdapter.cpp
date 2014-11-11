@@ -18,7 +18,9 @@ namespace ServerAdapter {
     \brief
  */
 ServerAdapter::ServerAdapter(QObject *parent) :
-    IAdapter(parent)
+    IAdapter(parent),
+    m_isWaiting(false),
+    m_CancelWaitCommand(false)
 {
     setObjectName("ServerAdapter");
 }
@@ -66,21 +68,47 @@ ServerCommand *ServerAdapter::rawOpenSpeedShopCommand(QString command)
  */
 QDomElement ServerAdapter::waitCommand(ServerCommand *serverCommand)
 {
+    // Make this reentrant; the CLI can only handle one query at a time anyway
+    while(m_isWaiting) {
+        QApplication::processEvents();
+        Thread::sleep(50);
+    }
+
+    m_isWaiting = true;
+
     /*! \todo We need to notify the user of the wait state after the first second or so (spinning visual display).
         \todo We need to ask the user if they'd like to continue waiting after 30 seconds or so. */
 
     while(serverCommand->state() != ServerCommand::State_Response) {
         QApplication::processEvents();
+
+        if(m_CancelWaitCommand) {
+            m_CancelWaitCommand = false;
+            m_isWaiting = false;
+            throw tr("Command canceled by user");
+        }
+
         if(serverCommand->state() == ServerCommand::State_Invalid) {
+            m_isWaiting = false;
             throw tr("Command has been invalidated");
         }
-        Thread::sleep(10);
+
+        Thread::sleep(50);
     }
+
+    m_isWaiting = false;
 
     QDomElement responseElement = serverCommand->response().firstChildElement("Response");
     if(responseElement.isNull()) throw tr("'Response' element doesn't exist, as expected.");
 
     return responseElement;
+}
+
+void ServerAdapter::cancelWaitOperation()
+{
+    if(m_isWaiting) {
+        m_CancelWaitCommand = true;
+    }
 }
 
 /*! \fn ServerAdapter::getString()

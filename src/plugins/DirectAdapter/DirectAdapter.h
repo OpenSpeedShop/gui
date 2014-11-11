@@ -65,6 +65,10 @@ public:
     QMap<QString,QString> waitExperimentTypeMetrics(QString experimentType);
 
     virtual bool useLocalFileDialog() { return true; }
+    virtual bool isWaiting() { return m_isWaiting; }
+
+public slots:
+    virtual void cancelWaitOperation();
 
 protected:
     Plugins::OpenSpeedShop::ServerCommand *version();
@@ -126,6 +130,9 @@ protected slots:
 private:
     QDomDocument m_MetricsList;
     QHash<QUuid, int> m_ExperimentIds;
+
+    bool m_isWaiting;
+    bool m_CancelWaitCommand;
 
 };
 

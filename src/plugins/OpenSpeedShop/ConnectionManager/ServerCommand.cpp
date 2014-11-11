@@ -5,7 +5,7 @@
 namespace Plugins {
 namespace OpenSpeedShop {
 
-ServerCommand::ServerCommand(QDomDocument command, QObject *parent) :
+ServerCommand::ServerCommand(const QDomDocument &command, QObject *parent) :
     QObject(parent)
 {
     m_id = QUuid::createUuid();
@@ -15,7 +15,7 @@ ServerCommand::ServerCommand(QDomDocument command, QObject *parent) :
     m_Command.firstChildElement("Command").setAttribute("id", m_id.toString());
 }
 
-ServerCommand::ServerCommand(QString command, QString type, QObject *parent) :
+ServerCommand::ServerCommand(const QString &command, const QString &type, QObject *parent) :
     QObject(parent)
 {
     m_id = QUuid::createUuid();
@@ -29,27 +29,33 @@ ServerCommand::ServerCommand(QString command, QString type, QObject *parent) :
     m_Command.appendChild(element);
 }
 
-QDomDocument ServerCommand::command()
+QDomDocument ServerCommand::command() const
 {
     return m_Command;
 }
 
-QString ServerCommand::commandText()
+QString ServerCommand::commandText() const
 {
     return command().firstChildElement("Command").text();
 }
 
-QString ServerCommand::commandType()
+QString ServerCommand::commandType() const
 {
     return command().firstChildElement("Command").attribute("type");
 }
 
-QString ServerCommand::commandID()
+QString ServerCommand::commandID() const
 {
     return command().firstChildElement("Command").attribute("id");
 }
 
-QDomDocument ServerCommand::response()
+QUuid ServerCommand::commandUid() const
+{
+    return m_id;
+}
+
+
+QDomDocument ServerCommand::response() const
 {
     return m_Response;
 }
@@ -61,7 +67,7 @@ void ServerCommand::setResponse(QDomDocument response)
     emit readyResponse();
 }
 
-ServerCommand::States ServerCommand::state()
+ServerCommand::States ServerCommand::state() const
 {
     return m_State;
 }

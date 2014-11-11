@@ -39,11 +39,14 @@ protected:
     QString rewriteSourceFilePath(int row);
     void refreshSourceIcon(int row = -1);
 
+    FilterDescriptor getFilter() const;
+
 protected slots:
+    void on_tabWidget_currentChanged(int);
+
     // Processes tab
     void on_trvNodeList_selectionChanged();
-    void on_trvNodeList_doubleClicked(QString);
-    void on_trvProcesses_doubleClicked(QModelIndex);
+    void trvProcesses_selectionChanged();
 
     // Views tab
     void on_cmbViews_currentIndexChanged(int index);
@@ -73,14 +76,14 @@ protected slots:
 private:
     Ui::ExperimentWidget *ui;
     QUuid m_ExperimentUid;
+    QUuid m_CurrentDescriptorUid;
     QAbstractItemView *m_CurrentView;
     QAbstractItemModel *m_CurrentModel;
     QMap<QString, QString> m_SourceFileCache;
     QString m_CommonPath;
+    bool m_FilterDirty;
 
     QSortFilterProxyModel *proxyModelProcesses;
-
-    FilterDescriptor m_CurrentFilter;
 
     int m_lstSourceContextMenuRow;
 };

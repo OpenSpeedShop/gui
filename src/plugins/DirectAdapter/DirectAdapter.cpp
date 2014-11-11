@@ -19,7 +19,9 @@ namespace DirectAdapter {
     \brief
  */
 DirectAdapter::DirectAdapter(QObject *parent) :
-    IAdapter(parent)
+    IAdapter(parent),
+    m_isWaiting(false),
+    m_CancelWaitCommand(false)
 {
     setObjectName("DirectAdapter");
 }
@@ -67,22 +69,47 @@ ServerCommand *DirectAdapter::rawOpenSpeedShopCommand(QString command)
  */
 QDomElement DirectAdapter::waitCommand(ServerCommand *serverCommand)
 {
-    /*! \todo We need to notify the user of the wait state after the first second or so (spinning visual display).
-        \todo We need to ask the user if they'd like to continue waiting after 30 seconds or so. */
+    // Make this reentrant; the CLI can only handle one query at a time anyway
+    //TODO: Reimplement using QMutex
+    while(m_isWaiting) {
+        QApplication::processEvents();
+        Thread::sleep(50);
+    }
+
+    m_isWaiting = true;
 
     while(serverCommand->state() != ServerCommand::State_Response) {
         QApplication::processEvents();
+
+        if(m_CancelWaitCommand) {
+            m_CancelWaitCommand = false;
+            m_isWaiting = false;
+            throw tr("Command canceled by user");
+        }
+
         if(serverCommand->state() == ServerCommand::State_Invalid) {
+            m_isWaiting = false;
             throw tr("Command has been invalidated");
         }
-        Thread::sleep(10);
+
+        Thread::sleep(50);
     }
+
+    m_isWaiting = false;
 
     QDomElement responseElement = serverCommand->response().firstChildElement("Response");
     if(responseElement.isNull()) throw tr("'Response' element doesn't exist, as expected.");
 
     return responseElement;
 }
+
+void DirectAdapter::cancelWaitOperation()
+{
+    if(m_isWaiting) {
+        m_CancelWaitCommand = true;
+    }
+}
+
 
 /*! \fn DirectAdapter::getString()
     \brief
@@ -705,7 +732,6 @@ ServerCommand *DirectAdapter::experimentView(qint64 experimentId, QStringList mo
         command.append(" -m " + metrics.join(","));
     }
 
-    //TODO: Rebuild this into a filter object that handles the parameter flags instead of doing it in the front end code!
     if(!filters.isEmpty()) {
         command.append(" " + filters.join(" "));
     }
@@ -719,11 +745,13 @@ ServerCommand *DirectAdapter::experimentView(qint64 experimentId, QStringList mo
 QAbstractItemModel *DirectAdapter::waitExperimentView(qint64 experimentId, QStringList modifiers, QStringList metrics, QStringList filters, QString experimentType, int count)
 {
     ServerCommand *serverCommand = experimentView(experimentId, modifiers, metrics, filters, experimentType, count);
-    qDebug() << serverCommand->commandText();
     waitCommand(serverCommand);
 
     DataModel *dataModel = NULL;
-    try { dataModel = new DataModel(serverCommand->response(), this); }
+    try {
+        dataModel = new DataModel(serverCommand->response(), this);
+        dataModel->setProperty("CommandText", serverCommand->commandText());
+    }
     catch(QString err) { throw tr("Failed to create data model. Error from model: '%1'").arg(err); }
 
     serverCommand->deleteLater();

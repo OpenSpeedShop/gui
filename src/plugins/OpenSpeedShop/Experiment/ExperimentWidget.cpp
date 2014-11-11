@@ -55,6 +55,8 @@ ExperimentWidget::ExperimentWidget(QWidget *parent) :
     proxyModelProcesses->setSourceModel(new QStandardItemModel());
     ui->trvProcesses->setModel(proxyModelProcesses);
 
+    connect(ui->trvProcesses->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), this, SLOT(trvProcesses_selectionChanged()));
+
 
     // readSettings has to be called after we set up the presentation entirely
     readSettings();
@@ -369,12 +371,23 @@ void ExperimentWidget::getModel(QUuid descriptorUid)
         ui->cmbViewFilterColumn->clear();
         ui->cmbViews->clear();
 
-        m_CurrentModel = ModelManager::instance().model(descriptorUid, m_ExperimentUid, m_CurrentFilter);
+
+        m_CurrentModel = ModelManager::instance().model(descriptorUid, m_ExperimentUid, getFilter());
+        m_CurrentDescriptorUid = descriptorUid;
+        m_FilterDirty = false;
+
+        if(!m_CurrentModel) {
+            // Waiting on it to be fetched from the server
+            return;
+        }
+
+        qDebug() << m_CurrentModel->property("CommandText").toString();
 
         /* Let the source view know about the change */
         ui->txtSource->setModel(m_CurrentModel);
 
         if(!m_CurrentModel) {
+            m_CurrentDescriptorUid = QUuid();
             return;
         }
 
@@ -401,6 +414,13 @@ void ExperimentWidget::getModel(QUuid descriptorUid)
     }
 }
 
+void ExperimentWidget::on_tabWidget_currentChanged(int index)
+{
+    if(m_FilterDirty && ui->tabWidget->tabText(index).compare(tr("Views")) == 0) {
+        getModel(m_CurrentDescriptorUid);
+    }
+}
+
 /*! Filter the process list based on the node list selection
     \sa ExperimentWidget::refreshProcessTree()
  */
@@ -413,34 +433,46 @@ void ExperimentWidget::on_trvNodeList_selectionChanged()
         nodeListFilter = nodeListFilter.prepend("^(").append(")$");
     }
 
+    ui->trvProcesses->selectionModel()->clearSelection();
+
     proxyModelProcesses->setFilterRegExp(nodeListFilter);
     proxyModelProcesses->sort(1);
     proxyModelProcesses->sort(0);
     for(int i=0; i < proxyModelProcesses->columnCount(); i++) {
         ui->trvProcesses->resizeColumnToContents(i);
     }
+
+    // Update the view & filter!
+    m_FilterDirty = true;
 }
 
-void ExperimentWidget::on_trvNodeList_doubleClicked(QString node)
+void ExperimentWidget::trvProcesses_selectionChanged()
 {
-    m_CurrentFilter.clearHosts();
-    m_CurrentFilter.clearThreads();
-    m_CurrentFilter.clearRanks();
-    m_CurrentFilter.insertHost(node);
+    // Update the view & filter!
+    m_FilterDirty = true;
 }
 
-void ExperimentWidget::on_trvProcesses_doubleClicked(QModelIndex index)
+FilterDescriptor ExperimentWidget::getFilter() const
 {
-    QModelIndex nodeIndex = index.sibling(index.row(), 0);
-    QModelIndex rankIndex = index.sibling(index.row(), 1);
-    QModelIndex threadIndex = index.sibling(index.row(), 3);
+    FilterDescriptor retval;
 
-    m_CurrentFilter.clearHosts();
-    m_CurrentFilter.clearThreads();
-    m_CurrentFilter.clearRanks();
-    m_CurrentFilter.insertHost(nodeIndex.data(Qt::DisplayRole).toString());
-    m_CurrentFilter.insertThread(threadIndex.data(Qt::DisplayRole).toString());
-    m_CurrentFilter.insertRank(rankIndex.data(Qt::DisplayRole).toString());
+    foreach(QModelIndex index, ui->trvProcesses->selectionModel()->selectedRows()) {
+        QModelIndex nodeIndex = index.sibling(index.row(), 0);
+        QModelIndex rankIndex = index.sibling(index.row(), 1);
+        QModelIndex threadIndex = index.sibling(index.row(), 3);
+
+        retval.insertHost(nodeIndex.data(Qt::DisplayRole).toString());
+        retval.insertThread(threadIndex.data(Qt::DisplayRole).toString());
+        retval.insertRank(rankIndex.data(Qt::DisplayRole).toString());
+    }
+
+    if(retval.isEmpty()) {
+        foreach(QString host, ui->trvNodeList->selectedNodes(true).split(",")) {
+            retval.insertHost(host);
+        }
+    }
+
+    return retval;
 }
 
 

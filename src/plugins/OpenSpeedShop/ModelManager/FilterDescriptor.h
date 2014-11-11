@@ -31,11 +31,10 @@
 namespace Plugins {
 namespace OpenSpeedShop {
 
-class FilterDescriptor : public QObject
+class FilterDescriptor
 {
-    Q_OBJECT
 public:
-    explicit FilterDescriptor(QObject *parent = 0);
+    explicit FilterDescriptor();
 
     QByteArray getHash() const;
 
@@ -56,13 +55,6 @@ public:
     void clearRanks();
     void removeRank(const QString &rank);
     void insertRank(const QString &rank);
-
-signals:
-    void idChanged();
-    void hostsChanged();
-    void threadsChanged();
-    void ranksChanged();
-    void dataChanged();
 
 protected:
     QStringList m_Hosts;
