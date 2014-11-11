@@ -162,7 +162,7 @@ void SourceView::refreshStatements()
     QString statementType;
     for(int i=0; i < m_Model->columnCount(); ++i) {
         QString columnType = m_Model->headerData(i, Qt::Horizontal, Qt::ToolTipRole).toString();
-        if(columnType == "Statement" || columnType == "Function") {
+        if(columnType == "Statement" || columnType == "Function"  || columnType == "CallStackEntry") {
             statementType = columnType;
             statementColumn = i;
             break;
@@ -175,6 +175,8 @@ void SourceView::refreshStatements()
             statementPattern.setPattern("^.*\\((.*):([0-9]+)\\)$");
         } else if(statementType == "Statement") {
             statementPattern.setPattern("^(.*):([0-9]+)$");
+        } else if(statementType == "CallStackEntry") {
+            statementPattern.setPattern("^.* \\((.*):([0-9]+)\\)$");
         }
 
         for(int i=0; i < m_Model->rowCount(); ++i) {
