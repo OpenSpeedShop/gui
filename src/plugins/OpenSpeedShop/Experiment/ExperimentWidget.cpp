@@ -719,7 +719,7 @@ void ExperimentWidget::on_btnSourcePath_clicked()
 void ExperimentWidget::viewItemActivated(QModelIndex index)
 {
     QString type = index.data(Qt::UserRole + 1).toString();
-    if(type == "Function" || type == "Statement") {
+    if(type == "Function" || type == "Statement" || type == "CallStackEntry") {
         QString text = index.data(Qt::DisplayRole).toString();
 
         QRegExp statementPattern;
@@ -727,6 +727,8 @@ void ExperimentWidget::viewItemActivated(QModelIndex index)
             statementPattern.setPattern("^.*\\((.*):([0-9]+)\\)$");
         } else if(type == "Statement") {
             statementPattern.setPattern("^(.*):([0-9]+)$");
+        } else if(type == "CallStackEntry") {
+            statementPattern.setPattern("^.* \\((.*):([0-9]+)\\)$");
         }
 
         if(statementPattern.exactMatch(text)) {
