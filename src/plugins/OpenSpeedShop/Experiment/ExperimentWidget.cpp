@@ -16,6 +16,8 @@
 #include <RemoteFileSystem/RemoteFileDialog.h>
 #include <RemoteFileSystem/PathRewriter.h>
 
+#include <NotificationManager/NotificationManager.h>
+
 #include <QMenu>
 #include <QMessageBox>
 #include <QFileDialog>
@@ -381,7 +383,7 @@ void ExperimentWidget::getModel(QUuid descriptorUid)
             return;
         }
 
-        qDebug() << m_CurrentModel->property("CommandText").toString();
+        Core::NotificationManager::NotificationManager::instance().writeToLogFile(0, m_CurrentModel->property("CommandText").toString());
 
         /* Let the source view know about the change */
         ui->txtSource->setModel(m_CurrentModel);
