@@ -456,18 +456,26 @@ FilterDescriptor ExperimentWidget::getFilter() const
 {
     FilterDescriptor retval;
 
-    foreach(QModelIndex index, ui->trvProcesses->selectionModel()->selectedRows()) {
-        QModelIndex nodeIndex = index.sibling(index.row(), 0);
-        QModelIndex rankIndex = index.sibling(index.row(), 1);
-        QModelIndex threadIndex = index.sibling(index.row(), 3);
+    QStringList selectedNodes = ui->trvNodeList->selectedNodes(true).split(",");
+    QModelIndexList selectedProcs = ui->trvProcesses->selectionModel()->selectedRows();
 
-        retval.insertHost(nodeIndex.data(Qt::DisplayRole).toString());
-        retval.insertThread(threadIndex.data(Qt::DisplayRole).toString());
-        retval.insertRank(rankIndex.data(Qt::DisplayRole).toString());
+    bool allNodes = ((ui->trvNodeList->nodeCount() == selectedNodes.count()) || (selectedNodes.count() == 0));
+    bool allProcs = ((ui->trvProcesses->model()->rowCount() == selectedProcs.count()) || (selectedProcs.count() == 0));
+
+    if(!allProcs) {
+        foreach(QModelIndex index, selectedProcs) {
+            QModelIndex nodeIndex = index.sibling(index.row(), 0);
+            QModelIndex rankIndex = index.sibling(index.row(), 1);
+            QModelIndex threadIndex = index.sibling(index.row(), 3);
+
+            retval.insertHost(nodeIndex.data(Qt::DisplayRole).toString());
+            retval.insertThread(threadIndex.data(Qt::DisplayRole).toString());
+            retval.insertRank(rankIndex.data(Qt::DisplayRole).toString());
+        }
     }
 
-    if(retval.isEmpty()) {
-        foreach(QString host, ui->trvNodeList->selectedNodes(true).split(",")) {
+    if(!allNodes && retval.isEmpty()) {
+        foreach(QString host, selectedNodes) {
             retval.insertHost(host);
         }
     }
