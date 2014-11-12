@@ -41,6 +41,7 @@
 #include <QFileInfo>
 #include <QDomDocument>
 #include <QIcon>
+#include <QDebug>
 
 
 QString RegExpReplacement::replacement() const
