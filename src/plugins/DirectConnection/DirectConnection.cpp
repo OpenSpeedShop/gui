@@ -97,7 +97,7 @@ QString DirectConnection::errorMessage()
 void DirectConnection::writeSettings()
 {
     Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
-    settingManager.beginGroup("Plugins/ConnectionManager");
+    settingManager.setGroup("Plugins/OpenSpeedShop/ConnectionManager");
 
 
     settingManager.endGroup();
@@ -106,7 +106,7 @@ void DirectConnection::writeSettings()
 void DirectConnection::readSettings()
 {
     Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
-    settingManager.beginGroup("Plugins/ConnectionManager");
+    settingManager.setGroup("Plugins/OpenSpeedShop/ConnectionManager");
 
 
     settingManager.endGroup();

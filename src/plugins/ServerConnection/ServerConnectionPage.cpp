@@ -60,7 +60,7 @@ ServerConnectionPage::~ServerConnectionPage()
 void ServerConnectionPage::apply()
 {
     Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
-    settingManager.beginGroup("Plugins/ConnectionManager/ServerConnection");
+    settingManager.setGroup("Plugins/OpenSpeedShop/ConnectionManager/ServerConnection");
     settingManager.setValue("HostName", ui->txtHostname->text());
     settingManager.setValue("Port", ui->txtPort->value());
     settingManager.endGroup();
@@ -71,7 +71,7 @@ void ServerConnectionPage::apply()
 void ServerConnectionPage::reset()
 {
     Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
-    settingManager.beginGroup("Plugins/ConnectionManager/ServerConnection");
+    settingManager.setGroup("Plugins/OpenSpeedShop/ConnectionManager/ServerConnection");
     ui->txtHostname->setText(settingManager.value("HostName", m_ParentConnection->m_HostName).toString());
     ui->txtPort->setValue(settingManager.value("Port", m_ParentConnection->m_Port).toInt());
     settingManager.endGroup();

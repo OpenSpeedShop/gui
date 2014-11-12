@@ -219,7 +219,7 @@ void ServerConnection::disconnected()
 void ServerConnection::writeSettings()
 {
     Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
-    settingManager.beginGroup("Plugins/ConnectionManager");
+    settingManager.setGroup("Plugins/OpenSpeedShop/ConnectionManager");
 
     settingManager.setValue("ServerConnection/HostName", m_HostName);
     settingManager.setValue("ServerConnection/Port", m_Port);
@@ -230,7 +230,7 @@ void ServerConnection::writeSettings()
 void ServerConnection::readSettings()
 {
     Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
-    settingManager.beginGroup("Plugins/ConnectionManager");
+    settingManager.setGroup("Plugins/OpenSpeedShop/ConnectionManager");
 
     m_HostName = settingManager.value("ServerConnection/Hostname", "localhost").toString();
 

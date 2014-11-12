@@ -68,8 +68,7 @@ void SettingPage::initialize()
 {
     // Get settings from SettingManager and populate form
     Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
-    settingManager.beginGroup("Plugins/OpenSpeedShop");
-
+    settingManager.setGroup("Plugins/OpenSpeedShop");
 
 
     // Populate the model with data from the settings manager
@@ -125,7 +124,7 @@ void SettingPage::apply()
 {
     // Persist changed settings to SettingManager
     Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
-    settingManager.beginGroup("Plugins/OpenSpeedShop");
+    settingManager.setGroup("Plugins/OpenSpeedShop");
 
     // Write stuff from the model into the settings manager
     QStandardItemModel *model = qobject_cast<QStandardItemModel *>(ui->lstPathRewriting->model());
@@ -143,8 +142,6 @@ void SettingPage::apply()
 
     QString pathRewritingXML = document.toString(0);
     settingManager.setValue("Experiment/pathRewriting", pathRewritingXML);
-
-
 
 
     settingManager.setValue("Experiment/defaultExperimentPath", ui->txtDatabasePath->text());

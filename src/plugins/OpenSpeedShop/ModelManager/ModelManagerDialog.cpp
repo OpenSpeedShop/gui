@@ -26,7 +26,7 @@ ModelManagerDialog::ModelManagerDialog(QWidget *parent) :
     connect(descriptorListWidget, SIGNAL(currentDescriptorChanged(QUuid)), this, SLOT(currentSelectionChanged(QUuid)));
 
     Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
-    settingManager.beginGroup("Plugins/OpenSpeedShop");
+    settingManager.setGroup("Plugins/OpenSpeedShop/ModelManager");
 
     restoreGeometry(settingManager.value("ModelManagerDialog/windowGeometry", saveGeometry()).toByteArray());
     ui->splitter->restoreGeometry(settingManager.value("ModelManagerDialog/splitterGeometry", ui->splitter->saveGeometry()).toByteArray());
@@ -40,7 +40,7 @@ ModelManagerDialog::~ModelManagerDialog()
     ModelManager::instance().exportDescriptors();
 
     Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
-    settingManager.beginGroup("Plugins/OpenSpeedShop");
+    settingManager.setGroup("Plugins/OpenSpeedShop/ModelManager");
     settingManager.setValue("ModelManagerDialog/windowGeometry", saveGeometry());
     settingManager.setValue("ModelManagerDialog/splitterGeometry", ui->splitter->saveGeometry());
     settingManager.setValue("ModelManagerDialog/splitterState", ui->splitter->saveState());

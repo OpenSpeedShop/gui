@@ -152,7 +152,7 @@ QList<Core::PluginManager::Dependency> OpenSpeedShopPlugin::dependencies()
 void OpenSpeedShopPlugin::readSettings()
 {
     Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
-    settingManager.beginGroup("Plugins/OpenSpeedShop");
+    settingManager.setGroup("Plugins/OpenSpeedShop");
 
 
     settingManager.endGroup();
@@ -161,7 +161,7 @@ void OpenSpeedShopPlugin::readSettings()
 void OpenSpeedShopPlugin::writeSettings()
 {
     Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
-    settingManager.beginGroup("Plugins/OpenSpeedShop");
+    settingManager.setGroup("Plugins/OpenSpeedShop");
 
 
     settingManager.endGroup();

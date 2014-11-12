@@ -60,7 +60,7 @@ DirectConnectionPage::~DirectConnectionPage()
 void DirectConnectionPage::apply()
 {
     Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
-    settingManager.beginGroup("Plugins/ConnectionManager/DirectConnection");
+    settingManager.setGroup("Plugins/OpenSpeedShop/ConnectionManager/DirectConnection");
 
 
     settingManager.endGroup();
@@ -71,7 +71,7 @@ void DirectConnectionPage::apply()
 void DirectConnectionPage::reset()
 {
     Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
-    settingManager.beginGroup("Plugins/ConnectionManager/DirectConnection");
+    settingManager.setGroup("Plugins/OpenSpeedShop/ConnectionManager/DirectConnection");
 
 
     settingManager.endGroup();

@@ -89,7 +89,7 @@ void ExperimentWidget::closeEvent(QCloseEvent *event)
 void ExperimentWidget::readSettings()
 {
     Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
-    settingManager.beginGroup("Plugins/OpenSpeedShop/Experiment");
+    settingManager.setGroup("Plugins/OpenSpeedShop/Experiment");
 
     ui->splitSource->restoreState(settingManager.value("splitSource/state", ui->splitSource->saveState()).toByteArray());
 
@@ -105,7 +105,7 @@ void ExperimentWidget::readSettings()
 void ExperimentWidget::writeSettings()
 {
     Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
-    settingManager.beginGroup("Plugins/OpenSpeedShop/Experiment");
+    settingManager.setGroup("Plugins/OpenSpeedShop/Experiment");
 
     settingManager.setValue("splitSource/state", ui->splitSource->saveState());
 
@@ -141,7 +141,7 @@ bool ExperimentWidget::load()
     if(!adapter) throw tr("Server not connected");
 
     Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
-    settingManager.beginGroup("Plugins/OpenSpeedShop/Experiment");
+    settingManager.setGroup("Plugins/OpenSpeedShop/Experiment");
     QString filePath = settingManager.value("defaultExperimentPath", QLatin1String("/")).toString();
     settingManager.endGroup();
 
@@ -173,7 +173,7 @@ bool ExperimentWidget::load()
 
     /* User convenience.  If the path wasn't set in the settings, we'll set it for the user the first time. */
     if(defaultPath) {
-        settingManager.beginGroup("Plugins/OpenSpeedShop/Experiment");
+        settingManager.setGroup("Plugins/OpenSpeedShop/Experiment");
         settingManager.setValue("defaultExperimentPath", absolutePath);
         settingManager.endGroup();
     }
@@ -608,7 +608,7 @@ QString ExperimentWidget::rewriteSourceFilePath(int row)
     QString filePath = sourceFilePath(row, false);
 
     Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
-    settingManager.beginGroup("Plugins/OpenSpeedShop/Experiment");
+    settingManager.setGroup("Plugins/OpenSpeedShop/Experiment");
     QString startPath = settingManager.value("defaultSourcePath", QLatin1String("/")).toString();
     settingManager.endGroup();
 
@@ -671,7 +671,7 @@ void ExperimentWidget::on_txtSourcePath_editingFinished()
 {
     try {
         Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
-        settingManager.beginGroup("Plugins/OpenSpeedShop/Experiment");
+        settingManager.setGroup("Plugins/OpenSpeedShop/Experiment");
         QString filePath = settingManager.value("defaultSourcePath", QLatin1String("/")).toString();
         settingManager.endGroup();
 
@@ -686,7 +686,7 @@ void ExperimentWidget::on_txtSourcePath_editingFinished()
 
         /* User convenience.  If the path wasn't set in the settings, we'll set it for the user the first time. */
         if(defaultPath) {
-            settingManager.beginGroup("Plugins/OpenSpeedShop/Experiment");
+            settingManager.setGroup("Plugins/OpenSpeedShop/Experiment");
             settingManager.setValue("defaultSourcePath", filePath);
             settingManager.endGroup();
         }
@@ -705,7 +705,7 @@ void ExperimentWidget::on_btnSourcePath_clicked()
 {
     try {
         Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
-        settingManager.beginGroup("Plugins/OpenSpeedShop/Experiment");
+        settingManager.setGroup("Plugins/OpenSpeedShop/Experiment");
         QString filePath = settingManager.value("defaultSourcePath", QLatin1String("/")).toString();
         settingManager.endGroup();
 

@@ -111,7 +111,7 @@ void ConnectionWidget::initialize()
 {
     // Get settings from SettingManager and populate form
     Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
-    settingManager.beginGroup("Plugins/OpenSpeedShop/ConnectionManager");
+    settingManager.setGroup("Plugins/OpenSpeedShop/ConnectionManager");
 
     QString connectionName = settingManager.value("ConnectionName", ui->cmbConnectionType->itemText(0)).toString();
     int index = ui->cmbConnectionType->findText(connectionName, Qt::MatchExactly);
@@ -124,7 +124,7 @@ void ConnectionWidget::apply()
 {
     // Persist changed settings to SettingManager
     Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
-    settingManager.beginGroup("Plugins/OpenSpeedShop/ConnectionManager");
+    settingManager.setGroup("Plugins/OpenSpeedShop/ConnectionManager");
     settingManager.setValue("ConnectionName", ui->cmbConnectionType->currentText());
     settingManager.endGroup();
 

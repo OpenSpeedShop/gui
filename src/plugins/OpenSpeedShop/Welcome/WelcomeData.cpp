@@ -57,7 +57,7 @@ bool WelcomeData::initialize()
 
     QString filePath;
 //    Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
-//    settingManager.beginGroup("Plugins/OpenSpeedShop/Welcome");
+//    settingManager.setGroup("Plugins/OpenSpeedShop/Welcome");
 //    filePath = settingManager.value("welcomeDataPath", fileInfo.absoluteFilePath()).toString();
 //    settingManager.endGroup();
 
@@ -83,7 +83,7 @@ bool WelcomeData::initialize()
 
 //    /* User convenience.  If the path wasn't set in the settings, we'll set it for the user the first time. */
 //    if(defaultPath) {
-//        settingManager.beginGroup("Plugins/OpenSpeedShop/Welcome");
+//        settingManager.setGroup("Plugins/OpenSpeedShop/Welcome");
 //        settingManager.setValue("welcomeDataPath", filePath);
 //        settingManager.endGroup();
 //    }

@@ -19,7 +19,7 @@ ModelDescriptor::ModelDescriptor(QObject *parent) :
 
 
     Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
-    settingManager.beginGroup("Plugins/OpenSpeedShop/ModelManager");
+    settingManager.setGroup("Plugins/OpenSpeedShop/ModelManager");
 
     bool okay;
     /* Row count is set by the user in the main OpenSpeedShop plugin setting page */

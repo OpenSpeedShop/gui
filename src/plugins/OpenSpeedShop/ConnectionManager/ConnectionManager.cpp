@@ -149,7 +149,7 @@ void ConnectionManager::shutdown()
 void ConnectionManager::readSettings()
 {
     Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
-    settingManager.beginGroup("Plugins/OpenSpeedShop/ConnectionManager");
+    settingManager.setGroup("Plugins/OpenSpeedShop/ConnectionManager");
     QString connectionName = settingManager.value("ConnectionName", QString()).toString();
     settingManager.endGroup();
 
@@ -172,7 +172,7 @@ void ConnectionManager::readSettings()
 void ConnectionManager::writeSettings()
 {
     Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
-    settingManager.beginGroup("Plugins/OpenSpeedShop/ConnectionManager");
+    settingManager.setGroup("Plugins/OpenSpeedShop/ConnectionManager");
 
     settingManager.endGroup();
 }
@@ -205,7 +205,7 @@ void ConnectionManager::registerConnection(IConnection *connection)
     emit connectionRegistered(connection);
 
     Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
-    settingManager.beginGroup("Plugins/OpenSpeedShop/ConnectionManager");
+    settingManager.setGroup("Plugins/OpenSpeedShop/ConnectionManager");
     QString connectionName = settingManager.value("ConnectionName", QString()).toString();
     settingManager.endGroup();
 
