@@ -277,11 +277,16 @@ void ExperimentWidget::refreshSourceIcon(int row)
         }
     } else {
         QListWidgetItem *item = ui->lstSource->item(row);
-        item->setToolTip(sourceFilePath(row));
-        if(!PathRewriter::instance().hasRewrite(sourceFilePath(row, false))) {
-            item->setIcon(QIcon(":/OpenSpeedShop/SourceFile/sourcefile.svg"));
-        } else {
+
+        int rewriteType = PathRewriter::instance().hasRewrite(sourceFilePath(row, false));
+        if(rewriteType == 1) {
             item->setIcon(QIcon(":/OpenSpeedShop/SourceFile/sourcefile-linked.svg"));
+            item->setToolTip(tr("Path specified manually: \"%1\"").arg(sourceFilePath(row)));
+        } else if(rewriteType == 2) {
+            item->setIcon(QIcon(":/OpenSpeedShop/SourceFile/sourcefile-pattern.svg"));
+            item->setToolTip(tr("Path rewrite pattern replaced: \"%1\"").arg(sourceFilePath(row)));
+        } else {
+            item->setIcon(QIcon(":/OpenSpeedShop/SourceFile/sourcefile.svg"));
         }
     }
 }
@@ -786,7 +791,7 @@ void ExperimentWidget::on_lstSource_customContextMenuRequested(const QPoint &pos
         QAction reset(tr("Reset file path"), this);
         connect(&reset, SIGNAL(triggered()), this, SLOT(resetSourcePath()));
         QString filePath = sourceFilePath(m_lstSourceContextMenuRow, false);
-        reset.setEnabled(PathRewriter::instance().hasRewrite(filePath));
+        reset.setEnabled(PathRewriter::instance().hasRewrite(filePath) == 1);
         contextMenu.addAction(&reset);
 
         contextMenu.exec(ui->lstSource->mapToGlobal(position));

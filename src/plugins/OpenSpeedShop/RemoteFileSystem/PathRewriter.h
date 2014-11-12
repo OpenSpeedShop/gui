@@ -30,6 +30,16 @@
 
 #include <QObject>
 #include <QMap>
+#include <QRegExp>
+
+class RegExpReplacement : public QRegExp
+{
+public:
+    QString replacement() const;
+    void setReplacement(const QString &replacement);
+private:
+    QString m_Replacement;
+};
 
 class PathRewriter : public QObject
 {
@@ -42,17 +52,20 @@ public:
 
     QString rewrite(const QString &oldPath);
     void setRewrite(const QString &oldPath, const QString &newPath);
-    bool hasRewrite(const QString &oldPath);
+    int hasRewrite(const QString &oldPath);
 
 protected:
     explicit PathRewriter(QObject *parent = 0);
     ~PathRewriter();
+
+    void restorePathRewrite();
 
     void restorePathCache();
     void storePathCache();
 
 private:
     QMap<QString, QString> m_PathCache;
+    QList<RegExpReplacement> m_PathRewrite;
 
 };
 

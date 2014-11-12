@@ -26,6 +26,7 @@
     <qresource prefix="/OpenSpeedShop/SourceFile">
         <file alias="sourcefile.svg">sourcefile.svg</file>
         <file alias="sourcefile-linked.svg">sourcefile-linked.svg</file>
+        <file alias="sourcefile-pattern.svg">sourcefile-pattern.svg</file>
     </qresource>
     <qresource prefix="/OpenSpeedShop/ConnectionManager">
         <file alias="connected.svg">network-connect-3.svg</file>

@@ -28,6 +28,7 @@
 #include "PathRewriter.h"
 
 #include <PluginManager/PluginManager.h>
+#include <SettingManager/SettingManager.h>
 
 #if QT_VERSION >= 0x050000
 #  include <QStandardPaths>
@@ -41,6 +42,17 @@
 #include <QDomDocument>
 #include <QIcon>
 #include <QDebug>
+
+
+QString RegExpReplacement::replacement() const
+{
+    return m_Replacement;
+}
+void RegExpReplacement::setReplacement(const QString &replacement)
+{
+    m_Replacement = replacement;
+}
+
 
 PathRewriter &PathRewriter::instance()
 {
@@ -65,6 +77,7 @@ bool PathRewriter::initialize(QStringList &args, QString *err)
     try {
 
         restorePathCache();
+        restorePathRewrite();
 
         using namespace Core::PluginManager;
         PluginManager &pluginManager = PluginManager::instance();
@@ -91,6 +104,69 @@ void PathRewriter::shutdown()
         qCritical() << tr("Could not shut down remote file path rewriter.");
     }
 }
+
+void PathRewriter::restorePathRewrite()
+{
+    m_PathRewrite.clear();
+
+    Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
+    settingManager.setGroup("Plugins/OpenSpeedShop");
+
+    QString pathRewritingXML = settingManager.value("Experiment/pathRewriting", QString()).toString();
+
+    qDebug() << settingManager.group() << pathRewritingXML;
+
+    if(!pathRewritingXML.isEmpty()) {
+        QDomDocument document;
+        QString error;
+        int errorLine, errorColumn;
+        if(document.setContent(pathRewritingXML, &error, &errorLine, &errorColumn)) {
+            QDomNode root = document.firstChild();
+
+            QDomNode node = root.firstChild();
+            while(!node.isNull()) {
+                QDomElement element = node.toElement();
+                if(!element.isNull() && element.tagName().compare("pathRewrite") == 0) {
+
+
+                    RegExpReplacement replacement;
+                    replacement.setPattern(element.attribute("pattern"));
+                    replacement.setReplacement(element.attribute("newPath"));
+
+                    QString patternSyntax = element.attribute("patternSyntax", tr("Wildcard"));
+                    if(patternSyntax.compare(tr("Fixed String"), Qt::CaseInsensitive) == 0) {
+                        replacement.setPatternSyntax(QRegExp::FixedString);
+                        qDebug() << patternSyntax << "Fixed";
+                    } else if(patternSyntax.compare(tr("Regular Expression"), Qt::CaseInsensitive) == 0) {
+                        replacement.setPatternSyntax(QRegExp::RegExp2);
+                        qDebug() << patternSyntax << "Regexp";
+                    } else {
+                        replacement.setPatternSyntax(QRegExp::Wildcard);
+                        qDebug() << patternSyntax << "wild";
+                    }
+
+                    QString caseSensitivity = element.attribute("caseSensitivity");
+                    if(caseSensitivity.compare(tr("Case Insensitive"), Qt::CaseInsensitive) == 0) {
+                        replacement.setCaseSensitivity(Qt::CaseInsensitive);
+                        qDebug() << caseSensitivity << "Insense";
+                    } else {
+                        replacement.setCaseSensitivity(Qt::CaseSensitive);
+                        qDebug() << caseSensitivity << "Sense";
+                    }
+
+                    m_PathRewrite.append(replacement);
+                }
+                node = node.nextSibling();
+            }
+
+        } else {
+            qWarning() << Q_FUNC_INFO << tr("Error reading path rewriting information from stored settings; error: \"%1\" at line: %2 column: %3").arg(error).arg(errorLine).arg(errorColumn) << pathRewritingXML;
+        }
+    }
+
+
+}
+
 
 void PathRewriter::restorePathCache()
 {
@@ -183,13 +259,13 @@ void PathRewriter::storePathCache()
 
 QString PathRewriter::rewrite(const QString &oldPath)
 {
-    QString newPath;
     if(m_PathCache.contains(oldPath)) {
-        newPath = m_PathCache.value(oldPath, QString());
+        return m_PathCache.value(oldPath, QString());
     }
 
-    if(newPath.isEmpty()) {
-        newPath = oldPath;
+    QString newPath = oldPath;
+    foreach(RegExpReplacement rx, m_PathRewrite) {
+        newPath = newPath.replace(rx, rx.replacement());
     }
 
     return newPath;
@@ -206,7 +282,17 @@ void PathRewriter::setRewrite(const QString &oldPath, const QString &newPath)
     }
 }
 
-bool PathRewriter::hasRewrite(const QString &oldPath)
+int PathRewriter::hasRewrite(const QString &oldPath)
 {
-    return m_PathCache.contains(oldPath);
+    if(m_PathCache.contains(oldPath)) {
+        return 1;
+    }
+
+    foreach(RegExpReplacement rx, m_PathRewrite) {
+        if(oldPath.indexOf(rx) >= 0) {
+            return 2;
+        }
+    }
+
+    return 0;
 }
