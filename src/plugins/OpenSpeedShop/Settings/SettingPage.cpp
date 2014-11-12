@@ -33,9 +33,75 @@
 #include <QDebug>
 #include <QStandardItemModel>
 #include <QDomDocument>
+#include <QComboBox>
+#include <QTableView>
 
 namespace Plugins {
 namespace OpenSpeedShop {
+
+
+// Column 0 - Old path pattern
+// Column 1 - New path
+// Column 2 - Pattern type
+// Column 3 - Case sensitivity
+
+
+
+ComboBoxDelegate::ComboBoxDelegate(QObject *parent) :
+    QItemDelegate(parent)
+{
+}
+
+QWidget *ComboBoxDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const
+{
+    Q_UNUSED(option);
+    QComboBox *comboBox = new QComboBox(parent);
+
+    if(index.column() == 2) {
+        comboBox->addItem(tr("Wildcard"));
+        comboBox->addItem(tr("Fixed String"));
+        comboBox->addItem(tr("Regular Expression"));
+    } else if(index.column() == 3) {
+        comboBox->addItem(tr("Case Sensitive"));
+        comboBox->addItem(tr("Case Insensitive"));
+    }
+
+    return comboBox;
+}
+void ComboBoxDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
+{
+    QComboBox *comboBox = qobject_cast<QComboBox *>(editor);
+    if(!comboBox) {
+        return;
+    }
+
+    QString value = index.model()->data(index, Qt::EditRole).toString();
+
+    for(int i = 0; i < comboBox->count(); ++i) {
+        if(comboBox->itemText(i).compare(value, Qt::CaseInsensitive) == 0) {
+            comboBox->setCurrentIndex(i);
+            return;
+        }
+    }
+
+    comboBox->setCurrentIndex(0);
+}
+void ComboBoxDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const
+{
+    QComboBox *comboBox = qobject_cast<QComboBox *>(editor);
+    if(!comboBox) {
+        return;
+    }
+
+    model->setData(index, comboBox->currentText(), Qt::EditRole);
+}
+void ComboBoxDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const
+{
+    Q_UNUSED(index);
+    editor->setGeometry(option.rect);
+}
+
+
 
 /*!
    \class SettingPage
@@ -54,7 +120,10 @@ SettingPage::SettingPage(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    ui->lstPathRewriting->setModel(new QStandardItemModel(ui->lstPathRewriting));
+    QStandardItemModel *model = new QStandardItemModel(ui->lstPathRewriting);
+    ui->lstPathRewriting->setModel(model);
+
+    connect(model, SIGNAL(itemChanged(QStandardItem*)), this, SLOT(pathRewritingItemChanged(QStandardItem*)));
 
     initialize();
 }
@@ -76,9 +145,13 @@ void SettingPage::initialize()
     model->clear();
 
     QStringList headerLabels;
-    headerLabels << tr("Path Pattern") << tr("New Path");
-    model->setColumnCount(2);
+    headerLabels << tr("Path Pattern") << tr("New Path") << tr("Pattern Syntax") << tr("Case Sensitivity");
+    model->setColumnCount(4);
     model->setHorizontalHeaderLabels(headerLabels);
+
+    ComboBoxDelegate *delegate = new ComboBoxDelegate(this);
+    ui->lstPathRewriting->setItemDelegateForColumn(2, delegate);
+    ui->lstPathRewriting->setItemDelegateForColumn(3, delegate);
 
     QString pathRewritingXML = settingManager.value("Experiment/pathRewriting", QString()).toString();
 
@@ -94,7 +167,10 @@ void SettingPage::initialize()
                 QDomElement element = node.toElement();
                 if(!element.isNull() && element.tagName().compare("pathRewrite") == 0) {
                     QList<QStandardItem *> columns;
-                    columns << new QStandardItem(element.attribute("pattern")) << new QStandardItem(element.attribute("newPath"));
+                    columns << new QStandardItem(element.attribute("pattern"))
+                            << new QStandardItem(element.attribute("newPath"))
+                            << new QStandardItem(element.attribute("patternSyntax", tr("Wildcard")))
+                            << new QStandardItem(element.attribute("caseSensitivity", tr("Case Sensitive")));
                     model->appendRow(columns);
 
                 }
@@ -105,6 +181,8 @@ void SettingPage::initialize()
             qWarning() << Q_FUNC_INFO << tr("Error reading path rewriting information from stored settings; error: \"%1\" at line: %2 column: %3").arg(error).arg(errorLine).arg(errorColumn) << pathRewritingXML;
         }
     }
+
+    ui->lstPathRewriting->resizeColumnsToContents();
 
 
     ui->txtDatabasePath->setText(settingManager.value("Experiment/defaultExperimentPath", QString(QLatin1Char('/'))).toString());
@@ -137,6 +215,8 @@ void SettingPage::apply()
         QDomElement pathRewrite = document.createElement("pathRewrite");
         pathRewrite.setAttribute("pattern", model->item(i, 0)->text());
         pathRewrite.setAttribute("newPath", model->item(i, 1)->text());
+        pathRewrite.setAttribute("patternSyntax", model->item(i, 2)->text());
+        pathRewrite.setAttribute("caseSensitivity", model->item(i, 3)->text());
         root.appendChild(pathRewrite);
     }
 
@@ -162,9 +242,13 @@ void SettingPage::on_btnPathRewritingAdd_clicked()
 {
     QStandardItemModel *model = qobject_cast<QStandardItemModel *>(ui->lstPathRewriting->model());
     QList<QStandardItem *> columns;
-    columns.append(new QStandardItem("OLD_PATH"));
-    columns.append(new QStandardItem("NEW_PATH"));
+    columns.append(new QStandardItem(tr("/OLD_PATH/TO/SOURCE/")));
+    columns.append(new QStandardItem(tr("/NEW_PATH/TO/SOURCE/")));
+    columns.append(new QStandardItem(tr("Wildcard")));
+    columns.append(new QStandardItem(tr("Case Sensitive")));
     model->appendRow(columns);
+
+    ui->lstPathRewriting->resizeColumnsToContents();
 }
 
 
@@ -175,6 +259,13 @@ void SettingPage::on_btnPathRewritingRemove_clicked()
     foreach(QModelIndex index, ui->lstPathRewriting->selectionModel()->selectedRows()) {
         model->removeRow(index.row());
     }
+
+    ui->lstPathRewriting->resizeColumnsToContents();
+}
+
+void SettingPage::pathRewritingItemChanged(QStandardItem *item)
+{
+    ui->lstPathRewriting->resizeColumnToContents(item->column());
 }
 
 

@@ -30,12 +30,26 @@
 
 #include <SettingManager/ISettingPage.h>
 
+#include <QItemDelegate>
 class QStandardItemModel;
+class QStandardItem;
 
 namespace Plugins {
 namespace OpenSpeedShop {
 
 namespace Ui { class SettingPage; }
+
+class ComboBoxDelegate : public QItemDelegate
+{
+    Q_OBJECT
+public:
+    ComboBoxDelegate(QObject *parent = 0);
+    QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    void setEditorData(QWidget *editor, const QModelIndex &index) const;
+    void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const;
+    void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+};
+
 
 class SettingPage : public Core::SettingManager::ISettingPage
 {
@@ -56,6 +70,7 @@ protected:
 protected slots:
     void on_btnPathRewritingAdd_clicked();
     void on_btnPathRewritingRemove_clicked();
+    void pathRewritingItemChanged(QStandardItem *item);
 
 private:
     Ui::SettingPage *ui;
