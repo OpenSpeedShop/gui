@@ -30,6 +30,8 @@
 
 #include <SettingManager/ISettingPage.h>
 
+class QStandardItemModel;
+
 namespace Plugins {
 namespace OpenSpeedShop {
 
@@ -50,6 +52,10 @@ public slots:
 
 protected:
     void initialize();
+
+protected slots:
+    void on_btnPathRewritingAdd_clicked();
+    void on_btnPathRewritingRemove_clicked();
 
 private:
     Ui::SettingPage *ui;

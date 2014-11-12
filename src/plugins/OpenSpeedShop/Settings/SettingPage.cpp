@@ -30,6 +30,10 @@
 
 #include <SettingManager/SettingManager.h>
 
+#include <QDebug>
+#include <QStandardItemModel>
+#include <QDomDocument>
+
 namespace Plugins {
 namespace OpenSpeedShop {
 
@@ -49,6 +53,9 @@ SettingPage::SettingPage(QWidget *parent) :
     ui(new Ui::SettingPage)
 {
     ui->setupUi(this);
+
+    ui->lstPathRewriting->setModel(new QStandardItemModel(ui->lstPathRewriting));
+
     initialize();
 }
 
@@ -62,6 +69,44 @@ void SettingPage::initialize()
     // Get settings from SettingManager and populate form
     Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
     settingManager.beginGroup("Plugins/OpenSpeedShop");
+
+
+
+    // Populate the model with data from the settings manager
+    QStandardItemModel *model = qobject_cast<QStandardItemModel *>(ui->lstPathRewriting->model());
+    model->clear();
+
+    QStringList headerLabels;
+    headerLabels << tr("Path Pattern") << tr("New Path");
+    model->setColumnCount(2);
+    model->setHorizontalHeaderLabels(headerLabels);
+
+    QString pathRewritingXML = settingManager.value("Experiment/pathRewriting", QString()).toString();
+
+    if(!pathRewritingXML.isEmpty()) {
+        QDomDocument document;
+        QString error;
+        int errorLine, errorColumn;
+        if(document.setContent(pathRewritingXML, &error, &errorLine, &errorColumn)) {
+            QDomNode root = document.firstChild();
+
+            QDomNode node = root.firstChild();
+            while(!node.isNull()) {
+                QDomElement element = node.toElement();
+                if(!element.isNull() && element.tagName().compare("pathRewrite") == 0) {
+                    QList<QStandardItem *> columns;
+                    columns << new QStandardItem(element.attribute("pattern")) << new QStandardItem(element.attribute("newPath"));
+                    model->appendRow(columns);
+
+                }
+                node = node.nextSibling();
+            }
+
+        } else {
+            qWarning() << Q_FUNC_INFO << tr("Error reading path rewriting information from stored settings; error: \"%1\" at line: %2 column: %3").arg(error).arg(errorLine).arg(errorColumn) << pathRewritingXML;
+        }
+    }
+
 
     ui->txtDatabasePath->setText(settingManager.value("Experiment/defaultExperimentPath", QString(QLatin1Char('/'))).toString());
     ui->txtSourcePath->setText(settingManager.value("Experiment/defaultSourcePath", QString(QLatin1Char('/'))).toString());
@@ -82,6 +127,26 @@ void SettingPage::apply()
     Core::SettingManager::SettingManager &settingManager = Core::SettingManager::SettingManager::instance();
     settingManager.beginGroup("Plugins/OpenSpeedShop");
 
+    // Write stuff from the model into the settings manager
+    QStandardItemModel *model = qobject_cast<QStandardItemModel *>(ui->lstPathRewriting->model());
+
+    QDomDocument document;
+    QDomElement root = document.createElement("pathRewrites");
+    document.appendChild(root);
+
+    for(int i = 0; i < model->rowCount(); ++i) {
+        QDomElement pathRewrite = document.createElement("pathRewrite");
+        pathRewrite.setAttribute("pattern", model->item(i, 0)->text());
+        pathRewrite.setAttribute("newPath", model->item(i, 1)->text());
+        root.appendChild(pathRewrite);
+    }
+
+    QString pathRewritingXML = document.toString(0);
+    settingManager.setValue("Experiment/pathRewriting", pathRewritingXML);
+
+
+
+
     settingManager.setValue("Experiment/defaultExperimentPath", ui->txtDatabasePath->text());
     settingManager.setValue("Experiment/defaultSourcePath", ui->txtSourcePath->text());
     settingManager.setValue("Experiment/defaultSampleRate", ui->txtExperimentSampleRate->value());
@@ -94,5 +159,26 @@ void SettingPage::reset()
 {
     initialize();
 }
+
+
+void SettingPage::on_btnPathRewritingAdd_clicked()
+{
+    QStandardItemModel *model = qobject_cast<QStandardItemModel *>(ui->lstPathRewriting->model());
+    QList<QStandardItem *> columns;
+    columns.append(new QStandardItem("OLD_PATH"));
+    columns.append(new QStandardItem("NEW_PATH"));
+    model->appendRow(columns);
+}
+
+
+void SettingPage::on_btnPathRewritingRemove_clicked()
+{
+    QStandardItemModel *model = qobject_cast<QStandardItemModel *>(ui->lstPathRewriting->model());
+
+    foreach(QModelIndex index, ui->lstPathRewriting->selectionModel()->selectedRows()) {
+        model->removeRow(index.row());
+    }
+}
+
 
 }}
