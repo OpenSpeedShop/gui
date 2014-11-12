@@ -41,7 +41,6 @@
 #include <QFileInfo>
 #include <QDomDocument>
 #include <QIcon>
-#include <QDebug>
 
 
 QString RegExpReplacement::replacement() const
@@ -114,8 +113,6 @@ void PathRewriter::restorePathRewrite()
 
     QString pathRewritingXML = settingManager.value("Experiment/pathRewriting", QString()).toString();
 
-    qDebug() << settingManager.group() << pathRewritingXML;
-
     if(!pathRewritingXML.isEmpty()) {
         QDomDocument document;
         QString error;
@@ -136,22 +133,17 @@ void PathRewriter::restorePathRewrite()
                     QString patternSyntax = element.attribute("patternSyntax", tr("Wildcard"));
                     if(patternSyntax.compare(tr("Fixed String"), Qt::CaseInsensitive) == 0) {
                         replacement.setPatternSyntax(QRegExp::FixedString);
-                        qDebug() << patternSyntax << "Fixed";
                     } else if(patternSyntax.compare(tr("Regular Expression"), Qt::CaseInsensitive) == 0) {
                         replacement.setPatternSyntax(QRegExp::RegExp2);
-                        qDebug() << patternSyntax << "Regexp";
                     } else {
                         replacement.setPatternSyntax(QRegExp::Wildcard);
-                        qDebug() << patternSyntax << "wild";
                     }
 
                     QString caseSensitivity = element.attribute("caseSensitivity");
                     if(caseSensitivity.compare(tr("Case Insensitive"), Qt::CaseInsensitive) == 0) {
                         replacement.setCaseSensitivity(Qt::CaseInsensitive);
-                        qDebug() << caseSensitivity << "Insense";
                     } else {
                         replacement.setCaseSensitivity(Qt::CaseSensitive);
-                        qDebug() << caseSensitivity << "Sense";
                     }
 
                     m_PathRewrite.append(replacement);
