@@ -30,7 +30,7 @@
 
 #include <OpenSpeedShop/ConnectionManager/IConnection.h>
 
-#include <openspeedshop/Direct.h>
+#include <openspeedshop/Direct.hxx>
 
 using namespace Plugins::OpenSpeedShop;
 

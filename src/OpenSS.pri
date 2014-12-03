@@ -30,7 +30,7 @@ OPENSS_PRI_INCLUDED = 1
     warning()
 
   } else {
-    !exists($$quote($${OPENSS_PATH}/include/openspeedshop/Direct.h)) {
+    !exists($$quote($${OPENSS_PATH}/include/openspeedshop/Direct.hxx)) {
       warning()
       warning("The plugin depends on headers from the Open|SpeedShop tool framework.  However, the path passed " \
               "to qmake through 'OPENSS_PATH=$$OPENSS_PATH', doesn't contain the expected source files.")

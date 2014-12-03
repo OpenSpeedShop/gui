@@ -73,10 +73,13 @@ isEmpty(PTGF_LIBPATH): PTGF_LIBPATH = $$quote($${PTGF_INSTALLROOT})
 # Possible subdirectories for DLL
 PTGF_LIBPATHS = $${PTGF_LIBPATH}
 PTGF_LIBPATHS += $${PTGF_LIBPATH}/lib
+PTGF_LIBPATHS += $${PTGF_LIBPATH}/lib64
 PTGF_LIBPATHS += $${PTGF_LIBPATH}/debug
 PTGF_LIBPATHS += $${PTGF_LIBPATH}/lib/debug
+PTGF_LIBPATHS += $${PTGF_LIBPATH}/lib64/debug
 PTGF_LIBPATHS += $${PTGF_LIBPATH}/release
 PTGF_LIBPATHS += $${PTGF_LIBPATH}/lib/release
+PTGF_LIBPATHS += $${PTGF_LIBPATH}/lib64/release
 
 # Find name of library file
 CONFIG(debug, debug|release) {
