@@ -787,7 +787,8 @@ QList<DirectAdapter::Process> DirectAdapter::waitExperimentProcesses(qint64 expe
 
     QList<Process> processes;
     //FIXME: I don't know why I can't use character sets.  Bug in Qt4.7.1?
-    QRegExp regex("^\\s*-h (.+) -p (.+) -t (.+) -r (.+) \\((.+)\\)\\s*$");
+    QRegExp regex("^\\s*-h (.+) -p (.+) -t (.+) -r (.+)( \\((.+)\\)\\s*)*$");
+//    QRegExp regex("^\\s*-h (.+) -p (.+) -t (.+) -r (.+) \\((.+)\\)\\s*$");
     foreach(QString string, stringList) {
         if(regex.exactMatch(string)) {
             Process process;
@@ -795,7 +796,7 @@ QList<DirectAdapter::Process> DirectAdapter::waitExperimentProcesses(qint64 expe
             process.processId = regex.cap(2).toLongLong();
             process.threadId = regex.cap(3).toLongLong();
             process.rank = regex.cap(4).toLongLong();
-            process.executable = regex.cap(5);
+            process.executable = regex.cap(6);
             processes.append(process);
         }
     }
