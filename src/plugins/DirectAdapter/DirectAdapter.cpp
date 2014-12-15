@@ -72,13 +72,6 @@ ServerCommand *DirectAdapter::rawOpenSpeedShopCommand(QString command)
  */
 QDomElement DirectAdapter::waitCommand(ServerCommand *serverCommand)
 {
-    // Make this reentrant; the CLI can only handle one query at a time anyway
-    //TODO: Reimplement using QMutex
-    while(m_isWaiting) {
-        QApplication::processEvents();
-        Thread::sleep(50);
-    }
-
     m_isWaiting = true;
 
     while(serverCommand->state() != ServerCommand::State_Response) {
