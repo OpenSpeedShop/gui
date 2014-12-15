@@ -79,6 +79,7 @@ private:
         QString result = QString(m_DirectCLI->execute(std::string(m_Command.toLocal8Bit())).c_str());
         m_Mutex->unlock();
 #else
+        if(m_Canceled) { return; }  // nevermind!
         QString result = QString(m_DirectCLI.execute(std::string(m_Command.toLocal8Bit())).c_str());
 #endif
 
