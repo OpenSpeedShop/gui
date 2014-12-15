@@ -33,7 +33,7 @@ QT                 += xml
 
 LIBS         += -L$$quote($${BUILD_PATH}/plugins/OpenSpeedShop/$${DIR_POSTFIX}) -lOpenSpeedShop$${LIB_POSTFIX}
 
-#debug: DEFINES += SERVERADAPTER_DEBUG
+#debug: DEFINES += DIRECTADAPTER_DEBUG
 
 # List of experiment types and their possible modifiers/metrics
 # In the future, this should be pulled from the direct

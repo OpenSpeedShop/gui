@@ -4,7 +4,10 @@
 #include <QFile>
 #include <QDir>
 #include <QTimer>
-#include <QDebug>
+
+#ifdef DIRECTADAPTER_DEBUG
+#  include <QDebug>
+#endif
 
 #include <OpenSpeedShop/ConnectionManager/ConnectionManager.h>
 #include <OpenSpeedShop/ConnectionManager/ServerCommand.h>
@@ -779,6 +782,7 @@ QAbstractItemModel *DirectAdapter::waitExperimentView(QUuid experimentUid, int c
 
 QList<DirectAdapter::Process> DirectAdapter::waitExperimentProcesses(qint64 experimentId)
 {
+    Q_UNUSED(experimentId)
     QString command = QString("expStatus -v full");
 //    QString command = QString("expStatus -x %1").arg(experimentId);          // Gives only a summary on large runs
 //    QString command = QString("expStatus -v full -x %1").arg(experimentId);  //BUG: "-v full -x 1" is broken
@@ -788,7 +792,7 @@ QList<DirectAdapter::Process> DirectAdapter::waitExperimentProcesses(qint64 expe
     QStringList stringList = getStringList(responseElement);
 
     QList<Process> processes;
-    //FIXME: I don't know why I can't use character sets.  Bug in Qt4.7.1?
+    //FIXME: I don't know why I can't use character sets like "\\S+".  Bug in Qt4.7.1?
     QRegExp regex("^\\s*-h (.+) -p (.+) -t (.+) -r (.+)( \\((.+)\\)\\s*)*$");
     foreach(QString string, stringList) {
         if(regex.exactMatch(string)) {
