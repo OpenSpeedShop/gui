@@ -59,6 +59,11 @@ DirectConnection::DirectConnection(QObject *parent) :
 DirectConnection::~DirectConnection()
 {
     writeSettings();
+
+    foreach(DirectThread *directThread, m_DirectThreads) {
+        directThread->cancel();
+        m_DirectThreads.removeAll(directThread);
+    }
 }
 
 QString DirectConnection::name() const
@@ -128,8 +133,26 @@ void DirectConnection::send(QString command)
     if(!command.endsWith('\n'))
         command.append('\n');
 
-    m_Buffer = QString(m_DirectCLI.execute(std::string(command.toLocal8Bit())).c_str());
+#ifdef OSSCLI_BLOCKING
+    DirectThread *directThread = new DirectThread(command, &m_DirectCLI, &m_CLIMutex, this);
+#else
+    DirectThread *directThread = new DirectThread(command, this);
+#endif
 
+    connect(directThread, SIGNAL(resultReady(QString)), this, SLOT(handleResult(QString)));
+    connect(directThread, SIGNAL(finished()), directThread, SLOT(deleteLater()));
+    m_DirectThreads.append(directThread);
+    directThread->start();
+}
+
+void DirectConnection::handleResult(const QString &result)
+{
+    DirectThread *directThread = qobject_cast<DirectThread*>(sender());
+    if(directThread) {
+        m_DirectThreads.removeAll(directThread);
+    }
+
+    m_Buffer = result;
     emit readyReceive();
 }
 

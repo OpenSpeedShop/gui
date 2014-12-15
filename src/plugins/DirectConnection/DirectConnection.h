@@ -28,9 +28,18 @@
 #ifndef PLUGINS_DIRECTCONNECTION_DIRECTCONNECTION_H
 #define PLUGINS_DIRECTCONNECTION_DIRECTCONNECTION_H
 
+// The Open|SpeedShop CLI is non-reentrant right now; enable the OSSCLI_BLOCKING define when this changes!
+#define OSSCLI_BLOCKING
+
 #include <OpenSpeedShop/ConnectionManager/IConnection.h>
 
 #include <openspeedshop/Direct.hxx>
+
+#include <QThread>
+
+#ifdef OSSCLI_BLOCKING
+#include <QMutex>
+#endif
 
 using namespace Plugins::OpenSpeedShop;
 
@@ -38,6 +47,54 @@ namespace Plugins {
 namespace DirectConnection {
 
 class DirectConnectionPage;
+
+class DirectThread : public QThread
+{
+    Q_OBJECT
+
+public:
+
+#ifdef OSSCLI_BLOCKING
+    DirectThread(const QString &command, Direct *direct, QMutex *mutex, QObject *parent = 0) :
+        QThread(parent), m_DirectCLI(direct), m_Mutex(mutex), m_Command(command), m_Canceled(false) { }
+#else
+    DirectThread(const QString &command, QObject *parent = 0) :
+        QThread(parent), m_Command(command), m_Canceled(false) { }
+#endif
+
+    QString command() const { return m_Command; }
+    void setCommand(const QString &command) { m_Command = command; }
+
+    void cancel() { m_Canceled = true; }
+
+signals:
+    void resultReady(const QString &result);
+
+private:
+    void run() {
+
+#ifdef OSSCLI_BLOCKING
+        m_Mutex->lock();
+        if(m_Canceled) { m_Mutex->unlock(); return; }  // nevermind!
+        QString result = QString(m_DirectCLI->execute(std::string(m_Command.toLocal8Bit())).c_str());
+        m_Mutex->unlock();
+#else
+        QString result = QString(m_DirectCLI.execute(std::string(m_Command.toLocal8Bit())).c_str());
+#endif
+
+        emit resultReady(result);
+    }
+
+#ifdef OSSCLI_BLOCKING
+    Direct *m_DirectCLI;
+    QMutex *m_Mutex;
+#else
+    Direct m_DirectCLI;
+#endif
+
+    QString m_Command;
+    bool m_Canceled;
+};
 
 class DirectConnection : public IConnection
 {
@@ -66,12 +123,20 @@ protected:
     void readSettings();
     void setState(States state);
 
+protected slots:
+    void handleResult(const QString &result);
+
 private:
     IConnection::States m_State;
     QString m_ErrorMessage;
 
     QString m_Buffer;
+
+#ifdef OSSCLI_BLOCKING
     Direct m_DirectCLI;
+    QMutex m_CLIMutex;
+#endif
+    QList<DirectThread *> m_DirectThreads;
 
     friend class DirectConnectionPage;
 };
