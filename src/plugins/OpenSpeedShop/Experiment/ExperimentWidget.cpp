@@ -371,6 +371,10 @@ void ExperimentWidget::loadModelDescriptors(QString experimentType)
 
 void ExperimentWidget::getModel(QUuid descriptorUid)
 {
+
+    QApplication::setOverrideCursor(Qt::BusyCursor);
+    this->setDisabled(true);
+
     try {
 
         // Clear the model dependent stuff
@@ -378,6 +382,13 @@ void ExperimentWidget::getModel(QUuid descriptorUid)
         ui->cmbViewFilterColumn->clear();
         ui->cmbViews->clear();
 
+        if(m_CurrentView) {
+            m_CurrentView->hide();
+            ui->grpView->layout()->removeWidget(m_CurrentView);
+            disconnect(m_CurrentView, SIGNAL(activated(QModelIndex)), this, SLOT(viewItemActivated(QModelIndex)));
+            m_CurrentView->deleteLater();
+            m_CurrentView = NULL;
+        }
 
         m_CurrentModel = ModelManager::instance().model(descriptorUid, m_ExperimentUid, getFilter());
         m_CurrentDescriptorUid = descriptorUid;
@@ -419,6 +430,9 @@ void ExperimentWidget::getModel(QUuid descriptorUid)
     } catch(...) {
         qCritical() << tr("Failed to fetch experiement model.");
     }
+
+    this->setDisabled(false);
+    QApplication::setOverrideCursor(Qt::ArrowCursor);
 }
 
 void ExperimentWidget::on_tabWidget_currentChanged(int index)
@@ -498,6 +512,7 @@ void ExperimentWidget::on_cmbViews_currentIndexChanged(int index)
     try {
 
         if(m_CurrentView) {
+            m_CurrentView->hide();
             ui->grpView->layout()->removeWidget(m_CurrentView);
             disconnect(m_CurrentView, SIGNAL(activated(QModelIndex)), this, SLOT(viewItemActivated(QModelIndex)));
             m_CurrentView->deleteLater();
