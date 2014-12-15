@@ -779,8 +779,10 @@ QAbstractItemModel *DirectAdapter::waitExperimentView(QUuid experimentUid, int c
 
 QList<DirectAdapter::Process> DirectAdapter::waitExperimentProcesses(qint64 experimentId)
 {
-    QString command = QString("expStatus -x %1").arg(experimentId);
-//    QString command = QString("expStatus -v full -x %1").arg(experimentId);
+    QString command = QString("expStatus -v full");
+//    QString command = QString("expStatus -x %1").arg(experimentId);          // Gives only a summary on large runs
+//    QString command = QString("expStatus -v full -x %1").arg(experimentId);  //BUG: "-v full -x 1" is broken
+
     ServerCommand *serverCommand = rawOpenSpeedShopCommand(command);
     QDomElement responseElement = waitCommand(serverCommand);
     QStringList stringList = getStringList(responseElement);
@@ -788,7 +790,6 @@ QList<DirectAdapter::Process> DirectAdapter::waitExperimentProcesses(qint64 expe
     QList<Process> processes;
     //FIXME: I don't know why I can't use character sets.  Bug in Qt4.7.1?
     QRegExp regex("^\\s*-h (.+) -p (.+) -t (.+) -r (.+)( \\((.+)\\)\\s*)*$");
-//    QRegExp regex("^\\s*-h (.+) -p (.+) -t (.+) -r (.+) \\((.+)\\)\\s*$");
     foreach(QString string, stringList) {
         if(regex.exactMatch(string)) {
             Process process;
