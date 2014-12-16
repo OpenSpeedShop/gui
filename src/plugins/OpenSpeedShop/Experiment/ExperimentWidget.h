@@ -5,6 +5,7 @@
 #include <QModelIndex>
 #include <QUuid>
 
+#include <NotificationManager/NotificationWidget.h>
 #include <ModelManager/FilterDescriptor.h>
 
 class QAbstractItemView;
@@ -40,6 +41,8 @@ protected:
     void refreshSourceIcon(int row = -1);
 
     FilterDescriptor getFilter() const;
+
+    void timerEvent(QTimerEvent *event);
 
 protected slots:
     void on_tabWidget_currentChanged(int);
@@ -86,6 +89,11 @@ private:
     QSortFilterProxyModel *proxyModelProcesses;
 
     int m_lstSourceContextMenuRow;
+
+    int m_FetchingTimer;
+    int m_FetchingTimerLong;
+    Core::NotificationManager::NotificationWidget *m_FetchingNotify;
+
 };
 
 

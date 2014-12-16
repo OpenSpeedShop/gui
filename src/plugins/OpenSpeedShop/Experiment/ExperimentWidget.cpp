@@ -30,8 +30,12 @@ namespace OpenSpeedShop {
 
 ExperimentWidget::ExperimentWidget(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::ExperimentWidget)
+    ui(new Ui::ExperimentWidget),
+    m_FetchingNotify(NULL)
 {
+    m_FetchingTimer = 0;
+    m_FetchingTimerLong = 0;
+
     m_CurrentView = NULL;
     m_CurrentModel = NULL;
 
@@ -74,6 +78,12 @@ ExperimentWidget::ExperimentWidget(QWidget *parent) :
 ExperimentWidget::~ExperimentWidget()
 {
     delete ui;
+
+    if(m_FetchingNotify) {
+        m_FetchingNotify->close();
+        m_FetchingNotify->deleteLater();
+        m_FetchingNotify = NULL;
+    }
 }
 
 void ExperimentWidget::closeEvent(QCloseEvent *event)
@@ -390,15 +400,32 @@ void ExperimentWidget::getModel(QUuid descriptorUid)
             m_CurrentView = NULL;
         }
 
+        // Start the timer so we can notify the user of a long process, only if it takes a long time
+        m_FetchingTimer = startTimer(1500);
+
         m_CurrentModel = ModelManager::instance().model(descriptorUid, m_ExperimentUid, getFilter());
         m_CurrentDescriptorUid = descriptorUid;
         m_FilterDirty = false;
+
+        // Stop the timers; we're done.
+        killTimer(m_FetchingTimer);
+        m_FetchingTimer = 0;
+        killTimer(m_FetchingTimerLong);
+        m_FetchingTimerLong = 0;
+
+        if(m_FetchingNotify) {
+            m_FetchingNotify->close();
+            m_FetchingNotify->deleteLater();
+            m_FetchingNotify = NULL;
+        }
+
 
         if(!m_CurrentModel) {
             // Waiting on it to be fetched from the server
             return;
         }
 
+        // Write the CLI command text directly to the notification window
         Core::NotificationManager::NotificationManager::instance().writeToLogFile(0, m_CurrentModel->property("CommandText").toString());
 
         /* Let the source view know about the change */
@@ -503,6 +530,44 @@ FilterDescriptor ExperimentWidget::getFilter() const
 
     return retval;
 }
+
+void ExperimentWidget::timerEvent(QTimerEvent *event)
+{
+    int timerId = event->timerId();
+
+    if(timerId == m_FetchingTimer) {
+        if(m_FetchingNotify) {
+            m_FetchingNotify->close();
+            m_FetchingNotify->deleteLater();
+            m_FetchingNotify = NULL;
+        }
+
+        using namespace Core::NotificationManager;
+        m_FetchingNotify = NotificationManager::instance().notify(tr("Compiling data."), NotificationWidget::Loading);
+
+        killTimer(m_FetchingTimer);
+        m_FetchingTimer = 0;
+
+        m_FetchingTimerLong = startTimer(5000);
+
+        event->accept();
+        return;
+
+    } else if(timerId == m_FetchingTimerLong) {
+        if(m_FetchingNotify) {
+            m_FetchingNotify->setText(tr("Still compiling data. Thank you for your patience."));
+        }
+
+        m_FetchingTimerLong = 0;
+
+        event->accept();
+        return;
+
+    }
+
+    QWidget::timerEvent(event);
+}
+
 
 
 void ExperimentWidget::on_cmbViews_currentIndexChanged(int index)
