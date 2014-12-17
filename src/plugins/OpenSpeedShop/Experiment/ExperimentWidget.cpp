@@ -52,14 +52,14 @@ ExperimentWidget::ExperimentWidget(QWidget *parent) :
 
 
     // Set up the proxy model for node filtering and sorting
-    proxyModelProcesses = new QSortFilterProxyModel();
-    proxyModelProcesses->setFilterKeyColumn(0);
-    proxyModelProcesses->setFilterRole(Qt::DisplayRole);
-    proxyModelProcesses->setDynamicSortFilter(true);
-    proxyModelProcesses->setSortCaseSensitivity(Qt::CaseInsensitive);
-    proxyModelProcesses->setSortRole(Qt::DisplayRole);
-    proxyModelProcesses->setSourceModel(new QStandardItemModel());
-    ui->trvProcesses->setModel(proxyModelProcesses);
+    m_ProxyModelProcesses = new QSortFilterProxyModel();
+    m_ProxyModelProcesses->setFilterKeyColumn(0);
+    m_ProxyModelProcesses->setFilterRole(Qt::DisplayRole);
+    m_ProxyModelProcesses->setDynamicSortFilter(true);
+    m_ProxyModelProcesses->setSortCaseSensitivity(Qt::CaseInsensitive);
+    m_ProxyModelProcesses->setSortRole(Qt::DisplayRole);
+    m_ProxyModelProcesses->setSourceModel(new QStandardItemModel());
+    ui->trvProcesses->setModel(m_ProxyModelProcesses);
 
     connect(ui->trvProcesses->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), this, SLOT(trvProcesses_selectionChanged()));
 
@@ -310,7 +310,7 @@ void ExperimentWidget::refreshProcessTree()
     IAdapter *adapter = ConnectionManager::instance().askAdapter();
     if(!adapter) throw tr("Server not connected");
 
-    QStandardItemModel *model = qobject_cast<QStandardItemModel*>(proxyModelProcesses->sourceModel());
+    QStandardItemModel *model = qobject_cast<QStandardItemModel*>(m_ProxyModelProcesses->sourceModel());
     Q_ASSERT(model);
 
     model->clear();
@@ -357,8 +357,8 @@ void ExperimentWidget::refreshProcessTree()
         ui->trvProcesses->resizeColumnToContents(i);
     }
 
-    proxyModelProcesses->sort(1);
-    proxyModelProcesses->sort(0);
+    m_ProxyModelProcesses->sort(1);
+    m_ProxyModelProcesses->sort(0);
 }
 
 void ExperimentWidget::loadModelDescriptors(QString experimentType)
@@ -483,10 +483,10 @@ void ExperimentWidget::on_trvNodeList_selectionChanged()
 
     ui->trvProcesses->selectionModel()->clearSelection();
 
-    proxyModelProcesses->setFilterRegExp(nodeListFilter);
-    proxyModelProcesses->sort(1);
-    proxyModelProcesses->sort(0);
-    for(int i=0; i < proxyModelProcesses->columnCount(); i++) {
+    m_ProxyModelProcesses->setFilterRegExp(nodeListFilter);
+    m_ProxyModelProcesses->sort(1);
+    m_ProxyModelProcesses->sort(0);
+    for(int i=0; i < m_ProxyModelProcesses->columnCount(); i++) {
         ui->trvProcesses->resizeColumnToContents(i);
     }
 
@@ -512,19 +512,15 @@ FilterDescriptor ExperimentWidget::getFilter() const
 
     if(!allProcs) {
         foreach(QModelIndex index, selectedProcs) {
-            QModelIndex nodeIndex = index.sibling(index.row(), 0);
             QModelIndex rankIndex = index.sibling(index.row(), 1);
-            QModelIndex threadIndex = index.sibling(index.row(), 3);
-
-            retval.insertHost(nodeIndex.data(Qt::DisplayRole).toString());
-            retval.insertThread(threadIndex.data(Qt::DisplayRole).toString());
             retval.insertRank(rankIndex.data(Qt::DisplayRole).toString());
         }
     }
 
     if(!allNodes && retval.isEmpty()) {
-        foreach(QString host, selectedNodes) {
-            retval.insertHost(host);
+        // Grab ranks associated with each selected host, and insert them using retval.insertRank()
+        for(int i = 0; i < m_ProxyModelProcesses->rowCount(); ++i) {
+            retval.insertRank(m_ProxyModelProcesses->index(i, 1).data(Qt::DisplayRole).toString());
         }
     }
 

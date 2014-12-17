@@ -86,7 +86,7 @@ private:
     QString m_CommonPath;
     bool m_FilterDirty;
 
-    QSortFilterProxyModel *proxyModelProcesses;
+    QSortFilterProxyModel *m_ProxyModelProcesses;
 
     int m_lstSourceContextMenuRow;
 

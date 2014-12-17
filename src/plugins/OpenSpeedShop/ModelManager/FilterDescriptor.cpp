@@ -68,12 +68,12 @@ QStringList FilterDescriptor::filters() const
         retval.append("-h " + m_Hosts.join(","));
     }
 
-    if(!m_Threads.isEmpty()) {
-        retval.append("-t " + m_Threads.join(","));
-    }
-
     if(!m_Ranks.isEmpty()) {
         retval.append("-r " + m_Ranks.join(","));
+    }
+
+    if(!m_Threads.isEmpty()) {
+        retval.append("-t " + m_Threads.join(","));
     }
 
     return retval;
