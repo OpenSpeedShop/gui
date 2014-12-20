@@ -137,16 +137,33 @@ void DataModel::buildModel(QDomDocument document)
     qDeleteAll(m_Rows);
     m_Rows.clear();
 
+    int columnCount = 0;
     QDomElement rowElement = commandObjectElement.firstChildElement();
     while(!rowElement.isNull()) {
-        Cell *cell = processCell(rowElement, NULL);
-        if(cell) {
-            m_Rows.append(cell);
+
+        QString rowType = rowElement.tagName();
+
+        if(!rowType.compare("Headers", Qt::CaseInsensitive)) {
+            Cell *cell = processCell(rowElement, NULL);
+            if(cell) {
+                columnCount = cell->columns.count();
+                m_Header = cell;
+            }
+
+        } else {
+            Cell *cell = processCell(rowElement, NULL);
+            if(cell && cell->columns.count() == columnCount) {    // Ensure that we're not getting erroneous data from the CLI
+                m_Rows.append(cell);
+            } else {
+                QString rowElementString;
+                QTextStream tempStream(&rowElementString, QIODevice::WriteOnly);
+                rowElement.save(tempStream, 2);
+                qWarning() << tr("Unexpected data row size from CLI: \"%1\"").arg(rowElementString.replace('\n', ' ').remove('\r'));
+            }
         }
+
         rowElement = rowElement.nextSiblingElement();
     }
-
-
 
 }
 
@@ -209,14 +226,10 @@ DataModel::Cell *DataModel::processCell(QDomElement cellElement, Cell *parent)
         childElement = childElement.nextSiblingElement();
     }
 
-    if(cellElement.tagName() == "Headers" || cellElement.tagName() == "Columns") {
+//    if(!cellElement.tagName().compare("Headers", Qt::CaseInsensitive) && !cellElement.tagName().compare("Columns", Qt::CaseInsensitive)) {
+    if(!parent) {
         cell->columns = cell->children;
         cell->children.clear();
-    }
-
-    if(cellElement.tagName() == "Headers") {
-        m_Header = cell;
-        return NULL;
     }
 
     return cell;
