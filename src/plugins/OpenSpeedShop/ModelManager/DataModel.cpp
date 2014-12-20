@@ -144,22 +144,45 @@ void DataModel::buildModel(QDomDocument document)
         QString rowType = rowElement.tagName();
 
         if(!rowType.compare("Headers", Qt::CaseInsensitive)) {
+
             Cell *cell = processCell(rowElement, NULL);
             if(cell) {
                 columnCount = cell->columns.count();
                 m_Header = cell;
             }
 
-        } else {
+        } else if(!rowType.compare("Columns", Qt::CaseInsensitive)) {
+
             Cell *cell = processCell(rowElement, NULL);
+
             if(cell && cell->columns.count() == columnCount) {    // Ensure that we're not getting erroneous data from the CLI
                 m_Rows.append(cell);
+
             } else {
+                /* If you're seeing this warning, you have likely made a change to the CLI output that the GUI doesn't understand.
+                   We are expecting that all Columns objects will have the same number of subobjects as the Headers object. */
+
                 QString rowElementString;
                 QTextStream tempStream(&rowElementString, QIODevice::WriteOnly);
                 rowElement.save(tempStream, 2);
                 qWarning() << tr("Unexpected data row size from CLI: \"%1\"").arg(rowElementString.replace('\n', ' ').remove('\r'));
+
             }
+
+        } else {
+            // Let's warn on other stuff, so the CLI guys know something is amiss when they test their changes in the GUI
+
+            /* If you're getting this warning, you have made a change to the CLI output that the GUI doesn't understand.
+               You can either remove your changes, or use exactly one Headers object along with multiple Columns objects to get your data into the GUI.
+               If you need special exceptions, add them here; as is the case for the Enders object, which we're ignoring completely. */
+
+            if(rowType.compare("Enders", Qt::CaseInsensitive)) {    // We're just plain ignoring Enders objects
+                QString rowElementString;
+                QTextStream tempStream(&rowElementString, QIODevice::WriteOnly);
+                rowElement.save(tempStream, 2);
+                qWarning() << tr("Unexpected element in CommandObject: \"%1\"").arg(rowElementString.replace('\n', ' ').remove('\r'));
+            }
+
         }
 
         rowElement = rowElement.nextSiblingElement();
@@ -226,7 +249,6 @@ DataModel::Cell *DataModel::processCell(QDomElement cellElement, Cell *parent)
         childElement = childElement.nextSiblingElement();
     }
 
-//    if(!cellElement.tagName().compare("Headers", Qt::CaseInsensitive) && !cellElement.tagName().compare("Columns", Qt::CaseInsensitive)) {
     if(!parent) {
         cell->columns = cell->children;
         cell->children.clear();
