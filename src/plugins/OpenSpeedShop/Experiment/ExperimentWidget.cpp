@@ -233,7 +233,7 @@ void ExperimentWidget::refreshSourcePaths()
     /* Remove the common path names at the beginning */
     if(!sourcePaths.isEmpty()) {
         QStringList commonPath;
-        bool keepGoing = true;
+        bool keepGoing = (sourcePaths.count() > 1);    // There has to be more than one in the list!
         while(keepGoing) {
             QString dir;
             foreach(QStringList path, sourcePaths) {
