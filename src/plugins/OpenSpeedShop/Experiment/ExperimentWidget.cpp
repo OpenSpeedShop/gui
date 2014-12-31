@@ -39,6 +39,8 @@ ExperimentWidget::ExperimentWidget(QWidget *parent) :
     m_CurrentView = NULL;
     m_CurrentModel = NULL;
 
+    m_FilterDirty = false;
+
     m_lstSourceContextMenuRow = -1;
 
     ui->setupUi(this);
