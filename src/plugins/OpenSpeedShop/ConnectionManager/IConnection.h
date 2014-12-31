@@ -52,7 +52,7 @@ public:
         State_Error
     };
 
-    explicit IConnection(QObject *parent = 0) : QObject(parent) {}
+    explicit IConnection(QObject *parent = 0) : QObject(parent), m_Current(false) {}
     virtual ~IConnection() {}
 
     virtual QString name() const = 0;
