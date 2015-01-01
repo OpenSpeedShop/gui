@@ -158,43 +158,30 @@ void SourceView::refreshStatements()
         return;
     }
 
-    int statementColumn = -1;
-    QString statementType;
-    for(int i=0; i < m_Model->columnCount(); ++i) {
-        QString columnType = m_Model->headerData(i, Qt::Horizontal, Qt::ToolTipRole).toString();
-        if(columnType == "Statement" || columnType == "Function"  || columnType == "CallStackEntry") {
-            statementType = columnType;
-            statementColumn = i;
-            break;
-        }
-    }
-
-    if(statementColumn >= 0) {
-        QRegExp statementPattern;
-        if(statementType == "Function") {
-            statementPattern.setPattern("^.*\\((.*):([0-9]+)\\)$");
-        } else if(statementType == "Statement") {
-            statementPattern.setPattern("^(.*):([0-9]+)$");
-        } else if(statementType == "CallStackEntry") {
-            statementPattern.setPattern("^.* \\((.*):([0-9]+)\\)$");
-        }
+    int statementColumn = m_Model->columnCount() - 1;
+    if(statementColumn > -1) {
+        QRegExp statementPattern("[\\(]*(\\S+):(\\d+)", Qt::CaseInsensitive, QRegExp::RegExp2);
 
         for(int i=0; i < m_Model->rowCount(); ++i) {
             QModelIndex index = m_Model->index(i, statementColumn);
-            QString statementText = index.data(Qt::DisplayRole).toString();
 
-            if(statementPattern.exactMatch(statementText)) {
-                QString filePath = statementPattern.cap(1);
+            QVariant indexData = index.data(Qt::DisplayRole);
+            if(indexData.type() == QVariant::String) {
+                QString statementText = indexData.toString();
 
-                bool okay;
-                int lineNumber = statementPattern.cap(2).toInt(&okay);
-                if(!okay) { lineNumber = 0; }
+                int matchIndex = statementPattern.indexIn(statementText);
+                if(matchIndex > -1) {
+                    QString filePath = statementPattern.cap(1);
 
-                if(filePath == m_FilePath) {
-                    m_Statements.insert(lineNumber, index);
+                    bool okay;
+                    int lineNumber = statementPattern.cap(2).toInt(&okay);
+                    if(!okay) { lineNumber = 0; }
+
+                    if(filePath == m_FilePath) {
+                        m_Statements.insert(lineNumber, index);
+                    }
                 }
             }
-
         }
     }
 }
