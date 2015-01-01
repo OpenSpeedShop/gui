@@ -811,20 +811,14 @@ void ExperimentWidget::on_btnSourcePath_clicked()
 
 void ExperimentWidget::viewItemActivated(QModelIndex index)
 {
-    QString type = index.data(Qt::UserRole + 1).toString();
-    if(type == "Function" || type == "Statement" || type == "CallStackEntry") {
-        QString text = index.data(Qt::DisplayRole).toString();
+    QVariant indexData = index.data(Qt::DisplayRole);
+    if(indexData.type() == QVariant::String) {
+        QString text = indexData.toString();
 
-        QRegExp statementPattern;
-        if(type == "Function") {
-            statementPattern.setPattern("^.*\\((.*):([0-9]+)\\)$");
-        } else if(type == "Statement") {
-            statementPattern.setPattern("^(.*):([0-9]+)$");
-        } else if(type == "CallStackEntry") {
-            statementPattern.setPattern("^.* \\((.*):([0-9]+)\\)$");
-        }
+        QRegExp statementPattern("[\\(]*(\\S+):(\\d+)", Qt::CaseInsensitive, QRegExp::RegExp2);
 
-        if(statementPattern.exactMatch(text)) {
+        int matchIndex = statementPattern.indexIn(text);
+        if(matchIndex > -1) {
             QStringList filePathDirs = statementPattern.cap(1).split(QLatin1Char('/'), QString::SkipEmptyParts);
 
             QString filePath(filePathDirs.takeLast());
