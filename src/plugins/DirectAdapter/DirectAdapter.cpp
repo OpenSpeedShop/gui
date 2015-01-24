@@ -745,7 +745,7 @@ QAbstractItemModel *DirectAdapter::waitExperimentView(qint64 experimentId, QStri
 
     DataModel *dataModel = NULL;
     try {
-        dataModel = new DataModel(serverCommand->response(), this);
+        dataModel = new DataModel(serverCommand->response());
         dataModel->setProperty("CommandText", serverCommand->commandText());
     }
     catch(QString err) { throw tr("Failed to create data model. Error from model: '%1'").arg(err); }
