@@ -129,7 +129,7 @@ protected:
     Cell *m_Header;
     QList<Cell *> m_Rows;
 
-    QVariant displayRole(Cell *cell) const;
+    QVariant displayRole(Cell *cell, bool truncate = true) const;
     QVariant toolTipRole(Cell *cell) const;
     QVariant editRole(Cell *cell) const;
 

@@ -469,7 +469,7 @@ QVariant DataModel::displayRole(Cell *cell, bool truncate) const
         QString value = cell->data["value"].toString();
         if(cell->data.contains("path")) {
             QString path = cell->data["path"].toString();
-            value.append(" (" + truncate ? ::truncatePath(path) : path);
+            value.append(" (" + (truncate ? ::truncatePath(path) : path));
             if(cell->data.contains("line")) {
                 value.append(":" + cell->data["line"].toString());
             }
