@@ -48,7 +48,7 @@ OSSDelegate::OSSDelegate(QObject *parent) :
 }
 
 /*! \fn OSSDelegate::paint()
-    \brief Handles special case items (like CallStackEntry and percentage values).
+    \brief Handles special case items (like CallStackEntry).
     \reimp QStyledItemDelegate::paint()
     \sa sizeHint() selected() deselected()
  */

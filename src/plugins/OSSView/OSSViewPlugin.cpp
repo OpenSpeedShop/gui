@@ -123,11 +123,9 @@ QAbstractItemView *OSSViewPlugin::viewWidget(QAbstractItemModel *model)
 
     Plugins::TableView::TableView *tableView = new Plugins::TableView::TableView();
 
-//    QAbstractItemDelegate *oldDelegate = tableView->itemDelegate();
-    tableView->setItemDelegate(new OSSDelegate(tableView));
-
-//! \todo debug this
-//! oldDelegate->deleteLater();
+    QAbstractItemDelegate *oldDelegate = tableView->itemDelegate();
+    tableView->setItemDelegate(new OSSDelegate(this));
+    oldDelegate->deleteLater();
 
     tableView->setModel(model);
     return tableView;
