@@ -28,7 +28,30 @@
 #include "DataModel.h"
 
 #include <QStringList>
+#include <QFileInfo>
 #include <QDebug>
+
+namespace {
+    QString truncatePath(const QString &path)
+    {
+        static const int MAXPATHLENGTH = 16;
+
+        // Try to just get the filename from the path, and if it's longer than the max length return the whole thing
+        QFileInfo fileInfo(path);
+        if(!fileInfo.fileName().isEmpty()) {
+            if(fileInfo.fileName().length() >= MAXPATHLENGTH) {
+                return fileInfo.fileName();
+            }
+        }
+
+        // If the filename is smaller than the max length, return a truncated path
+        if(path.length() > MAXPATHLENGTH) {
+            return QString("%1%2").arg(QChar(0x2026)).arg(path.right(MAXPATHLENGTH - 1));
+        }
+
+        return path;
+    }
+} //END anonymous namespace
 
 namespace Plugins {
 namespace OpenSpeedShop {
@@ -414,7 +437,7 @@ QVariant DataModel::data(const QModelIndex &index, int role) const
         if(!cellType.compare("CallStackEntry", Qt::CaseInsensitive)) {
             QStringList stack;
             foreach(Cell *child, dataItem->children) {
-                stack.append(displayRole(child).toString());
+                stack.append(displayRole(child, false).toString());
             }
             return stack;
         }
@@ -423,7 +446,7 @@ QVariant DataModel::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
-QVariant DataModel::displayRole(Cell *cell) const
+QVariant DataModel::displayRole(Cell *cell, bool truncate) const
 {
     QString cellType = cell->data["type"].toString();
 
@@ -433,7 +456,7 @@ QVariant DataModel::displayRole(Cell *cell) const
         int i = 0;
         while(i < max && i < cell->children.count()) {
             Cell *child = cell->children.at(i);
-            stack.append(displayRole(child).toString());
+            stack.append(displayRole(child, truncate).toString());
             if(++i < max && i < cell->children.count()) {
                 stack.append(QString(" %1 ").arg(QChar(0x00AB)));
             } else if(i >= max) {
@@ -445,7 +468,8 @@ QVariant DataModel::displayRole(Cell *cell) const
     } else if(!cellType.compare("Function", Qt::CaseInsensitive)) {
         QString value = cell->data["value"].toString();
         if(cell->data.contains("path")) {
-            value.append(" (" + cell->data["path"].toString());
+            QString path = cell->data["path"].toString();
+            value.append(" (" + truncate ? ::truncatePath(path) : path);
             if(cell->data.contains("line")) {
                 value.append(":" + cell->data["line"].toString());
             }
@@ -456,7 +480,8 @@ QVariant DataModel::displayRole(Cell *cell) const
     } else if(!cellType.compare("Statement", Qt::CaseInsensitive)) {
         QString value;
         if(cell->data.contains("path")) {
-            value.append(cell->data["path"].toString());
+            QString path = cell->data["path"].toString();
+            value.append(truncate ? ::truncatePath(path) : path);
             if(cell->data.contains("line")) {
                 value.append(":" + cell->data["line"].toString());
             }
@@ -479,7 +504,7 @@ QVariant DataModel::toolTipRole(Cell *cell) const
         int i=0;
         while(i < cell->children.count()) {
             Cell *child = cell->children.at(i);
-            stack.append(displayRole(child).toString());
+            stack.append(displayRole(child, false).toString());
             if(++i < cell->children.count()) {
                 stack.append(QChar::LineSeparator);
             }
@@ -498,7 +523,7 @@ QVariant DataModel::editRole(Cell *cell) const
         int i = 0;
         while(i < cell->children.count()) {
             Cell *child = cell->children.at(i);
-            stack.append(displayRole(child).toString());
+            stack.append(displayRole(child, false).toString());
             if(++i < cell->children.count()) {
                 stack.append(" ");
             }
@@ -506,7 +531,7 @@ QVariant DataModel::editRole(Cell *cell) const
         return stack;
     }
 
-    return displayRole(cell);
+    return displayRole(cell, false);
 }
 
 QVariant DataModel::headerData(int section, Qt::Orientation orientation, int role) const
