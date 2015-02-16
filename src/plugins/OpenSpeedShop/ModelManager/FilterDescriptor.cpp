@@ -4,7 +4,7 @@
 
    \section LICENSE
    This file is part of the Parallel Tools GUI Framework (PTGF)
-   Copyright (C) 2010-2014 Argo Navis Technologies, LLC
+   Copyright (C) 2010-2015 Argo Navis Technologies, LLC
 
    This library is free software; you can redistribute it and/or modify it
    under the terms of the GNU Lesser General Public License as published by the

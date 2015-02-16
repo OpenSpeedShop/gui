@@ -2,7 +2,13 @@
                      O P E N | S P E E D S H O P   G U I
 ******************************************************************************
 
-TODO: LICENSE
+Copyright (C) 2010-2015 Argo Navis Technologies, LLC
+
+This library is free software; you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation; either version 2.1 of the License, or (at your option) any later version.
+
+This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License along with this library; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 ******************************************************************************
 
@@ -11,39 +17,25 @@ CONTENTS OF THIS FILE
  * Introduction
  * Releases
  * Installation
- * Scripts
- * Notes
- * TODO
  * Links
  * Contact
+ * Funding
 
 
 INTRODUCTION
 ------------
-TODO: Introduction
+The Open|SpeedShop™ parallel performance analysis tool is an important application used by HPC developers at many computing facilities to assist in the optimization of their codes.  This project aims to update the existing graphical user interface to be easier to learn and more intuitive.
 
 
 RELEASES
 --------
-Currently in primordial ooze phase
+If you need stable code, stick with the Master branch.  The Devel branch has the latest changes, but may be a bit less stable.
 
 
 INSTALLATION
 ------------
-TODO: Installation
+Build and installation instructions can be found in our GitHub Wiki <https://github.com/OpenSpeedShop/gui/wiki>.
 
-
-SCRIPTS
--------
-
-
-NOTES
------
-
-
-TODO
-----
-Our issue tracker is located at <https://github.com/OpenSpeedShop/gui/issues>
 
 LINKS
 -----
@@ -52,9 +44,13 @@ LINKS
  * Project issue tracker   <https://github.com/OpenSpeedShop/gui/issues>
  * Google group            <http://groups.google.com/group/openspeedshop-gui>
 
+
 CONTACT
 -------
-TODO: Contacting us
+Please go to the project's main site for contact information, or you may contact the lead developer at <https://github.com/DaneGardner>.
 
 
+FUNDING
+-------
+The Open|SpeedShop GUI project is proud to be funded in part by the NASA SBIR program, the DOE SBIR program, and DOE NNSA contracts.
 
